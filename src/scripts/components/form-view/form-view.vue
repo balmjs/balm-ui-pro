@@ -23,7 +23,7 @@
           <ui-grid v-if="useGrid" v-bind="gridAttrOrProp">
             <slot
               name="before"
-              :class-name="[itemClass, subitemClass, actionClass]"
+              :class-name="{ itemClass, subitemClass }"
             ></slot>
             <template
               v-for="(configData, configIndex) in formConfig"
@@ -54,14 +54,14 @@
             </template>
             <slot
               name="after"
-              :class-name="[itemClass, subitemClass, actionClass]"
+              :class-name="{ itemClass, subitemClass, actionClass }"
             ></slot>
           </ui-grid>
           <!-- For detail view -->
           <template v-else>
             <slot
               name="before"
-              :class-name="[itemClass, subitemClass, actionClass]"
+              :class-name="{ itemClass, subitemClass }"
             ></slot>
             <template
               v-for="(configData, configIndex) in formConfig"
@@ -90,13 +90,9 @@
             </template>
             <slot
               name="after"
-              :class-name="[itemClass, subitemClass, actionClass]"
+              :class-name="{ itemClass, subitemClass, actionClass }"
             ></slot>
           </template>
-          <!-- Form actions -->
-          <ui-form-field :class="[itemClass, actionClass]">
-            <slot name="actions"></slot>
-          </ui-form-field>
         </div>
       </template>
     </ui-form>
@@ -154,8 +150,6 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['update:modelValue', 'loaded']);
-
 const state = reactive({
   formData: props.modelValue,
   formConfig: []
@@ -196,8 +190,6 @@ function setFormConfig(modelConfig = props.modelConfig) {
     state.formConfig = formConfig;
 
     initFormDataByConfig();
-
-    isFunctionConfig && emit('loaded', formConfig);
   } else {
     console.warn(`[UiFormView]: Invalid form model config`);
   }

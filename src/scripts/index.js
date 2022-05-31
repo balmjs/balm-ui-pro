@@ -5,7 +5,7 @@ import UiFormView from './components/form-view/form-view.vue';
 import UiCheckboxGroup from './components/form-components/checkbox-group.vue';
 import UiRadioGroup from './components/form-components/radio-group.vue';
 import UiSwitchBox from './components/form-components/switch-box.vue';
-import $model, { useModel } from './plugins/model';
+// import $model, { useModel } from './plugins/model';
 
 const Components = {
   UiFormView,
@@ -15,7 +15,7 @@ const Components = {
 };
 
 const Plugins = {
-  $model
+  // $model
 };
 
 const install = (app, options = {}) =>
@@ -31,4 +31,4 @@ const BalmUIPro = {
 export default BalmUIPro;
 export { version, install };
 export { UiFormView, UiCheckboxGroup, UiRadioGroup, UiSwitchBox };
-export { $model, useModel };
+// export { $model, useModel };

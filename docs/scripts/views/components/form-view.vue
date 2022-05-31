@@ -1,9 +1,5 @@
 <template>
-  <ui-form-view v-model="formData" debug :model-config="config">
-    <template #readonly__ui-textfield--a="{ value }">
-      {{ value }}
-    </template>
-  </ui-form-view>
+  <ui-form-view v-model="formData" :model-config="config"></ui-form-view>
 </template>
 
 <script setup>
