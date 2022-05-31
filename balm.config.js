@@ -1,5 +1,5 @@
-const getConfig = require('./config/balmrc');
-const api = require('./config/balm.api');
+const getConfig = require('./config/balm');
+const api = require('./config/balm/api');
 
 module.exports = (balm) => {
   return {

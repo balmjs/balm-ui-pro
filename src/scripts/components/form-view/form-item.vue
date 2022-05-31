@@ -27,7 +27,6 @@
       <ui-readonly-item
         v-if="config.readonly"
         :subitem-class="subitemClass"
-        :config="config"
         :value="value"
       >
         <slot :name="customSlots.readonly" :value="value"></slot>
@@ -67,7 +66,6 @@ export default {
 <script setup>
 import { reactive, toRefs, computed, watch, onBeforeMount } from 'vue';
 import UiReadonlyItem from './readonly-item.vue';
-import { useFormItem } from '../../mixins/form-item';
 import getType from '../../utils/typeof';
 
 const props = defineProps({
@@ -104,8 +102,9 @@ const state = reactive({
 });
 const { formData } = toRefs(state);
 
-const { component, key, componentKey } = useFormItem(props.config);
-
+const component = computed(() => props.config.component || 'unknown-component');
+const key = computed(() => props.config.key || 'unknown-key');
+const componentKey = computed(() => `${component.value}--${key.value}`);
 const customSlots = computed(() => ({
   beforeLabel: `before-label__${componentKey.value}`,
   afterLabel: `after-label__${componentKey.value}`,

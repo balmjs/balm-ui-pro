@@ -1,6 +1,6 @@
 {
   "name": "balm-ui-pro",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Javascript error tracking",
   "keywords": [],
   "license": "MIT",
@@ -51,6 +51,7 @@
     "markdown-loader": "^8.0.0",
     "prettier": "^2.6.0",
     "prismjs": "^1.28.0",
+    "rollup-plugin-vue": "^6.0.0",
     "vue": "^3.2.30",
     "vue-loader": "^17.0.0",
     "vue-router": "^4.0.0",
