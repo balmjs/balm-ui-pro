@@ -1,8 +1,20 @@
 {
   "name": "balm-ui-pro",
   "version": "0.1.0",
-  "description": "Javascript error tracking",
-  "keywords": [],
+  "description": "BalmUI Pro",
+  "keywords": [
+    "balm",
+    "material",
+    "design",
+    "vue",
+    "vue-component",
+    "component",
+    "components",
+    "ui",
+    "pro",
+    "framework",
+    "frontend"
+  ],
   "license": "MIT",
   "author": {
     "name": "Elf-mousE",
@@ -13,6 +25,7 @@
     "dist"
   ],
   "main": "dist/balm-ui-pro.js",
+  "module": "dist/balm-ui-pro.esm.js",
   "scripts": {
     "dev": "balm",
     "prod": "balm -p",
@@ -56,5 +69,8 @@
     "vue-loader": "^17.0.0",
     "vue-router": "^4.0.0",
     "webpack": "^5.72.0"
+  },
+  "peerDependencies": {
+    "vue": ">=3"
   }
 }
