@@ -1,0 +1,44 @@
+[
+  {
+    "component": "ui-textfield",
+    "label": "Input",
+    "key": "a",
+    "value": "",
+    "attrOrProp": {
+      "placeholder": "aaa"
+    }
+  },
+  {
+    "component": "ui-autocomplete",
+    "label": "Autocomplete",
+    "key": "b",
+    "value": ""
+  },
+  {
+    "component": "ui-editor",
+    "label": "Editor",
+    "key": "c",
+    "value": ""
+  },
+  {
+    "component": "ui-select",
+    "label": "Select",
+    "key": "d",
+    "value": "",
+    "attrOrProp": {
+      "placeholder": "bbb",
+      "default-label": "default",
+      "options": [
+        {
+          "label": "A",
+          "value": 1
+        },
+        {
+          "label": "B",
+          "value": 2
+        }
+      ]
+    },
+    "reload": true
+  }
+]

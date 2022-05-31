@@ -1,0 +1,76 @@
+<template>
+  <div :class="['mdc-radio-group', cssClasses.subitemClass]">
+    <ui-form-field
+      v-for="(option, index) in options"
+      :key="`radio-${key}-${index}`"
+    >
+      <ui-radio
+        :model-value="selectedValue"
+        :input-id="`radio-${key}-${index}`"
+        :value="option.value"
+        :disabled="option.disabled || false"
+        @update:model-value="handleChange"
+      ></ui-radio>
+      <label :for="`radio-${key}-${index}`">{{ option.label }}</label>
+    </ui-form-field>
+  </div>
+</template>
+
+<script>
+import { cssClasses } from './constants';
+
+// Define radio group constants
+const UI_RADIO_GROUP = {
+  EVENTS: {
+    CHANGE: 'update:modelValue'
+  }
+};
+
+export default {
+  name: 'UiRadioGroup',
+  customOptions: {
+    UI_RADIO_GROUP,
+    cssClasses
+  }
+};
+</script>
+
+<script setup>
+import { reactive, toRefs, computed, watch } from 'vue';
+
+const props = defineProps({
+  // States
+  modelValue: {
+    type: [String, Number],
+    default: ''
+  },
+  // UI attributes
+  options: {
+    type: Array,
+    default: () => []
+  },
+  // For form view
+  config: {
+    type: Object,
+    default: () => ({})
+  }
+});
+
+const emit = defineEmits([UI_RADIO_GROUP.EVENTS.CHANGE]);
+
+const state = reactive({
+  selectedValue: props.modelValue
+});
+const { selectedValue } = toRefs(state);
+
+const key = computed(() => props.config.key || 'unknown-key');
+
+watch(
+  () => props.modelValue,
+  (val) => (state.selectedValue = val)
+);
+
+function handleChange(selectedValue) {
+  emit(UI_RADIO_GROUP.EVENTS.CHANGE, selectedValue);
+}
+</script>

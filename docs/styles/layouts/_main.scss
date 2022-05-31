@@ -1,0 +1,53 @@
+@use '../global';
+
+a {
+  color: global.$primary;
+}
+
+.balmui-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.mdc-top-app-bar__title {
+  font-size: 20px;
+}
+
+.balmui-body {
+  display: flex;
+  justify-content: flex-start;
+  flex: 1;
+  max-width: 100%;
+}
+
+.balmui-menu {
+  position: fixed;
+  z-index: 2;
+}
+
+.balmui-content {
+  display: block;
+  position: relative;
+  width: 100%;
+  overflow: auto;
+  padding: 16px;
+}
+
+.catalog-list {
+  h3 {
+    padding: 0 12px;
+    font-size: 18px;
+    line-height: 1;
+  }
+  .mdc-list-item {
+    font-size: 14px;
+    padding-left: 40px;
+  }
+}
+
+@media screen and (min-width: #{global.$MIN_WIDTH}px) {
+  .balmui-content {
+    width: calc(100% - #{global.$nav-width});
+  }
+}

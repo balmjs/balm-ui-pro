@@ -1,0 +1,59 @@
+{
+  "name": "balm-ui-pro",
+  "version": "0.0.0",
+  "description": "Javascript error tracking",
+  "keywords": [],
+  "license": "MIT",
+  "author": {
+    "name": "Elf-mousE",
+    "email": "ifmouz@gmail.com",
+    "url": "http://elf-mouse.me"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/balm-ui-pro.js",
+  "scripts": {
+    "dev": "balm",
+    "prod": "balm -p",
+    "docs": "balm -p --docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/balmjs/balm-ui-pro.git"
+  },
+  "bugs": {
+    "url": "https://github.com/balmjs/balm-ui-pro/issues"
+  },
+  "dependencies": {
+    "balm-ui": "^10.6.0"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.18.0",
+    "@babel/runtime-corejs3": "^7.18.0",
+    "@csstools/normalize.css": "^12.0.0",
+    "@rollup/plugin-alias": "^3.1.0",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^22.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-replace": "^4.0.0",
+    "@vue/compiler-sfc": "^3.2.30",
+    "axios": "^0.27.2",
+    "babel-plugin-prismjs": "^2.1.0",
+    "balm": "^4.6.0",
+    "core-js": "^3.22.0",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-vue": "^9.0.0",
+    "html-loader": "^3.1.0",
+    "markdown-loader": "^8.0.0",
+    "prettier": "^2.6.0",
+    "prismjs": "^1.28.0",
+    "vue": "^3.2.30",
+    "vue-loader": "^17.0.0",
+    "vue-router": "^4.0.0",
+    "webpack": "^5.72.0"
+  }
+}
