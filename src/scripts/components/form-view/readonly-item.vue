@@ -6,19 +6,16 @@
 
 <script>
 export default {
-  name: 'UiReadonlyItem'
-};
-</script>
-
-<script setup>
-const props = defineProps({
-  subitemClass: {
-    type: String,
-    default: ''
-  },
-  value: {
-    type: null,
-    default: ''
+  name: 'UiReadonlyItem',
+  props: {
+    subitemClass: {
+      type: String,
+      default: ''
+    },
+    value: {
+      type: null,
+      default: ''
+    }
   }
-});
+};
 </script>

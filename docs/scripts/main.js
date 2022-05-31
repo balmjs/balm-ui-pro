@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import Vue from 'vue';
 import router from '@/routes';
 import $http from '@/plugins/http';
 import $prism from '@/plugins/prism';
@@ -7,24 +7,30 @@ import App from '@/views/layouts/app';
 import BalmUI from 'balm-ui';
 import BalmUIPlus from 'balm-ui-plus';
 import BalmUIPro from 'balm-ui-pro';
+import { customComponents } from '@/config/components';
 // PWA
 // import './my-sw';
 
 function createBalmUIProApp() {
-  const app = createApp(App);
+  Vue.config.productionTip = false;
 
-  app.use(router);
-  app.use($http);
-  app.use($prism);
-  app.use(BalmUI);
-  app.use(BalmUIPlus);
-  app.use(BalmUIPro, {
-    $model: {
-      baseDir: '@/model-config'
-    }
+  Vue.use($http);
+  Vue.use($prism);
+  Vue.use(BalmUI);
+  Vue.use(BalmUIPlus);
+  Vue.use(BalmUIPro);
+  customComponents.forEach((component) => {
+    Vue.component(component.name, component);
   });
 
-  router.isReady().then(() => app.mount('#app'));
+  new Vue({
+    el: '#app',
+    components: {
+      App
+    },
+    router,
+    template: '<app />'
+  });
 }
 
 export default createBalmUIProApp;

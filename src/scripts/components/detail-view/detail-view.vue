@@ -11,7 +11,10 @@
         :model-options="modelOptions"
         v-bind="formViewAttrOrProp"
       >
-        <template v-for="(_, slotName) in $slots" #[slotName]="data">
+        <template
+          v-for="(_, slotName) in $scopedSlots"
+          v-slot:[slotName]="data"
+        >
           <slot
             :name="slotName"
             v-bind="{

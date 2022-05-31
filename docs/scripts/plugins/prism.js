@@ -3,8 +3,8 @@ import prismjs from 'prismjs';
 const usePrism = () => prismjs;
 
 export default {
-  install(app) {
-    app.config.globalProperties.$prism = prismjs;
+  install(Vue) {
+    Vue.prototype.$prism = prismjs;
   }
 };
 export { usePrism };

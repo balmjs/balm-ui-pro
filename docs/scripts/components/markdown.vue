@@ -4,55 +4,50 @@
 </template>
 
 <script>
-export default {
-  name: 'ui-markdown',
-  inheritAttrs: false
-};
-</script>
-
-<script setup>
-import { reactive, toRefs, computed, watch, onMounted, nextTick } from 'vue';
 import { usePrism } from '@/plugins/prism';
 
-const props = defineProps({
-  // 文档内容
-  text: {
-    type: String,
-    default: ''
+export default {
+  name: 'UiMarkdown',
+  props: {
+    // 文档内容
+    text: {
+      type: String,
+      default: ''
+    },
+    // 代码片段
+    code: {
+      type: Boolean,
+      default: false
+    }
   },
-  // 代码片段
-  code: {
-    type: Boolean,
-    default: false
+  data() {
+    return {
+      html: this.text
+    };
+  },
+  computed: {
+    className() {
+      return this.code ? 'snippet-code' : 'markdown-body';
+    }
+  },
+  watch: {
+    html(val) {
+      this.html = val;
+      this.init();
+    }
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      if (this.html) {
+        nextTick(() => {
+          const prism = usePrism();
+          prism.highlightAll();
+        });
+      }
+    }
   }
-});
-
-const state = reactive({
-  html: props.text
-});
-
-const className = computed(() =>
-  props.code ? 'snippet-code' : 'markdown-body'
-);
-
-const text = watch(
-  () => state.html,
-  (val) => {
-    state.html = val;
-    init();
-  }
-);
-
-function init() {
-  if (state.html) {
-    nextTick(() => {
-      const prism = usePrism();
-      prism.highlightAll();
-    });
-  }
-}
-
-onMounted(() => init());
-
-const { html } = toRefs(state);
+};
 </script>

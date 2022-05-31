@@ -6,7 +6,16 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import docs from '@/docs/demo.md';
 import code from '@/snippets/demo.md';
+
+export default {
+  data() {
+    return {
+      docs,
+      code
+    };
+  }
+};
 </script>

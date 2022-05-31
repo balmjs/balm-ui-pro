@@ -16,7 +16,7 @@ canRelease=false
 if [[ "$tagName" =~ $regTag ]]; then
   canRelease=true
 elif [[ "$tagName" =~ $regVersion ]] && [[ ! "$tagName" =~ $regTag ]]; then
-  tagName="v${tagName}"
+  tagName="v${tagName}-legacy"
   canRelease=true
 else
   echo "Invalid version: ${tagName}"
@@ -25,7 +25,7 @@ fi
 if $canRelease; then
   echo "${tagName} releasing"
 
-  npm publish
+  npm publish --tag legacy
 
   git tag ${tagName}
   git push origin ${tagName}

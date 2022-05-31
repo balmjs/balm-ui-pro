@@ -43,9 +43,10 @@
               </ui-nav-item>
             </router-link>
             <h3 :class="$theme.getTextClass('primary', 'light')">Components</h3>
-            <template v-for="(item, index) in menu" :key="`item${index}`">
+            <template v-for="(item, index) in menu">
               <router-link
                 v-slot="{ navigate, href, isActive }"
+                :key="`item${index}`"
                 custom
                 :to="{ name: item.name }"
               >
@@ -69,21 +70,25 @@
   </div>
 </template>
 
-<script setup>
-import { reactive, toRefs, onMounted } from 'vue';
+<script>
 import SvgGithub from '@/components/github';
 import menu from '@/routes/components';
 
-const state = reactive({
-  open: false
-});
-
-onMounted(() => {
-  state.open = window.innerWidth >= 1024;
-  window.addEventListener('balmResize', () => {
-    state.open = window.innerWidth >= 1024;
-  });
-});
-
-const { open } = toRefs(state);
+export default {
+  components: {
+    SvgGithub
+  },
+  data() {
+    return {
+      menu,
+      open: false
+    };
+  },
+  mounted() {
+    this.open = window.innerWidth >= 1024;
+    window.addEventListener('balmResize', () => {
+      this.open = window.innerWidth >= 1024;
+    });
+  }
+};
 </script>

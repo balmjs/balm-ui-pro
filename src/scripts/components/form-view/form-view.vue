@@ -25,11 +25,11 @@
               name="before"
               :class-name="{ itemClass, subitemClass }"
             ></slot>
-            <template
-              v-for="(configData, configIndex) in formConfig"
-              :key="`form-item-${configData.key || configIndex}`"
-            >
-              <ui-grid-cell v-bind="gridCellAttrOrProp">
+            <template v-for="(configData, configIndex) in formConfig">
+              <ui-grid-cell
+                :key="`form-item-${configData.key || configIndex}`"
+                v-bind="gridCellAttrOrProp"
+              >
                 <ui-form-item
                   v-model="formData"
                   :debug="debug"
@@ -37,11 +37,11 @@
                   :subitem-class="subitemClass"
                   :config="configData"
                   :attr-or-prop="formItemAttrOrProp"
-                  @reload:form-config="setFormConfig"
+                  @reload-form-config="setFormConfig"
                 >
                   <template
-                    v-for="(_, slotName) in $slots"
-                    #[slotName]="{ value }"
+                    v-for="(_, slotName) in $scopedSlots"
+                    v-slot:[slotName]="{ value }"
                   >
                     <slot
                       :name="slotName"
@@ -63,22 +63,20 @@
               name="before"
               :class-name="{ itemClass, subitemClass }"
             ></slot>
-            <template
-              v-for="(configData, configIndex) in formConfig"
-              :key="`form-item-${configData.key || configIndex}`"
-            >
+            <template v-for="(configData, configIndex) in formConfig">
               <ui-form-item
                 v-model="formData"
+                :key="`form-item-${configData.key || configIndex}`"
                 :debug="debug"
                 :item-class="itemClass"
                 :subitem-class="subitemClass"
                 :config="configData"
                 :attr-or-prop="formItemAttrOrProp"
-                @reload:form-config="setFormConfig"
+                @reload-form-config="setFormConfig"
               >
                 <template
-                  v-for="(_, slotName) in $slots"
-                  #[slotName]="{ value }"
+                  v-for="(_, slotName) in $scopedSlots"
+                  v-slot:[slotName]="{ value }"
                 >
                   <slot
                     :name="slotName"
@@ -100,107 +98,97 @@
 </template>
 
 <script>
-export default {
-  name: 'UiFormView'
-};
-</script>
-
-<script setup>
-import { reactive, toRefs, watch, onBeforeMount } from 'vue';
 import UiFormItem from './form-item.vue';
 import getType from '../../utils/typeof';
 
-const props = defineProps({
-  debug: {
-    type: Boolean,
-    default: false
+export default {
+  name: 'UiFormView',
+  props: {
+    debug: {
+      type: Boolean,
+      default: false
+    },
+    modelValue: {
+      type: Object,
+      default: () => ({})
+    },
+    modelConfig: {
+      type: [Array, Function],
+      default: () => [],
+      required: true
+    },
+    modelOptions: {
+      type: Object,
+      default: () => ({})
+    },
+    useGrid: {
+      type: Boolean,
+      default: false
+    },
+    formAttrOrProp: {
+      type: Object,
+      default: () => ({})
+    },
+    formItemAttrOrProp: {
+      type: Object,
+      default: () => ({})
+    },
+    gridAttrOrProp: {
+      type: Object,
+      default: () => ({})
+    },
+    gridCellAttrOrProp: {
+      type: Object,
+      default: () => ({})
+    }
   },
-  modelValue: {
-    type: Object,
-    default: () => ({})
+  data() {
+    return {
+      formData: this.modelValue,
+      formConfig: []
+    };
   },
-  modelConfig: {
-    type: [Array, Function],
-    default: () => [],
-    required: true
+  watch: {
+    modelValue(val) {
+      this.formData = Object.assign(this.formData, val);
+    },
+    modelConfig(val) {
+      this.setFormConfig(val);
+    }
   },
-  modelOptions: {
-    type: Object,
-    default: () => ({})
+  beforeMount() {
+    this.setFormConfig();
   },
-  useGrid: {
-    type: Boolean,
-    default: false
-  },
-  formAttrOrProp: {
-    type: Object,
-    default: () => ({})
-  },
-  formItemAttrOrProp: {
-    type: Object,
-    default: () => ({})
-  },
-  gridAttrOrProp: {
-    type: Object,
-    default: () => ({})
-  },
-  gridCellAttrOrProp: {
-    type: Object,
-    default: () => ({})
+  methods: {
+    setFormConfig(modelConfig = this.modelConfig) {
+      const isFunctionConfig = getType(modelConfig) === 'function';
+      const originalConfig = isFunctionConfig
+        ? modelConfig({
+            data: this.formData,
+            ...this.modelOptions
+          })
+        : modelConfig;
+
+      if (Array.isArray(originalConfig)) {
+        const formConfig = originalConfig.filter(
+          (configData) =>
+            getType(configData.if) === 'undefined' || configData.if
+        );
+        this.formConfig = formConfig;
+
+        this.initFormDataByConfig();
+      } else {
+        console.warn(`[UiFormView]: Invalid form model config`);
+      }
+    },
+    initFormDataByConfig() {
+      const formConfig = this.formConfig;
+      const needInit = formConfig.length && !Object.keys(this.formData).length;
+      needInit &&
+        formConfig
+          .filter(({ key }) => key)
+          .forEach(({ key, value }) => (this.formData[key] = value));
+    }
   }
-});
-
-const state = reactive({
-  formData: props.modelValue,
-  formConfig: []
-});
-const { formData, formConfig } = toRefs(state);
-
-onBeforeMount(() => {
-  setFormConfig();
-});
-
-watch(
-  () => props.modelValue,
-  (val) => {
-    state.formData = Object.assign(state.formData, val);
-  }
-);
-
-watch(
-  () => props.modelConfig,
-  (val) => {
-    setFormConfig(val);
-  }
-);
-
-function setFormConfig(modelConfig = props.modelConfig) {
-  const isFunctionConfig = getType(modelConfig) === 'function';
-  const originalConfig = isFunctionConfig
-    ? modelConfig({
-        data: state.formData,
-        ...props.modelOptions
-      })
-    : modelConfig;
-
-  if (Array.isArray(originalConfig)) {
-    const formConfig = originalConfig.filter(
-      (configData) => getType(configData.if) === 'undefined' || configData.if
-    );
-    state.formConfig = formConfig;
-
-    initFormDataByConfig();
-  } else {
-    console.warn(`[UiFormView]: Invalid form model config`);
-  }
-}
-
-function initFormDataByConfig() {
-  const formConfig = state.formConfig;
-  const needInit = formConfig.length && !Object.keys(state.formData).length;
-  needInit &&
-    formConfig
-      .filter(({ key }) => key)
-      .forEach(({ key, value }) => (state.formData[key] = value));
-}
+};
 </script>

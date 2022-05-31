@@ -1,25 +1,27 @@
 <template>
-  <ui-form-view v-model="formData" :model-config="config"></ui-form-view>
+  <ui-form-view v-model="formData" debug :model-config="config"></ui-form-view>
 </template>
 
-<script setup>
-import { reactive, toRefs, onMounted } from 'vue';
+<script>
 import { loadAsset } from '@/utils';
 
-const state = reactive({
-  config: [],
-  formData: {}
-});
-const { config, formData } = toRefs(state);
-
-onMounted(async () => {
-  const module = await loadAsset('model-config/b.js');
-
-  setTimeout(() => {
-    state.config = module;
-    state.formData = {
-      a: 'world'
+export default {
+  data() {
+    return {
+      config: [],
+      formData: {}
     };
-  }, 1e3);
-});
-</script>
+  },
+  async mounted() {
+    const module = await loadAsset('model-config/b.js');
+
+    console.log(module);
+
+    // setTimeout(() => {
+    //   this.config = module;
+    //   this.formData = {
+    //     a: 'world'
+    //   };
+    // }, 1e3);
+  }
+};

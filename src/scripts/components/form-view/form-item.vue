@@ -37,7 +37,7 @@
           v-show="displayFormItem(config)"
           v-model="formData[config.key]"
           v-bind="config.attrOrProp"
-          @update:model-value="handleChange(config)"
+          @change="handleChange(config)"
         ></component>
       </template>
       <slot :name="customSlots.afterItem" :value="value"></slot>
@@ -46,95 +46,101 @@
 </template>
 
 <script>
+import UiReadonlyItem from './readonly-item.vue';
+import getType from '../../utils/typeof';
+
 const name = 'UiFormItem';
 const UI_FORM_ITEM = {
   EVENTS: {
-    update: 'update:model-value',
-    reload: 'reload:form-config'
+    update: 'change',
+    reload: 'reload-form-config'
   }
 };
 
 export default {
   name,
-  customOptions: {
-    name,
-    UI_FORM_ITEM
+  components: {
+    UiReadonlyItem
+  },
+  model: {
+    prop: 'modelValue',
+    event: UI_FORM_ITEM.EVENTS.update
+  },
+  props: {
+    debug: {
+      type: Boolean,
+      default: false
+    },
+    itemClass: {
+      type: String,
+      default: ''
+    },
+    subitemClass: {
+      type: String,
+      default: ''
+    },
+    modelValue: {
+      type: Object,
+      default: () => ({})
+    },
+    config: {
+      type: Object,
+      default: () => ({})
+    },
+    attrOrProp: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+  data() {
+    return {
+      formData: this.modelValue
+    };
+  },
+  computed: {
+    component() {
+      return this.config.component || 'unknown-component';
+    },
+    key() {
+      return this.config.key || 'unknown-key';
+    },
+    componentKey() {
+      return `${this.component}--${this.key}`;
+    },
+    customSlots() {
+      return {
+        beforeLabel: `before-label__${this.componentKey}`,
+        afterLabel: `after-label__${this.componentKey}`,
+        beforeItem: `before-item__${this.componentKey}`,
+        afterItem: `after-item__${this.componentKey}`,
+        readonly: `readonly__${this.componentKey}`
+      };
+    },
+    value() {
+      return getModelValue(this.config);
+    }
+  },
+  watch: {
+    modelValue(val) {
+      this.formData = val;
+    }
+  },
+  beforeMount() {
+    const customSlotsNames = Object.values(this.customSlots);
+    this.debug &&
+      customSlotsNames.length &&
+      console.log(`[${name}] slots:`, customSlotsNames);
+  },
+  methods: {
+    displayFormItem({ show }) {
+      return getType(show) === 'undefined' || show;
+    },
+    handleChange({ reload }) {
+      reload && this.$emit(UI_FORM_ITEM.EVENTS.reload);
+    },
+    getModelValue({ key, value, defaultValue }) {
+      return this.formData[key] || value || defaultValue;
+    }
   }
 };
-</script>
-
-<script setup>
-import { reactive, toRefs, computed, watch, onBeforeMount } from 'vue';
-import UiReadonlyItem from './readonly-item.vue';
-import getType from '../../utils/typeof';
-
-const props = defineProps({
-  debug: {
-    type: Boolean,
-    default: false
-  },
-  itemClass: {
-    type: String,
-    default: ''
-  },
-  subitemClass: {
-    type: String,
-    default: ''
-  },
-  modelValue: {
-    type: Object,
-    default: () => ({})
-  },
-  config: {
-    type: Object,
-    default: () => ({})
-  },
-  attrOrProp: {
-    type: Object,
-    default: () => ({})
-  }
-});
-
-const emit = defineEmits([UI_FORM_ITEM.EVENTS.reload]);
-
-const state = reactive({
-  formData: props.modelValue
-});
-const { formData } = toRefs(state);
-
-const component = computed(() => props.config.component || 'unknown-component');
-const key = computed(() => props.config.key || 'unknown-key');
-const componentKey = computed(() => `${component.value}--${key.value}`);
-const customSlots = computed(() => ({
-  beforeLabel: `before-label__${componentKey.value}`,
-  afterLabel: `after-label__${componentKey.value}`,
-  beforeItem: `before-item__${componentKey.value}`,
-  afterItem: `after-item__${componentKey.value}`,
-  readonly: `readonly__${componentKey.value}`
-}));
-const value = computed(() => getModelValue(props.config));
-
-onBeforeMount(() => {
-  const customSlotsNames = Object.values(customSlots.value);
-  props.debug &&
-    customSlotsNames.length &&
-    console.log(`[${name}] slots:`, customSlotsNames);
-});
-
-watch(
-  () => props.modelValue,
-  (val) => (state.formData = val)
-);
-
-function displayFormItem({ show }) {
-  return getType(show) === 'undefined' || show;
-}
-
-function handleChange({ reload }) {
-  reload && emit(UI_FORM_ITEM.EVENTS.reload);
-}
-
-function getModelValue({ key, value, defaultValue }) {
-  return state.formData[key] || value || defaultValue;
-}
 </script>

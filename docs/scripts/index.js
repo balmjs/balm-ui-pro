@@ -1,2 +1,5 @@
-// At this point shared modules initialized and remote modules are loaded
-import('./bootstrap');
+import '@/polyfill';
+import { isIE, killIE } from '@/kill-ie';
+import createBalmUIProApp from '@/main';
+
+isIE ? killIE() : createBalmUIProApp();
