@@ -42,7 +42,7 @@ export default {
   methods: {
     init() {
       if (this.html) {
-        nextTick(() => {
+        this.$nextTick(() => {
           const prism = usePrism();
           prism.highlightAll();
         });

@@ -1,8 +1,10 @@
 <template>
   <ui-form-field class="mdc-switch-box">
     <ui-switch
-      :model-value="selectedValue"
+      v-model="selectedValue"
       :input-id="`switch-${key}`"
+      :disabled="config.disabled || false"
+      v-bind="switchAttrOrProp"
       @change="handleChange"
     ></ui-switch>
     <label :for="`switch-${key}`">{{ label }}</label>
@@ -10,6 +12,8 @@
 </template>
 
 <script>
+import formItemMixin from '../../mixins/form-item';
+
 // Define switch box constants
 const UI_SWITCH_BOX = {
   EVENTS: {
@@ -19,6 +23,11 @@ const UI_SWITCH_BOX = {
 
 export default {
   name: 'UiSwitchBox',
+  mixins: [formItemMixin],
+  model: {
+    prop: 'modelValue',
+    event: UI_SWITCH_BOX.EVENTS.CHANGE
+  },
   props: {
     // States
     modelValue: {
@@ -30,8 +39,7 @@ export default {
       type: Array,
       default: () => []
     },
-    // For form view
-    config: {
+    switchAttrOrProp: {
       type: Object,
       default: () => ({})
     }
@@ -42,12 +50,11 @@ export default {
     };
   },
   computed: {
-    key() {
-      return this.config.key || 'unknown-key';
-    },
     label() {
-      const index = this.options.findIndex(
-        (option) => option.value === this.modelValue
+      const index = this.options.findIndex((option) =>
+        this.selectedValue
+          ? option.value === this.switchAttrOrProp.trueValue || option.value
+          : option.value === this.switchAttrOrProp.falseValue || !option.value
       );
       return ~index && this.options[index].label;
     }

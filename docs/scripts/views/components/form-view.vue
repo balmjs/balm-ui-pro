@@ -1,5 +1,14 @@
 <template>
-  <ui-form-view v-model="formData" debug :model-config="config"></ui-form-view>
+  <div>
+    <ui-form-view v-model="formData" :model-config="config" debug>
+      <template #after="{ actionClass, data }">
+        <ui-form-field :class="actionClass">
+          <ui-button raised @click="onSubmit(data)">Submit</ui-button>
+        </ui-form-field>
+      </template>
+    </ui-form-view>
+    formData: {{ formData }}
+  </div>
 </template>
 
 <script>
@@ -15,13 +24,17 @@ export default {
   async mounted() {
     const module = await loadAsset('model-config/b.js');
 
-    console.log(module);
-
-    // setTimeout(() => {
-    //   this.config = module;
-    //   this.formData = {
-    //     a: 'world'
-    //   };
-    // }, 1e3);
+    setTimeout(() => {
+      this.config = module;
+      this.formData = {
+        a: 'world'
+      };
+    }, 1e3);
+  },
+  methods: {
+    onSubmit(formData) {
+      console.log(formData);
+    }
   }
 };
+</script>

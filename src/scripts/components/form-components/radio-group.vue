@@ -5,7 +5,7 @@
       :key="`radio-${key}-${index}`"
     >
       <ui-radio
-        :model-value="selectedValue"
+        v-model="selectedValue"
         :input-id="`radio-${key}-${index}`"
         :value="option.value"
         :disabled="option.disabled || false"
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import formItemMixin from '../../mixins/form-item';
 import { cssClasses } from './constants';
 
 // Define radio group constants
@@ -28,6 +29,7 @@ const UI_RADIO_GROUP = {
 
 export default {
   name: 'UiRadioGroup',
+  mixins: [formItemMixin],
   model: {
     prop: 'modelValue',
     event: UI_RADIO_GROUP.EVENTS.CHANGE
@@ -42,11 +44,6 @@ export default {
     options: {
       type: Array,
       default: () => []
-    },
-    // For form view
-    config: {
-      type: Object,
-      default: () => ({})
     }
   },
   data() {
@@ -54,11 +51,6 @@ export default {
       cssClasses,
       selectedValue: this.modelValue
     };
-  },
-  computed: {
-    key() {
-      return this.config.key || 'unknown-key';
-    }
   },
   watch: {
     modelValue(val) {

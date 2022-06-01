@@ -29,7 +29,7 @@
         :subitem-class="subitemClass"
         :value="value"
       >
-        <slot :name="customSlots.readonly" :value="value"></slot>
+        <slot :name="customSlots.readonlyItem" :value="value"></slot>
       </ui-readonly-item>
       <template v-else>
         <component
@@ -37,7 +37,8 @@
           v-show="displayFormItem(config)"
           v-model="formData[config.key]"
           v-bind="config.attrOrProp"
-          @change="handleChange(config)"
+          @input="handleInput(config, $event)"
+          @change="handleChange(config, $event)"
         ></component>
       </template>
       <slot :name="customSlots.afterItem" :value="value"></slot>
@@ -47,6 +48,7 @@
 
 <script>
 import UiReadonlyItem from './readonly-item.vue';
+import formItemMixin from '../../mixins/form-item';
 import getType from '../../utils/typeof';
 
 const name = 'UiFormItem';
@@ -54,7 +56,8 @@ const UI_FORM_ITEM = {
   EVENTS: {
     update: 'change',
     reload: 'reload-form-config'
-  }
+  },
+  DEFAULT_INPUT_COMPONENTS: ['ui-textfield', 'ui-autocomplete']
 };
 
 export default {
@@ -62,6 +65,7 @@ export default {
   components: {
     UiReadonlyItem
   },
+  mixins: [formItemMixin],
   model: {
     prop: 'modelValue',
     event: UI_FORM_ITEM.EVENTS.update
@@ -83,26 +87,27 @@ export default {
       type: Object,
       default: () => ({})
     },
-    config: {
-      type: Object,
-      default: () => ({})
-    },
     attrOrProp: {
       type: Object,
       default: () => ({})
+    },
+    inputComponents: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
     return {
-      formData: this.modelValue
+      formData: this.modelValue,
+      formInputComponents: [].concat(
+        UI_FORM_ITEM.DEFAULT_INPUT_COMPONENTS,
+        this.inputComponents
+      )
     };
   },
   computed: {
     component() {
       return this.config.component || 'unknown-component';
-    },
-    key() {
-      return this.config.key || 'unknown-key';
     },
     componentKey() {
       return `${this.component}--${this.key}`;
@@ -113,11 +118,11 @@ export default {
         afterLabel: `after-label__${this.componentKey}`,
         beforeItem: `before-item__${this.componentKey}`,
         afterItem: `after-item__${this.componentKey}`,
-        readonly: `readonly__${this.componentKey}`
+        readonlyItem: `readonly__${this.componentKey}`
       };
     },
     value() {
-      return getModelValue(this.config);
+      return this.getModelValue(this.config);
     }
   },
   watch: {
@@ -135,11 +140,17 @@ export default {
     displayFormItem({ show }) {
       return getType(show) === 'undefined' || show;
     },
-    handleChange({ reload }) {
+    handleInput({ component, key }, value) {
+      this.formInputComponents.includes(component) &&
+        this.$emit(UI_FORM_ITEM.EVENTS.update, key, value);
+    },
+    handleChange({ component, key, reload }, value) {
+      !this.formInputComponents.includes(component) &&
+        this.$emit(UI_FORM_ITEM.EVENTS.update, key, value);
       reload && this.$emit(UI_FORM_ITEM.EVENTS.reload);
     },
-    getModelValue({ key, value, defaultValue }) {
-      return this.formData[key] || value || defaultValue;
+    getModelValue({ key, value }) {
+      return this.formData[key] || value;
     }
   }
 };
