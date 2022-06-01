@@ -1,9 +1,11 @@
 <template>
   <ui-form-field class="mdc-switch-box">
     <ui-switch
-      :model-value="selectedValue"
+      v-model="selectedValue"
       :input-id="`switch-${key}`"
-      @update:model-value="handleChange"
+      :disabled="config.disabled || false"
+      v-bind="switchAttrOrProp"
+      @update:modelValue="handleChange"
     ></ui-switch>
     <label :for="`switch-${key}`">{{ label }}</label>
   </ui-form-field>
@@ -27,6 +29,7 @@ export default {
 
 <script setup>
 import { reactive, toRefs, computed, watch } from 'vue';
+import { formItemProps, useFormItem } from '../../mixins/form-item';
 
 const props = defineProps({
   // States
@@ -39,8 +42,8 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
-  // For form view
-  config: {
+  ...formItemProps,
+  switchAttrOrProp: {
     type: Object,
     default: () => ({})
   }
@@ -53,10 +56,12 @@ const state = reactive({
 });
 const { selectedValue } = toRefs(state);
 
-const key = computed(() => props.config.key || 'unknown-key');
+const { key } = useFormItem(props);
 const label = computed(() => {
-  const index = props.options.findIndex(
-    (option) => option.value === props.modelValue
+  const index = props.options.findIndex((option) =>
+    state.selectedValue
+      ? option.value === props.switchAttrOrProp.trueValue || option.value
+      : option.value === props.switchAttrOrProp.falseValue || !option.value
   );
   return ~index && props.options[index].label;
 });

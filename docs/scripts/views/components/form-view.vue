@@ -1,5 +1,14 @@
 <template>
-  <ui-form-view v-model="formData" :model-config="config"></ui-form-view>
+  <div>
+    <ui-form-view v-model="formData" :model-config="config" debug>
+      <template #after="{ actionClass, data }">
+        <ui-form-field :class="actionClass">
+          <ui-button raised @click="onSubmit(data)">Submit</ui-button>
+        </ui-form-field>
+      </template>
+    </ui-form-view>
+    formData: {{ formData }}
+  </div>
 </template>
 
 <script setup>

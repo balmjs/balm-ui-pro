@@ -5,7 +5,7 @@
 
 <script>
 export default {
-  name: 'ui-markdown',
+  name: 'UiMarkdown',
   inheritAttrs: false
 };
 </script>

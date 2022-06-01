@@ -23,7 +23,11 @@
           <ui-grid v-if="useGrid" v-bind="gridAttrOrProp">
             <slot
               name="before"
-              :class-name="{ itemClass, subitemClass }"
+              v-bind="{
+                itemClass,
+                subitemClass,
+                data: formData
+              }"
             ></slot>
             <template
               v-for="(configData, configIndex) in formConfig"
@@ -31,12 +35,13 @@
             >
               <ui-grid-cell v-bind="gridCellAttrOrProp">
                 <ui-form-item
-                  v-model="formData"
                   :debug="debug"
                   :item-class="itemClass"
                   :subitem-class="subitemClass"
+                  :model-value="formData"
                   :config="configData"
                   :attr-or-prop="formItemAttrOrProp"
+                  @update:model-value="handleChange"
                   @reload:form-config="setFormConfig"
                 >
                   <template
@@ -45,8 +50,11 @@
                   >
                     <slot
                       :name="slotName"
-                      :value="value"
-                      :config="configData"
+                      v-bind="{
+                        value,
+                        config: configData,
+                        data: formData
+                      }"
                     ></slot>
                   </template>
                 </ui-form-item>
@@ -54,26 +62,36 @@
             </template>
             <slot
               name="after"
-              :class-name="{ itemClass, subitemClass, actionClass }"
+              v-bind="{
+                itemClass,
+                subitemClass,
+                actionClass,
+                data: formData
+              }"
             ></slot>
           </ui-grid>
           <!-- For detail view -->
           <template v-else>
             <slot
               name="before"
-              :class-name="{ itemClass, subitemClass }"
+              v-bind="{
+                itemClass,
+                subitemClass,
+                data: formData
+              }"
             ></slot>
             <template
               v-for="(configData, configIndex) in formConfig"
               :key="`form-item-${configData.key || configIndex}`"
             >
               <ui-form-item
-                v-model="formData"
                 :debug="debug"
                 :item-class="itemClass"
                 :subitem-class="subitemClass"
+                :model-value="formData"
                 :config="configData"
                 :attr-or-prop="formItemAttrOrProp"
+                @update:model-value="handleChange"
                 @reload:form-config="setFormConfig"
               >
                 <template
@@ -82,15 +100,23 @@
                 >
                   <slot
                     :name="slotName"
-                    :value="value"
-                    :config="configData"
+                    v-bind="{
+                      value,
+                      config: configData,
+                      data: formData
+                    }"
                   ></slot>
                 </template>
               </ui-form-item>
             </template>
             <slot
               name="after"
-              :class-name="{ itemClass, subitemClass, actionClass }"
+              v-bind="{
+                itemClass,
+                subitemClass,
+                actionClass,
+                data: formData
+              }"
             ></slot>
           </template>
         </div>
@@ -100,8 +126,17 @@
 </template>
 
 <script>
+const UI_FORM_VIEW = {
+  EVENTS: {
+    update: 'update:model-value'
+  }
+};
+
 export default {
-  name: 'UiFormView'
+  name: 'UiFormView',
+  customOptions: {
+    UI_FORM_VIEW
+  }
 };
 </script>
 
@@ -121,7 +156,6 @@ const props = defineProps({
   },
   modelConfig: {
     type: [Array, Function],
-    default: () => [],
     required: true
   },
   modelOptions: {
@@ -150,8 +184,10 @@ const props = defineProps({
   }
 });
 
+const emit = defineEmits([UI_FORM_VIEW.EVENTS.update]);
+
 const state = reactive({
-  formData: props.modelValue,
+  formData: {},
   formConfig: []
 });
 const { formData, formConfig } = toRefs(state);
@@ -161,16 +197,16 @@ onBeforeMount(() => {
 });
 
 watch(
-  () => props.modelValue,
+  () => props.modelConfig,
   (val) => {
-    state.formData = Object.assign(state.formData, val);
+    setFormConfig(val);
   }
 );
 
 watch(
-  () => props.modelConfig,
+  () => props.modelValue,
   (val) => {
-    setFormConfig(val);
+    state.formData = Object.assign(state.formData, val);
   }
 );
 
@@ -196,11 +232,23 @@ function setFormConfig(modelConfig = props.modelConfig) {
 }
 
 function initFormDataByConfig() {
-  const formConfig = state.formConfig;
-  const needInit = formConfig.length && !Object.keys(state.formData).length;
-  needInit &&
-    formConfig
-      .filter(({ key }) => key)
-      .forEach(({ key, value }) => (state.formData[key] = value));
+  const formConfig = state.formConfig.filter(({ key }) => key);
+  const formDataKeys = Object.keys(state.formData);
+  const needInit =
+    formConfig.length && formConfig.length !== formDataKeys.length;
+
+  if (needInit) {
+    for (let i = 0, len = formConfig.length; i < len; i++) {
+      const { key, value } = formConfig[i];
+      if (getType(state.formData[key]) === 'undefined') {
+        state.formData[key] = value;
+      }
+    }
+  }
+}
+
+function handleChange(key, value) {
+  state.formData[key] = value;
+  emit(UI_FORM_VIEW.EVENTS.update, state.formData);
 }
 </script>

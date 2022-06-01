@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: 'ui-snippet',
+  name: 'UiSnippet',
   inheritAttrs: false
 };
 </script>

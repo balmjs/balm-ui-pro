@@ -25,7 +25,7 @@
     <div class="mdc-form-item__item">
       <slot :name="customSlots.beforeItem" :value="value"></slot>
       <ui-readonly-item
-        v-if="config.readonly"
+        v-if="config.readonlyItem"
         :subitem-class="subitemClass"
         :value="value"
       >
@@ -37,7 +37,7 @@
           v-show="displayFormItem(config)"
           v-model="formData[config.key]"
           v-bind="config.attrOrProp"
-          @update:model-value="handleChange(config)"
+          @update:modelValue="handleChange(config, $event)"
         ></component>
       </template>
       <slot :name="customSlots.afterItem" :value="value"></slot>
@@ -51,7 +51,8 @@ const UI_FORM_ITEM = {
   EVENTS: {
     update: 'update:model-value',
     reload: 'reload:form-config'
-  }
+  },
+  DEFAULT_INPUT_COMPONENTS: ['ui-textfield', 'ui-autocomplete']
 };
 
 export default {
@@ -66,6 +67,7 @@ export default {
 <script setup>
 import { reactive, toRefs, computed, watch, onBeforeMount } from 'vue';
 import UiReadonlyItem from './readonly-item.vue';
+import { formItemProps, useFormItem } from '../../mixins/form-item';
 import getType from '../../utils/typeof';
 
 const props = defineProps({
@@ -85,32 +87,40 @@ const props = defineProps({
     type: Object,
     default: () => ({})
   },
-  config: {
-    type: Object,
-    default: () => ({})
-  },
+  ...formItemProps,
   attrOrProp: {
     type: Object,
     default: () => ({})
+  },
+  inputComponents: {
+    type: Array,
+    default: () => []
   }
 });
 
-const emit = defineEmits([UI_FORM_ITEM.EVENTS.reload]);
+const emit = defineEmits([
+  UI_FORM_ITEM.EVENTS.update,
+  UI_FORM_ITEM.EVENTS.reload
+]);
 
 const state = reactive({
-  formData: props.modelValue
+  formData: props.modelValue,
+  formInputComponents: [].concat(
+    UI_FORM_ITEM.DEFAULT_INPUT_COMPONENTS,
+    props.inputComponents
+  )
 });
 const { formData } = toRefs(state);
 
 const component = computed(() => props.config.component || 'unknown-component');
-const key = computed(() => props.config.key || 'unknown-key');
+const { key } = useFormItem(props);
 const componentKey = computed(() => `${component.value}--${key.value}`);
 const customSlots = computed(() => ({
   beforeLabel: `before-label__${componentKey.value}`,
   afterLabel: `after-label__${componentKey.value}`,
   beforeItem: `before-item__${componentKey.value}`,
   afterItem: `after-item__${componentKey.value}`,
-  readonly: `readonly__${componentKey.value}`
+  readonlyItem: `readonly__${componentKey.value}`
 }));
 const value = computed(() => getModelValue(props.config));
 
@@ -130,11 +140,13 @@ function displayFormItem({ show }) {
   return getType(show) === 'undefined' || show;
 }
 
-function handleChange({ reload }) {
+function handleChange({ component, key, reload }, value) {
+  // props.debug && console.log(component, key, value);
+  emit(UI_FORM_ITEM.EVENTS.update, key, value);
   reload && emit(UI_FORM_ITEM.EVENTS.reload);
 }
 
-function getModelValue({ key, value, defaultValue }) {
-  return state.formData[key] || value || defaultValue;
+function getModelValue({ key, value }) {
+  return state.formData[key] || value;
 }
 </script>

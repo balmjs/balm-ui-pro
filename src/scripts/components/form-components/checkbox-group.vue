@@ -5,11 +5,11 @@
       :key="`checkbox-${key}-${index}`"
     >
       <ui-checkbox
-        :model-value="selectedValue"
+        v-model="selectedValue"
         :input-id="`checkbox-${key}-${index}`"
         :value="option.value"
         :disabled="option.disabled || false"
-        @update:model-value="handleChange"
+        @update:modelValue="handleChange"
       ></ui-checkbox>
       <label :for="`checkbox-${key}-${index}`">{{ option.label }}</label>
     </ui-form-field>
@@ -17,8 +17,6 @@
 </template>
 
 <script>
-import { cssClasses } from './constants';
-
 // Define checkbox group constants
 const UI_CHECKBOX_GROUP = {
   EVENTS: {
@@ -29,14 +27,14 @@ const UI_CHECKBOX_GROUP = {
 export default {
   name: 'UiCheckboxGroup',
   customOptions: {
-    UI_CHECKBOX_GROUP,
-    cssClasses
+    UI_CHECKBOX_GROUP
   }
 };
 </script>
 
 <script setup>
-import { reactive, toRefs, computed, watch } from 'vue';
+import { reactive, toRefs, watch } from 'vue';
+import { cssClasses, formItemProps, useFormItem } from '../../mixins/form-item';
 
 const props = defineProps({
   // States
@@ -49,11 +47,7 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
-  // For form view
-  config: {
-    type: Object,
-    default: () => ({})
-  }
+  ...formItemProps
 });
 
 const emit = defineEmits([UI_CHECKBOX_GROUP.EVENTS.CHANGE]);
@@ -63,7 +57,7 @@ const state = reactive({
 });
 const { selectedValue } = toRefs(state);
 
-const key = computed(() => props.config.key || 'unknown-key');
+const { key } = useFormItem(props);
 
 watch(
   () => props.modelValue,

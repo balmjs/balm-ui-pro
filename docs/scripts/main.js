@@ -7,6 +7,7 @@ import App from '@/views/layouts/app';
 import BalmUI from 'balm-ui';
 import BalmUIPlus from 'balm-ui-plus';
 import BalmUIPro from 'balm-ui-pro';
+import { customComponents } from '@/config/components';
 // PWA
 // import './my-sw';
 
@@ -23,6 +24,9 @@ function createBalmUIProApp() {
       baseDir: '@/model-config'
     }
   });
+  customComponents.forEach((component) =>
+    app.component(component.name, component)
+  );
 
   router.isReady().then(() => app.mount('#app'));
 }

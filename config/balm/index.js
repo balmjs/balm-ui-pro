@@ -1,10 +1,10 @@
-const env = require('./env');
+const env = require('../env');
 const path = require('path');
 const webpack = require('webpack');
 const { VueLoaderPlugin } = require('vue-loader');
 const { ModuleFederationPlugin } = webpack.container;
 
-const workspace = path.join(__dirname, '..');
+const workspace = path.join(__dirname, '..', '..');
 
 function resolve(dir) {
   return path.join(workspace, dir);
