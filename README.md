@@ -4,6 +4,12 @@
 
 > [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) supports for Vue 2
 
+- Preview components
+  - `<ui-form-view>`
+  - `<ui-checkbox-group>`
+  - `<ui-radio-group>`
+  - `<ui-switch-box>`
+
 ## Quick Start
 
 ### Installing
@@ -35,6 +41,10 @@ app.mount('#app');
 ```
 
 ## Documentation
+
+```html
+<ui-form-view></ui-form-view>
+```
 
 ### Props
 

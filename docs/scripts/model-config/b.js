@@ -4,7 +4,7 @@ export default ({ data }) => {
       component: 'ui-textfield',
       label: 'Input',
       key: 'a',
-      value: ''
+      value: '123'
     },
     {
       component: 'ui-autocomplete',

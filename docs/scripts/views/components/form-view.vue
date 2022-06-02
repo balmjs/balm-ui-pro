@@ -49,9 +49,11 @@ onMounted(async () => {
 
   setTimeout(() => {
     state.modelConfig = module;
-    state.formData = {
-      a: 'world'
-    };
+    setTimeout(() => {
+      state.formData = {
+        a: 'world'
+      };
+    }, 1e3);
   }, 1e3);
 });
 

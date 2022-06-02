@@ -179,7 +179,7 @@ export default {
 </script>
 
 <script setup>
-import { reactive, toRefs, watch, onBeforeMount } from 'vue';
+import { reactive, toRefs, computed, watch, onBeforeMount } from 'vue';
 import UiFormItem from './form-item.vue';
 import getType from '../../utils/typeof';
 
@@ -223,6 +223,10 @@ const props = defineProps({
   actionConfig: {
     type: Array,
     default: () => []
+  },
+  syncModelValue: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -232,10 +236,14 @@ const emit = defineEmits([
 ]);
 
 const state = reactive({
-  formData: {},
-  formConfig: []
+  formConfig: [],
+  formData: {}
 });
 const { formData, formConfig } = toRefs(state);
+
+const currentFormConfig = computed(() =>
+  state.formConfig.filter(({ key }) => key)
+);
 
 onBeforeMount(() => {
   setFormConfig();
@@ -252,6 +260,7 @@ watch(
   () => props.modelValue,
   (val) => {
     state.formData = Object.assign(state.formData, val);
+    props.syncModelValue && syncFormData(val);
   }
 );
 
@@ -277,7 +286,7 @@ function setFormConfig(modelConfig = props.modelConfig) {
 }
 
 function initFormDataByConfig() {
-  const formConfig = state.formConfig.filter(({ key }) => key);
+  const formConfig = currentFormConfig.value;
   const formDataKeys = Object.keys(state.formData);
   const needInit =
     formConfig.length && formConfig.length !== formDataKeys.length;
@@ -289,6 +298,18 @@ function initFormDataByConfig() {
         state.formData[key] = value;
       }
     }
+    emit(UI_FORM_VIEW.EVENTS.update, state.formData);
+  }
+}
+
+function syncFormData(newFormData) {
+  const formConfigKeys = currentFormConfig.value.map(({ key }) => key);
+  const newFormDataKeys = Object.keys(newFormData).filter((key) =>
+    formConfigKeys.includes(key)
+  );
+  const needSync =
+    formConfigKeys.length && formConfigKeys.length !== newFormDataKeys.length;
+  if (needSync) {
     emit(UI_FORM_VIEW.EVENTS.update, state.formData);
   }
 }
@@ -310,7 +331,7 @@ function handleAction({ type, delay }) {
       };
       break;
     case NATIVE_BUTTON_TYPES.reset:
-      const formConfig = state.formConfig.filter(({ key }) => key);
+      const formConfig = currentFormConfig.value;
       if (formConfig.length) {
         formConfig.forEach(({ key, value }) => {
           state.formData[key] = value;
