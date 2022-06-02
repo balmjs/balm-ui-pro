@@ -65,7 +65,6 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                actionClass,
                 data: formData
               }"
             ></slot>
@@ -112,11 +111,41 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                actionClass,
                 data: formData
               }"
             ></slot>
           </template>
+          <slot
+            name="actions"
+            v-bind="{
+              className: [itemClass, actionClass],
+              data: formData
+            }"
+          >
+            <ui-form-field
+              v-if="actionConfig.length"
+              :class="[itemClass, actionClass]"
+            >
+              <template v-for="(buttonData, buttonIndex) in actionConfig">
+                <ui-button
+                  v-if="buttonData.type === 'submit'"
+                  :key="`form-submit-${buttonIndex}`"
+                  v-debounce="handleAction(buttonData)"
+                  v-bind="buttonData.attrOrProp"
+                >
+                  {{ buttonData.text }}
+                </ui-button>
+                <ui-button
+                  v-else
+                  :key="`form-button-${buttonIndex}`"
+                  v-bind="buttonData.attrOrProp"
+                  @click="handleAction(buttonData)"
+                >
+                  {{ buttonData.text }}
+                </ui-button>
+              </template>
+            </ui-form-field>
+          </slot>
         </div>
       </template>
     </ui-form>
@@ -129,8 +158,15 @@ import getType from '../../utils/typeof';
 
 const UI_FORM_VIEW = {
   EVENTS: {
-    update: 'change'
+    update: 'change',
+    action: 'action'
   }
+};
+
+const NATIVE_BUTTON_TYPES = {
+  button: 'button',
+  submit: 'submit',
+  reset: 'reset'
 };
 
 export default {
@@ -178,13 +214,26 @@ export default {
     gridCellAttrOrProp: {
       type: Object,
       default: () => ({})
+    },
+    actionConfig: {
+      type: Array,
+      default: () => []
+    },
+    syncModelValue: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      formData: {},
-      formConfig: []
+      formConfig: [],
+      formData: {}
     };
+  },
+  computed: {
+    currentFormConfig() {
+      return this.formConfig.filter((key) => key);
+    }
   },
   watch: {
     modelConfig(val) {
@@ -192,6 +241,7 @@ export default {
     },
     modelValue(val) {
       this.formData = Object.assign(this.formData, val);
+      this.syncModelValue && this.syncFormData(val);
     }
   },
   beforeMount() {
@@ -220,7 +270,7 @@ export default {
       }
     },
     initFormDataByConfig() {
-      const formConfig = this.formConfig.filter(({ key }) => key);
+      const formConfig = this.currentFormConfig;
       const formDataKeys = Object.keys(this.formData);
       const needInit =
         formConfig.length && formConfig.length !== formDataKeys.length;
@@ -231,11 +281,56 @@ export default {
             this.$set(this.formData, key, value);
           }
         }
+        this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
+      }
+    },
+    syncFormData(newFormData) {
+      const formConfigKeys = this.currentFormConfig.map(({ key }) => key);
+      const newFormDataKeys = Object.keys(newFormData).filter((key) =>
+        formConfigKeys.includes(key)
+      );
+      const needSync =
+        formConfigKeys.length &&
+        formConfigKeys.length !== newFormDataKeys.length;
+      if (needSync) {
+        this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
       }
     },
     handleChange(key, value) {
       this.$set(this.formData, key, value);
       this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
+    },
+    handleAction({ type, delay }) {
+      let debounceConfig = {};
+
+      switch (type) {
+        case NATIVE_BUTTON_TYPES.submit:
+          debounceConfig = {
+            callback: () =>
+              this.$emit(
+                UI_FORM_VIEW.EVENTS.action,
+                NATIVE_BUTTON_TYPES.submit
+              ),
+            delay: delay || 250
+          };
+          break;
+        case NATIVE_BUTTON_TYPES.reset:
+          const formConfig = this.currentFormConfig;
+          if (formConfig.length) {
+            formConfig.forEach(({ key, value }) => {
+              this.formData[key] = value;
+            });
+          }
+          this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
+          break;
+      }
+
+      return type === NATIVE_BUTTON_TYPES.submit
+        ? debounceConfig
+        : this.$emit(
+            UI_FORM_VIEW.EVENTS.action,
+            type || NATIVE_BUTTON_TYPES.button
+          );
     }
   }
 };
