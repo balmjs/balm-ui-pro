@@ -36,6 +36,7 @@
           :is="config.component"
           v-show="displayFormItem(config)"
           v-model="formData[config.key]"
+          :form-data="formData"
           v-bind="config.attrOrProp"
           @input="handleInput(config, $event)"
           @change="handleChange(config, $event)"
