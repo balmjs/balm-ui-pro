@@ -232,7 +232,7 @@ export default {
   },
   computed: {
     currentFormConfig() {
-      return this.formConfig.filter((key) => key);
+      return this.formConfig.filter(({ key }) => key);
     }
   },
   watch: {
