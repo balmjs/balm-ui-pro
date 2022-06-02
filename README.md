@@ -2,6 +2,8 @@
 
 > Coming up...
 
+> [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) supports for Vue 2
+
 ## Quick Start
 
 ### Installing
