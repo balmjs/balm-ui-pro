@@ -65,7 +65,6 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                actionClass,
                 data: formData
               }"
             ></slot>
@@ -114,11 +113,42 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                actionClass,
                 data: formData
               }"
             ></slot>
           </template>
+          <slot
+            name="actions"
+            v-bind="{
+              className: [itemClass, actionClass],
+              data: formData
+            }"
+          >
+            <ui-form-field
+              v-if="actionConfig.length"
+              :class="[itemClass, actionClass]"
+            >
+              <template
+                v-for="(buttonData, buttonIndex) in actionConfig"
+                :key="`form-action-${buttonIndex}`"
+              >
+                <ui-button
+                  v-if="buttonData.type === 'submit'"
+                  v-debounce="handleAction(buttonData)"
+                  v-bind="buttonData.attrOrProp"
+                >
+                  {{ buttonData.text }}
+                </ui-button>
+                <ui-button
+                  v-else
+                  v-bind="buttonData.attrOrProp"
+                  @click="handleAction(buttonData)"
+                >
+                  {{ buttonData.text }}
+                </ui-button>
+              </template>
+            </ui-form-field>
+          </slot>
         </div>
       </template>
     </ui-form>
@@ -128,14 +158,22 @@
 <script>
 const UI_FORM_VIEW = {
   EVENTS: {
-    update: 'update:model-value'
+    update: 'update:model-value',
+    action: 'action'
   }
+};
+
+const NATIVE_BUTTON_TYPES = {
+  button: 'button',
+  submit: 'submit',
+  reset: 'reset'
 };
 
 export default {
   name: 'UiFormView',
   customOptions: {
-    UI_FORM_VIEW
+    UI_FORM_VIEW,
+    NATIVE_BUTTON_TYPES
   }
 };
 </script>
@@ -181,10 +219,17 @@ const props = defineProps({
   gridCellAttrOrProp: {
     type: Object,
     default: () => ({})
+  },
+  actionConfig: {
+    type: Array,
+    default: () => []
   }
 });
 
-const emit = defineEmits([UI_FORM_VIEW.EVENTS.update]);
+const emit = defineEmits([
+  UI_FORM_VIEW.EVENTS.update,
+  UI_FORM_VIEW.EVENTS.action
+]);
 
 const state = reactive({
   formData: {},
@@ -244,11 +289,39 @@ function initFormDataByConfig() {
         state.formData[key] = value;
       }
     }
+    emit(UI_FORM_VIEW.EVENTS.update, state.formData);
   }
 }
 
 function handleChange(key, value) {
   state.formData[key] = value;
   emit(UI_FORM_VIEW.EVENTS.update, state.formData);
+}
+
+function handleAction({ type, delay }) {
+  let debounceConfig = {};
+
+  switch (type) {
+    case NATIVE_BUTTON_TYPES.submit:
+      debounceConfig = {
+        callback: () =>
+          emit(UI_FORM_VIEW.EVENTS.action, NATIVE_BUTTON_TYPES.submit),
+        delay: delay || 250
+      };
+      break;
+    case NATIVE_BUTTON_TYPES.reset:
+      const formConfig = state.formConfig.filter(({ key }) => key);
+      if (formConfig.length) {
+        formConfig.forEach(({ key, value }) => {
+          state.formData[key] = value;
+        });
+      }
+      emit(UI_FORM_VIEW.EVENTS.update, state.formData);
+      break;
+  }
+
+  return type === NATIVE_BUTTON_TYPES.submit
+    ? debounceConfig
+    : emit(UI_FORM_VIEW.EVENTS.action, type || NATIVE_BUTTON_TYPES.button);
 }
 </script>

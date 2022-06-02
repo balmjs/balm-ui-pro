@@ -19,10 +19,10 @@ npm install --save balm-ui-pro
 ```
 
 ```js
-import { createApp } from 'vue';
-import App from '@/views/layouts/app';
-import BalmUI from 'balm-ui';
-import BalmUIPro from 'balm-ui-pro';
+import { createApp } fror 'vue';
+import App fror '@/views/layouts/app';
+import BalmUI fror 'balm-ui';
+import BalmUIPro fror 'balm-ui-pro';
 
 const app = createApp(App);
 
@@ -36,46 +36,56 @@ app.mount('#app');
 
 ### Props
 
-| Name                 | Type            | Default    | Description                                                                       |
-| -------------------- | --------------- | ---------- | --------------------------------------------------------------------------------- |
-| `debug`              | boolean         | `false`    | Debug form view                                                                   |
-| `modelValue`         | object          | `{}`       | Form model data                                                                   |
-| `modelConfig`        | array, function | `required` | Form model config                                                                 |
-| `modelOptions`       | object          | `{}`       | The extra options of the form model config                                        |
-| `useGrid`            | boolean         | `false`    |                                                                                   |
-| `formAttrOrProp`     | object          | `{}`       | See BalmUI `<ui-form>` props [docs](https://material.balmjs.com/layout/form)      |
-| `formItemAttrOrProp` | object          | `{}`       |                                                                                   |
-| `gridAttrOrProp`     | object          | `{}`       | See BalmUI `<ui-grid>` props [docs](https://material.balmjs.com/layout/grid)      |
-| `gridCellAttrOrProp` | object          | `{}`       | See BalmUI `<ui-grid-cell>` props [docs](https://material.balmjs.com/layout/grid) |
+| Name                 | Type            | Default    | Description                                                                                           |
+| -------------------- | --------------- | ---------- | ----------------------------------------------------------------------------------------------------- |
+| `debug`              | boolean         | `false`    | Debug form view                                                                                       |
+| `modelValue`         | object          | `{}`       | Form model data                                                                                       |
+| `modelConfig`        | array, function | `required` | Form model config                                                                                     |
+| `modelOptions`       | object          | `{}`       | The extra options of the form model config                                                            |
+| `useGrid`            | boolean         | `false`    |                                                                                                       |
+| `formAttrOrProp`     | object          | `{}`       | See BalmUI `<ui-form>` props [docs](https://material.balmjs.com/layout/form)                          |
+| `formItemAttrOrProp` | object          | `{}`       |                                                                                                       |
+| `gridAttrOrProp`     | object          | `{}`       | See BalmUI `<ui-grid>` props [docs](https://material.balmjs.com/layout/grid)                          |
+| `gridCellAttrOrProp` | object          | `{}`       | See BalmUI `<ui-grid-cell>` props [docs](https://material.balmjs.com/layout/grid)                     |
+| `actionConfig`       | actionButton[]  | `[]`       | Form button config, see BalmUI `<ui-button>` props [docs](https://material.balmjs.com/general/button) |
+
+```ts
+interface actionButton {
+  text: string;
+  type?: 'button' | 'submit' | 'reset';
+  attrOrProp?: object;
+}
+```
 
 ### Slots
 
-| Name                               | Props                                              | Description                                |
-| ---------------------------------- | -------------------------------------------------- | ------------------------------------------ |
-| `before`                           | `itemClass`, `subitemClass`, `data`                |                                            |
-| custom slot (by from model config) | `value`, `config`, `data`                          | See all custom slot name by `debug = true` |
-| `after`                            | `itemClass`, `subitemClass`, `actionClass`, `data` |                                            |
+| Name                                          | Props                               | Description                                                    |
+| --------------------------------------------- | ----------------------------------- | -------------------------------------------------------------- |
+| `before`                                      | `itemClass`, `subitemClass`, `data` | Before form items                                              |
+| custom form item slots (by form model config) | `value`, `config`, `data`           | Custom form item slots (See all slots names by `debug = true`) |
+| `after`                                       | `itemClass`, `subitemClass`, `data` | After form items                                               |
+| `actions`                                     | `className`, `data`                 | Custom form buttons                                            |
 
 ### Events
 
 | Name                 | Type                           | Description |
 | -------------------- | ------------------------------ | ----------- |
 | `update:model-value` | `function(modelValue: object)` |             |
+| `action`             | `function(type: string)`       |             |
 
 ## Demo
 
 ```html
-<ui-form-view v-model="formData" :model-config="config">
-  <template #after="{ actionClass }">
-    <ui-form-field :class="actionClass">
-      <ui-button raised @click="onSubmit">Submit</ui-button>
-    </ui-form-field>
-  </template>
-</ui-form-view>
+<ui-form-view
+  v-model="formData"
+  :model-config="modelConfig"
+  :action-config="actionConfig"
+  @action="onAction"
+></ui-form-view>
 ```
 
 ```js
-const config = ({ data }) => {
+const modelConfig = ({ data }) => {
   return [
     {
       component: 'ui-textfield',
@@ -215,4 +225,25 @@ const config = ({ data }) => {
     }
   ];
 };
+
+const actionConfig = [
+  {
+    type: 'reset',
+    text: 'Reset',
+    attrOrProp: {
+      outlined: true
+    }
+  },
+  {
+    type: 'submit',
+    text: 'Submit',
+    attrOrProp: {
+      raised: true
+    }
+  }
+];
+
+function onAction(type) {
+  console.log(type);
+}
 ```
