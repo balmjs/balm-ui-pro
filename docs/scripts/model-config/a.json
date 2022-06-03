@@ -6,7 +6,8 @@
     "value": "",
     "attrOrProp": {
       "placeholder": "aaa"
-    }
+    },
+    "showSlots": true
   },
   {
     "component": "ui-autocomplete",

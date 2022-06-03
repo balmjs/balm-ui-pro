@@ -72,10 +72,6 @@ export default {
     event: UI_FORM_ITEM.EVENTS.update
   },
   props: {
-    debug: {
-      type: Boolean,
-      default: false
-    },
     itemClass: {
       type: String,
       default: ''
@@ -132,10 +128,10 @@ export default {
     }
   },
   beforeMount() {
-    const customSlotsNames = Object.values(this.customSlots);
-    this.debug &&
-      customSlotsNames.length &&
-      console.log(`[${name}] slots:`, customSlotsNames);
+    if (this.config.showSlots) {
+      const customSlotsNames = Object.values(this.customSlots);
+      console.info(`[${name}] slots:`, customSlotsNames);
+    }
   },
   methods: {
     displayFormItem({ show }) {

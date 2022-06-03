@@ -43,7 +43,6 @@ Vue.use(BalmUIPro);
 
 | Name                 | Type            | Default    | Description                                                                                           |
 | -------------------- | --------------- | ---------- | ----------------------------------------------------------------------------------------------------- |
-| `debug`              | boolean         | `false`    | Debug form view                                                                                       |
 | `modelValue`         | object          | `{}`       | Form model data                                                                                       |
 | `modelConfig`        | array, function | `required` | Form model config                                                                                     |
 | `modelOptions`       | object          | `{}`       | The extra options of the form model config                                                            |
@@ -64,12 +63,12 @@ interface actionButton {
 
 ### Slots
 
-| Name                                          | Props                               | Description                                                    |
-| --------------------------------------------- | ----------------------------------- | -------------------------------------------------------------- |
-| `before`                                      | `itemClass`, `subitemClass`, `data` | Before form items                                              |
-| custom form item slots (by form model config) | `value`, `config`, `data`           | Custom form item slots (See all slots names by `debug = true`) |
-| `after`                                       | `itemClass`, `subitemClass`, `data` | After form items                                               |
-| `actions`                                     | `className`, `data`                 | Custom form buttons                                            |
+| Name                                          | Props                               | Description                                                        |
+| --------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------ |
+| `before`                                      | `itemClass`, `subitemClass`, `data` | Before form items                                                  |
+| custom form item slots (by form model config) | `value`, `config`, `data`           | Custom form item slots (See all slots names by `config.showSlots`) |
+| `after`                                       | `itemClass`, `subitemClass`, `data` | After form items                                                   |
+| `actions`                                     | `className`, `data`                 | Custom form buttons                                                |
 
 ### Events
 
@@ -96,7 +95,8 @@ const modelConfig = ({ data }) => {
       component: 'ui-textfield',
       label: 'Input',
       key: 'a',
-      value: ''
+      value: '',
+      showSlots: true // show all custom slots names in console
     },
     {
       component: 'ui-autocomplete',

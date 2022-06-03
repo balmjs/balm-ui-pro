@@ -54,7 +54,8 @@ export default ({ data }) => {
             value: 4
           }
         ]
-      }
+      },
+      showSlots: true
     },
     {
       component: 'ui-radio-group',
