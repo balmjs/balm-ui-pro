@@ -4,26 +4,36 @@
       v-model="formData"
       :model-config="modelConfig"
       :action-config="actionConfig"
-      debug
       @action="onAction"
     >
+      <template #before>
+        <div>outer formData: {{ formData }}</div>
+        <hr />
+      </template>
       <!-- <template #actions="{ className, data }">
         <ui-form-field :class="className">
           <ui-button raised @click="onSubmit(data)">Custom Submit</ui-button>
         </ui-form-field>
       </template> -->
+      <template #after="{ data, dataSource }">
+        <div>inner formData: {{ data }}</div>
+        <hr />
+        <div>formDataSource: {{ dataSource }}</div>
+      </template>
     </ui-form-view>
-    formData: {{ formData }}
   </div>
 </template>
 
 <script setup>
 import { reactive, toRefs, onMounted } from 'vue';
 import { loadAsset } from '@/utils';
+import defaultModelConfig from '@/model-config/a.json';
 
 const state = reactive({
-  modelConfig: [],
-  formData: {}
+  modelConfig: defaultModelConfig,
+  formData: {
+    a: 'hello'
+  }
 });
 const { modelConfig, formData } = toRefs(state);
 
@@ -48,11 +58,11 @@ onMounted(async () => {
   const module = await loadAsset('model-config/b.js');
 
   setTimeout(() => {
-    state.modelConfig = module;
+    state.formData = {
+      a: 'world'
+    };
     setTimeout(() => {
-      state.formData = {
-        a: 'world'
-      };
+      state.modelConfig = module;
     }, 1e3);
   }, 1e3);
 });

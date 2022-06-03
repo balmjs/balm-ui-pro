@@ -1,6 +1,6 @@
 {
   "name": "balm-ui-pro",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "BalmUI Pro",
   "keywords": [
     "balm",
@@ -22,7 +22,8 @@
     "url": "http://elf-mouse.me"
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "main": "dist/balm-ui-pro.js",
   "module": "dist/balm-ui-pro.esm.js",

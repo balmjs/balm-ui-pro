@@ -36,6 +36,7 @@
           :is="config.component"
           v-show="displayFormItem(config)"
           v-model="formData[config.key]"
+          :form-data="formData"
           v-bind="config.attrOrProp"
           @update:modelValue="handleChange(config, $event)"
         ></component>
@@ -71,10 +72,6 @@ import { formItemProps, useFormItem } from '../../mixins/form-item';
 import getType from '../../utils/typeof';
 
 const props = defineProps({
-  debug: {
-    type: Boolean,
-    default: false
-  },
   itemClass: {
     type: String,
     default: ''
@@ -125,10 +122,10 @@ const customSlots = computed(() => ({
 const value = computed(() => getModelValue(props.config));
 
 onBeforeMount(() => {
-  const customSlotsNames = Object.values(customSlots.value);
-  props.debug &&
-    customSlotsNames.length &&
-    console.log(`[${name}] slots:`, customSlotsNames);
+  if (props.config.showSlots) {
+    const customSlotsNames = Object.values(customSlots.value);
+    console.info(`[${name}] slots:`, customSlotsNames);
+  }
 });
 
 watch(
@@ -141,7 +138,7 @@ function displayFormItem({ show }) {
 }
 
 function handleChange({ component, key, reload }, value) {
-  // props.debug && console.log(component, key, value);
+  props.config.debug && console.log(component, key, value);
   emit(UI_FORM_ITEM.EVENTS.update, key, value);
   reload && emit(UI_FORM_ITEM.EVENTS.reload);
 }

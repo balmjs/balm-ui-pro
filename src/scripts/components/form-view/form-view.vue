@@ -7,11 +7,6 @@
       }
     ]"
   >
-    <template v-if="debug">
-      <div>Form config: {{ formConfig }}</div>
-      <hr />
-      <div>Form data: {{ formData }}</div>
-    </template>
     <ui-form
       class="mdc-form-view__form"
       :type="useGrid ? 'horizontal' : 'vertical'"
@@ -26,7 +21,8 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData
+                data: formData,
+                dataSource: formDataSource
               }"
             ></slot>
             <template
@@ -35,7 +31,6 @@
             >
               <ui-grid-cell v-bind="gridCellAttrOrProp">
                 <ui-form-item
-                  :debug="debug"
                   :item-class="itemClass"
                   :subitem-class="subitemClass"
                   :model-value="formData"
@@ -65,7 +60,8 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData
+                data: formData,
+                dataSource: formDataSource
               }"
             ></slot>
           </ui-grid>
@@ -76,7 +72,8 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData
+                data: formData,
+                dataSource: formDataSource
               }"
             ></slot>
             <template
@@ -84,7 +81,6 @@
               :key="`form-item-${configData.key || configIndex}`"
             >
               <ui-form-item
-                :debug="debug"
                 :item-class="itemClass"
                 :subitem-class="subitemClass"
                 :model-value="formData"
@@ -113,7 +109,8 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData
+                data: formData,
+                dataSource: formDataSource
               }"
             ></slot>
           </template>
@@ -121,7 +118,8 @@
             name="actions"
             v-bind="{
               className: [itemClass, actionClass],
-              data: formData
+              data: formData,
+              dataSource: formDataSource
             }"
           >
             <ui-form-field
@@ -184,10 +182,6 @@ import UiFormItem from './form-item.vue';
 import getType from '../../utils/typeof';
 
 const props = defineProps({
-  debug: {
-    type: Boolean,
-    default: false
-  },
   modelValue: {
     type: Object,
     default: () => ({})
@@ -237,30 +231,41 @@ const emit = defineEmits([
 
 const state = reactive({
   formConfig: [],
-  formData: {}
+  formData: {},
+  formDataSource: props.modelValue
 });
-const { formData, formConfig } = toRefs(state);
+const { formData, formConfig, formDataSource } = toRefs(state);
 
 const currentFormConfig = computed(() =>
   state.formConfig.filter(({ key }) => key)
 );
+const formDataKeys = computed(() =>
+  currentFormConfig.value.map(({ key }) => key)
+);
+const hasFormDataSource = computed(
+  () => Object.keys(state.formDataSource).length
+);
 
 onBeforeMount(() => {
   setFormConfig();
+  updateFormData();
 });
 
 watch(
   () => props.modelConfig,
   (val) => {
     setFormConfig(val);
+    if (hasFormDataSource.value) {
+      updateFormData();
+    }
   }
 );
 
 watch(
   () => props.modelValue,
   (val) => {
-    state.formData = Object.assign(state.formData, val);
-    props.syncModelValue && syncFormData(val);
+    state.formDataSource = Object.assign({}, val);
+    updateFormData();
   }
 );
 
@@ -279,38 +284,42 @@ function setFormConfig(modelConfig = props.modelConfig) {
     );
     state.formConfig = formConfig;
 
-    initFormDataByConfig();
+    initFormData();
   } else {
     console.warn(`[UiFormView]: Invalid form model config`);
   }
 }
 
-function initFormDataByConfig() {
+function initFormData() {
   const formConfig = currentFormConfig.value;
-  const formDataKeys = Object.keys(state.formData);
-  const needInit =
-    formConfig.length && formConfig.length !== formDataKeys.length;
-
-  if (needInit) {
-    for (let i = 0, len = formConfig.length; i < len; i++) {
+  const formConfigCount = formConfig.length;
+  if (formConfigCount) {
+    for (let i = 0; i < formConfigCount; i++) {
       const { key, value } = formConfig[i];
-      if (getType(state.formData[key]) === 'undefined') {
-        state.formData[key] = value;
-      }
+      state.formData[key] = value;
     }
-    emit(UI_FORM_VIEW.EVENTS.update, state.formData);
   }
 }
 
-function syncFormData(newFormData) {
-  const formConfigKeys = currentFormConfig.value.map(({ key }) => key);
-  const newFormDataKeys = Object.keys(newFormData).filter((key) =>
-    formConfigKeys.includes(key)
-  );
-  const needSync =
-    formConfigKeys.length && formConfigKeys.length !== newFormDataKeys.length;
-  if (needSync) {
-    emit(UI_FORM_VIEW.EVENTS.update, state.formData);
+function updateFormData(newFormData = state.formDataSource) {
+  if (currentFormConfig.value.length) {
+    let needSync = false;
+
+    const newFormDataKeys = Object.keys(newFormData).filter((key) =>
+      formDataKeys.value.includes(key)
+    );
+    const newFormDataKeysCount = newFormDataKeys.length;
+    for (let i = 0; i < newFormDataKeysCount; i++) {
+      const key = newFormDataKeys[i];
+      if (state.formData[key] !== newFormData[key]) {
+        state.formData[key] = newFormData[key];
+        needSync = true;
+      }
+    }
+
+    if (needSync) {
+      emit(UI_FORM_VIEW.EVENTS.update, state.formData);
+    }
   }
 }
 
