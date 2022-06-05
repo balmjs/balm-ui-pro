@@ -21,6 +21,7 @@ npm install --save balm-ui-pro@legacy
 ### Usage
 
 ```scss
+@use 'balm-ui/dist/balm-ui';
 @use 'balm-ui-pro/dist/balm-ui-pro';
 ```
 
