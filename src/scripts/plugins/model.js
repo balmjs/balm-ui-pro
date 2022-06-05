@@ -74,8 +74,9 @@ class RouterModel {
     };
   }
 
-  createViewRoutes(name, { BlankView, ListView, DetailView }, options = {}) {
-    const { listPath, detailPath, listOptions } = options;
+  createViewRoutes(name, views = {}, options = {}) {
+    const { BlankView, ListView, DetailView } = views;
+    const { listPath, detailPath, listOptions, detailOptions } = options;
     return {
       path: name,
       name: `${name}.index`,
@@ -88,7 +89,7 @@ class RouterModel {
                 listPath || CRUD.list,
                 `${name}.${CRUD.list}`,
                 ListView,
-                listOptions
+                listOptions || {}
               )
             ]
           : []),
@@ -99,7 +100,8 @@ class RouterModel {
               this.createRoute(
                 detailPath || ':id?',
                 `${name}.${CRUD.detail}`,
-                DetailView
+                DetailView,
+                detailOptions || {}
               )
             ]
           : [])

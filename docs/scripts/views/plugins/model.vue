@@ -2,7 +2,8 @@
   <div>
     <div>model: {{ model }}</div>
     <div>apis: {{ apis }}</div>
-    <div>apiName: {{ api }}</div>
+    <div>apiName: {{ apiName }}</div>
+    <div>routes: {{ routes }}</div>
   </div>
 </template>
 
@@ -24,7 +25,28 @@ export default {
           exclude: ['update']
         }
       ),
-      apiName: this.$apiModel.getApiName('user', 'list')
+      apiName: this.$apiModel.getApiName('user', 'list'),
+      routes: this.$routerModel.createViewRoutes(
+        'user',
+        {
+          BlankView: 'blank-layout',
+          ListView: 'list-view',
+          DetailView: 'detail-view'
+        },
+        {
+          listPath: 'list/:type?',
+          detailPath: ':userId?',
+          listOptions: {
+            meta: {
+              auth: true
+            },
+            a: 'hello'
+          },
+          detailOptions: {
+            b: 'world'
+          }
+        }
+      )
     };
   }
 };

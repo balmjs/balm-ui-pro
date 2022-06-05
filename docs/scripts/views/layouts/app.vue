@@ -72,7 +72,8 @@
 
 <script>
 import SvgGithub from '@/components/github';
-import menu from '@/routes/components';
+import componentsMenu from '@/routes/components';
+import pluginsMenu from '@/routes/plugins';
 
 export default {
   components: {
@@ -80,7 +81,7 @@ export default {
   },
   data() {
     return {
-      menu,
+      menu: [].concat(componentsMenu, pluginsMenu),
       open: false
     };
   },
