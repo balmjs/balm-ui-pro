@@ -15,10 +15,9 @@
           <ui-button raised @click="onSubmit(data)">Custom Submit</ui-button>
         </ui-form-field>
       </template> -->
-      <template #after="{ data, dataSource }">
+      <template #after="{ data }">
         <div>inner formData: {{ data }}</div>
-        <hr />
-        <div>formDataSource: {{ dataSource }}</div>
+        <ui-alert v-if="message" state="warning">{{ message }}</ui-alert>
       </template>
     </ui-form-view>
   </div>
@@ -33,9 +32,10 @@ const state = reactive({
   modelConfig: defaultModelConfig,
   formData: {
     a: 'hello'
-  }
+  },
+  message: ''
 });
-const { modelConfig, formData } = toRefs(state);
+const { modelConfig, formData, message } = toRefs(state);
 
 const actionConfig = [
   {
@@ -67,8 +67,16 @@ onMounted(async () => {
   }, 1e3);
 });
 
-function onAction(type) {
+function onAction({ type, valid, message }) {
   console.log('onAction', type);
+
+  if (type === 'submit') {
+    state.message = message;
+
+    if (valid) {
+      console.log('gg');
+    }
+  }
 }
 
 function onSubmit(data) {

@@ -10,7 +10,8 @@ export default ({ data }) => {
       component: 'ui-autocomplete',
       label: 'Autocomplete',
       key: 'b',
-      value: ''
+      value: '',
+      validator: 'required'
     },
     {
       component: 'ui-editor',

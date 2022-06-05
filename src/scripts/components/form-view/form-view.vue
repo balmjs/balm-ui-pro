@@ -21,8 +21,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData,
-                dataSource: formDataSource
+                data: formData
               }"
             ></slot>
             <template
@@ -60,8 +59,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData,
-                dataSource: formDataSource
+                data: formData
               }"
             ></slot>
           </ui-grid>
@@ -72,8 +70,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData,
-                dataSource: formDataSource
+                data: formData
               }"
             ></slot>
             <template
@@ -109,8 +106,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData,
-                dataSource: formDataSource
+                data: formData
               }"
             ></slot>
           </template>
@@ -118,8 +114,7 @@
             name="actions"
             v-bind="{
               className: [itemClass, actionClass],
-              data: formData,
-              dataSource: formDataSource
+              data: formData
             }"
           >
             <ui-form-field
@@ -131,7 +126,7 @@
                 :key="`form-action-${buttonIndex}`"
               >
                 <ui-button
-                  v-if="buttonData.type === 'submit'"
+                  v-if="buttonData.type === NATIVE_BUTTON_TYPES.submit"
                   v-debounce="handleAction(buttonData)"
                   v-bind="buttonData.attrOrProp"
                 >
@@ -177,7 +172,7 @@ export default {
 </script>
 
 <script setup>
-import { reactive, toRefs, computed, watch, onBeforeMount } from 'vue';
+import { inject, reactive, toRefs, computed, watch, onBeforeMount } from 'vue';
 import UiFormItem from './form-item.vue';
 import getType from '../../utils/typeof';
 
@@ -229,12 +224,13 @@ const emit = defineEmits([
   UI_FORM_VIEW.EVENTS.action
 ]);
 
+const validator = inject('validator');
 const state = reactive({
   formConfig: [],
   formData: {},
   formDataSource: props.modelValue
 });
-const { formData, formConfig, formDataSource } = toRefs(state);
+const { formData, formConfig } = toRefs(state);
 
 const currentFormConfig = computed(() =>
   state.formConfig.filter(({ key }) => key)
@@ -334,8 +330,31 @@ function handleAction({ type, delay }) {
   switch (type) {
     case NATIVE_BUTTON_TYPES.submit:
       debounceConfig = {
-        callback: () =>
-          emit(UI_FORM_VIEW.EVENTS.action, NATIVE_BUTTON_TYPES.submit),
+        callback: () => {
+          const validations = state.formConfig.filter(
+            ({ validator }) => validator
+          );
+          if (validations.length) {
+            if (validator.validate) {
+              validator.set(validations);
+
+              const result = validator.validate(state.formData);
+
+              emit(UI_FORM_VIEW.EVENTS.action, {
+                type: NATIVE_BUTTON_TYPES.submit,
+                ...result
+              });
+
+              validator.clear();
+            } else {
+              console.warn(`[UiFormView]: BalmUI $validator plugin is missing`);
+            }
+          } else {
+            emit(UI_FORM_VIEW.EVENTS.action, {
+              type: NATIVE_BUTTON_TYPES.submit
+            });
+          }
+        },
         delay: delay || 250
       };
       break;
@@ -352,6 +371,8 @@ function handleAction({ type, delay }) {
 
   return type === NATIVE_BUTTON_TYPES.submit
     ? debounceConfig
-    : emit(UI_FORM_VIEW.EVENTS.action, type || NATIVE_BUTTON_TYPES.button);
+    : emit(UI_FORM_VIEW.EVENTS.action, {
+        type: type || NATIVE_BUTTON_TYPES.button
+      });
 }
 </script>
