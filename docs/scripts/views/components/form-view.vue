@@ -15,10 +15,9 @@
           <ui-button raised @click="onSubmit(data)">Custom Submit</ui-button>
         </ui-form-field>
       </template> -->
-      <template #after="{ data, dataSource }">
+      <template #after="{ data }">
         <div>inner formData: {{ data }}</div>
-        <hr />
-        <div>formDataSource: {{ dataSource }}</div>
+        <ui-alert v-if="message" state="warning">{{ message }}</ui-alert>
       </template>
     </ui-form-view>
   </div>
@@ -52,7 +51,8 @@ export default {
       formData: {
         a: 'hello'
       },
-      actionConfig
+      actionConfig,
+      message: ''
     };
   },
   async mounted() {
@@ -68,8 +68,16 @@ export default {
     }, 1e3);
   },
   methods: {
-    onAction(type) {
+    onAction({ type, valid, message }) {
       console.log('onAction', type);
+
+      if (type === 'submit') {
+        this.message = message;
+
+        if (valid) {
+          console.log('gg');
+        }
+      }
     },
     onSubmit(data) {
       console.log('onSubmit', data, this.formData);

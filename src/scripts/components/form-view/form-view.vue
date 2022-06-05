@@ -21,8 +21,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData,
-                dataSource: formDataSource
+                data: formData
               }"
             ></slot>
             <template v-for="(configData, configIndex) in formConfig">
@@ -60,8 +59,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData,
-                dataSource: formDataSource
+                data: formData
               }"
             ></slot>
           </ui-grid>
@@ -72,8 +70,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData,
-                dataSource: formDataSource
+                data: formData
               }"
             ></slot>
             <template v-for="(configData, configIndex) in formConfig">
@@ -107,8 +104,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData,
-                dataSource: formDataSource
+                data: formData
               }"
             ></slot>
           </template>
@@ -116,8 +112,7 @@
             name="actions"
             v-bind="{
               className: [itemClass, actionClass],
-              data: formData,
-              dataSource: formDataSource
+              data: formData
             }"
           >
             <ui-form-field
@@ -126,7 +121,7 @@
             >
               <template v-for="(buttonData, buttonIndex) in actionConfig">
                 <ui-button
-                  v-if="buttonData.type === 'submit'"
+                  v-if="buttonData.type === NATIVE_BUTTON_TYPES.submit"
                   :key="`form-submit-${buttonIndex}`"
                   v-debounce="handleAction(buttonData)"
                   v-bind="buttonData.attrOrProp"
@@ -220,6 +215,7 @@ export default {
   },
   data() {
     return {
+      NATIVE_BUTTON_TYPES,
       formConfig: [],
       formData: {},
       formDataSource: this.modelValue
@@ -316,11 +312,33 @@ export default {
       switch (type) {
         case NATIVE_BUTTON_TYPES.submit:
           debounceConfig = {
-            callback: () =>
-              this.$emit(
-                UI_FORM_VIEW.EVENTS.action,
-                NATIVE_BUTTON_TYPES.submit
-              ),
+            callback: () => {
+              const validations = this.formConfig.filter(
+                ({ validator }) => validator
+              );
+              if (validations.length) {
+                if (this.$validate) {
+                  this.$validations.set(validations);
+
+                  const result = this.$validate(this.formData);
+
+                  this.$emit(UI_FORM_VIEW.EVENTS.action, {
+                    type: NATIVE_BUTTON_TYPES.submit,
+                    ...result
+                  });
+
+                  this.$validations.clear();
+                } else {
+                  console.warn(
+                    `[UiFormView]: BalmUI $validator plugin is missing`
+                  );
+                }
+              } else {
+                this.$emit(UI_FORM_VIEW.EVENTS.action, {
+                  type: NATIVE_BUTTON_TYPES.submit
+                });
+              }
+            },
             delay: delay || 250
           };
           break;
@@ -337,10 +355,9 @@ export default {
 
       return type === NATIVE_BUTTON_TYPES.submit
         ? debounceConfig
-        : this.$emit(
-            UI_FORM_VIEW.EVENTS.action,
-            type || NATIVE_BUTTON_TYPES.button
-          );
+        : this.$emit(UI_FORM_VIEW.EVENTS.action, {
+            type: type || NATIVE_BUTTON_TYPES.button
+          });
     }
   }
 };

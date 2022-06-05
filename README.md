@@ -39,6 +39,23 @@ Vue.use(BalmUIPro);
 <ui-form-view></ui-form-view>
 ```
 
+```ts
+interface FormConfigItem {
+  if?: boolean;
+  show?: boolean;
+  component: string;
+  label?: string;
+  key?: string;
+  value?: string;
+  attrOrProp?: object;
+  showSlots?: boolean; // For dev and debug
+  reload?: boolean;
+  ...BalmUIValidationRule
+}
+```
+
+> NOTE: see BalmUI $validator rule and result [docs](https://v8.material.balmjs.com/#/data-input/validator)
+
 ### Props
 
 | Name                 | Type            | Default    | Description                                                                                           |
@@ -51,10 +68,10 @@ Vue.use(BalmUIPro);
 | `formItemAttrOrProp` | object          | `{}`       |                                                                                                       |
 | `gridAttrOrProp`     | object          | `{}`       | See BalmUI `<ui-grid>` props [docs](https://material.balmjs.com/layout/grid)                          |
 | `gridCellAttrOrProp` | object          | `{}`       | See BalmUI `<ui-grid-cell>` props [docs](https://material.balmjs.com/layout/grid)                     |
-| `actionConfig`       | actionButton[]  | `[]`       | Form button config, see BalmUI `<ui-button>` props [docs](https://material.balmjs.com/general/button) |
+| `actionConfig`       | ActionButton[]  | `[]`       | Form button config, see BalmUI `<ui-button>` props [docs](https://material.balmjs.com/general/button) |
 
 ```ts
-interface actionButton {
+interface ActionButton {
   text: string;
   type?: 'button' | 'submit' | 'reset';
   attrOrProp?: object;
@@ -72,10 +89,17 @@ interface actionButton {
 
 ### Events
 
-| Name                 | Type                           | Description |
-| -------------------- | ------------------------------ | ----------- |
-| `update:model-value` | `function(modelValue: object)` |             |
-| `action`             | `function(type: string)`       |             |
+| Name                 | Type                                   | Description |
+| -------------------- | -------------------------------------- | ----------- |
+| `update:model-value` | `function(modelValue: object)`         |             |
+| `action`             | `function(antionResult: ActionResult)` |             |
+
+```ts
+interface ActionResult {
+  type: string; // ActionButton.type,
+  ...validationResult?: BalmUIValidationResult
+}
+```
 
 ## Demo
 
@@ -248,7 +272,7 @@ const actionConfig = [
   }
 ];
 
-function onAction(type) {
+function onAction({ type }) {
   console.log(type);
 }
 ```
