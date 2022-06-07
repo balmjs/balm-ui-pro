@@ -20,6 +20,9 @@
         <ui-alert v-if="message" state="warning">{{ message }}</ui-alert>
       </template>
     </ui-form-view>
+
+    <ui-button @click="clearFormData">Clear formData</ui-button>
+    <ui-button @click="setFormData">Set formData</ui-button>
   </div>
 </template>
 
@@ -85,6 +88,15 @@ export default {
     },
     onSubmit(data) {
       console.log('onSubmit', data, this.formData);
+    },
+    clearFormData() {
+      this.formData = {};
+    },
+    setFormData() {
+      this.formData = {
+        a: 'xxx',
+        b: 'yyy'
+      };
     }
   }
 };
