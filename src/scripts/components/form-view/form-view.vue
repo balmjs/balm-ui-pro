@@ -246,7 +246,10 @@ export default {
   },
   beforeMount() {
     this.setFormConfig();
-    this.updateFormData();
+    const synchronized = this.updateFormData();
+    if (!synchronized) {
+      this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
+    }
   },
   methods: {
     setFormConfig(modelConfig = this.modelConfig) {
@@ -281,9 +284,9 @@ export default {
       }
     },
     updateFormData(newFormData = this.formDataSource) {
-      if (this.currentFormConfig.length) {
-        let needSync = false;
+      let needSync = false;
 
+      if (this.currentFormConfig.length) {
         const formDataKeys = this.formDataKeys;
         const newFormDataKeys = Object.keys(newFormData).filter((key) =>
           formDataKeys.includes(key)
@@ -301,6 +304,8 @@ export default {
           this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
         }
       }
+
+      return needSync;
     },
     handleChange(key, value) {
       this.$set(this.formData, key, value);
