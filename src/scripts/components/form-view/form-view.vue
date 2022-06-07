@@ -237,12 +237,12 @@ export default {
         this.updateFormData();
       }
     },
-    modelValue(val) {
+    modelValue(val, oldVal) {
       this.formDataSource = Object.assign({}, val);
       if (this.hasFormDataSource) {
         this.updateFormData();
       } else {
-        this.resetFormData();
+        this.resetFormData(Object.keys(oldVal).length);
       }
     }
   },
@@ -307,20 +307,18 @@ export default {
           }
         }
 
-        if (needSync) {
-          this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
-        }
+        needSync && this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
       }
 
       return needSync;
     },
-    resetFormData() {
+    resetFormData(needSync) {
       this.formData = {};
       const formConfig = this.currentFormConfig;
       formConfig.forEach(({ key, value }) => {
         this.$set(this.formData, key, value);
       });
-      this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
+      needSync && this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
     },
     handleChange(key, value) {
       this.$set(this.formData, key, value);
@@ -363,7 +361,7 @@ export default {
           };
           break;
         case NATIVE_BUTTON_TYPES.reset:
-          this.resetFormData();
+          this.resetFormData(true);
           break;
       }
 
