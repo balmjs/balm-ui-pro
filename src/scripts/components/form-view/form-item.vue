@@ -19,7 +19,7 @@
       ]"
     >
       <slot :name="customSlots.beforeLabel" :value="value"></slot>
-      <span>{{ config.label }}</span>
+      <span>{{ getFormLabel(config) }}</span>
       <slot :name="customSlots.afterLabel" :value="value"></slot>
     </label>
     <div class="mdc-form-item__item">
@@ -55,8 +55,7 @@ import getType from '../../utils/typeof';
 const name = 'UiFormItem';
 const UI_FORM_ITEM = {
   EVENTS: {
-    update: 'change',
-    reload: 'reload-form-config'
+    update: 'change'
   },
   DEFAULT_INPUT_COMPONENTS: ['ui-textfield', 'ui-autocomplete']
 };
@@ -134,17 +133,26 @@ export default {
     }
   },
   methods: {
-    displayFormItem({ show }) {
-      return getType(show) === 'undefined' || show;
+    displayFormItem({ show, key, value }) {
+      const display =
+        getType(show) === 'function'
+          ? show(this.formData)
+          : getType(show) === 'undefined' || show;
+
+      !display && this.$emit(UI_FORM_ITEM.EVENTS.update, key, value);
+
+      return display;
+    },
+    getFormLabel({ label }) {
+      return getType(label) === 'function' ? label(this.formData) : label;
     },
     handleInput({ component, key }, value) {
       this.formInputComponents.includes(component) &&
         this.$emit(UI_FORM_ITEM.EVENTS.update, key, value);
     },
-    handleChange({ component, key, reload }, value) {
+    handleChange({ component, key }, value) {
       !this.formInputComponents.includes(component) &&
         this.$emit(UI_FORM_ITEM.EVENTS.update, key, value);
-      reload && this.$emit(UI_FORM_ITEM.EVENTS.reload);
     },
     getModelValue({ key, value }) {
       return this.formData[key] || value;

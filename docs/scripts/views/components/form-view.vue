@@ -49,7 +49,8 @@ export default {
     return {
       modelConfig,
       formData: {
-        a: 'hello'
+        a: 'hello',
+        f: 5
       },
       actionConfig,
       message: ''
@@ -59,11 +60,14 @@ export default {
     const module = await loadAsset('model-config/b.js');
 
     setTimeout(() => {
-      this.formData = {
-        a: 'world'
-      };
+      this.modelConfig = module;
+
       setTimeout(() => {
-        this.modelConfig = module;
+        this.formData = {
+          a: 'world',
+          d: 1,
+          f: 5
+        };
       }, 1e3);
     }, 1e3);
   },

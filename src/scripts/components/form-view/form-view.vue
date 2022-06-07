@@ -36,7 +36,6 @@
                   :config="configData"
                   :attr-or-prop="formItemAttrOrProp"
                   @change="handleChange"
-                  @reload-form-config="setFormConfig"
                 >
                   <template
                     v-for="(_, slotName) in $scopedSlots"
@@ -82,7 +81,6 @@
                 :config="configData"
                 :attr-or-prop="formItemAttrOrProp"
                 @change="handleChange"
-                @reload-form-config="setFormConfig"
               >
                 <template
                   v-for="(_, slotName) in $scopedSlots"

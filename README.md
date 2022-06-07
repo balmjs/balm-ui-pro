@@ -43,14 +43,13 @@ Vue.use(BalmUIPro);
 ```ts
 interface FormConfigItem {
   if?: boolean;
-  show?: boolean;
+  show?: boolean | (formData) => boolean;
   component: string;
-  label?: string;
+  label?: string | (formData) => string;
   key?: string;
   value?: string;
   attrOrProp?: object;
   showSlots?: boolean; // For dev and debug
-  reload?: boolean;
   ...BalmUIValidationRule
 }
 ```
@@ -152,8 +151,7 @@ const modelConfig = ({ data }) => {
             value: 2
           }
         ]
-      },
-      reload: true
+      }
     },
     {
       component: 'ui-checkbox-group',
