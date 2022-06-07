@@ -18,7 +18,14 @@ function createBalmUIProApp() {
   Vue.use($prism);
   Vue.use(BalmUI);
   Vue.use(BalmUIPlus);
-  Vue.use(BalmUIPro);
+  Vue.use(BalmUIPro, {
+    $model: {
+      crud: {
+        create: 'add',
+        update: 'edit'
+      }
+    }
+  });
   customComponents.forEach((component) => {
     Vue.component(component.name, component);
   });

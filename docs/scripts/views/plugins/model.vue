@@ -2,32 +2,42 @@
   <div>
     <div>model: {{ model }}</div>
     <div>apis: {{ apis }}</div>
-    <div>apiName: {{ apiName }}</div>
+    <hr />
     <div>routes: {{ routes }}</div>
   </div>
 </template>
 
 <script>
+import { useApiModel } from 'balm-ui-pro';
+
+const model = 'user';
+
+const $apiModel = useApiModel();
+
+const a = $apiModel.createApis(model, '/api/user', {
+  // create: {},
+  read: {
+    list: 'index',
+    detail: 'info'
+  }
+  // update: {
+  //   status: 'xxx/status'
+  // },
+  // delete: {
+  //   id: 'id'
+  // },
+  // excludeDefaults: ['create']
+});
+
+const b = $apiModel.createApis('post', '/api/post');
+
 export default {
   data() {
     return {
-      model: 'user',
-      apis: this.$apiModel.createApis(
-        'user',
-        '/api/user',
-        {
-          updateUserStatus: 'status'
-        },
-        {
-          crud: {
-            detail: 'info'
-          },
-          exclude: ['update']
-        }
-      ),
-      apiName: this.$apiModel.getApiName('user', 'list'),
+      model,
+      apis: this.$apiModel.apis,
       routes: this.$routerModel.createViewRoutes(
-        'user',
+        model,
         {
           BlankView: 'blank-layout',
           ListView: 'list-view',
