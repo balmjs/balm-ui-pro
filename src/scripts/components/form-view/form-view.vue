@@ -221,7 +221,7 @@ export default {
       NATIVE_BUTTON_TYPES,
       formConfig: [],
       formData: {},
-      formDataSource: this.modelValue
+      formDataSource: {}
     };
   },
   computed: {
@@ -247,7 +247,7 @@ export default {
       }
     },
     modelValue(val, oldVal) {
-      this.formDataSource = Object.assign({}, val);
+      this.updateFormDataSource(val);
       if (this.hasFormDataSource) {
         this.updateFormData();
       } else {
@@ -301,6 +301,14 @@ export default {
           const { key, value } = formConfig[i];
           this.$set(this.formData, key, value);
         }
+      }
+    },
+    updateFormDataSource(val) {
+      const newFormDataSource = Object.assign({}, val);
+      const newFormDataSourceKeys = Object.keys(newFormDataSource);
+      const oldFormDataSourceKeys = Object.keys(this.formDataSource);
+      if (newFormDataSourceKeys.length >= oldFormDataSourceKeys.length) {
+        this.formDataSource = newFormDataSource;
       }
     },
     updateFormData(newFormData = this.formDataSource) {
