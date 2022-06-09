@@ -180,7 +180,7 @@ export default {
       default: () => ({})
     },
     modelConfig: {
-      type: [Array, Function],
+      type: [Array, Function, Boolean],
       required: true
     },
     modelOptions: {
@@ -237,8 +237,8 @@ export default {
     }
   },
   watch: {
-    modelConfig(val, oldVal) {
-      if (!val.length && oldVal.length) {
+    modelConfig(val) {
+      if (val === false) {
         this.resetFormView();
       } else {
         this.setFormConfig(val);
