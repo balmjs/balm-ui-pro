@@ -13,9 +13,9 @@
 ### Installing
 
 ```sh
-yarn add balm-ui-pro@legacy
+yarn add balm-ui@legacy balm-ui-pro@legacy
 # OR
-npm install --save balm-ui-pro@legacy
+npm install --save balm-ui@legacy balm-ui-pro@legacy
 ```
 
 ### Usage
@@ -50,6 +50,7 @@ interface FormConfigItem {
   value?: string;
   attrOrProp?: object;
   showSlots?: boolean; // For dev and debug
+  validator?: string;
   ...BalmUIValidationRule
 }
 ```
