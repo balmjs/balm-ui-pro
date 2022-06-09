@@ -2,7 +2,7 @@
   <ui-form-field
     v-show="displayFormItem(config)"
     :class="[
-      itemClass,
+      attrOrProp.itemClass,
       'mdc-form-item',
       `mdc-form-item__${component}`,
       `mdc-form-item__${key}`
@@ -24,11 +24,7 @@
     </label>
     <div class="mdc-form-item__item">
       <slot :name="customSlots.beforeItem" :value="value"></slot>
-      <ui-readonly-item
-        v-if="config.readonly"
-        :subitem-class="subitemClass"
-        :value="value"
-      >
+      <ui-readonly-item v-if="config.readonly" :value="value">
         <slot :name="customSlots.readonlyItem" :value="value"></slot>
       </ui-readonly-item>
       <template v-else>
@@ -37,6 +33,7 @@
           v-show="displayFormItem(config)"
           v-model="formData[config.key]"
           :form-data="formData"
+          :form-data-source="formDataSource"
           v-bind="config.attrOrProp"
           @input="handleInput(config, $event)"
           @change="handleChange(config, $event)"
@@ -48,7 +45,7 @@
 </template>
 
 <script>
-import UiReadonlyItem from './readonly-item.vue';
+import UiReadonlyItem from '../form-components/readonly-item';
 import formItemMixin from '../../mixins/form-item';
 import getType from '../../utils/typeof';
 
@@ -71,15 +68,11 @@ export default {
     event: UI_FORM_ITEM.EVENTS.update
   },
   props: {
-    itemClass: {
-      type: String,
-      default: ''
-    },
-    subitemClass: {
-      type: String,
-      default: ''
-    },
     modelValue: {
+      type: Object,
+      default: () => ({})
+    },
+    formDataSource: {
       type: Object,
       default: () => ({})
     },

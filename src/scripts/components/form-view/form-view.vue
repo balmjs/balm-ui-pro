@@ -30,11 +30,15 @@
                 v-bind="gridCellAttrOrProp"
               >
                 <ui-form-item
-                  :item-class="itemClass"
-                  :subitem-class="subitemClass"
-                  :model-value="formData"
                   :config="configData"
-                  :attr-or-prop="formItemAttrOrProp"
+                  :model-value="formData"
+                  :form-data-source="formDataSource"
+                  :attr-or-prop="
+                    Object.assign(
+                      { itemClass, subitemClass },
+                      formItemAttrOrProp
+                    )
+                  "
                   @change="handleChange"
                 >
                   <template
@@ -75,11 +79,12 @@
             <template v-for="(configData, configIndex) in formConfig">
               <ui-form-item
                 :key="`form-item-${configData.key || configIndex}`"
-                :item-class="itemClass"
-                :subitem-class="subitemClass"
-                :model-value="formData"
                 :config="configData"
-                :attr-or-prop="formItemAttrOrProp"
+                :model-value="formData"
+                :form-data-source="formDataSource"
+                :attr-or-prop="
+                  Object.assign({ itemClass, subitemClass }, formItemAttrOrProp)
+                "
                 @change="handleChange"
               >
                 <template
@@ -144,7 +149,7 @@
 </template>
 
 <script>
-import UiFormItem from './form-item.vue';
+import UiFormItem from './form-item';
 import getType from '../../utils/typeof';
 
 const UI_FORM_VIEW = {
@@ -231,10 +236,14 @@ export default {
     }
   },
   watch: {
-    modelConfig(val) {
-      this.setFormConfig(val);
-      if (this.hasFormDataSource) {
-        this.updateFormData();
+    modelConfig(val, oldVal) {
+      if (!val.length && oldVal.length) {
+        this.resetFormView();
+      } else {
+        this.setFormConfig(val);
+        if (this.hasFormDataSource) {
+          this.updateFormData();
+        }
       }
     },
     modelValue(val, oldVal) {
@@ -254,16 +263,20 @@ export default {
     }
   },
   beforeDestroy() {
-    this.formConfig = [];
-    this.formData = {};
-    this.formDataSource = {};
+    this.resetFormView();
   },
   methods: {
+    resetFormView() {
+      this.formConfig = [];
+      this.formData = {};
+      this.formDataSource = {};
+    },
     setFormConfig(modelConfig = this.modelConfig) {
       const isFunctionConfig = getType(modelConfig) === 'function';
       const originalConfig = isFunctionConfig
         ? modelConfig({
             data: this.formData,
+            dataSource: this.formDataSource,
             ...this.modelOptions
           })
         : modelConfig;

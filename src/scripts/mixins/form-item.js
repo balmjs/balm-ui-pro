@@ -1,6 +1,6 @@
 export default {
   props: {
-    // For form view
+    // For form component
     config: {
       type: Object,
       default: () => ({})

@@ -1,21 +1,24 @@
 <template>
-  <div :class="[subitemClass, 'mdc-readonly-item']">
+  <div :class="['mdc-readonly-item', cssClasses.subitemClass]">
     <slot>{{ value }}</slot>
   </div>
 </template>
 
 <script>
+import { cssClasses } from './constants';
+
 export default {
   name: 'UiReadonlyItem',
   props: {
-    subitemClass: {
-      type: String,
-      default: ''
-    },
     value: {
       type: null,
       default: ''
     }
+  },
+  data() {
+    return {
+      cssClasses
+    };
   }
 };
 </script>
