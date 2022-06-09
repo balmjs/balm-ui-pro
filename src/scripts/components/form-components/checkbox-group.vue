@@ -2,16 +2,16 @@
   <div :class="['mdc-checkbox-group', cssClasses.subitemClass]">
     <ui-form-field
       v-for="(option, index) in options"
-      :key="`checkbox-${key}-${index}`"
+      :key="`${componentKey}-${index}`"
     >
       <ui-checkbox
         v-model="selectedValue"
-        :input-id="`checkbox-${key}-${index}`"
+        :input-id="`${componentKey}-${index}`"
         :value="option.value"
         :disabled="option.disabled || false"
         @change="handleChange"
       ></ui-checkbox>
-      <label :for="`checkbox-${key}-${index}`">{{ option.label }}</label>
+      <label :for="`${componentKey}-${index}`">{{ option.label }}</label>
     </ui-form-field>
   </div>
 </template>

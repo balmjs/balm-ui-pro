@@ -1,12 +1,7 @@
 <template>
   <ui-form-field
     v-show="displayFormItem(config)"
-    :class="[
-      attrOrProp.itemClass,
-      'mdc-form-item',
-      `mdc-form-item__${component}`,
-      `mdc-form-item__${key}`
-    ]"
+    :class="className"
     v-bind="attrOrProp"
   >
     <label
@@ -24,7 +19,11 @@
     </label>
     <div class="mdc-form-item__item">
       <slot :name="customSlots.beforeItem" :value="value"></slot>
-      <ui-readonly-item v-if="config.readonly" :value="value">
+      <ui-readonly-item
+        v-if="config.readonly"
+        :component-key="componentKey"
+        :value="value"
+      >
         <slot :name="customSlots.readonlyItem" :value="value"></slot>
       </ui-readonly-item>
       <template v-else>
@@ -32,9 +31,16 @@
           :is="config.component"
           v-show="displayFormItem(config)"
           v-model="formData[config.key]"
-          :form-data="formData"
-          :form-data-source="formDataSource"
-          v-bind="config.attrOrProp"
+          v-bind="
+            Object.assign(
+              {
+                componentKey,
+                formData,
+                formDataSource
+              },
+              config.attrOrProp
+            )
+          "
           @input="handleInput(config, $event)"
           @change="handleChange(config, $event)"
         ></component>
@@ -46,7 +52,6 @@
 
 <script>
 import UiReadonlyItem from '../form-components/readonly-item';
-import formItemMixin from '../../mixins/form-item';
 import getType from '../../utils/typeof';
 
 const name = 'UiFormItem';
@@ -62,12 +67,15 @@ export default {
   components: {
     UiReadonlyItem
   },
-  mixins: [formItemMixin],
   model: {
     prop: 'modelValue',
     event: UI_FORM_ITEM.EVENTS.update
   },
   props: {
+    config: {
+      type: Object,
+      default: () => ({})
+    },
     modelValue: {
       type: Object,
       default: () => ({})
@@ -98,8 +106,19 @@ export default {
     component() {
       return this.config.component || 'unknown-component';
     },
+    key() {
+      return this.config.key || 'unknown-key';
+    },
     componentKey() {
       return `${this.component}--${this.key}`;
+    },
+    className() {
+      return [
+        'mdc-form__item',
+        'mdc-form-item',
+        `mdc-form-item__${this.component}`,
+        `mdc-form-item__${this.key}`
+      ];
     },
     customSlots() {
       return {

@@ -24,39 +24,33 @@
                 data: formData
               }"
             ></slot>
-            <template v-for="(configData, configIndex) in formConfig">
-              <ui-grid-cell
-                :key="`form-item-${configData.key || configIndex}`"
-                v-bind="gridCellAttrOrProp"
+            <ui-grid-cell
+              v-for="(configData, configIndex) in formConfig"
+              :key="`form-item-${configData.key || configIndex}`"
+              v-bind="gridCellAttrOrProp"
+            >
+              <ui-form-item
+                :config="configData"
+                :model-value="formData"
+                :form-data-source="formDataSource"
+                :attr-or-prop="formItemAttrOrProp"
+                @change="handleChange"
               >
-                <ui-form-item
-                  :config="configData"
-                  :model-value="formData"
-                  :form-data-source="formDataSource"
-                  :attr-or-prop="
-                    Object.assign(
-                      { itemClass, subitemClass },
-                      formItemAttrOrProp
-                    )
-                  "
-                  @change="handleChange"
+                <template
+                  v-for="(_, slotName) in $scopedSlots"
+                  #[slotName]="{ value }"
                 >
-                  <template
-                    v-for="(_, slotName) in $scopedSlots"
-                    #[slotName]="{ value }"
-                  >
-                    <slot
-                      :name="slotName"
-                      v-bind="{
-                        value,
-                        config: configData,
-                        data: formData
-                      }"
-                    ></slot>
-                  </template>
-                </ui-form-item>
-              </ui-grid-cell>
-            </template>
+                  <slot
+                    :name="slotName"
+                    v-bind="{
+                      value,
+                      config: configData,
+                      data: formData
+                    }"
+                  ></slot>
+                </template>
+              </ui-form-item>
+            </ui-grid-cell>
             <slot
               name="after"
               v-bind="{
@@ -76,32 +70,29 @@
                 data: formData
               }"
             ></slot>
-            <template v-for="(configData, configIndex) in formConfig">
-              <ui-form-item
-                :key="`form-item-${configData.key || configIndex}`"
-                :config="configData"
-                :model-value="formData"
-                :form-data-source="formDataSource"
-                :attr-or-prop="
-                  Object.assign({ itemClass, subitemClass }, formItemAttrOrProp)
-                "
-                @change="handleChange"
+            <ui-form-item
+              v-for="(configData, configIndex) in formConfig"
+              :key="`form-item-${configData.key || configIndex}`"
+              :config="configData"
+              :model-value="formData"
+              :form-data-source="formDataSource"
+              :attr-or-prop="formItemAttrOrProp"
+              @change="handleChange"
+            >
+              <template
+                v-for="(_, slotName) in $scopedSlots"
+                #[slotName]="{ value }"
               >
-                <template
-                  v-for="(_, slotName) in $scopedSlots"
-                  #[slotName]="{ value }"
-                >
-                  <slot
-                    :name="slotName"
-                    v-bind="{
-                      value,
-                      config: configData,
-                      data: formData
-                    }"
-                  ></slot>
-                </template>
-              </ui-form-item>
-            </template>
+                <slot
+                  :name="slotName"
+                  v-bind="{
+                    value,
+                    config: configData,
+                    data: formData
+                  }"
+                ></slot>
+              </template>
+            </ui-form-item>
             <slot
               name="after"
               v-bind="{
@@ -210,22 +201,20 @@ export default {
     actionConfig: {
       type: Array,
       default: () => []
-    },
-    syncModelValue: {
-      type: Boolean,
-      default: false
     }
   },
   data() {
     return {
       NATIVE_BUTTON_TYPES,
-      isFunctionConfig: false,
       formConfig: [],
       formData: {},
       formDataSource: {}
     };
   },
   computed: {
+    isFunctionConfig() {
+      return getType(this.modelConfig) === 'function';
+    },
     currentFormConfig() {
       return this.formConfig.filter(({ key }) => key);
     },
@@ -274,7 +263,6 @@ export default {
       this.formDataSource = {};
     },
     setFormConfig(modelConfig = this.modelConfig) {
-      this.isFunctionConfig = getType(modelConfig) === 'function';
       const originalConfig = this.isFunctionConfig
         ? modelConfig({
             data: this.formData,

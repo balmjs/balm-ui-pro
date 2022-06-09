@@ -5,10 +5,12 @@
 </template>
 
 <script>
+import formItemMixin from '../../mixins/form-item';
 import { cssClasses } from './constants';
 
 export default {
   name: 'UiReadonlyItem',
+  mixins: [formItemMixin],
   props: {
     value: {
       type: null,

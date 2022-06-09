@@ -2,12 +2,12 @@
   <ui-form-field class="mdc-switch-box">
     <ui-switch
       v-model="selectedValue"
-      :input-id="`switch-${key}`"
-      :disabled="config.disabled || false"
+      :input-id="componentKey"
+      :disabled="disabled"
       v-bind="switchAttrOrProp"
       @change="handleChange"
     ></ui-switch>
-    <label :for="`switch-${key}`">{{ label }}</label>
+    <label :for="componentKey">{{ label }}</label>
   </ui-form-field>
 </template>
 
@@ -38,6 +38,10 @@ export default {
     options: {
       type: Array,
       default: () => []
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     },
     switchAttrOrProp: {
       type: Object,

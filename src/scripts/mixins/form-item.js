@@ -1,14 +1,16 @@
 export default {
   props: {
-    // For form component
-    config: {
+    componentKey: {
+      type: String,
+      default: 'unknown'
+    },
+    formData: {
       type: Object,
       default: () => ({})
-    }
-  },
-  computed: {
-    key() {
-      return this.config.key || 'unknown-key';
+    },
+    formDataSource: {
+      type: Object,
+      default: () => ({})
     }
   }
 };

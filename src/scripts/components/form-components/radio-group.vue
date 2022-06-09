@@ -2,16 +2,16 @@
   <div :class="['mdc-radio-group', cssClasses.subitemClass]">
     <ui-form-field
       v-for="(option, index) in options"
-      :key="`radio-${key}-${index}`"
+      :key="`${componentKey}-${index}`"
     >
       <ui-radio
         v-model="selectedValue"
-        :input-id="`radio-${key}-${index}`"
+        :input-id="`${componentKey}-${index}`"
         :value="option.value"
         :disabled="option.disabled || false"
         @change="handleChange"
       ></ui-radio>
-      <label :for="`radio-${key}-${index}`">{{ option.label }}</label>
+      <label :for="`${componentKey}-${index}`">{{ option.label }}</label>
     </ui-form-field>
   </div>
 </template>
