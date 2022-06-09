@@ -219,6 +219,7 @@ export default {
   data() {
     return {
       NATIVE_BUTTON_TYPES,
+      isFunctionConfig: false,
       formConfig: [],
       formData: {},
       formDataSource: {}
@@ -248,6 +249,7 @@ export default {
     },
     modelValue(val, oldVal) {
       this.updateFormDataSource(val);
+      this.isFunctionConfig && this.setFormConfig();
       if (this.hasFormDataSource) {
         this.updateFormData();
       } else {
@@ -272,8 +274,8 @@ export default {
       this.formDataSource = {};
     },
     setFormConfig(modelConfig = this.modelConfig) {
-      const isFunctionConfig = getType(modelConfig) === 'function';
-      const originalConfig = isFunctionConfig
+      this.isFunctionConfig = getType(modelConfig) === 'function';
+      const originalConfig = this.isFunctionConfig
         ? modelConfig({
             data: this.formData,
             dataSource: this.formDataSource,
