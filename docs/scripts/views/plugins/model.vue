@@ -39,9 +39,9 @@ export default {
       routes: this.$routerModel.createViewRoutes(
         model,
         {
-          BlankView: 'blank-layout',
-          ListView: 'list-view',
-          DetailView: 'detail-view'
+          indexView: 'blank-layout',
+          listView: 'list-view',
+          detailView: 'detail-view'
         },
         {
           listPath: 'list/:type?',
