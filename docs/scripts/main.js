@@ -21,7 +21,10 @@ function createBalmUIProApp() {
   app.use(BalmUIPlus);
   app.use(BalmUIPro, {
     $model: {
-      baseDir: '@/model-config'
+      crud: {
+        create: 'add',
+        update: 'edit'
+      }
     }
   });
   customComponents.forEach((component) =>

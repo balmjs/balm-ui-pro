@@ -72,7 +72,10 @@
 <script setup>
 import { reactive, toRefs, onMounted } from 'vue';
 import SvgGithub from '@/components/github';
-import menu from '@/routes/components';
+import componentsMenu from '@/routes/components';
+import pluginsMenu from '@/routes/plugins';
+
+const menu = [].concat(componentsMenu, pluginsMenu);
 
 const state = reactive({
   open: false

@@ -36,10 +36,10 @@ export default ({ data }) => {
             value: 2
           }
         ]
-      },
-      reload: true
+      }
     },
     {
+      label: ({ d }) => `Checkbox - ${d}`,
       component: 'ui-checkbox-group',
       label: 'Checkbox',
       key: 'e',
@@ -59,6 +59,7 @@ export default ({ data }) => {
       showSlots: true
     },
     {
+      show: ({ d }) => d === 2,
       component: 'ui-radio-group',
       label: 'Radio',
       key: 'f',
@@ -77,6 +78,7 @@ export default ({ data }) => {
       }
     },
     {
+      show: ({ f }) => f === 6,
       component: 'ui-chips',
       label: 'Chips',
       key: 'g',

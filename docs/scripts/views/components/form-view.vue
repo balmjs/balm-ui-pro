@@ -20,6 +20,9 @@
         <ui-alert v-if="message" state="warning">{{ message }}</ui-alert>
       </template>
     </ui-form-view>
+
+    <ui-button @click="clearFormData">Clear formData</ui-button>
+    <ui-button @click="setFormData">Set formData</ui-button>
   </div>
 </template>
 
@@ -31,7 +34,8 @@ import defaultModelConfig from '@/model-config/a.json';
 const state = reactive({
   modelConfig: defaultModelConfig,
   formData: {
-    a: 'hello'
+    a: 'hello',
+    f: 5
   },
   message: ''
 });
@@ -58,11 +62,13 @@ onMounted(async () => {
   const module = await loadAsset('model-config/b.js');
 
   setTimeout(() => {
-    state.formData = {
-      a: 'world'
-    };
+    state.modelConfig = module;
     setTimeout(() => {
-      state.modelConfig = module;
+      state.formData = {
+        a: 'world',
+        d: 1,
+        f: 5
+      };
     }, 1e3);
   }, 1e3);
 });
@@ -81,5 +87,16 @@ function onAction({ type, valid, message }) {
 
 function onSubmit(data) {
   console.log('onSubmit', data, state.formData);
+}
+
+function clearFormData() {
+  state.formData = {};
+}
+
+function setFormData() {
+  state.formData = {
+    a: 'xxx',
+    b: 'yyy'
+  };
 }
 </script>
