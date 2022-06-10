@@ -6,6 +6,7 @@
 
 - Preview components
   - `<ui-form-view>`
+  - `<ui-readonly-item>`
   - `<ui-checkbox-group>`
   - `<ui-radio-group>`
   - `<ui-switch-box>`
@@ -15,9 +16,9 @@
 ### Installing
 
 ```sh
-yarn add balm-ui-pro
+yarn add balm-ui balm-ui-pro
 # OR
-npm install --save balm-ui-pro
+npm install --save balm-ui balm-ui-pro
 ```
 
 ### Usage
@@ -50,14 +51,14 @@ app.mount('#app');
 ```ts
 interface FormConfigItem {
   if?: boolean;
-  show?: boolean;
+  show?: boolean | (formData) => boolean;
   component: string;
-  label?: string;
+  label?: string | (formData) => string;
   key?: string;
   value?: string;
   attrOrProp?: object;
   showSlots?: boolean; // For dev and debug
-  reload?: boolean;
+  validator?: string;
   ...BalmUIValidationRule
 }
 ```
@@ -66,22 +67,22 @@ interface FormConfigItem {
 
 ### Props
 
-| Name                 | Type            | Default    | Description                                                                                           |
-| -------------------- | --------------- | ---------- | ----------------------------------------------------------------------------------------------------- |
-| `modelValue`         | object          | `{}`       | Form model data                                                                                       |
-| `modelConfig`        | array, function | `required` | Form model config                                                                                     |
-| `modelOptions`       | object          | `{}`       | The extra options of the form model config                                                            |
-| `useGrid`            | boolean         | `false`    |                                                                                                       |
-| `formAttrOrProp`     | object          | `{}`       | See BalmUI `<ui-form>` props [docs](https://material.balmjs.com/layout/form)                          |
-| `formItemAttrOrProp` | object          | `{}`       |                                                                                                       |
-| `gridAttrOrProp`     | object          | `{}`       | See BalmUI `<ui-grid>` props [docs](https://material.balmjs.com/layout/grid)                          |
-| `gridCellAttrOrProp` | object          | `{}`       | See BalmUI `<ui-grid-cell>` props [docs](https://material.balmjs.com/layout/grid)                     |
-| `actionConfig`       | ActionButton[]  | `[]`       | Form button config, see BalmUI `<ui-button>` props [docs](https://material.balmjs.com/general/button) |
+| Name                 | Type                     | Default    | Description                                                                                           |
+| -------------------- | ------------------------ | ---------- | ----------------------------------------------------------------------------------------------------- |
+| `modelValue`         | object                   | `{}`       | Form model data                                                                                       |
+| `modelConfig`        | array, function, boolean | `required` | Form model config                                                                                     |
+| `modelOptions`       | object                   | `{}`       | The extra options of the form model config                                                            |
+| `useGrid`            | boolean                  | `false`    |                                                                                                       |
+| `formAttrOrProp`     | object                   | `{}`       | See BalmUI `<ui-form>` props [docs](https://material.balmjs.com/layout/form)                          |
+| `formItemAttrOrProp` | object                   | `{}`       |                                                                                                       |
+| `gridAttrOrProp`     | object                   | `{}`       | See BalmUI `<ui-grid>` props [docs](https://material.balmjs.com/layout/grid)                          |
+| `gridCellAttrOrProp` | object                   | `{}`       | See BalmUI `<ui-grid-cell>` props [docs](https://material.balmjs.com/layout/grid)                     |
+| `actionConfig`       | ActionButton[]           | `[]`       | Form button config, see BalmUI `<ui-button>` props [docs](https://material.balmjs.com/general/button) |
 
 ```ts
 interface ActionButton {
   text: string;
-  type?: 'button' | 'submit' | 'reset';
+  type?: 'button' | 'submit' | 'reset' | string;
   attrOrProp?: object;
 }
 ```
@@ -159,8 +160,7 @@ const modelConfig = ({ data }) => {
             value: 2
           }
         ]
-      },
-      reload: true
+      }
     },
     {
       component: 'ui-checkbox-group',
