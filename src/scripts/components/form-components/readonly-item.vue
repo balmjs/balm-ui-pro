@@ -1,5 +1,5 @@
 <template>
-  <div :class="[subitemClass, 'mdc-readonly-item']">
+  <div :class="['mdc-readonly-item', cssClasses.subitemClass]">
     <slot>{{ value }}</slot>
   </div>
 </template>
@@ -11,11 +11,10 @@ export default {
 </script>
 
 <script setup>
+import { cssClasses, formItemProps } from '../../mixins/form-item';
+
 const props = defineProps({
-  subitemClass: {
-    type: String,
-    default: ''
-  },
+  ...formItemProps,
   value: {
     type: null,
     default: ''

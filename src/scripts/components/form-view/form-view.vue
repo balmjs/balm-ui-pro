@@ -30,13 +30,11 @@
             >
               <ui-grid-cell v-bind="gridCellAttrOrProp">
                 <ui-form-item
-                  :item-class="itemClass"
-                  :subitem-class="subitemClass"
-                  :model-value="formData"
                   :config="configData"
+                  :model-value="formData"
+                  :form-data-source="formDataSource"
                   :attr-or-prop="formItemAttrOrProp"
                   @update:model-value="handleChange"
-                  @reload:form-config="setFormConfig"
                 >
                   <template
                     v-for="(_, slotName) in $slots"
@@ -78,13 +76,11 @@
               :key="`form-item-${configData.key || configIndex}`"
             >
               <ui-form-item
-                :item-class="itemClass"
-                :subitem-class="subitemClass"
-                :model-value="formData"
                 :config="configData"
+                :model-value="formData"
+                :form-data-source="formDataSource"
                 :attr-or-prop="formItemAttrOrProp"
                 @update:model-value="handleChange"
-                @reload:form-config="setFormConfig"
               >
                 <template
                   v-for="(_, slotName) in $slots"
@@ -172,7 +168,15 @@ export default {
 </script>
 
 <script setup>
-import { inject, reactive, toRefs, computed, watch, onBeforeMount } from 'vue';
+import {
+  inject,
+  reactive,
+  toRefs,
+  computed,
+  watch,
+  onBeforeMount,
+  onBeforeUnmount
+} from 'vue';
 import UiFormItem from './form-item.vue';
 import getType from '../../utils/typeof';
 
@@ -182,7 +186,7 @@ const props = defineProps({
     default: () => ({})
   },
   modelConfig: {
-    type: [Array, Function],
+    type: [Array, Function, Boolean],
     required: true
   },
   modelOptions: {
@@ -212,10 +216,6 @@ const props = defineProps({
   actionConfig: {
     type: Array,
     default: () => []
-  },
-  syncModelValue: {
-    type: Boolean,
-    default: false
   }
 });
 
@@ -228,10 +228,13 @@ const validator = inject('validator');
 const state = reactive({
   formConfig: [],
   formData: {},
-  formDataSource: props.modelValue
+  formDataSource: {}
 });
-const { formData, formConfig } = toRefs(state);
+const { formData, formConfig, formDataSource } = toRefs(state);
 
+const isFunctionConfig = computed(
+  () => getType(props.modelConfig) === 'function'
+);
 const currentFormConfig = computed(() =>
   state.formConfig.filter(({ key }) => key)
 );
@@ -244,32 +247,56 @@ const hasFormDataSource = computed(
 
 onBeforeMount(() => {
   setFormConfig();
-  updateFormData();
+  const synchronized = updateFormData();
+  if (!synchronized) {
+    emit(UI_FORM_VIEW.EVENTS.update, state.formData);
+  }
+});
+
+onBeforeUnmount(() => {
+  resetFormView();
 });
 
 watch(
   () => props.modelConfig,
   (val) => {
-    setFormConfig(val);
-    if (hasFormDataSource.value) {
-      updateFormData();
+    if (val === false) {
+      resetFormView();
+    } else {
+      setFormConfig(val);
+      if (hasFormDataSource.value) {
+        updateFormData();
+      }
     }
   }
 );
 
 watch(
   () => props.modelValue,
-  (val) => {
+  (val, oldVal) => {
     state.formDataSource = Object.assign({}, val);
-    updateFormData();
+
+    isFunctionConfig.value && setFormConfig();
+
+    if (hasFormDataSource.value) {
+      updateFormData();
+    } else {
+      resetFormData(Object.keys(oldVal).length);
+    }
   }
 );
 
+function resetFormView() {
+  state.formConfig = [];
+  state.formData = {};
+  state.formDataSource = {};
+}
+
 function setFormConfig(modelConfig = props.modelConfig) {
-  const isFunctionConfig = getType(modelConfig) === 'function';
-  const originalConfig = isFunctionConfig
+  const originalConfig = isFunctionConfig.value
     ? modelConfig({
         data: state.formData,
+        dataSource: state.formDataSource,
         ...props.modelOptions
       })
     : modelConfig;
@@ -298,9 +325,9 @@ function initFormData() {
 }
 
 function updateFormData(newFormData = state.formDataSource) {
-  if (currentFormConfig.value.length) {
-    let needSync = false;
+  let needSync = false;
 
+  if (currentFormConfig.value.length) {
     const newFormDataKeys = Object.keys(newFormData).filter((key) =>
       formDataKeys.value.includes(key)
     );
@@ -313,10 +340,20 @@ function updateFormData(newFormData = state.formDataSource) {
       }
     }
 
-    if (needSync) {
-      emit(UI_FORM_VIEW.EVENTS.update, state.formData);
-    }
+    needSync && emit(UI_FORM_VIEW.EVENTS.update, state.formData);
   }
+
+  return needSync;
+}
+
+function resetFormData(needSync) {
+  state.formData = {};
+  const formConfig = currentFormConfig.value;
+  formConfig.forEach(({ key, value }) => {
+    state.formData[key] = value;
+  });
+
+  needSync && emit(UI_FORM_VIEW.EVENTS.update, state.formData);
 }
 
 function handleChange(key, value) {
@@ -359,13 +396,7 @@ function handleAction({ type, delay }) {
       };
       break;
     case NATIVE_BUTTON_TYPES.reset:
-      const formConfig = currentFormConfig.value;
-      if (formConfig.length) {
-        formConfig.forEach(({ key, value }) => {
-          state.formData[key] = value;
-        });
-      }
-      emit(UI_FORM_VIEW.EVENTS.update, state.formData);
+      resetFormData(true);
       break;
   }
 

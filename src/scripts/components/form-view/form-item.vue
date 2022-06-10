@@ -1,12 +1,7 @@
 <template>
   <ui-form-field
     v-show="displayFormItem(config)"
-    :class="[
-      itemClass,
-      'mdc-form-item',
-      `mdc-form-item__${component}`,
-      `mdc-form-item__${key}`
-    ]"
+    :class="className"
     v-bind="attrOrProp"
   >
     <label
@@ -19,14 +14,14 @@
       ]"
     >
       <slot :name="customSlots.beforeLabel" :value="value"></slot>
-      <span>{{ config.label }}</span>
+      <span>{{ getFormLabel(config) }}</span>
       <slot :name="customSlots.afterLabel" :value="value"></slot>
     </label>
     <div class="mdc-form-item__item">
       <slot :name="customSlots.beforeItem" :value="value"></slot>
       <ui-readonly-item
         v-if="config.readonlyItem"
-        :subitem-class="subitemClass"
+        :component-key="componentKey"
         :value="value"
       >
         <slot :name="customSlots.readonly" :value="value"></slot>
@@ -36,8 +31,16 @@
           :is="config.component"
           v-show="displayFormItem(config)"
           v-model="formData[config.key]"
-          :form-data="formData"
-          v-bind="config.attrOrProp"
+          v-bind="
+            Object.assign(
+              {
+                componentKey,
+                formData,
+                formDataSource
+              },
+              config.attrOrProp
+            )
+          "
           @update:modelValue="handleChange(config, $event)"
         ></component>
       </template>
@@ -50,8 +53,7 @@
 const name = 'UiFormItem';
 const UI_FORM_ITEM = {
   EVENTS: {
-    update: 'update:model-value',
-    reload: 'reload:form-config'
+    update: 'update:model-value'
   },
   DEFAULT_INPUT_COMPONENTS: ['ui-textfield', 'ui-autocomplete']
 };
@@ -67,24 +69,22 @@ export default {
 
 <script setup>
 import { reactive, toRefs, computed, watch, onBeforeMount } from 'vue';
-import UiReadonlyItem from './readonly-item.vue';
-import { formItemProps, useFormItem } from '../../mixins/form-item';
+import UiReadonlyItem from '../form-components/readonly-item.vue';
 import getType from '../../utils/typeof';
 
 const props = defineProps({
-  itemClass: {
-    type: String,
-    default: ''
-  },
-  subitemClass: {
-    type: String,
-    default: ''
+  config: {
+    type: Object,
+    default: () => ({})
   },
   modelValue: {
     type: Object,
     default: () => ({})
   },
-  ...formItemProps,
+  formDataSource: {
+    type: Object,
+    default: () => ({})
+  },
   attrOrProp: {
     type: Object,
     default: () => ({})
@@ -95,10 +95,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits([
-  UI_FORM_ITEM.EVENTS.update,
-  UI_FORM_ITEM.EVENTS.reload
-]);
+const emit = defineEmits([UI_FORM_ITEM.EVENTS.update]);
 
 const state = reactive({
   formData: props.modelValue,
@@ -110,8 +107,14 @@ const state = reactive({
 const { formData } = toRefs(state);
 
 const component = computed(() => props.config.component || 'unknown-component');
-const { key } = useFormItem(props);
+const key = computed(() => props.config.key || 'unknown-key');
 const componentKey = computed(() => `${component.value}--${key.value}`);
+const className = computed(() => [
+  'mdc-form__item',
+  'mdc-form-item',
+  `mdc-form-item__${component.value}`,
+  `mdc-form-item__${key.value}`
+]);
 const customSlots = computed(() => ({
   beforeLabel: `before-label__${componentKey.value}`,
   afterLabel: `after-label__${componentKey.value}`,
@@ -133,14 +136,23 @@ watch(
   (val) => (state.formData = val)
 );
 
-function displayFormItem({ show }) {
-  return getType(show) === 'undefined' || show;
+function displayFormItem({ show, key, value }) {
+  const display =
+    getType(show) === 'function'
+      ? show(state.formData)
+      : getType(show) === 'undefined' || show;
+
+  !display && emit(UI_FORM_ITEM.EVENTS.update, key, value);
+
+  return display;
 }
 
-function handleChange({ component, key, reload }, value) {
-  props.config.debug && console.log(component, key, value);
+function getFormLabel({ label }) {
+  return getType(label) === 'function' ? label(state.formData) : label;
+}
+
+function handleChange({ key }, value) {
   emit(UI_FORM_ITEM.EVENTS.update, key, value);
-  reload && emit(UI_FORM_ITEM.EVENTS.reload);
 }
 
 function getModelValue({ key, value }) {

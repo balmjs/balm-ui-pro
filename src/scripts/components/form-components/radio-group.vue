@@ -2,16 +2,16 @@
   <div :class="['mdc-radio-group', cssClasses.subitemClass]">
     <ui-form-field
       v-for="(option, index) in options"
-      :key="`radio-${key}-${index}`"
+      :key="`${componentKey}-${index}`"
     >
       <ui-radio
         v-model="selectedValue"
-        :input-id="`radio-${key}-${index}`"
+        :input-id="`${componentKey}-${index}`"
         :value="option.value"
         :disabled="option.disabled || false"
         @update:modelValue="handleChange"
       ></ui-radio>
-      <label :for="`radio-${key}-${index}`">{{ option.label }}</label>
+      <label :for="`${componentKey}-${index}`">{{ option.label }}</label>
     </ui-form-field>
   </div>
 </template>
@@ -34,9 +34,10 @@ export default {
 
 <script setup>
 import { reactive, toRefs, watch } from 'vue';
-import { cssClasses, formItemProps, useFormItem } from '../../mixins/form-item';
+import { cssClasses, formItemProps } from '../../mixins/form-item';
 
 const props = defineProps({
+  ...formItemProps,
   // States
   modelValue: {
     type: [String, Number],
@@ -46,8 +47,7 @@ const props = defineProps({
   options: {
     type: Array,
     default: () => []
-  },
-  ...formItemProps
+  }
 });
 
 const emit = defineEmits([UI_RADIO_GROUP.EVENTS.CHANGE]);
@@ -56,8 +56,6 @@ const state = reactive({
   selectedValue: props.modelValue
 });
 const { selectedValue } = toRefs(state);
-
-const { key } = useFormItem(props);
 
 watch(
   () => props.modelValue,
