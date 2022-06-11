@@ -1,5 +1,18 @@
 export default ({ data }) => {
+  const { id } = data;
   return [
+    {
+      if: !!id,
+      component: 'ui-textfield',
+      label: 'ID',
+      key: 'id',
+      value: id,
+      attrOrProp: {
+        attrs: {
+          readonly: true
+        }
+      }
+    },
     {
       component: 'ui-textfield',
       label: 'Input',
@@ -54,8 +67,7 @@ export default ({ data }) => {
             value: 4
           }
         ]
-      },
-      showSlots: true
+      }
     },
     {
       show: ({ d }) => d === 2,

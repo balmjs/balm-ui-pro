@@ -63,12 +63,18 @@ export default {
       message: ''
     };
   },
+  computed: {
+    id() {
+      return this.$route.params.id || 0;
+    }
+  },
   async mounted() {
-    const module = await loadAsset('model-config/b.js');
-
-    setTimeout(() => {
-      this.modelConfig = module;
-
+    this.modelConfig = await loadAsset('model-config/b.js');
+    if (this.id) {
+      this.formData = await this.$http.get(`/user/${this.id}`, {
+        baseURL: '/api/mock'
+      });
+    } else {
       setTimeout(() => {
         this.formData = {
           a: 'world',
@@ -76,7 +82,7 @@ export default {
           f: 5
         };
       }, 1e3);
-    }, 1e3);
+    }
   },
   methods: {
     onAction({ type, valid, message }) {

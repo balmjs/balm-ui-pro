@@ -21,7 +21,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData
+                data: formDataSource
               }"
             ></slot>
             <ui-grid-cell
@@ -45,7 +45,7 @@
                     v-bind="{
                       value,
                       config: configData,
-                      data: formData
+                      data: formDataSource
                     }"
                   ></slot>
                 </template>
@@ -56,7 +56,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData
+                data: formDataSource
               }"
             ></slot>
           </ui-grid>
@@ -67,7 +67,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData
+                data: formDataSource
               }"
             ></slot>
             <ui-form-item
@@ -88,7 +88,7 @@
                   v-bind="{
                     value,
                     config: configData,
-                    data: formData
+                    data: formDataSource
                   }"
                 ></slot>
               </template>
@@ -98,7 +98,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData
+                data: formDataSource
               }"
             ></slot>
           </template>
@@ -106,7 +106,7 @@
             name="actions"
             v-bind="{
               className: [itemClass, actionClass],
-              data: formData
+              data: formDataSource
             }"
           >
             <ui-form-field
@@ -267,18 +267,15 @@ export default {
     setFormConfig(modelConfig = this.modelConfig) {
       const originalConfig = this.isFunctionConfig
         ? modelConfig({
-            data: this.formData,
-            dataSource: this.formDataSource,
+            data: Object.assign({}, this.formDataSource),
             ...this.modelOptions
           })
         : modelConfig;
 
       if (Array.isArray(originalConfig)) {
-        const formConfig = originalConfig.filter(
-          (configData) =>
-            getType(configData.if) === 'undefined' || configData.if
+        this.formConfig = originalConfig.filter(
+          (configData) => !configData.hasOwnProperty('if') || configData.if
         );
-        this.formConfig = formConfig;
 
         this.initFormData();
       } else {

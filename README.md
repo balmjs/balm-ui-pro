@@ -45,14 +45,14 @@ Vue.use(BalmUIPro);
 interface FormConfigItem {
   if?: boolean;
   show?: boolean | (formData) => boolean;
-  slot?: string; // Custom slot
-  useSlot? boolean; // The slot of the component
-  showSlots?: boolean; // For dev and debug
   component?: string;
   label?: string | (formData) => string;
   key?: string;
   value?: string;
   attrOrProp?: object;
+  useSlot? boolean; // The slot of the component
+  showSlots?: boolean; // For dev and debug
+  slot?: string; // Custom slot
   validator?: string;
   ...BalmUIValidationRule
 }
@@ -113,12 +113,30 @@ interface ActionResult {
   :model-config="modelConfig"
   :action-config="actionConfig"
   @action="onAction"
-></ui-form-view>
+>
+  <template #ui-textfield--l>
+    <input v-model="formData.l" />
+  </template>
+  <template #custom-slot>gg</template>
+</ui-form-view>
 ```
 
 ```js
 const modelConfig = ({ data }) => {
+  const { id } = data;
   return [
+    {
+      if: !!id,
+      component: 'ui-textfield',
+      label: 'ID',
+      key: 'id',
+      value: id,
+      attrOrProp: {
+        attrs: {
+          readonly: true
+        }
+      }
+    },
     {
       component: 'ui-textfield',
       label: 'Input',
@@ -254,6 +272,18 @@ const modelConfig = ({ data }) => {
       label: 'Slider',
       key: 'k',
       value: 0
+    },
+    {
+      component: 'ui-textfield',
+      label: 'useSlot',
+      key: 'l',
+      value: '',
+      useSlot: true,
+      showSlots: true
+    },
+    {
+      slot: 'custom-slot',
+      label: 'custom slot'
     }
   ];
 };
