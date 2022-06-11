@@ -1,5 +1,5 @@
 import axios from 'axios';
-// import { saveErrorLog } from 'balm-tracking';
+import { API_ENDPOINT } from '@/config';
 
 axios.interceptors.request.use(
   (config) => {
@@ -12,7 +12,12 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   (response) => {
-    return response.data;
+    const { code, data, message } = response.data;
+    if (code === 200) {
+      return Promise.resolve(data);
+    } else {
+      return Promise.reject(response.data);
+    }
   },
   (error) => {
     if (error.response) {
@@ -43,7 +48,7 @@ const useHttp = () => axios;
 
 export default {
   install(Vue) {
-    // axios.defaults.baseURL = API_ENDPOINT;
+    axios.defaults.baseURL = API_ENDPOINT;
 
     Vue.prototype.$http = axios;
   }
