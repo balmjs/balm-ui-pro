@@ -19,30 +19,31 @@
     </label>
     <div class="mdc-form-item__item">
       <slot :name="customSlots.beforeItem" :value="value"></slot>
-      <ui-readonly-item
-        v-if="config.readonlyItem"
-        :component-key="componentKey"
-        :value="value"
-      >
-        <slot :name="customSlots.readonly" :value="value"></slot>
-      </ui-readonly-item>
+      <template v-if="config.slot">
+        <slot :name="config.slot" :value="value"></slot>
+      </template>
       <template v-else>
-        <component
-          :is="config.component"
-          v-show="displayFormItem(config)"
-          v-model="formData[config.key]"
-          v-bind="
-            Object.assign(
-              {
-                componentKey,
-                formData,
-                formDataSource
-              },
-              config.attrOrProp
-            )
-          "
-          @update:modelValue="handleChange(config, $event)"
-        ></component>
+        <template v-if="config.useSlot">
+          <slot :name="customSlots.componentItem" :value="value"></slot>
+        </template>
+        <template v-else>
+          <component
+            :is="config.component"
+            v-show="displayFormItem(config)"
+            v-model="formData[config.key]"
+            v-bind="
+              Object.assign(
+                {
+                  componentKey,
+                  formData,
+                  formDataSource
+                },
+                config.attrOrProp
+              )
+            "
+            @update:modelValue="handleChange(config, $event)"
+          ></component>
+        </template>
       </template>
       <slot :name="customSlots.afterItem" :value="value"></slot>
     </div>
@@ -69,7 +70,6 @@ export default {
 
 <script setup>
 import { reactive, toRefs, computed, watch, onBeforeMount } from 'vue';
-import UiReadonlyItem from '../form-components/readonly-item.vue';
 import getType from '../../utils/typeof';
 
 const props = defineProps({
@@ -119,8 +119,10 @@ const customSlots = computed(() => ({
   beforeLabel: `before-label__${componentKey.value}`,
   afterLabel: `after-label__${componentKey.value}`,
   beforeItem: `before-item__${componentKey.value}`,
-  afterItem: `after-item__${componentKey.value}`,
-  readonlyItem: `readonly__${componentKey.value}`
+  componentItem: props.config.useSlot
+    ? componentKey.value
+    : `'useSlot' is not enabled`,
+  afterItem: `after-item__${componentKey.value}`
 }));
 const value = computed(() => getModelValue(props.config));
 

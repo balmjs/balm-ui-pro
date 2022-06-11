@@ -10,6 +10,10 @@
         <div>outer formData: {{ formData }}</div>
         <hr />
       </template>
+      <template #ui-textfield--l>
+        <input v-model="formData.l" />
+      </template>
+      <template #custom-slot>gg</template>
       <!-- <template #actions="{ className, data }">
         <ui-form-field :class="className">
           <ui-button raised @click="onSubmit(data)">Custom Submit</ui-button>
