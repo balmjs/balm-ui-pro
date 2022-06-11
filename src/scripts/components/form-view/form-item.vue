@@ -19,31 +19,32 @@
     </label>
     <div class="mdc-form-item__item">
       <slot :name="customSlots.beforeItem" :value="value"></slot>
-      <ui-readonly-item
-        v-if="config.readonly"
-        :component-key="componentKey"
-        :value="value"
-      >
-        <slot :name="customSlots.readonlyItem" :value="value"></slot>
-      </ui-readonly-item>
+      <template v-if="config.slot">
+        <slot :name="config.slot" :value="value"></slot>
+      </template>
       <template v-else>
-        <component
-          :is="config.component"
-          v-show="displayFormItem(config)"
-          v-model="formData[config.key]"
-          v-bind="
-            Object.assign(
-              {
-                componentKey,
-                formData,
-                formDataSource
-              },
-              config.attrOrProp
-            )
-          "
-          @input="handleInput(config, $event)"
-          @change="handleChange(config, $event)"
-        ></component>
+        <template v-if="config.useSlot">
+          <slot :name="customSlots.componentItem" :value="value"></slot>
+        </template>
+        <template v-else>
+          <component
+            :is="config.component"
+            v-show="displayFormItem(config)"
+            v-model="formData[config.key]"
+            v-bind="
+              Object.assign(
+                {
+                  componentKey,
+                  formData,
+                  formDataSource
+                },
+                config.attrOrProp
+              )
+            "
+            @input="handleInput(config, $event)"
+            @change="handleChange(config, $event)"
+          ></component>
+        </template>
       </template>
       <slot :name="customSlots.afterItem" :value="value"></slot>
     </div>
@@ -51,7 +52,6 @@
 </template>
 
 <script>
-import UiReadonlyItem from '../form-components/readonly-item';
 import getType from '../../utils/typeof';
 
 const name = 'UiFormItem';
@@ -64,9 +64,6 @@ const UI_FORM_ITEM = {
 
 export default {
   name,
-  components: {
-    UiReadonlyItem
-  },
   model: {
     prop: 'modelValue',
     event: UI_FORM_ITEM.EVENTS.update
@@ -125,8 +122,10 @@ export default {
         beforeLabel: `before-label__${this.componentKey}`,
         afterLabel: `after-label__${this.componentKey}`,
         beforeItem: `before-item__${this.componentKey}`,
-        afterItem: `after-item__${this.componentKey}`,
-        readonlyItem: `readonly__${this.componentKey}`
+        componentItem: this.config.useSlot
+          ? this.componentKey
+          : `'useSlot' is not enabled`,
+        afterItem: `after-item__${this.componentKey}`
       };
     },
     value() {

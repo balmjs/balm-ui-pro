@@ -138,6 +138,18 @@ export default ({ data }) => {
       label: 'Slider',
       key: 'k',
       value: 0
+    },
+    {
+      component: 'ui-textfield',
+      label: 'useSlot',
+      key: 'l',
+      value: '',
+      useSlot: true,
+      showSlots: true
+    },
+    {
+      slot: 'custom-slot',
+      label: 'custom slot'
     }
   ];
 };

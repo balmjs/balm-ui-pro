@@ -45,12 +45,14 @@ Vue.use(BalmUIPro);
 interface FormConfigItem {
   if?: boolean;
   show?: boolean | (formData) => boolean;
-  component: string;
+  slot?: string; // Custom slot
+  useSlot? boolean; // The slot of the component
+  showSlots?: boolean; // For dev and debug
+  component?: string;
   label?: string | (formData) => string;
   key?: string;
   value?: string;
   attrOrProp?: object;
-  showSlots?: boolean; // For dev and debug
   validator?: string;
   ...BalmUIValidationRule
 }
