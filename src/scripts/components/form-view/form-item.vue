@@ -124,7 +124,7 @@ export default {
         beforeLabel: `before-label__${this.componentKey}`,
         afterLabel: `after-label__${this.componentKey}`,
         beforeItem: `before-item__${this.componentKey}`,
-        componentItem: `item__${this.componentKey}`,
+        componentItem: `form-item__${this.componentKey}`,
         afterItem: `after-item__${this.componentKey}`
       };
     },
@@ -138,7 +138,7 @@ export default {
     }
   },
   beforeMount() {
-    if (this.config.showSlots) {
+    if (this.config.debug) {
       const customSlotsNames = Object.values(this.customSlots);
       console.info(`[${name}] slots:`, customSlotsNames);
     }
@@ -157,7 +157,9 @@ export default {
     getFormLabel({ label }) {
       return getType(label) === 'function' ? label(this.formData) : label;
     },
-    handleChange({ key }, value) {
+    handleChange({ component, key }, value) {
+      this.config.debug &&
+        console.info(`[${name}] ${component}@${this.eventName}`, key, value);
       this.$emit(UI_FORM_ITEM.EVENTS.update, key, value);
     },
     getModelValue({ key, value }) {
