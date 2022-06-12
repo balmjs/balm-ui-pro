@@ -59,6 +59,8 @@ Vue.use(BalmUIPro);
 
   ```ts
   interface FormConfigItem {
+    // Show all custom slots names and component event in console
+    debug?: boolean;
     // Conditional Rendering
     if?: boolean;
     show?: boolean | (formData) => boolean;
@@ -73,7 +75,6 @@ Vue.use(BalmUIPro);
     event?: string; // Defaults: 'change'
     // Custom slot
     slot?: string;
-    showSlots?: boolean; // For debug
     // BalmUI validator
     validator?: string;
     ...BalmUIValidationRule
@@ -94,12 +95,12 @@ Vue.use(BalmUIPro);
 
 ### Slots
 
-| Name                                          | Props                               | Description                                                        |
-| --------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------ |
-| `before`                                      | `itemClass`, `subitemClass`, `data` | Before form items                                                  |
-| custom form item slots (by form model config) | `value`, `config`, `data`           | Custom form item slots (See all slots names by `config.showSlots`) |
-| `after`                                       | `itemClass`, `subitemClass`, `data` | After form items                                                   |
-| `actions`                                     | `className`, `data`                 | Custom form buttons                                                |
+| Name                                          | Props                               | Description                                                    |
+| --------------------------------------------- | ----------------------------------- | -------------------------------------------------------------- |
+| `before`                                      | `itemClass`, `subitemClass`, `data` | Before form items                                              |
+| custom form item slots (by form model config) | `value`, `config`, `data`           | Custom form item slots (See all slots names by `config.debug`) |
+| `after`                                       | `itemClass`, `subitemClass`, `data` | After form items                                               |
+| `actions`                                     | `className`, `data`                 | Custom form buttons                                            |
 
 ### Events
 
@@ -124,7 +125,7 @@ interface ActionResult {
   :action-config="actionConfig"
   @action="onAction"
 >
-  <template #ui-textfield--l>
+  <template #form-item__ui-textfield--l>
     <input v-model="formData.l" />
   </template>
   <template #custom-slot>gg</template>
@@ -135,6 +136,7 @@ interface ActionResult {
 const formData = {};
 
 const modelConfig = ({ data }) => {
+  console.log('static data', data);
   const { id } = data;
   return [
     {
@@ -187,10 +189,11 @@ const modelConfig = ({ data }) => {
       }
     },
     {
+      show: ({ d }) => d === 2,
       label: 'Checkbox',
       component: 'ui-checkbox-group',
       key: 'e',
-      value: [],
+      value: data.e || [],
       attrOrProp: {
         options: [
           {
@@ -285,11 +288,19 @@ const modelConfig = ({ data }) => {
       value: 0
     },
     {
+      debug: true,
       label: 'Component slot',
       component: 'ui-textfield',
       key: 'l',
+      value: ''
+    },
+    {
+      debug: true,
+      label: 'Custom component',
+      component: 'x-form-item',
+      key: 'm',
       value: '',
-      showSlots: true // show all custom slots names in console
+      event: 'input'
     },
     {
       label: 'Custom slot',

@@ -64,7 +64,7 @@
     "webpack": "4"
   },
   "peerDependencies": {
-    "balm-ui": "^8.50.2",
+    "balm-ui": "^8.50.3",
     "vue": ">=2.1.0"
   }
 }
