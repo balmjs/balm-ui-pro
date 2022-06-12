@@ -10,7 +10,7 @@
         <div>outer formData: {{ formData }}</div>
         <hr />
       </template>
-      <template #item__ui-textfield--l>
+      <template #form-item__ui-textfield--l>
         <input v-model="formData.l" />
       </template>
       <template #custom-slot>gg</template>

@@ -1,4 +1,5 @@
 export default ({ data }) => {
+  console.log('static data', data);
   const { id } = data;
   return [
     {
@@ -51,10 +52,11 @@ export default ({ data }) => {
       }
     },
     {
+      show: ({ d }) => d === 2,
       label: 'Checkbox',
       component: 'ui-checkbox-group',
       key: 'e',
-      value: [],
+      value: data.e || [],
       attrOrProp: {
         options: [
           {
@@ -149,11 +151,19 @@ export default ({ data }) => {
       value: 0
     },
     {
+      debug: true,
       label: 'Component slot',
       component: 'ui-textfield',
       key: 'l',
+      value: ''
+    },
+    {
+      debug: true,
+      label: 'Custom component',
+      component: 'x-form-item',
+      key: 'm',
       value: '',
-      showSlots: true // show all custom slots names in console
+      event: 'input'
     },
     {
       label: 'Custom slot',
