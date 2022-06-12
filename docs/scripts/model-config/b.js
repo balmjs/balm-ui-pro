@@ -3,8 +3,8 @@ export default ({ data }) => {
   return [
     {
       if: !!id,
-      component: 'ui-textfield',
       label: 'ID',
+      component: 'ui-textfield',
       key: 'id',
       value: id,
       attrOrProp: {
@@ -14,27 +14,26 @@ export default ({ data }) => {
       }
     },
     {
-      component: 'ui-textfield',
       label: 'Input',
+      component: 'ui-textfield',
       key: 'a',
-      value: '123'
+      value: ''
     },
     {
-      component: 'ui-autocomplete',
       label: 'Autocomplete',
+      component: 'ui-autocomplete',
       key: 'b',
-      value: '',
-      validator: 'required'
+      value: ''
     },
     {
-      component: 'ui-editor',
       label: 'Editor',
+      component: 'ui-editor',
       key: 'c',
       value: ''
     },
     {
-      component: 'ui-select',
       label: 'Select',
+      component: 'ui-select',
       key: 'd',
       value: '',
       attrOrProp: {
@@ -52,8 +51,8 @@ export default ({ data }) => {
       }
     },
     {
+      label: 'Checkbox',
       component: 'ui-checkbox-group',
-      label: ({ d }) => `Checkbox - ${d}`,
       key: 'e',
       value: [],
       attrOrProp: {
@@ -70,9 +69,8 @@ export default ({ data }) => {
       }
     },
     {
-      show: ({ d }) => d === 2,
-      component: 'ui-radio-group',
       label: 'Radio',
+      component: 'ui-radio-group',
       key: 'f',
       value: '',
       attrOrProp: {
@@ -89,9 +87,8 @@ export default ({ data }) => {
       }
     },
     {
-      show: ({ f }) => f === 6,
-      component: 'ui-chips',
       label: 'Chips',
+      component: 'ui-chips',
       key: 'g',
       value: [],
       attrOrProp: {
@@ -113,23 +110,23 @@ export default ({ data }) => {
       }
     },
     {
-      component: 'ui-datepicker',
       label: 'Datepicker',
+      component: 'ui-datepicker',
       key: 'h',
       value: '',
       attrOrProp: {
         clear: true
       }
     },
-    // {
-    //   component: 'ui-rangepicker',
-    //   label: 'Rangepicker',
-    //   key: 'i',
-    //   value: []
-    // },
     {
-      component: 'ui-switch-box',
+      label: 'Rangepicker',
+      component: 'ui-rangepicker',
+      key: 'i',
+      value: []
+    },
+    {
       label: 'Switch',
+      component: 'ui-switch-box',
       key: 'j',
       value: false,
       attrOrProp: {
@@ -146,22 +143,21 @@ export default ({ data }) => {
       }
     },
     {
-      component: 'ui-slider',
       label: 'Slider',
+      component: 'ui-slider',
       key: 'k',
       value: 0
     },
     {
+      label: 'Component slot',
       component: 'ui-textfield',
-      label: 'useSlot',
       key: 'l',
       value: '',
-      useSlot: true,
-      showSlots: true
+      showSlots: true // show all custom slots names in console
     },
     {
-      slot: 'custom-slot',
-      label: 'custom slot'
+      label: 'Custom slot',
+      slot: 'custom-slot'
     }
   ];
 };

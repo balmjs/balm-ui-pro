@@ -23,10 +23,7 @@
         <slot :name="config.slot" :value="value"></slot>
       </template>
       <template v-else>
-        <template v-if="config.useSlot">
-          <slot :name="customSlots.componentItem" :value="value"></slot>
-        </template>
-        <template v-else>
+        <slot :name="customSlots.componentItem" :value="value">
           <component
             :is="config.component"
             v-show="displayFormItem(config)"
@@ -41,10 +38,9 @@
                 config.attrOrProp
               )
             "
-            @input="handleInput(config, $event)"
-            @change="handleChange(config, $event)"
+            @[eventName]="handleChange(config, $event)"
           ></component>
-        </template>
+        </slot>
       </template>
       <slot :name="customSlots.afterItem" :value="value"></slot>
     </div>
@@ -100,6 +96,12 @@ export default {
     };
   },
   computed: {
+    eventName() {
+      return this.config.event ||
+        this.formInputComponents.includes(this.config.component)
+        ? 'input'
+        : UI_FORM_ITEM.EVENTS.update;
+    },
     component() {
       return this.config.component || 'unknown-component';
     },
@@ -122,9 +124,7 @@ export default {
         beforeLabel: `before-label__${this.componentKey}`,
         afterLabel: `after-label__${this.componentKey}`,
         beforeItem: `before-item__${this.componentKey}`,
-        componentItem: this.config.useSlot
-          ? this.componentKey
-          : `'useSlot' is not enabled`,
+        componentItem: `item__${this.componentKey}`,
         afterItem: `after-item__${this.componentKey}`
       };
     },
@@ -157,13 +157,8 @@ export default {
     getFormLabel({ label }) {
       return getType(label) === 'function' ? label(this.formData) : label;
     },
-    handleInput({ component, key }, value) {
-      this.formInputComponents.includes(component) &&
-        this.$emit(UI_FORM_ITEM.EVENTS.update, key, value);
-    },
-    handleChange({ component, key }, value) {
-      !this.formInputComponents.includes(component) &&
-        this.$emit(UI_FORM_ITEM.EVENTS.update, key, value);
+    handleChange({ key }, value) {
+      this.$emit(UI_FORM_ITEM.EVENTS.update, key, value);
     },
     getModelValue({ key, value }) {
       return this.formData[key] || value;

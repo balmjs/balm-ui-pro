@@ -21,7 +21,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formDataSource
+                data: currentFormData
               }"
             ></slot>
             <ui-grid-cell
@@ -45,7 +45,7 @@
                     v-bind="{
                       value,
                       config: configData,
-                      data: formDataSource
+                      data: currentFormData
                     }"
                   ></slot>
                 </template>
@@ -56,7 +56,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formDataSource
+                data: currentFormData
               }"
             ></slot>
           </ui-grid>
@@ -67,7 +67,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formDataSource
+                data: currentFormData
               }"
             ></slot>
             <ui-form-item
@@ -88,7 +88,7 @@
                   v-bind="{
                     value,
                     config: configData,
-                    data: formDataSource
+                    data: currentFormData
                   }"
                 ></slot>
               </template>
@@ -98,7 +98,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formDataSource
+                data: currentFormData
               }"
             ></slot>
           </template>
@@ -106,7 +106,7 @@
             name="actions"
             v-bind="{
               className: [itemClass, actionClass],
-              data: formDataSource
+              data: currentFormData
             }"
           >
             <ui-form-field
@@ -223,6 +223,9 @@ export default {
     },
     hasFormDataSource() {
       return Object.keys(this.formDataSource).length;
+    },
+    currentFormData() {
+      return Object.assign({}, this.formDataSource, this.formData);
     }
   },
   watch: {
