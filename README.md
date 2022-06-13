@@ -79,7 +79,7 @@ app.mount('#app');
     // Form component config
     component?: string;
     attrOrProp?: object;
-    event?: string; // Defaults: 'change'
+    event?: string; // Defaults: 'update:model-value'
     // Custom slot
     slot?: string;
     // BalmUI validator
