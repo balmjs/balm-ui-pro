@@ -1,6 +1,6 @@
 {
   "name": "balm-ui-pro",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "BalmUI Pro",
   "keywords": [
     "balm",
@@ -61,6 +61,8 @@
     "eslint-plugin-vue": "^9.0.0",
     "html-loader": "^3.1.0",
     "markdown-loader": "^8.0.0",
+    "miragejs": "0.1.43",
+    "miragejs-axios-adapter": "^0.1.0",
     "prettier": "^2.6.0",
     "prismjs": "^1.28.0",
     "rollup-plugin-vue": "^6.0.0",

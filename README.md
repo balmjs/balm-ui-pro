@@ -48,25 +48,6 @@ app.mount('#app');
 <ui-form-view></ui-form-view>
 ```
 
-```ts
-interface FormConfigItem {
-  if?: boolean;
-  show?: boolean | (formData) => boolean;
-  slot?: string; // Custom slot
-  useSlot? boolean; // The slot of the component
-  showSlots?: boolean; // For dev and debug
-  component?: string;
-  label?: string | (formData) => string;
-  key?: string;
-  value?: string;
-  attrOrProp?: object;
-  validator?: string;
-  ...BalmUIValidationRule
-}
-```
-
-> NOTE: see BalmUI $validator rule and result [docs](https://material.balmjs.com/data-input/validator)
-
 ### Props
 
 | Name                 | Type                     | Default    | Description                                                                                           |
@@ -79,24 +60,54 @@ interface FormConfigItem {
 | `formItemAttrOrProp` | object                   | `{}`       |                                                                                                       |
 | `gridAttrOrProp`     | object                   | `{}`       | See BalmUI `<ui-grid>` props [docs](https://material.balmjs.com/layout/grid)                          |
 | `gridCellAttrOrProp` | object                   | `{}`       | See BalmUI `<ui-grid-cell>` props [docs](https://material.balmjs.com/layout/grid)                     |
-| `actionConfig`       | ActionButton[]           | `[]`       | Form button config, see BalmUI `<ui-button>` props [docs](https://material.balmjs.com/general/button) |
+| `actionConfig`       | array                    | `[]`       | Form button config, see BalmUI `<ui-button>` props [docs](https://material.balmjs.com/general/button) |
 
-```ts
-interface ActionButton {
-  text: string;
-  type?: 'button' | 'submit' | 'reset' | string;
-  attrOrProp?: object;
-}
-```
+- `modelConfig: FormConfigItem[] | (formData: object) => FormConfigItem[] | false`
+
+  ```ts
+  interface FormConfigItem {
+    // Show all custom slots names and component event in console
+    debug?: boolean;
+    // Conditional Rendering
+    if?: boolean;
+    show?: boolean | (formData) => boolean;
+    // Form label
+    label?: string | (formData) => string;
+    // Form data config
+    key?: string;
+    value?: string;
+    // Form component config
+    component?: string;
+    attrOrProp?: object;
+    event?: string; // Defaults: 'change'
+    // Custom slot
+    slot?: string;
+    // BalmUI validator
+    validator?: string;
+    ...BalmUIValidationRule
+  }
+  ```
+
+  > NOTE: see BalmUI $validator rule and result [docs](https://material.balmjs.com/data-input/validator)
+
+- `actionConfig: ActionButton[]`
+
+  ```ts
+  interface ActionButton {
+    text: string;
+    type?: 'button' | 'submit' | 'reset' | string;
+    attrOrProp?: object;
+  }
+  ```
 
 ### Slots
 
-| Name                                          | Props                               | Description                                                        |
-| --------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------ |
-| `before`                                      | `itemClass`, `subitemClass`, `data` | Before form items                                                  |
-| custom form item slots (by form model config) | `value`, `config`, `data`           | Custom form item slots (See all slots names by `config.showSlots`) |
-| `after`                                       | `itemClass`, `subitemClass`, `data` | After form items                                                   |
-| `actions`                                     | `className`, `data`                 | Custom form buttons                                                |
+| Name                                          | Props                               | Description                                                    |
+| --------------------------------------------- | ----------------------------------- | -------------------------------------------------------------- |
+| `before`                                      | `itemClass`, `subitemClass`, `data` | Before form items                                              |
+| custom form item slots (by form model config) | `value`, `config`, `data`           | Custom form item slots (See all slots names by `config.debug`) |
+| `after`                                       | `itemClass`, `subitemClass`, `data` | After form items                                               |
+| `actions`                                     | `className`, `data`                 | Custom form buttons                                            |
 
 ### Events
 
@@ -120,34 +131,54 @@ interface ActionResult {
   :model-config="modelConfig"
   :action-config="actionConfig"
   @action="onAction"
-></ui-form-view>
+>
+  <template #form-item__ui-textfield--l>
+    <input v-model="formData.l" />
+  </template>
+  <template #custom-slot>gg</template>
+</ui-form-view>
 ```
 
 ```js
+const formData = {};
+
 const modelConfig = ({ data }) => {
+  console.log('static data', data);
+  const { id } = data;
   return [
     {
+      if: !!id,
+      label: 'ID',
       component: 'ui-textfield',
-      label: 'Input',
-      key: 'a',
-      value: '',
-      showSlots: true // show all custom slots names in console
+      key: 'id',
+      value: id,
+      attrOrProp: {
+        attrs: {
+          readonly: true
+        }
+      }
     },
     {
-      component: 'ui-autocomplete',
+      label: 'Input',
+      component: 'ui-textfield',
+      key: 'a',
+      value: ''
+    },
+    {
       label: 'Autocomplete',
+      component: 'ui-autocomplete',
       key: 'b',
       value: ''
     },
     {
-      component: 'ui-editor',
       label: 'Editor',
+      component: 'ui-editor',
       key: 'c',
       value: ''
     },
     {
-      component: 'ui-select',
       label: 'Select',
+      component: 'ui-select',
       key: 'd',
       value: '',
       attrOrProp: {
@@ -165,10 +196,11 @@ const modelConfig = ({ data }) => {
       }
     },
     {
-      component: 'ui-checkbox-group',
+      show: ({ d }) => d === 2,
       label: 'Checkbox',
+      component: 'ui-checkbox-group',
       key: 'e',
-      value: [],
+      value: data.e || [],
       attrOrProp: {
         options: [
           {
@@ -183,8 +215,8 @@ const modelConfig = ({ data }) => {
       }
     },
     {
-      component: 'ui-radio-group',
       label: 'Radio',
+      component: 'ui-radio-group',
       key: 'f',
       value: '',
       attrOrProp: {
@@ -201,8 +233,8 @@ const modelConfig = ({ data }) => {
       }
     },
     {
-      component: 'ui-chips',
       label: 'Chips',
+      component: 'ui-chips',
       key: 'g',
       value: [],
       attrOrProp: {
@@ -224,23 +256,23 @@ const modelConfig = ({ data }) => {
       }
     },
     {
-      component: 'ui-datepicker',
       label: 'Datepicker',
+      component: 'ui-datepicker',
       key: 'h',
       value: '',
       attrOrProp: {
         clear: true
       }
     },
-    // {
-    //   component: 'ui-rangepicker',
-    //   label: 'Rangepicker',
-    //   key: 'i',
-    //   value: []
-    // },
     {
-      component: 'ui-switch-box',
+      label: 'Rangepicker',
+      component: 'ui-rangepicker',
+      key: 'i',
+      value: []
+    },
+    {
       label: 'Switch',
+      component: 'ui-switch-box',
       key: 'j',
       value: false,
       attrOrProp: {
@@ -257,10 +289,29 @@ const modelConfig = ({ data }) => {
       }
     },
     {
-      component: 'ui-slider',
       label: 'Slider',
+      component: 'ui-slider',
       key: 'k',
       value: 0
+    },
+    {
+      debug: true,
+      label: 'Component slot',
+      component: 'ui-textfield',
+      key: 'l',
+      value: ''
+    },
+    {
+      debug: true,
+      label: 'Custom component',
+      component: 'x-form-item',
+      key: 'm',
+      value: '',
+      event: 'input'
+    },
+    {
+      label: 'Custom slot',
+      slot: 'custom-slot'
     }
   ];
 };
@@ -282,7 +333,15 @@ const actionConfig = [
   }
 ];
 
-function onAction({ type }) {
+function onAction({ type, valid, message }) {
   console.log(type);
+
+  if (type === 'submit') {
+    state.errorMessage = message;
+
+    if (valid) {
+      console.log('gg');
+    }
+  }
 }
 ```
