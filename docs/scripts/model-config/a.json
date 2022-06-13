@@ -1,29 +1,28 @@
 [
   {
-    "component": "ui-textfield",
     "label": "Input",
+    "component": "ui-textfield",
     "key": "a",
     "value": "",
     "attrOrProp": {
       "placeholder": "aaa"
-    },
-    "showSlots": true
+    }
   },
   {
-    "component": "ui-autocomplete",
     "label": "Autocomplete",
+    "component": "ui-autocomplete",
     "key": "b",
     "value": ""
   },
   {
-    "component": "ui-editor",
     "label": "Editor",
+    "component": "ui-editor",
     "key": "c",
     "value": ""
   },
   {
-    "component": "ui-select",
     "label": "Select",
+    "component": "ui-select",
     "key": "d",
     "value": "",
     "attrOrProp": {
@@ -39,7 +38,6 @@
           "value": 2
         }
       ]
-    },
-    "reload": true
+    }
   }
 ]

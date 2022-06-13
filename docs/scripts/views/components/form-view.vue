@@ -10,7 +10,7 @@
         <div>outer formData: {{ formData }}</div>
         <hr />
       </template>
-      <template #ui-textfield--l>
+      <template #form-item__ui-textfield--l>
         <input v-model="formData.l" />
       </template>
       <template #custom-slot>gg</template>
@@ -31,9 +31,14 @@
 </template>
 
 <script setup>
-import { reactive, toRefs, onMounted } from 'vue';
+import { reactive, toRefs, computed, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useHttp } from '@/plugins/http';
 import { loadAsset } from '@/utils';
 import defaultModelConfig from '@/model-config/a.json';
+
+const route = useRoute();
+const http = useHttp();
 
 const state = reactive({
   modelConfig: defaultModelConfig,
@@ -62,19 +67,24 @@ const actionConfig = [
   }
 ];
 
-onMounted(async () => {
-  const module = await loadAsset('model-config/b.js');
+const id = computed(() => route.params.id || 0);
 
-  setTimeout(() => {
-    state.modelConfig = module;
+onMounted(async () => {
+  state.modelConfig = await loadAsset('model-config/b.js');
+  if (id.value) {
+    state.formData = await http.get(`/user/${id.value}`, {
+      baseURL: '/api/mock'
+    });
+  } else {
     setTimeout(() => {
       state.formData = {
         a: 'world',
         d: 1,
-        f: 5
+        f: 5,
+        g: [8]
       };
     }, 1e3);
-  }, 1e3);
+  }
 });
 
 function onAction({ type, valid, message }) {
