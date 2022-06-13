@@ -143,8 +143,8 @@ function getFormLabel({ label }) {
 }
 
 function handleChange({ component, key }, value) {
-  // props.config.debug &&
-  console.info(`[${name}] ${component}@${eventName.value}`, key, value);
+  props.config.debug &&
+    console.info(`[${name}] ${component}@${eventName.value}`, key, value);
 
   emit(UI_FORM_ITEM.EVENTS.update, key, value);
 }
