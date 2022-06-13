@@ -9,7 +9,7 @@
         :input-id="`${componentKey}-${index}`"
         :value="option.value"
         :disabled="option.disabled || false"
-        @update:modelValue="handleChange"
+        @update:model-value="handleChange"
       ></ui-radio>
       <label :for="`${componentKey}-${index}`">{{ option.label }}</label>
     </ui-form-field>
@@ -20,7 +20,7 @@
 // Define radio group constants
 const UI_RADIO_GROUP = {
   EVENTS: {
-    CHANGE: 'update:modelValue'
+    CHANGE: 'update:model-value'
   }
 };
 

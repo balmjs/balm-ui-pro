@@ -23,10 +23,7 @@
         <slot :name="config.slot" :value="value"></slot>
       </template>
       <template v-else>
-        <template v-if="config.useSlot">
-          <slot :name="customSlots.componentItem" :value="value"></slot>
-        </template>
-        <template v-else>
+        <slot :name="customSlots.componentItem" :value="value">
           <component
             :is="config.component"
             v-show="displayFormItem(config)"
@@ -41,9 +38,9 @@
                 config.attrOrProp
               )
             "
-            @update:modelValue="handleChange(config, $event)"
+            @[eventName]="handleChange(config, $event)"
           ></component>
-        </template>
+        </slot>
       </template>
       <slot :name="customSlots.afterItem" :value="value"></slot>
     </div>
@@ -55,8 +52,7 @@ const name = 'UiFormItem';
 const UI_FORM_ITEM = {
   EVENTS: {
     update: 'update:model-value'
-  },
-  DEFAULT_INPUT_COMPONENTS: ['ui-textfield', 'ui-autocomplete']
+  }
 };
 
 export default {
@@ -88,24 +84,19 @@ const props = defineProps({
   attrOrProp: {
     type: Object,
     default: () => ({})
-  },
-  inputComponents: {
-    type: Array,
-    default: () => []
   }
 });
 
 const emit = defineEmits([UI_FORM_ITEM.EVENTS.update]);
 
 const state = reactive({
-  formData: props.modelValue,
-  formInputComponents: [].concat(
-    UI_FORM_ITEM.DEFAULT_INPUT_COMPONENTS,
-    props.inputComponents
-  )
+  formData: props.modelValue
 });
 const { formData } = toRefs(state);
 
+const eventName = computed(() => {
+  return props.config.event || UI_FORM_ITEM.EVENTS.update;
+});
 const component = computed(() => props.config.component || 'unknown-component');
 const key = computed(() => props.config.key || 'unknown-key');
 const componentKey = computed(() => `${component.value}--${key.value}`);
@@ -119,15 +110,13 @@ const customSlots = computed(() => ({
   beforeLabel: `before-label__${componentKey.value}`,
   afterLabel: `after-label__${componentKey.value}`,
   beforeItem: `before-item__${componentKey.value}`,
-  componentItem: props.config.useSlot
-    ? componentKey.value
-    : `'useSlot' is not enabled`,
+  componentItem: `form-item__${componentKey.value}`,
   afterItem: `after-item__${componentKey.value}`
 }));
 const value = computed(() => getModelValue(props.config));
 
 onBeforeMount(() => {
-  if (props.config.showSlots) {
+  if (props.config.debug) {
     const customSlotsNames = Object.values(customSlots.value);
     console.info(`[${name}] slots:`, customSlotsNames);
   }
@@ -153,7 +142,10 @@ function getFormLabel({ label }) {
   return getType(label) === 'function' ? label(state.formData) : label;
 }
 
-function handleChange({ key }, value) {
+function handleChange({ component, key }, value) {
+  props.config.debug &&
+    console.info(`[${name}] ${component}@${eventName.value}`, key, value);
+
   emit(UI_FORM_ITEM.EVENTS.update, key, value);
 }
 

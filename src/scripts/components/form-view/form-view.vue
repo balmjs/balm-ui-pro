@@ -21,7 +21,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData
+                data: currentFormData
               }"
             ></slot>
             <template
@@ -45,7 +45,7 @@
                       v-bind="{
                         value,
                         config: configData,
-                        data: formData
+                        data: currentFormData
                       }"
                     ></slot>
                   </template>
@@ -57,7 +57,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData
+                data: currentFormData
               }"
             ></slot>
           </ui-grid>
@@ -68,7 +68,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData
+                data: currentFormData
               }"
             ></slot>
             <template
@@ -91,7 +91,7 @@
                     v-bind="{
                       value,
                       config: configData,
-                      data: formData
+                      data: currentFormData
                     }"
                   ></slot>
                 </template>
@@ -102,7 +102,7 @@
               v-bind="{
                 itemClass,
                 subitemClass,
-                data: formData
+                data: currentFormData
               }"
             ></slot>
           </template>
@@ -110,7 +110,7 @@
             name="actions"
             v-bind="{
               className: [itemClass, actionClass],
-              data: formData
+              data: currentFormData
             }"
           >
             <ui-form-field
@@ -244,6 +244,9 @@ const formDataKeys = computed(() =>
 const hasFormDataSource = computed(
   () => Object.keys(state.formDataSource).length
 );
+const currentFormData = computed(() =>
+  Object.assign({}, state.formDataSource, state.formData)
+);
 
 onBeforeMount(() => {
   setFormConfig();
@@ -295,17 +298,15 @@ function resetFormView() {
 function setFormConfig(modelConfig = props.modelConfig) {
   const originalConfig = isFunctionConfig.value
     ? modelConfig({
-        data: state.formData,
-        dataSource: state.formDataSource,
+        data: Object.assign({}, state.formDataSource),
         ...props.modelOptions
       })
     : modelConfig;
 
   if (Array.isArray(originalConfig)) {
-    const formConfig = originalConfig.filter(
+    state.formConfig = originalConfig.filter(
       (configData) => getType(configData.if) === 'undefined' || configData.if
     );
-    state.formConfig = formConfig;
 
     initFormData();
   } else {

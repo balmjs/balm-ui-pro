@@ -5,7 +5,7 @@
       :input-id="componentKey"
       :disabled="disabled"
       v-bind="switchAttrOrProp"
-      @update:modelValue="handleChange"
+      @update:model-value="handleChange"
     ></ui-switch>
     <label :for="componentKey">{{ label }}</label>
   </ui-form-field>
@@ -15,7 +15,7 @@
 // Define switch box constants
 const UI_SWITCH_BOX = {
   EVENTS: {
-    CHANGE: 'update:modelValue'
+    CHANGE: 'update:model-value'
   }
 };
 

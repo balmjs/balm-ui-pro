@@ -9,7 +9,7 @@
         :input-id="`${componentKey}-${index}`"
         :value="option.value"
         :disabled="option.disabled || false"
-        @update:modelValue="handleChange"
+        @update:model-value="handleChange"
       ></ui-checkbox>
       <label :for="`${componentKey}-${index}`">{{ option.label }}</label>
     </ui-form-field>
@@ -20,7 +20,7 @@
 // Define checkbox group constants
 const UI_CHECKBOX_GROUP = {
   EVENTS: {
-    CHANGE: 'update:modelValue'
+    CHANGE: 'update:model-value'
   }
 };
 
