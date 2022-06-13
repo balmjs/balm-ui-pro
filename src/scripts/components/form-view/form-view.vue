@@ -34,7 +34,7 @@
                   :model-value="formData"
                   :form-data-source="formDataSource"
                   :attr-or-prop="formItemAttrOrProp"
-                  @update:model-value="handleChange"
+                  @update:modelValue="handleChange"
                 >
                   <template
                     v-for="(_, slotName) in $slots"
@@ -80,7 +80,7 @@
                 :model-value="formData"
                 :form-data-source="formDataSource"
                 :attr-or-prop="formItemAttrOrProp"
-                @update:model-value="handleChange"
+                @update:modelValue="handleChange"
               >
                 <template
                   v-for="(_, slotName) in $slots"
@@ -147,7 +147,7 @@
 <script>
 const UI_FORM_VIEW = {
   EVENTS: {
-    update: 'update:model-value',
+    update: 'update:modelValue',
     action: 'action'
   }
 };

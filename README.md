@@ -79,7 +79,7 @@ app.mount('#app');
     // Form component config
     component?: string;
     attrOrProp?: object;
-    event?: string; // Defaults: 'update:model-value'
+    event?: string; // Defaults: 'update:modelValue'
     // Custom slot
     slot?: string;
     // BalmUI validator
@@ -111,10 +111,10 @@ app.mount('#app');
 
 ### Events
 
-| Name                 | Type                                   | Description |
-| -------------------- | -------------------------------------- | ----------- |
-| `update:model-value` | `function(modelValue: object)`         |             |
-| `action`             | `function(antionResult: ActionResult)` |             |
+| Name                | Type                                   | Description |
+| ------------------- | -------------------------------------- | ----------- |
+| `update:modelValue` | `function(modelValue: object)`         |             |
+| `action`            | `function(antionResult: ActionResult)` |             |
 
 ```ts
 interface ActionResult {
