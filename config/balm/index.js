@@ -58,6 +58,7 @@ function getConfig(balm) {
         'balm-ui-plus$': 'balm-ui/src/scripts/balm-ui-plus.js',
         'balm-ui-next$': 'balm-ui/src/scripts/balm-ui-next.js',
         'balm-ui-pro': resolve('src/scripts/index.js'),
+        '@mock-server': resolve('mock-server'),
         '@': resolve('docs/scripts')
       },
       includeJsResource: [
