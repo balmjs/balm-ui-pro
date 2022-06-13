@@ -136,6 +136,9 @@ interface ActionResult {
     <input v-model="formData.l" />
   </template>
   <template #custom-slot>gg</template>
+  <template #after>
+    <ui-alert v-if="message" state="warning">{{ message }}</ui-alert>
+  </template>
 </ui-form-view>
 ```
 
@@ -337,7 +340,7 @@ function onAction({ type, valid, message }) {
   console.log(type);
 
   if (type === 'submit') {
-    state.errorMessage = message;
+    state.message = message;
 
     if (valid) {
       console.log('gg');
