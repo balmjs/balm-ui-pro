@@ -251,9 +251,7 @@ const currentFormData = computed(() =>
 onBeforeMount(() => {
   setFormConfig();
   const synchronized = updateFormData();
-  if (!synchronized) {
-    emit(UI_FORM_VIEW.EVENTS.update, state.formData);
-  }
+  !synchronized && emit(UI_FORM_VIEW.EVENTS.update, state.formData);
 });
 
 onBeforeUnmount(() => {
@@ -266,9 +264,12 @@ watch(
     if (val === false) {
       resetFormView();
     } else {
+      const synchronized = Object.keys(currentFormData.value).length;
       setFormConfig(val);
       if (hasFormDataSource.value) {
         updateFormData();
+      } else {
+        !synchronized && emit(UI_FORM_VIEW.EVENTS.update, state.formData);
       }
     }
   }
