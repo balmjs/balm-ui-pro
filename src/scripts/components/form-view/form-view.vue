@@ -233,9 +233,13 @@ export default {
       if (val === false) {
         this.resetFormView();
       } else {
+        const synchronized = Object.keys(this.currentFormData).length;
         this.setFormConfig(val);
         if (this.hasFormDataSource) {
           this.updateFormData();
+        } else {
+          !synchronized &&
+            this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
         }
       }
     },
@@ -254,9 +258,7 @@ export default {
   beforeMount() {
     this.setFormConfig();
     const synchronized = this.updateFormData();
-    if (!synchronized) {
-      this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
-    }
+    !synchronized && this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
   },
   beforeDestroy() {
     this.resetFormView();
