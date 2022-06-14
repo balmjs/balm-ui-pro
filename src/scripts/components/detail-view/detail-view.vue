@@ -1,6 +1,8 @@
 <template>
   <div class="mdc-detail-view">
-    <h2 class="mdc-detail-view__title"></h2>
+    <h2 class="mdc-detail-view__title">
+      <slot name="title">{{ title }}</slot>
+    </h2>
     <section class="mdc-detail-view__content">
       <slot name="before"></slot>
       <ui-spinner v-if="!config.length" active></ui-spinner>
@@ -9,12 +11,10 @@
         v-model="formData"
         :model-config="modelConfig"
         :model-options="modelOptions"
+        :action-config="actionConfig"
         v-bind="formViewAttrOrProp"
       >
-        <template
-          v-for="(_, slotName) in $scopedSlots"
-          v-slot:[slotName]="data"
-        >
+        <template v-for="(_, slotName) in $scopedSlots" #[slotName]="data">
           <slot
             :name="slotName"
             v-bind="{
@@ -27,12 +27,18 @@
           ></slot>
         </template>
 
-        <template #after="{ className: { itemClass, subitemClass } }">
+        <template #after>
+          <ui-alert v-if="errorMessage" state="warning">
+            {{ errorMessage }}
+          </ui-alert>
+        </template>
+
+        <template #action="{ className }">
           <ui-alert v-if="errorMessage" state="warning">
             {{ errorMessage }}
           </ui-alert>
 
-          <ui-form-field :class="[itemClass, subitemClass]">
+          <ui-form-field :class="className">
             <slot name="actions" :data="detailForm.data" :submit="onSubmit">
               <ui-button outlined @click="onCancel">
                 {{ cancelText }}
@@ -76,6 +82,7 @@ const state = reactive({
   formData: {},
   modelConfig: [],
   modelOptions: {},
+  actionConfig: [],
   errorMessage: ''
 });
 const { formData, modelConfig, modelOptions, errorMessage } = toRefs(state);

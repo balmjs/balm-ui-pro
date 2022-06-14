@@ -1,13 +1,13 @@
 <template>
   <ui-form-field class="mdc-switch-box">
     <ui-switch
-      v-model="selectedValue"
+      v-model="switchValue"
       :input-id="componentKey"
       :disabled="disabled"
       v-bind="switchAttrOrProp"
-      @change="handleChange"
+      @selected="handleSelected"
     ></ui-switch>
-    <label :for="componentKey">{{ label }}</label>
+    <label :for="componentKey">{{ switchItem.label }}</label>
   </ui-form-field>
 </template>
 
@@ -31,7 +31,7 @@ export default {
   props: {
     // States
     modelValue: {
-      type: Boolean,
+      type: [Boolean, String, Number],
       default: false
     },
     // UI attributes
@@ -50,26 +50,35 @@ export default {
   },
   data() {
     return {
-      selectedValue: this.modelValue
+      switchValue: this.isTrueValue(this.modelValue)
     };
   },
   computed: {
-    label() {
+    switchItem() {
       const index = this.options.findIndex((option) =>
-        this.selectedValue
-          ? option.value === this.switchAttrOrProp.trueValue || option.value
+        this.switchValue
+          ? this.isTrueValue(option.value)
           : option.value === this.switchAttrOrProp.falseValue || !option.value
       );
-      return ~index && this.options[index].label;
+      return ~index ? this.options[index] : {};
     }
   },
   watch: {
     modelValue(val) {
-      this.selectedValue = val;
+      this.switchValue = this.isTrueValue(val);
     }
   },
   methods: {
-    handleChange(selectedValue) {
+    isTrueValue(selectedValue) {
+      const hasTrueAndFalseValues =
+        this.switchAttrOrProp.hasOwnProperty('trueValue') &&
+        this.switchAttrOrProp.hasOwnProperty('falseValue');
+
+      return hasTrueAndFalseValues
+        ? selectedValue === this.switchAttrOrProp.trueValue
+        : selectedValue;
+    },
+    handleSelected(selectedValue) {
       this.$emit(UI_SWITCH_BOX.EVENTS.CHANGE, selectedValue);
     }
   }
