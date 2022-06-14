@@ -1,13 +1,13 @@
 <template>
   <ui-form-field class="mdc-switch-box">
     <ui-switch
-      v-model="selectedValue"
+      v-model="switchValue"
       :input-id="componentKey"
       :disabled="disabled"
       v-bind="switchAttrOrProp"
-      @update:modelValue="handleChange"
+      @selected="handleSelected"
     ></ui-switch>
-    <label :for="componentKey">{{ label }}</label>
+    <label :for="componentKey">{{ switchItem.label }}</label>
   </ui-form-field>
 </template>
 
@@ -35,7 +35,7 @@ const props = defineProps({
   ...formItemProps,
   // States
   modelValue: {
-    type: Boolean,
+    type: [Boolean, String, Number],
     default: false
   },
   // UI attributes
@@ -56,25 +56,35 @@ const props = defineProps({
 const emit = defineEmits([UI_SWITCH_BOX.EVENTS.CHANGE]);
 
 const state = reactive({
-  selectedValue: props.modelValue
+  switchValue: isTrueValue(props.modelValue)
 });
-const { selectedValue } = toRefs(state);
+const { switchValue } = toRefs(state);
 
-const label = computed(() => {
+const switchItem = computed(() => {
   const index = props.options.findIndex((option) =>
-    state.selectedValue
-      ? option.value === props.switchAttrOrProp.trueValue || option.value
+    state.switchValue
+      ? isTrueValue(option.value)
       : option.value === props.switchAttrOrProp.falseValue || !option.value
   );
-  return ~index && props.options[index].label;
+  return ~index ? props.options[index] : {};
 });
 
 watch(
   () => props.modelValue,
-  (val) => (state.selectedValue = val)
+  (val) => (state.switchValue = isTrueValue(val))
 );
 
-function handleChange(selectedValue) {
+function isTrueValue(selectedValue) {
+  const hasTrueAndFalseValues =
+    props.switchAttrOrProp.hasOwnProperty('trueValue') &&
+    props.switchAttrOrProp.hasOwnProperty('falseValue');
+
+  return hasTrueAndFalseValues
+    ? selectedValue === props.switchAttrOrProp.trueValue
+    : selectedValue;
+}
+
+function handleSelected(selectedValue) {
   emit(UI_SWITCH_BOX.EVENTS.CHANGE, selectedValue);
 }
 </script>
