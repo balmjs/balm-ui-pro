@@ -328,7 +328,15 @@ export default {
       needSync && this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
     },
     handleChange(key, value) {
-      this.$set(this.formData, key, value);
+      if (key) {
+        this.$set(this.formData, key, value);
+      } else {
+        if (getType(value) === 'object') {
+          for (const [k, v] of Object.entries(value)) {
+            this.$set(this.formData, k, v);
+          }
+        }
+      }
       this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
     },
     handleAction({ type, delay }) {
