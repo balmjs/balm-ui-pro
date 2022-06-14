@@ -270,18 +270,22 @@ const modelConfig = ({ data }) => {
       label: 'Switch',
       component: 'ui-switch-box',
       key: 'j',
-      value: false,
+      value: 'off',
       attrOrProp: {
         options: [
           {
-            label: 'On',
-            value: true
+            label: 'ON',
+            value: 'on'
           },
           {
-            label: 'Off',
-            value: false
+            label: 'OFF',
+            value: 'off'
           }
-        ]
+        ],
+        switchAttrOrProp: {
+          trueValue: 'on',
+          falseValue: 'off'
+        }
       }
     },
     {
