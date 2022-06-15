@@ -3,6 +3,7 @@
     <ui-form-view
       v-model="formData"
       :model-config="modelConfig"
+      :model-options="modelOptions"
       :action-config="actionConfig"
       @action="onAction"
     >
@@ -51,14 +52,63 @@ const actionConfig = [
   }
 ];
 
+const selectOptions = [
+  {
+    label: 'A',
+    value: 1
+  },
+  {
+    label: 'B',
+    value: 2
+  }
+];
+
+const checkboxOptions = [
+  {
+    label: 'C',
+    value: 3
+  },
+  {
+    label: 'D',
+    value: 4
+  }
+];
+
+const radioOptions = [
+  {
+    label: 'E',
+    value: 5
+  },
+  {
+    label: 'F',
+    value: 6
+  }
+];
+
+const chipsOptions = [
+  {
+    label: 'G',
+    value: 7
+  },
+  {
+    label: 'H',
+    value: 8
+  },
+  {
+    label: 'I',
+    value: 9
+  }
+];
+
 export default {
   data() {
     return {
-      modelConfig,
       formData: {
         a: 'hello',
         f: 5
       },
+      modelConfig,
+      modelOptions: {},
       actionConfig,
       message: ''
     };
@@ -70,6 +120,9 @@ export default {
   },
   async mounted() {
     this.modelConfig = await loadAsset('model-config/b.js');
+
+    const options1 = await this.$http.post('/mock/test/options1');
+
     if (this.id) {
       this.formData = await this.$http.get(`/user/${this.id}`, {
         baseURL: '/api/mock'
@@ -82,6 +135,12 @@ export default {
           f: 5,
           g: [8]
         };
+
+        this.$set(this.modelOptions, 'selectOptions', selectOptions);
+        this.$set(this.modelOptions, 'checkboxOptions', checkboxOptions);
+        this.$set(this.modelOptions, 'radioOptions', radioOptions);
+        this.$set(this.modelOptions, 'chipsOptions', chipsOptions);
+        this.$set(this.modelOptions, 'options1', options1);
       }, 1e3);
     }
   },
