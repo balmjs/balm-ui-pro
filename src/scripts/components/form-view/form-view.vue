@@ -229,6 +229,17 @@ export default {
     }
   },
   watch: {
+    modelValue(val, oldVal) {
+      this.formDataSource = Object.assign({}, val);
+
+      this.isFunctionConfig && this.setFormConfig();
+
+      if (this.hasFormDataSource) {
+        this.updateFormData();
+      } else {
+        this.resetFormData(Object.keys(oldVal).length);
+      }
+    },
     modelConfig(val) {
       if (val === false) {
         this.resetFormView();
@@ -243,15 +254,10 @@ export default {
         }
       }
     },
-    modelValue(val, oldVal) {
-      this.formDataSource = Object.assign({}, val);
-
+    modelOptions(val) {
       this.isFunctionConfig && this.setFormConfig();
-
       if (this.hasFormDataSource) {
         this.updateFormData();
-      } else {
-        this.resetFormData(Object.keys(oldVal).length);
       }
     }
   },

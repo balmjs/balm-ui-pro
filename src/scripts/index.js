@@ -7,6 +7,7 @@ import UiReadonlyItem from './components/form-components/readonly-item';
 import UiCheckboxGroup from './components/form-components/checkbox-group';
 import UiRadioGroup from './components/form-components/radio-group';
 import UiSwitchBox from './components/form-components/switch-box';
+import UiMultiSelect from './components/form-components/multi-select';
 import $model, { useApiModel, useRouterModel } from './plugins/model';
 
 const Components = {
@@ -14,7 +15,8 @@ const Components = {
   UiReadonlyItem,
   UiCheckboxGroup,
   UiRadioGroup,
-  UiSwitchBox
+  UiSwitchBox,
+  UiMultiSelect
 };
 
 const Plugins = {
@@ -35,5 +37,11 @@ autoInit(BalmUIPro);
 
 export default BalmUIPro;
 export { version, install };
-export { UiFormView, UiCheckboxGroup, UiRadioGroup, UiSwitchBox };
+export {
+  UiFormView,
+  UiCheckboxGroup,
+  UiRadioGroup,
+  UiSwitchBox,
+  UiMultiSelect
+};
 export { $model, useApiModel, useRouterModel };
