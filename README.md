@@ -8,6 +8,7 @@
   - `<ui-checkbox-group>`
   - `<ui-radio-group>`
   - `<ui-switch-box>`
+  - `<ui-multi-select>`
 
 ## Quick Start
 
