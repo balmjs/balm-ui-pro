@@ -8,7 +8,7 @@ export default ({
   checkboxOptions,
   radioOptions,
   chipsOptions,
-  options1
+  multiSelectOptions1
 }) => {
   console.log('static data', data);
   const { id } = data;
@@ -133,7 +133,7 @@ export default ({
           {
             key: 'l',
             value: '',
-            options: options1,
+            options: multiSelectOptions1,
             attrOrProp: {
               defaultLabel: 'Select1'
             }
@@ -141,13 +141,12 @@ export default ({
           {
             key: 'm',
             value: '',
-            options: ({ l }) => {
-              return l
-                ? http.post('/mock/test/options2', {
+            options: ({ l }) =>
+              l
+                ? http.post('/mock/multi-select/options2', {
                     id: l
                   })
-                : [];
-            },
+                : [],
             attrOrProp: {
               defaultLabel: 'Select2'
             }
@@ -155,13 +154,12 @@ export default ({
           {
             key: 'n',
             value: '',
-            options: async ({ m }) => {
-              return m
-                ? await http.post('/mock/test/options3', {
+            options: async ({ m }) =>
+              m
+                ? await http.post('/mock/multi-select/options3', {
                     id: m
                   })
-                : [];
-            },
+                : [],
             attrOrProp: {
               defaultLabel: 'Select3'
             }

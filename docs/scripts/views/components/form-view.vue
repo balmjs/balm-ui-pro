@@ -52,7 +52,7 @@ const actionConfig = [
   }
 ];
 
-const selectOptions = [
+const defaultSelectOptions = [
   {
     label: 'A',
     value: 1
@@ -63,7 +63,7 @@ const selectOptions = [
   }
 ];
 
-const checkboxOptions = [
+const defaultCheckboxOptions = [
   {
     label: 'C',
     value: 3
@@ -74,7 +74,7 @@ const checkboxOptions = [
   }
 ];
 
-const radioOptions = [
+const defaultRadioOptions = [
   {
     label: 'E',
     value: 5
@@ -85,7 +85,7 @@ const radioOptions = [
   }
 ];
 
-const chipsOptions = [
+const defaultChipsOptions = [
   {
     label: 'G',
     value: 7
@@ -108,7 +108,13 @@ export default {
         f: 5
       },
       modelConfig,
-      modelOptions: {},
+      modelOptions: {
+        selectOptions: defaultSelectOptions,
+        checkboxOptions: defaultCheckboxOptions,
+        radioOptions: defaultRadioOptions,
+        chipsOptions: defaultChipsOptions,
+        multiSelectOptions1: []
+      },
       actionConfig,
       message: ''
     };
@@ -121,7 +127,13 @@ export default {
   async mounted() {
     this.modelConfig = await loadAsset('model-config/b.js');
 
-    const options1 = await this.$http.post('/mock/test/options1');
+    const selectOptions = await this.$http.post('/mock/select/options');
+    const checkboxOptions = await this.$http.post('/mock/checkbox/options');
+    const radioOptions = await this.$http.post('/mock/radio/options');
+    const chipsOptions = await this.$http.post('/mock/chips/options');
+    const multiSelectOptions1 = await this.$http.post(
+      '/mock/multi-select/options1'
+    );
 
     if (this.id) {
       this.formData = await this.$http.get(`/user/${this.id}`, {
@@ -140,7 +152,11 @@ export default {
         this.$set(this.modelOptions, 'checkboxOptions', checkboxOptions);
         this.$set(this.modelOptions, 'radioOptions', radioOptions);
         this.$set(this.modelOptions, 'chipsOptions', chipsOptions);
-        this.$set(this.modelOptions, 'options1', options1);
+        this.$set(
+          this.modelOptions,
+          'multiSelectOptions1',
+          multiSelectOptions1
+        );
       }, 1e3);
     }
   },

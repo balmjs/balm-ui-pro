@@ -1,6 +1,6 @@
 import { responseHandler } from '@mock-server/handler';
 
-export function createDemoApis(server) {
+export function createUserApis(server) {
   server.get('/user/:id', (schema, request) => {
     const id = request.params.id;
 
