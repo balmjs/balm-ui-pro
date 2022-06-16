@@ -136,9 +136,18 @@ interface ActionResult {
 ```
 
 ```js
-const formData = {};
+import { useHttp } from '@/plugins/http';
 
-const modelConfig = ({ data }) => {
+const http = useHttp();
+
+const modelConfig = ({
+  data,
+  selectOptions,
+  checkboxOptions,
+  radioOptions,
+  chipsOptions,
+  multiSelectOptions1
+}) => {
   console.log('static data', data);
   const { id } = data;
   return [
@@ -178,17 +187,8 @@ const modelConfig = ({ data }) => {
       key: 'd',
       value: '',
       attrOrProp: {
-        'default-label': 'default',
-        options: [
-          {
-            label: 'A',
-            value: 1
-          },
-          {
-            label: 'B',
-            value: 2
-          }
-        ]
+        defaultLabel: 'default',
+        options: selectOptions
       }
     },
     {
@@ -198,16 +198,7 @@ const modelConfig = ({ data }) => {
       key: 'e',
       value: data.e || [],
       attrOrProp: {
-        options: [
-          {
-            label: 'C',
-            value: 3
-          },
-          {
-            label: 'D',
-            value: 4
-          }
-        ]
+        options: checkboxOptions
       }
     },
     {
@@ -216,16 +207,7 @@ const modelConfig = ({ data }) => {
       key: 'f',
       value: '',
       attrOrProp: {
-        options: [
-          {
-            label: 'E',
-            value: 5
-          },
-          {
-            label: 'F',
-            value: 6
-          }
-        ]
+        options: radioOptions
       }
     },
     {
@@ -235,20 +217,7 @@ const modelConfig = ({ data }) => {
       value: [],
       attrOrProp: {
         type: 'filter',
-        options: [
-          {
-            label: 'G',
-            value: 7
-          },
-          {
-            label: 'H',
-            value: 8
-          },
-          {
-            label: 'I',
-            value: 9
-          }
-        ]
+        options: chipsOptions
       }
     },
     {
@@ -295,17 +264,59 @@ const modelConfig = ({ data }) => {
       value: 0
     },
     {
+      label: 'Multi-select',
+      component: 'ui-multi-select',
+      attrOrProp: {
+        components: [
+          {
+            key: 'l',
+            value: '',
+            options: multiSelectOptions1,
+            attrOrProp: {
+              defaultLabel: 'Select1'
+            }
+          },
+          {
+            key: 'm',
+            value: '',
+            options: ({ l }) =>
+              l
+                ? http.post('/api/multi-select/options2', {
+                    id: l
+                  })
+                : [],
+            attrOrProp: {
+              defaultLabel: 'Select2'
+            }
+          },
+          {
+            key: 'n',
+            value: '',
+            options: async ({ m }) =>
+              m
+                ? await http.post('/api/multi-select/options3', {
+                    id: m
+                  })
+                : [],
+            attrOrProp: {
+              defaultLabel: 'Select3'
+            }
+          }
+        ]
+      }
+    },
+    {
       debug: true,
       label: 'Component slot',
       component: 'ui-textfield',
-      key: 'l',
+      key: 'o',
       value: ''
     },
     {
       debug: true,
       label: 'Custom component',
       component: 'x-form-item',
-      key: 'm',
+      key: 'p',
       value: '',
       event: 'input'
     },
@@ -315,6 +326,54 @@ const modelConfig = ({ data }) => {
     }
   ];
 };
+
+const selectOptions = [
+  {
+    label: 'A',
+    value: 1
+  },
+  {
+    label: 'B',
+    value: 2
+  }
+];
+
+const checkboxOptions = [
+  {
+    label: 'C',
+    value: 3
+  },
+  {
+    label: 'D',
+    value: 4
+  }
+];
+
+const radioOptions = [
+  {
+    label: 'E',
+    value: 5
+  },
+  {
+    label: 'F',
+    value: 6
+  }
+];
+
+const chipsOptions = [
+  {
+    label: 'G',
+    value: 7
+  },
+  {
+    label: 'H',
+    value: 8
+  },
+  {
+    label: 'I',
+    value: 9
+  }
+];
 
 const actionConfig = [
   {
@@ -333,15 +392,40 @@ const actionConfig = [
   }
 ];
 
-function onAction({ type, valid, message }) {
-  console.log(type);
+export default {
+  data() {
+    return {
+      formData: {},
+      modelConfig,
+      modelOptions: {
+        selectOptions,
+        checkboxOptions,
+        radioOptions,
+        chipsOptions,
+        multiSelectOptions1: []
+      },
+      actionConfig,
+      message: ''
+    };
+  },
+  async mounted() {
+    const multiSelectOptions1 = await this.$http.post(
+      '/api/multi-select/options1'
+    );
+    this.$set(this.modelOptions, 'multiSelectOptions1', multiSelectOptions1);
+  },
+  methods: {
+    onAction({ type, valid, message }) {
+      console.log(type);
 
-  if (type === 'submit') {
-    this.message = message;
+      if (type === 'submit') {
+        this.message = message;
 
-    if (valid) {
-      console.log('gg');
+        if (valid) {
+          console.log('gg');
+        }
+      }
     }
   }
-}
+};
 ```

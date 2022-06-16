@@ -1,6 +1,6 @@
 {
   "name": "balm-ui-pro",
-  "version": "0.9.4-legacy",
+  "version": "0.10.0-legacy",
   "description": "BalmUI Pro",
   "keywords": [
     "balm",
@@ -46,7 +46,7 @@
     "babel-plugin-prismjs": "^2.1.0",
     "balm": "^3.25.0",
     "balm-ui": "8",
-    "core-js": "^3.22.0",
+    "core-js": "^3.23.0",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -55,7 +55,7 @@
     "markdown-loader": "7",
     "miragejs": "0.1.43",
     "miragejs-axios-adapter": "^0.1.0",
-    "prettier": "^2.6.0",
+    "prettier": "^2.7.0",
     "prismjs": "^1.28.0",
     "vue": "2",
     "vue-loader": "15",

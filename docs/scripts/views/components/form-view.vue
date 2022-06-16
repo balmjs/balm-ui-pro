@@ -35,23 +35,6 @@
 import { loadAsset } from '@/utils';
 import modelConfig from '@/model-config/a.json';
 
-const actionConfig = [
-  {
-    type: 'reset',
-    text: 'Reset',
-    attrOrProp: {
-      outlined: true
-    }
-  },
-  {
-    type: 'submit',
-    text: 'Submit',
-    attrOrProp: {
-      raised: true
-    }
-  }
-];
-
 const defaultSelectOptions = [
   {
     label: 'A',
@@ -97,6 +80,23 @@ const defaultChipsOptions = [
   {
     label: 'I',
     value: 9
+  }
+];
+
+const actionConfig = [
+  {
+    type: 'reset',
+    text: 'Reset',
+    attrOrProp: {
+      outlined: true
+    }
+  },
+  {
+    type: 'submit',
+    text: 'Submit',
+    attrOrProp: {
+      raised: true
+    }
   }
 ];
 
