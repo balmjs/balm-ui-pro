@@ -229,10 +229,10 @@ export default {
     }
   },
   watch: {
-    modelValue(val, oldVal) {
+    async modelValue(val, oldVal) {
       this.formDataSource = Object.assign({}, val);
 
-      this.isFunctionConfig && this.setFormConfig();
+      this.isFunctionConfig && (await this.setFormConfig());
 
       if (this.hasFormDataSource) {
         this.updateFormData();
@@ -240,22 +240,24 @@ export default {
         this.resetFormData(Object.keys(oldVal).length);
       }
     },
-    modelConfig(val) {
+    async modelConfig(val) {
       if (val === false) {
         this.resetFormView();
       } else {
-        const synchronized = Object.keys(this.currentFormData).length;
-        this.setFormConfig(val);
+        await this.setFormConfig(val);
+
         if (this.hasFormDataSource) {
           this.updateFormData();
         } else {
+          const synchronized = Object.keys(this.currentFormData).length;
           !synchronized &&
             this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
         }
       }
     },
-    modelOptions(val) {
-      this.isFunctionConfig && this.setFormConfig();
+    async modelOptions(val) {
+      this.isFunctionConfig && (await this.setFormConfig());
+
       if (this.hasFormDataSource) {
         this.updateFormData();
       }
@@ -263,6 +265,7 @@ export default {
   },
   beforeMount() {
     this.setFormConfig();
+
     const synchronized = this.updateFormData();
     !synchronized && this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
   },
@@ -275,9 +278,9 @@ export default {
       this.formData = {};
       this.formDataSource = {};
     },
-    setFormConfig(modelConfig = this.modelConfig) {
+    async setFormConfig(modelConfig = this.modelConfig) {
       const originalConfig = this.isFunctionConfig
-        ? modelConfig({
+        ? await modelConfig({
             data: Object.assign({}, this.formDataSource),
             ...this.modelOptions
           })
