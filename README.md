@@ -71,9 +71,9 @@ app.mount('#app');
     debug?: boolean;
     // Conditional Rendering
     if?: boolean;
-    show?: boolean | (formData) => boolean;
+    show?: (formData) => boolean;
     // Form label
-    label?: string | (formData) => string;
+    label?: (formData) => string;
     // Form data config
     key?: string;
     value?: string;
