@@ -51,7 +51,7 @@ export default ({
       key: 'd',
       value: '',
       attrOrProp: {
-        'default-label': 'default',
+        defaultLabel: 'default',
         options: selectOptions
       }
     },

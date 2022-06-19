@@ -59,19 +59,20 @@ Vue.use(BalmUIPro);
 - `modelConfig: FormConfigItem[] | (formData: object) => FormConfigItem[] | false`
 
   ```ts
-  interface FormConfigItem {
+  interface FormItemConfig {
     // Show all custom slots names and component event in console
     debug?: boolean;
     // Conditional Rendering
     if?: boolean;
-    show?: boolean | (formData) => boolean;
+    show?: (formData) => boolean;
     // Form label
-    label?: string | (formData) => string;
+    label?: (formData) => string;
     // Form data config
     key?: string;
     value?: string;
     // Form component config
     component?: string;
+    components?: FormItemComponentsConfig[];
     attrOrProp?: object;
     event?: string; // Defaults: 'change'
     // Custom slot
@@ -79,6 +80,13 @@ Vue.use(BalmUIPro);
     // BalmUI validator
     validator?: string;
     ...BalmUIValidationRule
+  }
+
+  interface FormItemComponentsConfig {
+    key?: string;
+    value?: string;
+    attrOrProp?: object;
+    ...customAttrOrProp
   }
   ```
 
@@ -150,7 +158,9 @@ const modelConfig = ({
   multiSelectOptions1
 }) => {
   console.log('static data', data);
+
   const { id } = data;
+
   return [
     {
       if: !!id,
@@ -168,7 +178,7 @@ const modelConfig = ({
       label: 'Input',
       component: 'ui-textfield',
       key: 'a',
-      value: ''
+      value: '2'
     },
     {
       label: 'Autocomplete',
@@ -267,43 +277,48 @@ const modelConfig = ({
     {
       label: 'Multi-select',
       component: 'ui-multi-select',
-      attrOrProp: {
-        components: [
-          {
-            key: 'l',
-            value: '',
-            options: multiSelectOptions1,
-            attrOrProp: {
-              defaultLabel: 'Select1'
-            }
-          },
-          {
-            key: 'm',
-            value: '',
-            options: ({ l }) =>
-              l
-                ? http.post('/api/multi-select/options2', {
-                    id: l
-                  })
-                : [],
-            attrOrProp: {
-              defaultLabel: 'Select2'
-            }
-          },
-          {
-            key: 'n',
-            value: '',
-            options: async ({ m }) =>
-              m
-                ? await http.post('/api/multi-select/options3', {
-                    id: m
-                  })
-                : [],
-            attrOrProp: {
-              defaultLabel: 'Select3'
-            }
+      components: [
+        {
+          key: 'l',
+          value: '',
+          options: multiSelectOptions1,
+          attrOrProp: {
+            defaultLabel: 'Select1'
           }
-        ]
+        },
+        {
+          key: 'm',
+          value: '',
+          options: ({ l }) =>
+            l
+              ? http.post('/api/multi-select/options2', {
+                  id: l
+                })
+              : [],
+          attrOrProp: {
+            defaultLabel: 'Select2'
+          }
+        },
+        {
+          key: 'n',
+          value: '',
+          options: async ({ m }) =>
+            m
+              ? await http.post('/api/multi-select/options3', {
+                  id: m
+                })
+              : [],
+          attrOrProp: {
+            defaultLabel: 'Select3'
+          }
+        }
+      ],
+      validator: 'multiSelectRequired',
+      multiSelectRequired: {
+        validate(_, { l, m, n }) {
+          return l || m || n;
+        },
+        message: '%s is required'
       }
     },
     {

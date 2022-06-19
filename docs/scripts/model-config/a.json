@@ -27,7 +27,7 @@
     "value": "",
     "attrOrProp": {
       "placeholder": "bbb",
-      "default-label": "default",
+      "defaultLabel": "default",
       "options": [
         {
           "label": "A",
