@@ -89,7 +89,7 @@ export default {
           this.$set(this.optionsMap, key, []);
           this.$set(this.subOptionsSourceMap, key, new Map());
         }
-        this.$emit('change', this.selectedData);
+        this.$emit(UI_MULTI_SELECT.EVENTS.CHANGE, this.selectedData);
       } else {
         console.warn('components are empty');
       }
@@ -131,11 +131,11 @@ export default {
         this.$set(this.selectedData, key, '');
         this.$set(this.optionsMap, key, []);
       });
-      this.$emit('change', this.selectedData);
+      this.$emit(UI_MULTI_SELECT.EVENTS.CHANGE, this.selectedData);
     },
     async handleChange(key, value) {
       this.$set(this.selectedData, key, value);
-      this.$emit('change', this.selectedData);
+      this.$emit(UI_MULTI_SELECT.EVENTS.CHANGE, this.selectedData);
     }
   }
 };
