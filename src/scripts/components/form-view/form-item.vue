@@ -13,36 +13,53 @@
         }
       ]"
     >
-      <slot :name="customSlots.beforeLabel" :value="value"></slot>
+      <slot :name="customSlots.beforeLabel"></slot>
       <span>{{ getFormLabel(config) }}</span>
-      <slot :name="customSlots.afterLabel" :value="value"></slot>
+      <slot :name="customSlots.afterLabel"></slot>
     </label>
     <div class="mdc-form-item__item">
-      <slot :name="customSlots.beforeItem" :value="value"></slot>
+      <slot :name="customSlots.beforeItem"></slot>
       <template v-if="config.slot">
-        <slot :name="config.slot" :value="value"></slot>
+        <slot :name="config.slot"></slot>
       </template>
       <template v-else>
-        <slot :name="customSlots.componentItem" :value="value">
-          <component
-            :is="config.component"
-            v-show="displayFormItem(config)"
-            v-model="formData[config.key]"
-            v-bind="
-              Object.assign(
-                {
-                  componentKey,
-                  formData,
-                  formDataSource
-                },
-                config.attrOrProp
-              )
-            "
-            @[eventName]="handleChange(config, $event)"
-          ></component>
+        <slot :name="customSlots.componentItem">
+          <template v-if="config.key">
+            <component
+              :is="config.component"
+              v-model="formData[config.key]"
+              v-bind="
+                Object.assign(
+                  {
+                    componentKey,
+                    formData,
+                    formDataSource
+                  },
+                  config.attrOrProp
+                )
+              "
+              @[eventName]="handleChange(config, $event)"
+            ></component>
+          </template>
+          <template v-else>
+            <component
+              :is="config.component"
+              :components="config.components"
+              v-bind="
+                Object.assign(
+                  {
+                    formData,
+                    formDataSource
+                  },
+                  config.attrOrProp
+                )
+              "
+              @[eventName]="handleChange(config, $event)"
+            ></component>
+          </template>
         </slot>
       </template>
-      <slot :name="customSlots.afterItem" :value="value"></slot>
+      <slot :name="customSlots.afterItem"></slot>
     </div>
   </ui-form-field>
 </template>
@@ -127,9 +144,6 @@ export default {
         componentItem: `form-item__${this.componentKey}`,
         afterItem: `after-item__${this.componentKey}`
       };
-    },
-    value() {
-      return this.getModelValue(this.config);
     }
   },
   watch: {
@@ -150,8 +164,6 @@ export default {
           ? show(this.formData)
           : getType(show) === 'undefined' || show;
 
-      !display && this.$emit(UI_FORM_ITEM.EVENTS.update, key, value);
-
       return display;
     },
     getFormLabel({ label }) {
@@ -160,10 +172,10 @@ export default {
     handleChange({ component, key }, value) {
       this.config.debug &&
         console.info(`[${name}] ${component}@${this.eventName}`, key, value);
-      this.$emit(UI_FORM_ITEM.EVENTS.update, key, value);
-    },
-    getModelValue({ key, value }) {
-      return this.formData[key] || value;
+
+      key
+        ? this.$emit(UI_FORM_ITEM.EVENTS.update, key, value)
+        : this.$emit(UI_FORM_ITEM.EVENTS.update, value);
     }
   }
 };

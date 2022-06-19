@@ -2,7 +2,7 @@
   <div :class="['mdc-multi-select', cssClasses]">
     <ui-select
       v-for="(component, index) in components"
-      :key="index"
+      :key="`${component.key}-${index}`"
       v-model="selectedData[component.key]"
       :options="optionsMap[component.key]"
       v-bind="component.attrOrProp || {}"

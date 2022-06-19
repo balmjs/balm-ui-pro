@@ -36,14 +36,10 @@
                 :attr-or-prop="formItemAttrOrProp"
                 @change="handleChange"
               >
-                <template
-                  v-for="(_, slotName) in $scopedSlots"
-                  #[slotName]="{ value }"
-                >
+                <template v-for="(_, slotName) in $scopedSlots">
                   <slot
                     :name="slotName"
                     v-bind="{
-                      value,
                       config: configData,
                       data: currentFormData
                     }"
@@ -79,14 +75,10 @@
               :attr-or-prop="formItemAttrOrProp"
               @change="handleChange"
             >
-              <template
-                v-for="(_, slotName) in $scopedSlots"
-                #[slotName]="{ value }"
-              >
+              <template v-for="(_, slotName) in $scopedSlots">
                 <slot
                   :name="slotName"
                   v-bind="{
-                    value,
                     config: configData,
                     data: currentFormData
                   }"
@@ -208,7 +200,7 @@ export default {
       NATIVE_BUTTON_TYPES,
       formConfig: [],
       formData: {},
-      formDataSource: {}
+      formDataSource: this.modelValue
     };
   },
   computed: {
@@ -216,10 +208,10 @@ export default {
       return getType(this.modelConfig) === 'function';
     },
     currentFormConfig() {
-      return this.formConfig.filter(({ key }) => key);
-    },
-    formDataKeys() {
-      return this.currentFormConfig.map(({ key }) => key);
+      return this.formConfig.filter(
+        ({ key, components }) =>
+          getType(key) === 'string' || Array.isArray(components)
+      );
     },
     hasFormDataSource() {
       return Object.keys(this.formDataSource).length;
@@ -237,14 +229,14 @@ export default {
       if (this.hasFormDataSource) {
         this.updateFormData();
       } else {
-        this.resetFormData(Object.keys(oldVal).length);
+        this.initFormData(Object.keys(oldVal).length);
       }
     },
     async modelConfig(val) {
       if (val === false) {
         this.resetFormView();
       } else {
-        await this.setFormConfig(val);
+        await this.setFormConfig(val, true);
 
         if (this.hasFormDataSource) {
           this.updateFormData();
@@ -264,7 +256,7 @@ export default {
     }
   },
   beforeMount() {
-    this.setFormConfig();
+    this.setFormConfig(this.modelConfig, true);
 
     const synchronized = this.updateFormData();
     !synchronized && this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
@@ -276,9 +268,8 @@ export default {
     resetFormView() {
       this.formConfig = [];
       this.formData = {};
-      this.formDataSource = {};
     },
-    async setFormConfig(modelConfig = this.modelConfig) {
+    async setFormConfig(modelConfig = this.modelConfig, needInit = false) {
       const originalConfig = this.isFunctionConfig
         ? await modelConfig({
             data: Object.assign({}, this.formDataSource),
@@ -291,60 +282,76 @@ export default {
           (configData) => !configData.hasOwnProperty('if') || configData.if
         );
 
-        this.initFormData();
+        needInit && this.initFormData();
       } else {
         console.warn(`[UiFormView]: Invalid form model config`);
       }
     },
-    initFormData() {
-      const formConfig = this.currentFormConfig;
-      const formConfigCount = formConfig.length;
-      if (formConfigCount) {
-        for (let i = 0; i < formConfigCount; i++) {
-          const { key, value } = formConfig[i];
+    initFormData(needSync = false) {
+      this.formData = {};
+
+      this.currentFormConfig.forEach(({ key, value, components }) => {
+        if (key) {
           this.$set(this.formData, key, value);
+        } else {
+          if (Array.isArray(components)) {
+            components.forEach(({ key, value }) => {
+              this.$set(this.formData, key, value);
+            });
+          }
         }
-      }
+      });
+
+      needSync && this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
     },
     updateFormData(newFormData = this.formDataSource) {
       let needSync = false;
 
-      if (this.currentFormConfig.length) {
-        const formDataKeys = this.formDataKeys;
-        const newFormDataKeys = Object.keys(newFormData).filter((key) =>
-          formDataKeys.includes(key)
-        );
-        const newFormDataKeysCount = newFormDataKeys.length;
-        for (let i = 0; i < newFormDataKeysCount; i++) {
-          const key = newFormDataKeys[i];
-          if (this.formData[key] !== newFormData[key]) {
-            this.$set(this.formData, key, newFormData[key]);
+      const newFormDataKeys = Object.keys(newFormData);
+      const newFormConfig = this.currentFormConfig.filter(
+        ({ key, components }) =>
+          newFormDataKeys.includes(key) ||
+          (Array.isArray(components) &&
+            components.some((component) =>
+              newFormDataKeys.includes(component.key)
+            ))
+      );
+
+      newFormConfig.forEach(({ key, value, components }) => {
+        if (key) {
+          const newValue = newFormData[key];
+          if (
+            this.formData[key] !== newValue &&
+            JSON.stringify(newValue) !== JSON.stringify(value)
+          ) {
+            this.$set(this.formData, key, newValue);
             needSync = true;
           }
+        } else {
+          components.forEach(({ key, value }) => {
+            const newValue = newFormData[key];
+            if (
+              this.formData[key] !== newValue &&
+              JSON.stringify(newValue) !== JSON.stringify(value)
+            ) {
+              this.$set(this.formData, key, newValue);
+              needSync = true;
+            }
+          });
         }
+      });
 
-        needSync && this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
-      }
+      needSync && this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
 
       return needSync;
     },
-    resetFormData(needSync) {
-      this.formData = {};
-      const formConfig = this.currentFormConfig;
-      formConfig.forEach(({ key, value }) => {
-        this.$set(this.formData, key, value);
-      });
-      needSync && this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
-    },
     handleChange(key, value) {
-      if (key) {
-        this.$set(this.formData, key, value);
-      } else {
-        if (getType(value) === 'object') {
-          for (const [k, v] of Object.entries(value)) {
-            this.$set(this.formData, k, v);
-          }
+      if (getType(key) === 'object') {
+        for (const [k, v] of Object.entries(key)) {
+          this.$set(this.formData, k, v);
         }
+      } else {
+        this.$set(this.formData, key, value);
       }
       this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
     },
@@ -385,7 +392,7 @@ export default {
           };
           break;
         case NATIVE_BUTTON_TYPES.reset:
-          this.resetFormData(true);
+          this.initFormData(true);
           break;
       }
 
