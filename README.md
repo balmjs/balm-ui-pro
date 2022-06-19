@@ -56,7 +56,7 @@ Vue.use(BalmUIPro);
 | `gridCellAttrOrProp` | object                   | `{}`       | See BalmUI `<ui-grid-cell>` props [docs](https://material.balmjs.com/layout/grid)                     |
 | `actionConfig`       | array                    | `[]`       | Form button config, see BalmUI `<ui-button>` props [docs](https://material.balmjs.com/general/button) |
 
-- `modelConfig: FormConfigItem[] | (formData: object) => FormConfigItem[] | false`
+- `modelConfig: FormItemConfig[] | (formData: object) => FormItemConfig[] | false`
 
   ```ts
   interface FormItemConfig {
@@ -64,9 +64,9 @@ Vue.use(BalmUIPro);
     debug?: boolean;
     // Conditional Rendering
     if?: boolean;
-    show?: (formData) => boolean;
+    show?: boolean | (formData) => boolean;
     // Form label
-    label?: (formData) => string;
+    label?: string | (formData) => string;
     // Form data config
     key?: string;
     value?: string;
@@ -107,7 +107,7 @@ Vue.use(BalmUIPro);
 | Name                                          | Props                               | Description                                                    |
 | --------------------------------------------- | ----------------------------------- | -------------------------------------------------------------- |
 | `before`                                      | `itemClass`, `subitemClass`, `data` | Before form items                                              |
-| custom form item slots (by form model config) | `value`, `config`, `data`           | Custom form item slots (See all slots names by `config.debug`) |
+| custom form item slots (by form model config) | `config`, `data`                    | Custom form item slots (See all slots names by `config.debug`) |
 | `after`                                       | `itemClass`, `subitemClass`, `data` | After form items                                               |
 | `actions`                                     | `className`, `data`                 | Custom form buttons                                            |
 
@@ -116,7 +116,7 @@ Vue.use(BalmUIPro);
 | Name                 | Type                                   | Description |
 | -------------------- | -------------------------------------- | ----------- |
 | `update:model-value` | `function(modelValue: object)`         |             |
-| `action`             | `function(antionResult: ActionResult)` |             |
+| `action`             | `function(actionResult: ActionResult)` |             |
 
 ```ts
 interface ActionResult {
