@@ -138,6 +138,7 @@ interface ActionResult {
 <ui-form-view
   v-model="formData"
   :model-config="modelConfig"
+  :model-options="modelOptions"
   :action-config="actionConfig"
   @action="onAction"
 >
