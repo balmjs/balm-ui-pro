@@ -1,6 +1,19 @@
-export default ({ data }) => {
+import { useHttp } from '@/plugins/http';
+
+const http = useHttp();
+
+export default ({
+  data,
+  selectOptions,
+  checkboxOptions,
+  radioOptions,
+  chipsOptions,
+  multiSelectOptions1
+}) => {
   console.log('static data', data);
+
   const { id } = data;
+
   return [
     {
       if: !!id,
@@ -18,7 +31,7 @@ export default ({ data }) => {
       label: 'Input',
       component: 'ui-textfield',
       key: 'a',
-      value: ''
+      value: '2'
     },
     {
       label: 'Autocomplete',
@@ -38,17 +51,8 @@ export default ({ data }) => {
       key: 'd',
       value: '',
       attrOrProp: {
-        'default-label': 'default',
-        options: [
-          {
-            label: 'A',
-            value: 1
-          },
-          {
-            label: 'B',
-            value: 2
-          }
-        ]
+        defaultLabel: 'default',
+        options: selectOptions
       }
     },
     {
@@ -58,16 +62,7 @@ export default ({ data }) => {
       key: 'e',
       value: data.e || [],
       attrOrProp: {
-        options: [
-          {
-            label: 'C',
-            value: 3
-          },
-          {
-            label: 'D',
-            value: 4
-          }
-        ]
+        options: checkboxOptions
       }
     },
     {
@@ -76,16 +71,7 @@ export default ({ data }) => {
       key: 'f',
       value: '',
       attrOrProp: {
-        options: [
-          {
-            label: 'E',
-            value: 5
-          },
-          {
-            label: 'F',
-            value: 6
-          }
-        ]
+        options: radioOptions
       }
     },
     {
@@ -95,20 +81,7 @@ export default ({ data }) => {
       value: [],
       attrOrProp: {
         type: 'filter',
-        options: [
-          {
-            label: 'G',
-            value: 7
-          },
-          {
-            label: 'H',
-            value: 8
-          },
-          {
-            label: 'I',
-            value: 9
-          }
-        ]
+        options: chipsOptions
       }
     },
     {
@@ -155,17 +128,64 @@ export default ({ data }) => {
       value: 0
     },
     {
+      label: 'Multi-select',
+      component: 'ui-multi-select',
+      components: [
+        {
+          key: 'l',
+          value: '',
+          options: multiSelectOptions1,
+          attrOrProp: {
+            defaultLabel: 'Select1'
+          }
+        },
+        {
+          key: 'm',
+          value: '',
+          options: ({ l }) =>
+            l
+              ? http.post('/mock/multi-select/options2', {
+                  id: l
+                })
+              : [],
+          attrOrProp: {
+            defaultLabel: 'Select2'
+          }
+        },
+        {
+          key: 'n',
+          value: '',
+          options: async ({ m }) =>
+            m
+              ? await http.post('/mock/multi-select/options3', {
+                  id: m
+                })
+              : [],
+          attrOrProp: {
+            defaultLabel: 'Select3'
+          }
+        }
+      ],
+      validator: 'multiSelectRequired',
+      multiSelectRequired: {
+        validate(_, { l, m, n }) {
+          return l || m || n;
+        },
+        message: '%s is required'
+      }
+    },
+    {
       debug: true,
       label: 'Component slot',
       component: 'ui-textfield',
-      key: 'l',
+      key: 'o',
       value: ''
     },
     {
       debug: true,
       label: 'Custom component',
       component: 'x-form-item',
-      key: 'm',
+      key: 'p',
       value: '',
       event: 'input'
     },

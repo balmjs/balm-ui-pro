@@ -1,5 +1,7 @@
-import { createDemoApis } from './demo';
+import { createUserApis } from './user';
+import { createOptionsApis } from './options';
 
 export default function createApis(server) {
-  createDemoApis(server);
+  createUserApis(server);
+  createOptionsApis(server);
 }

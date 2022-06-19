@@ -3,7 +3,7 @@
     "label": "Input",
     "component": "ui-textfield",
     "key": "a",
-    "value": "",
+    "value": "1",
     "attrOrProp": {
       "placeholder": "aaa"
     }

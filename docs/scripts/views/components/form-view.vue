@@ -3,6 +3,7 @@
     <ui-form-view
       v-model="formData"
       :model-config="modelConfig"
+      :model-options="modelOptions"
       :action-config="actionConfig"
       @action="onAction"
     >
@@ -30,25 +31,83 @@
   </div>
 </template>
 
+<script>
+import defaultModelConfig from '@/model-config/a.json';
+
+const defaultSelectOptions = [
+  {
+    label: 'A',
+    value: 1
+  },
+  {
+    label: 'B',
+    value: 2
+  }
+];
+
+const defaultCheckboxOptions = [
+  {
+    label: 'C',
+    value: 3
+  },
+  {
+    label: 'D',
+    value: 4
+  }
+];
+
+const defaultRadioOptions = [
+  {
+    label: 'E',
+    value: 5
+  },
+  {
+    label: 'F',
+    value: 6
+  }
+];
+
+const defaultChipsOptions = [
+  {
+    label: 'G',
+    value: 7
+  },
+  {
+    label: 'H',
+    value: 8
+  },
+  {
+    label: 'I',
+    value: 9
+  }
+];
+</script>
+
 <script setup>
 import { reactive, toRefs, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useHttp } from '@/plugins/http';
 import { loadAsset } from '@/utils';
-import defaultModelConfig from '@/model-config/a.json';
 
 const route = useRoute();
 const http = useHttp();
 
 const state = reactive({
-  modelConfig: defaultModelConfig,
   formData: {
     a: 'hello',
     f: 5
   },
+  modelConfig: defaultModelConfig,
+  modelOptions: {
+    selectOptions: defaultSelectOptions,
+    checkboxOptions: defaultCheckboxOptions,
+    radioOptions: defaultRadioOptions,
+    chipsOptions: defaultChipsOptions,
+    multiSelectOptions1: []
+  },
   message: ''
 });
-const { modelConfig, formData, message } = toRefs(state);
+const { formData, modelConfig, modelOptions, message } = toRefs(state);
 
 const actionConfig = [
   {
@@ -71,6 +130,13 @@ const id = computed(() => route.params.id || 0);
 
 onMounted(async () => {
   state.modelConfig = await loadAsset('model-config/b.js');
+
+  const selectOptions = await http.post('/mock/select/options');
+  const checkboxOptions = await http.post('/mock/checkbox/options');
+  const radioOptions = await http.post('/mock/radio/options');
+  const chipsOptions = await http.post('/mock/chips/options');
+  const multiSelectOptions1 = await http.post('/mock/multi-select/options1');
+
   if (id.value) {
     state.formData = await http.get(`/user/${id.value}`, {
       baseURL: '/api/mock'
@@ -83,6 +149,12 @@ onMounted(async () => {
         f: 5,
         g: [8]
       };
+
+      state.modelOptions.selectOptions = selectOptions;
+      state.modelOptions.checkboxOptions = checkboxOptions;
+      state.modelOptions.radioOptions = radioOptions;
+      state.modelOptions.chipsOptions = chipsOptions;
+      state.modelOptions.multiSelectOptions1 = multiSelectOptions1;
     }, 1e3);
   }
 });
