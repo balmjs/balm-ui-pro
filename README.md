@@ -63,7 +63,7 @@ app.mount('#app');
 | `gridCellAttrOrProp` | object                   | `{}`       | See BalmUI `<ui-grid-cell>` props [docs](https://material.balmjs.com/layout/grid)                     |
 | `actionConfig`       | array                    | `[]`       | Form button config, see BalmUI `<ui-button>` props [docs](https://material.balmjs.com/general/button) |
 
-- `modelConfig: FormConfigItem[] | (formData: object) => FormConfigItem[] | false`
+- `modelConfig: FormItemConfig[] | (formData: object) => FormItemConfig[] | false`
 
   ```ts
   interface FormItemConfig {
@@ -71,9 +71,9 @@ app.mount('#app');
     debug?: boolean;
     // Conditional Rendering
     if?: boolean;
-    show?: (formData) => boolean;
+    show?: boolean | (formData) => boolean;
     // Form label
-    label?: (formData) => string;
+    label?: string | (formData) => string;
     // Form data config
     key?: string;
     value?: string;
@@ -123,7 +123,7 @@ app.mount('#app');
 | Name                | Type                                   | Description |
 | ------------------- | -------------------------------------- | ----------- |
 | `update:modelValue` | `function(modelValue: object)`         |             |
-| `action`            | `function(antionResult: ActionResult)` |             |
+| `action`            | `function(actionResult: ActionResult)` |             |
 
 ```ts
 interface ActionResult {
