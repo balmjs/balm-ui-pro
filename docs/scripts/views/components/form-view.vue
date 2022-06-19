@@ -104,8 +104,7 @@ export default {
   data() {
     return {
       formData: {
-        a: 'hello',
-        f: 5
+        a: 'hello'
       },
       modelConfig,
       modelOptions: {

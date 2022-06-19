@@ -11,7 +11,9 @@ export default ({
   multiSelectOptions1
 }) => {
   console.log('static data', data);
+
   const { id } = data;
+
   return [
     {
       if: !!id,
@@ -29,7 +31,7 @@ export default ({
       label: 'Input',
       component: 'ui-textfield',
       key: 'a',
-      value: ''
+      value: '2'
     },
     {
       label: 'Autocomplete',
@@ -128,43 +130,48 @@ export default ({
     {
       label: 'Multi-select',
       component: 'ui-multi-select',
-      attrOrProp: {
-        components: [
-          {
-            key: 'l',
-            value: '',
-            options: multiSelectOptions1,
-            attrOrProp: {
-              defaultLabel: 'Select1'
-            }
-          },
-          {
-            key: 'm',
-            value: '',
-            options: ({ l }) =>
-              l
-                ? http.post('/mock/multi-select/options2', {
-                    id: l
-                  })
-                : [],
-            attrOrProp: {
-              defaultLabel: 'Select2'
-            }
-          },
-          {
-            key: 'n',
-            value: '',
-            options: async ({ m }) =>
-              m
-                ? await http.post('/mock/multi-select/options3', {
-                    id: m
-                  })
-                : [],
-            attrOrProp: {
-              defaultLabel: 'Select3'
-            }
+      components: [
+        {
+          key: 'l',
+          value: '',
+          options: multiSelectOptions1,
+          attrOrProp: {
+            defaultLabel: 'Select1'
           }
-        ]
+        },
+        {
+          key: 'm',
+          value: '',
+          options: ({ l }) =>
+            l
+              ? http.post('/mock/multi-select/options2', {
+                  id: l
+                })
+              : [],
+          attrOrProp: {
+            defaultLabel: 'Select2'
+          }
+        },
+        {
+          key: 'n',
+          value: '',
+          options: async ({ m }) =>
+            m
+              ? await http.post('/mock/multi-select/options3', {
+                  id: m
+                })
+              : [],
+          attrOrProp: {
+            defaultLabel: 'Select3'
+          }
+        }
+      ],
+      validator: 'multiSelectRequired',
+      multiSelectRequired: {
+        validate(_, { l, m, n }) {
+          return l || m || n;
+        },
+        message: '%s is required'
       }
     },
     {
