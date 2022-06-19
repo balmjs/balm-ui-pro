@@ -26,9 +26,7 @@ const UI_CHECKBOX_GROUP = {
 
 export default {
   name: 'UiCheckboxGroup',
-  customOptions: {
-    UI_CHECKBOX_GROUP
-  }
+  customOptions: {}
 };
 </script>
 

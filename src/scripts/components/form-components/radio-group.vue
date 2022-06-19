@@ -26,9 +26,7 @@ const UI_RADIO_GROUP = {
 
 export default {
   name: 'UiRadioGroup',
-  customOptions: {
-    UI_RADIO_GROUP
-  }
+  customOptions: {}
 };
 </script>
 

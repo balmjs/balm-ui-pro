@@ -21,9 +21,7 @@ const UI_SWITCH_BOX = {
 
 export default {
   name: 'UiSwitchBox',
-  customOptions: {
-    UI_SWITCH_BOX
-  }
+  customOptions: {}
 };
 </script>
 

@@ -36,14 +36,10 @@
                   :attr-or-prop="formItemAttrOrProp"
                   @update:modelValue="handleChange"
                 >
-                  <template
-                    v-for="(_, slotName) in $slots"
-                    #[slotName]="{ value }"
-                  >
+                  <template v-for="(_, slotName) in $slots">
                     <slot
                       :name="slotName"
                       v-bind="{
-                        value,
                         config: configData,
                         data: currentFormData
                       }"
@@ -82,14 +78,10 @@
                 :attr-or-prop="formItemAttrOrProp"
                 @update:modelValue="handleChange"
               >
-                <template
-                  v-for="(_, slotName) in $slots"
-                  #[slotName]="{ value }"
-                >
+                <template v-for="(_, slotName) in $slots">
                   <slot
                     :name="slotName"
                     v-bind="{
-                      value,
                       config: configData,
                       data: currentFormData
                     }"
@@ -161,7 +153,6 @@ const NATIVE_BUTTON_TYPES = {
 export default {
   name: 'UiFormView',
   customOptions: {
-    UI_FORM_VIEW,
     NATIVE_BUTTON_TYPES
   }
 };
@@ -228,7 +219,7 @@ const validator = inject('validator');
 const state = reactive({
   formConfig: [],
   formData: {},
-  formDataSource: {}
+  formDataSource: props.modelValue
 });
 const { formData, formConfig, formDataSource } = toRefs(state);
 
@@ -236,10 +227,10 @@ const isFunctionConfig = computed(
   () => getType(props.modelConfig) === 'function'
 );
 const currentFormConfig = computed(() =>
-  state.formConfig.filter(({ key }) => key)
-);
-const formDataKeys = computed(() =>
-  currentFormConfig.value.map(({ key }) => key)
+  state.formConfig.filter(
+    ({ key, components }) =>
+      getType(key) === 'string' || Array.isArray(components)
+  )
 );
 const hasFormDataSource = computed(
   () => Object.keys(state.formDataSource).length
@@ -249,7 +240,7 @@ const currentFormData = computed(() =>
 );
 
 onBeforeMount(() => {
-  setFormConfig();
+  setFormConfig(props.modelConfig, true);
   const synchronized = updateFormData();
   !synchronized && emit(UI_FORM_VIEW.EVENTS.update, state.formData);
 });
@@ -259,16 +250,32 @@ onBeforeUnmount(() => {
 });
 
 watch(
+  () => props.modelValue,
+  async (val, oldVal) => {
+    state.formDataSource = Object.assign({}, val);
+
+    isFunctionConfig.value && (await setFormConfig());
+
+    if (hasFormDataSource.value) {
+      updateFormData();
+    } else {
+      initFormData(Object.keys(oldVal).length);
+    }
+  }
+);
+
+watch(
   () => props.modelConfig,
-  (val) => {
+  async (val) => {
     if (val === false) {
       resetFormView();
     } else {
-      const synchronized = Object.keys(currentFormData.value).length;
-      setFormConfig(val);
+      await setFormConfig(val, true);
+
       if (hasFormDataSource.value) {
         updateFormData();
       } else {
+        const synchronized = Object.keys(currentFormData.value).length;
         !synchronized && emit(UI_FORM_VIEW.EVENTS.update, state.formData);
       }
     }
@@ -276,16 +283,12 @@ watch(
 );
 
 watch(
-  () => props.modelValue,
-  (val, oldVal) => {
-    state.formDataSource = Object.assign({}, val);
-
-    isFunctionConfig.value && setFormConfig();
+  () => props.modelOptions,
+  async (val) => {
+    isFunctionConfig.value && (await setFormConfig());
 
     if (hasFormDataSource.value) {
       updateFormData();
-    } else {
-      resetFormData(Object.keys(oldVal).length);
     }
   }
 );
@@ -293,12 +296,14 @@ watch(
 function resetFormView() {
   state.formConfig = [];
   state.formData = {};
-  state.formDataSource = {};
 }
 
-function setFormConfig(modelConfig = props.modelConfig) {
+async function setFormConfig(
+  modelConfig = props.modelConfig,
+  needInit = false
+) {
   const originalConfig = isFunctionConfig.value
-    ? modelConfig({
+    ? await modelConfig({
         data: Object.assign({}, state.formDataSource),
         ...props.modelOptions
       })
@@ -309,57 +314,79 @@ function setFormConfig(modelConfig = props.modelConfig) {
       (configData) => getType(configData.if) === 'undefined' || configData.if
     );
 
-    initFormData();
+    needInit && initFormData();
   } else {
     console.warn(`[UiFormView]: Invalid form model config`);
   }
 }
 
-function initFormData() {
-  const formConfig = currentFormConfig.value;
-  const formConfigCount = formConfig.length;
-  if (formConfigCount) {
-    for (let i = 0; i < formConfigCount; i++) {
-      const { key, value } = formConfig[i];
+function initFormData(needSync = false) {
+  state.formData = {};
+
+  currentFormConfig.value.forEach(({ key, value, components }) => {
+    if (key) {
       state.formData[key] = value;
-    }
-  }
-}
-
-function updateFormData(newFormData = state.formDataSource) {
-  let needSync = false;
-
-  if (currentFormConfig.value.length) {
-    const newFormDataKeys = Object.keys(newFormData).filter((key) =>
-      formDataKeys.value.includes(key)
-    );
-    const newFormDataKeysCount = newFormDataKeys.length;
-    for (let i = 0; i < newFormDataKeysCount; i++) {
-      const key = newFormDataKeys[i];
-      if (state.formData[key] !== newFormData[key]) {
-        state.formData[key] = newFormData[key];
-        needSync = true;
+    } else {
+      if (Array.isArray(components)) {
+        components.forEach(({ key, value }) => {
+          state.formData[key] = value;
+        });
       }
     }
-
-    needSync && emit(UI_FORM_VIEW.EVENTS.update, state.formData);
-  }
-
-  return needSync;
-}
-
-function resetFormData(needSync) {
-  state.formData = {};
-  const formConfig = currentFormConfig.value;
-  formConfig.forEach(({ key, value }) => {
-    state.formData[key] = value;
   });
 
   needSync && emit(UI_FORM_VIEW.EVENTS.update, state.formData);
 }
 
+function updateFormData(newFormData = state.formDataSource) {
+  let needSync = false;
+
+  const newFormDataKeys = Object.keys(newFormData);
+  const newFormConfig = currentFormConfig.value.filter(
+    ({ key, components }) =>
+      newFormDataKeys.includes(key) ||
+      (Array.isArray(components) &&
+        components.some((component) => newFormDataKeys.includes(component.key)))
+  );
+
+  newFormConfig.forEach(({ key, value, components }) => {
+    if (key) {
+      const newValue = newFormData[key];
+      if (
+        state.formData[key] !== newValue &&
+        JSON.stringify(newValue) !== JSON.stringify(value)
+      ) {
+        state.formData[key] = newValue;
+        needSync = true;
+      }
+    } else {
+      components.forEach(({ key, value }) => {
+        const newValue = newFormData[key];
+        if (
+          state.formData[key] !== newValue &&
+          JSON.stringify(newValue) !== JSON.stringify(value)
+        ) {
+          state.formData[key] = newValue;
+          needSync = true;
+        }
+      });
+    }
+  });
+
+  needSync && emit(UI_FORM_VIEW.EVENTS.update, state.formData);
+
+  return needSync;
+}
+
 function handleChange(key, value) {
-  state.formData[key] = value;
+  if (getType(key) === 'object') {
+    for (const [k, v] of Object.entries(key)) {
+      state.formData[k] = v;
+    }
+  } else {
+    state.formData[key] = value;
+  }
+
   emit(UI_FORM_VIEW.EVENTS.update, state.formData);
 }
 
@@ -398,7 +425,7 @@ function handleAction({ type, delay }) {
       };
       break;
     case NATIVE_BUTTON_TYPES.reset:
-      resetFormData(true);
+      initFormData(true);
       break;
   }
 
