@@ -24,14 +24,13 @@
       </template>
       <template v-else>
         <slot :name="customSlots.componentItem">
-          <template v-if="config.key">
+          <template v-if="hasSubComponents">
             <component
               :is="config.component"
-              v-model="formData[config.key]"
+              :components="config.components"
               v-bind="
                 Object.assign(
                   {
-                    componentKey,
                     formData,
                     formDataSource
                   },
@@ -44,10 +43,11 @@
           <template v-else>
             <component
               :is="config.component"
-              :components="config.components"
+              v-model="formData[config.key]"
               v-bind="
                 Object.assign(
                   {
+                    componentKey,
                     formData,
                     formDataSource
                   },
@@ -113,6 +113,12 @@ export default {
     };
   },
   computed: {
+    hasSubComponents() {
+      return (
+        Array.isArray(this.config.components) &&
+        this.config.components.length > 1
+      );
+    },
     eventName() {
       return this.config.event ||
         this.formInputComponents.includes(this.config.component)
@@ -158,7 +164,7 @@ export default {
     }
   },
   methods: {
-    displayFormItem({ show, key, value }) {
+    displayFormItem({ show }) {
       const display =
         getType(show) === 'function'
           ? show(this.formData)
@@ -173,9 +179,9 @@ export default {
       this.config.debug &&
         console.info(`[${name}] ${component}@${this.eventName}`, key, value);
 
-      key
-        ? this.$emit(UI_FORM_ITEM.EVENTS.update, key, value)
-        : this.$emit(UI_FORM_ITEM.EVENTS.update, value);
+      this.hasSubComponents
+        ? this.$emit(UI_FORM_ITEM.EVENTS.update, value)
+        : this.$emit(UI_FORM_ITEM.EVENTS.update, key, value);
     }
   }
 };

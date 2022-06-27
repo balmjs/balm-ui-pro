@@ -143,11 +143,9 @@ export default ({
           key: 'm',
           value: '',
           options: ({ l }) =>
-            l
-              ? http.post('/mock/multi-select/options2', {
-                  id: l
-                })
-              : [],
+            http.post('/mock/multi-select/options2', {
+              id: l
+            }),
           attrOrProp: {
             defaultLabel: 'Select2'
           }
@@ -156,11 +154,9 @@ export default ({
           key: 'n',
           value: '',
           options: async ({ m }) =>
-            m
-              ? await http.post('/mock/multi-select/options3', {
-                  id: m
-                })
-              : [],
+            await http.post('/mock/multi-select/options3', {
+              id: m
+            }),
           attrOrProp: {
             defaultLabel: 'Select3'
           }

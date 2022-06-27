@@ -291,14 +291,12 @@ export default {
       this.formData = {};
 
       this.currentFormConfig.forEach(({ key, value, components }) => {
-        if (key) {
-          this.$set(this.formData, key, value);
+        if (Array.isArray(components)) {
+          components.forEach(({ key, value }) => {
+            key && this.$set(this.formData, key, value);
+          });
         } else {
-          if (Array.isArray(components)) {
-            components.forEach(({ key, value }) => {
-              this.$set(this.formData, key, value);
-            });
-          }
+          key && this.$set(this.formData, key, value);
         }
       });
 
@@ -318,16 +316,7 @@ export default {
       );
 
       newFormConfig.forEach(({ key, value, components }) => {
-        if (key) {
-          const newValue = newFormData[key];
-          if (
-            this.formData[key] !== newValue &&
-            JSON.stringify(newValue) !== JSON.stringify(value)
-          ) {
-            this.$set(this.formData, key, newValue);
-            needSync = true;
-          }
-        } else {
+        if (Array.isArray(components)) {
           components.forEach(({ key, value }) => {
             const newValue = newFormData[key];
             if (
@@ -338,6 +327,15 @@ export default {
               needSync = true;
             }
           });
+        } else {
+          const newValue = newFormData[key];
+          if (
+            this.formData[key] !== newValue &&
+            JSON.stringify(newValue) !== JSON.stringify(value)
+          ) {
+            this.$set(this.formData, key, newValue);
+            needSync = true;
+          }
         }
       });
 
@@ -346,13 +344,16 @@ export default {
       return needSync;
     },
     handleChange(key, value) {
-      if (getType(key) === 'object') {
+      const hasSubComponents = getType(key) === 'object';
+
+      if (hasSubComponents) {
         for (const [k, v] of Object.entries(key)) {
           this.$set(this.formData, k, v);
         }
       } else {
         this.$set(this.formData, key, value);
       }
+
       this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
     },
     handleAction({ type, delay }) {
