@@ -114,10 +114,7 @@ export default {
   },
   computed: {
     hasSubComponents() {
-      return (
-        Array.isArray(this.config.components) &&
-        this.config.components.length > 1
-      );
+      return Array.isArray(this.config.components);
     },
     eventName() {
       return this.config.event ||
@@ -180,7 +177,11 @@ export default {
         console.info(`[${name}] ${component}@${this.eventName}`, key, value);
 
       this.hasSubComponents
-        ? this.$emit(UI_FORM_ITEM.EVENTS.update, value)
+        ? this.$emit(
+            UI_FORM_ITEM.EVENTS.update,
+            Object.keys(value),
+            Object.values(value)
+          )
         : this.$emit(UI_FORM_ITEM.EVENTS.update, key, value);
     }
   }

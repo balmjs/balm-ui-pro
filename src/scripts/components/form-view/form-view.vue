@@ -207,14 +207,14 @@ export default {
     isFunctionConfig() {
       return getType(this.modelConfig) === 'function';
     },
-    currentFormConfig() {
+    formDataConfig() {
       return this.formConfig.filter(
         ({ key, components }) =>
           getType(key) === 'string' || Array.isArray(components)
       );
     },
     hasFormDataSource() {
-      return Object.keys(this.formDataSource).length;
+      return !!Object.keys(this.formDataSource).length;
     },
     currentFormData() {
       return Object.assign({}, this.formDataSource, this.formData);
@@ -222,9 +222,14 @@ export default {
   },
   watch: {
     async modelValue(val, oldVal) {
-      this.formDataSource = Object.assign({}, val);
+      this.formDataSource = Object.assign({}, oldVal, val);
 
-      this.isFunctionConfig && (await this.setFormConfig());
+      if (
+        this.isFunctionConfig &&
+        JSON.stringify(val) !== JSON.stringify(oldVal)
+      ) {
+        await this.setFormConfig();
+      }
 
       if (this.hasFormDataSource) {
         this.updateFormData();
@@ -242,8 +247,7 @@ export default {
           this.updateFormData();
         } else {
           const synchronized = Object.keys(this.currentFormData).length;
-          !synchronized &&
-            this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
+          !synchronized && this.syncFormData();
         }
       }
     },
@@ -259,7 +263,7 @@ export default {
     this.setFormConfig(this.modelConfig, true);
 
     const synchronized = this.updateFormData();
-    !synchronized && this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
+    !synchronized && this.syncFormData();
   },
   beforeDestroy() {
     this.resetFormView();
@@ -287,10 +291,13 @@ export default {
         console.warn(`[UiFormView]: Invalid form model config`);
       }
     },
+    syncFormData() {
+      this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
+    },
     initFormData(needSync = false) {
       this.formData = {};
 
-      this.currentFormConfig.forEach(({ key, value, components }) => {
+      this.formDataConfig.forEach(({ key, value, components }) => {
         if (Array.isArray(components)) {
           components.forEach(({ key, value }) => {
             key && this.$set(this.formData, key, value);
@@ -300,13 +307,13 @@ export default {
         }
       });
 
-      needSync && this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
+      needSync && this.syncFormData();
     },
     updateFormData(newFormData = this.formDataSource) {
       let needSync = false;
 
       const newFormDataKeys = Object.keys(newFormData);
-      const newFormConfig = this.currentFormConfig.filter(
+      const newFormConfig = this.formDataConfig.filter(
         ({ key, components }) =>
           newFormDataKeys.includes(key) ||
           (Array.isArray(components) &&
@@ -315,46 +322,38 @@ export default {
             ))
       );
 
-      newFormConfig.forEach(({ key, value, components }) => {
+      newFormConfig.forEach(({ key, components }) => {
         if (Array.isArray(components)) {
-          components.forEach(({ key, value }) => {
+          components.forEach(({ key }) => {
             const newValue = newFormData[key];
-            if (
-              this.formData[key] !== newValue &&
-              JSON.stringify(newValue) !== JSON.stringify(value)
-            ) {
+            if (this.formData[key] !== newValue) {
               this.$set(this.formData, key, newValue);
               needSync = true;
             }
           });
         } else {
           const newValue = newFormData[key];
-          if (
-            this.formData[key] !== newValue &&
-            JSON.stringify(newValue) !== JSON.stringify(value)
-          ) {
+          if (this.formData[key] !== newValue) {
             this.$set(this.formData, key, newValue);
             needSync = true;
           }
         }
       });
 
-      needSync && this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
+      needSync && this.syncFormData();
 
       return needSync;
     },
     handleChange(key, value) {
-      const hasSubComponents = getType(key) === 'object';
-
-      if (hasSubComponents) {
-        for (const [k, v] of Object.entries(key)) {
-          this.$set(this.formData, k, v);
+      if (Array.isArray(key)) {
+        for (let i = 0, len = key.length; i < len; i++) {
+          this.$set(this.formData, key[i], value[i]);
         }
       } else {
         this.$set(this.formData, key, value);
       }
 
-      this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
+      this.syncFormData();
     },
     handleAction({ type, delay }) {
       let debounceConfig = {};
