@@ -78,7 +78,7 @@ export default ({
       label: 'Chips',
       component: 'ui-chips',
       key: 'g',
-      value: [],
+      value: [8],
       attrOrProp: {
         type: 'filter',
         options: chipsOptions
@@ -134,7 +134,7 @@ export default ({
         {
           key: 'l',
           value: '',
-          options: multiSelectOptions1,
+          options: multiSelectOptions1, // () => http.post('/mock/multi-select/options1'),
           attrOrProp: {
             defaultLabel: 'Select1'
           }
@@ -143,9 +143,11 @@ export default ({
           key: 'm',
           value: '',
           options: ({ l }) =>
-            http.post('/mock/multi-select/options2', {
-              id: l
-            }),
+            l
+              ? http.post('/mock/multi-select/options2', {
+                  id: l
+                })
+              : [],
           attrOrProp: {
             defaultLabel: 'Select2'
           }
@@ -154,9 +156,11 @@ export default ({
           key: 'n',
           value: '',
           options: async ({ m }) =>
-            await http.post('/mock/multi-select/options3', {
-              id: m
-            }),
+            m
+              ? await http.post('/mock/multi-select/options3', {
+                  id: m
+                })
+              : [],
           attrOrProp: {
             defaultLabel: 'Select3'
           }

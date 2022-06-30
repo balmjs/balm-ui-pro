@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import XFormItem from '@/components/x-form-item';
 import { loadAsset } from '@/utils';
 import modelConfig from '@/model-config/a.json';
 
@@ -101,10 +102,14 @@ const actionConfig = [
 ];
 
 export default {
+  components: {
+    // XFormItem
+  },
   data() {
     return {
       formData: {
-        a: 'hello'
+        a: 'hello',
+        b: 'world'
       },
       modelConfig,
       modelOptions: {
@@ -126,13 +131,27 @@ export default {
   async mounted() {
     this.modelConfig = await loadAsset('model-config/b.js');
 
-    const selectOptions = await this.$http.post('/mock/select/options');
-    const checkboxOptions = await this.$http.post('/mock/checkbox/options');
-    const radioOptions = await this.$http.post('/mock/radio/options');
-    const chipsOptions = await this.$http.post('/mock/chips/options');
-    const multiSelectOptions1 = await this.$http.post(
-      '/mock/multi-select/options1'
-    );
+    // const selectOptions = await this.$http.post('/mock/select/options');
+    // const checkboxOptions = await this.$http.post('/mock/checkbox/options');
+    // const radioOptions = await this.$http.post('/mock/radio/options');
+    // const chipsOptions = await this.$http.post('/mock/chips/options');
+    // const multiSelectOptions1 = await this.$http.post(
+    //   '/mock/multi-select/options1'
+    // );
+
+    // setTimeout(() => {
+    //   this.$set(this.modelOptions, 'selectOptions', selectOptions);
+    // }, 100);
+    // setTimeout(() => {
+    //   this.$set(this.modelOptions, 'checkboxOptions', checkboxOptions);
+    // }, 200);
+    // setTimeout(() => {
+    //   this.$set(this.modelOptions, 'radioOptions', radioOptions);
+    // }, 300);
+    // setTimeout(() => {
+    //   this.$set(this.modelOptions, 'chipsOptions', chipsOptions);
+    // }, 400);
+    // this.$set(this.modelOptions, 'multiSelectOptions1', multiSelectOptions1);
 
     if (this.id) {
       this.formData = await this.$http.get(`/user/${this.id}`, {
@@ -141,21 +160,23 @@ export default {
     } else {
       setTimeout(() => {
         this.formData = {
-          a: 'world',
+          a: 'a1',
+          b: 'b1',
+          c: '<p>c1</p>',
           d: 1,
           f: 5,
-          g: [8]
+          g: [7, 8],
+          h: '2022-06-11',
+          i: ['2022-06-05', '2022-06-15'],
+          j: 'off',
+          k: 30,
+          l: 1,
+          m: 11,
+          n: 111,
+          o: 'o1',
+          p: 'p1',
+          x: 'xyz'
         };
-
-        this.$set(this.modelOptions, 'selectOptions', selectOptions);
-        this.$set(this.modelOptions, 'checkboxOptions', checkboxOptions);
-        this.$set(this.modelOptions, 'radioOptions', radioOptions);
-        this.$set(this.modelOptions, 'chipsOptions', chipsOptions);
-        this.$set(
-          this.modelOptions,
-          'multiSelectOptions1',
-          multiSelectOptions1
-        );
       }, 1e3);
     }
   },

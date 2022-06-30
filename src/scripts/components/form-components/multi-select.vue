@@ -4,7 +4,7 @@
       v-for="(component, index) in components"
       :key="`${component.key}-${index}`"
       v-model="selectedData[component.key]"
-      :options="optionsMap[component.key]"
+      :options="selectedOptions[component.key]"
       v-bind="component.attrOrProp || {}"
       @change="handleChange(component.key, $event)"
     ></ui-select>
@@ -36,105 +36,147 @@ export default {
     return {
       cssClasses,
       selectedData: {},
-      selectedDataSource: {},
-      optionsMap: {},
-      subOptionsSourceMap: {}
+      selectedOptions: {},
+      optionsMap: {}
     };
   },
   computed: {
-    selectedDataKeys() {
+    selectedKeys() {
       return this.components.map(({ key }) => key);
     },
-    hasRootOptions() {
-      let result = false;
-      if (this.components.length) {
-        const { key, options } = this.components[0];
-        result =
-          getType(options) !== 'undefined' &&
-          Array.isArray(this.optionsMap[key]) &&
-          this.optionsMap[key].length;
-      }
-      return result;
+    rootSelectedKey() {
+      return this.selectedKeys[0];
+    },
+    lastSelectedKey() {
+      return this.selectedKeys[this.selectedKeys.length - 1];
+    },
+    hasSelectedValue() {
+      return this.selectedKeys.some((key) => this.selectedData[key]);
+    },
+    hasSelectedOptions() {
+      const rootSelectedOptions = this.selectedOptions[this.rootSelectedKey];
+      return Array.isArray(rootSelectedOptions) && !!rootSelectedOptions.length;
     }
   },
   watch: {
     components() {
-      if (!this.hasRootOptions) {
-        this.initRootOptions();
-      }
+      this.initRootOptions(); // NOTE: for static options
     },
     formData: {
       handler(val) {
-        if (this.hasRootOptions) {
-          this.selectedDataKeys.forEach((key) => {
-            const value = val[key];
-            if (this.selectedDataSource[key] !== value) {
-              this.$set(this.selectedDataSource, key, value);
-              this.getNextSelectKey(key, value);
-            }
-          });
-        }
+        this.updateOptions(val);
       },
-      deep: true
+      deep: true,
+      immediate: true // NOTE: for dynamic form config
     }
   },
-  beforeMount() {
-    this.initFormData();
+  mounted() {
+    if (this.components.length) {
+      this.initOptions();
+    } else {
+      console.warn('[UiMultiSelect]: `components` are empty');
+    }
   },
   methods: {
-    initFormData() {
-      if (this.components.length) {
+    async setSelectedOptions(parentValue, { key, options }) {
+      let optionsMap = this.optionsMap[key];
+
+      if (getType(optionsMap) !== 'map') {
+        optionsMap = new Map();
+      }
+
+      if (!optionsMap.has(parentValue)) {
+        const currentFormData = Object.assign(
+          {},
+          this.formData,
+          this.selectedData
+        );
+
+        const selectedOptions =
+          getType(options) === 'function'
+            ? await options(currentFormData)
+            : options;
+
+        if (selectedOptions.length) {
+          optionsMap.set(parentValue, selectedOptions);
+        }
+      }
+
+      const selectedOptions = optionsMap.get(parentValue) || [];
+      this.$set(this.selectedOptions, key, selectedOptions);
+    },
+    initRootOptions() {
+      if (!this.hasSelectedOptions) {
+        this.setSelectedOptions(0, this.components[0]);
+      }
+    },
+    async initOptions() {
+      if (!this.hasSelectedValue) {
         for (const { key, value } of this.components) {
           this.$set(this.selectedData, key, value);
-          this.$set(this.optionsMap, key, []);
-          this.$set(this.subOptionsSourceMap, key, new Map());
+          this.$set(this.selectedOptions, key, []);
+          this.$set(this.optionsMap, key, new Map());
         }
-        this.$emit(UI_MULTI_SELECT.EVENTS.CHANGE, this.selectedData);
-      } else {
-        console.warn('components are empty');
       }
     },
-    async initRootOptions() {
-      const { key, options } = this.components[0];
-      const rootOptions =
-        getType(options) === 'function'
-          ? await options(this.formData)
-          : options;
-      this.$set(this.optionsMap, key, rootOptions);
+    async updateOptions(formData) {
+      let updateSelectedKeys = [];
+      this.selectedKeys.forEach((key) => {
+        const newValue = formData[key];
+        if (this.selectedData[key] !== newValue) {
+          this.$set(this.selectedData, key, newValue);
+
+          if (newValue) {
+            updateSelectedKeys.push({
+              key,
+              newValue
+            });
+          }
+        }
+      });
+
+      if (updateSelectedKeys.length) {
+        for await (const { key, newValue } of updateSelectedKeys) {
+          if (key !== this.lastSelectedKey) {
+            await this.getNextSelected(key, newValue);
+          }
+        }
+      }
     },
-    getNextSelectKey(parentKey, parentValue) {
-      const index = this.selectedDataKeys.findIndex((key) => key === parentKey);
-      const nextKey = this.selectedDataKeys[index + 1];
-      if (nextKey) {
+    async getNextSelected(parentKey, parentValue) {
+      const selectedIndex = this.selectedKeys.findIndex(
+        (key) => key === parentKey
+      );
+      const nextSelectedKey = this.selectedKeys[selectedIndex + 1];
+      if (nextSelectedKey) {
         parentValue
-          ? this.getNextOptions(nextKey)
-          : this.resetSelectedData(index);
+          ? await this.getNextOptions(nextSelectedKey, parentValue)
+          : this.clearSelectedData(selectedIndex);
       }
     },
-    async getNextOptions(currentKey) {
+    getNextOptions(key, parentValue) {
       const currentComponent = this.components.find(
-        ({ key }) => key === currentKey
+        (component) => component.key === key
       );
       const { options } = currentComponent;
-      const currentOptions =
-        getType(options) === 'function'
-          ? await options(this.formData)
-          : options;
-      this.$set(this.optionsMap, currentKey, currentOptions);
+
+      this.setSelectedOptions(parentValue, { key, options });
     },
-    resetSelectedData(parentIndex) {
-      const nextSelectedDataKeys = this.selectedDataKeys.filter(
+    clearSelectedData(parentIndex) {
+      const nextSelectedDataKeys = this.selectedKeys.filter(
         (key, index) => index > parentIndex
       );
       nextSelectedDataKeys.forEach((key) => {
-        this.$set(this.selectedDataSource, key, '');
         this.$set(this.selectedData, key, '');
-        this.$set(this.optionsMap, key, []);
+        this.$set(this.selectedOptions, key, []);
       });
-      this.$emit(UI_MULTI_SELECT.EVENTS.CHANGE, this.selectedData);
     },
     async handleChange(key, value) {
       this.$set(this.selectedData, key, value);
+      if (key !== this.lastSelectedKey) {
+        this.getNextSelected(key, value);
+      }
+
       this.$emit(UI_MULTI_SELECT.EVENTS.CHANGE, this.selectedData);
     }
   }
