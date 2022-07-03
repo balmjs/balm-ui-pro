@@ -6,7 +6,7 @@
     >
       <ui-select
         v-model="selectedData[component.key]"
-        :options="optionsMap[component.key]"
+        :options="selectedOptions[component.key]"
         v-bind="component.attrOrProp || {}"
         @update:modelValue="handleChange(component.key, $event)"
       ></ui-select>
@@ -46,109 +46,157 @@ const emit = defineEmits([UI_MULTI_SELECT.EVENTS.CHANGE]);
 
 const state = reactive({
   selectedData: {},
-  selectedDataSource: {},
-  optionsMap: {},
-  subOptionsSourceMap: {}
+  selectedOptions: {},
+  optionsMap: {}
 });
-const { selectedData, optionsMap } = toRefs(state);
+const { selectedData, selectedOptions } = toRefs(state);
 
-const selectedDataKeys = computed(() => props.components.map(({ key }) => key));
-
-const hasRootOptions = computed(() => {
-  let result = false;
-  if (props.components.length) {
-    const { key, options } = props.components[0];
-    result =
-      getType(options) !== 'undefined' &&
-      Array.isArray(state.optionsMap[key]) &&
-      state.optionsMap[key].length;
-  }
-  return result;
+const selectedKeys = computed(() => props.components.map(({ key }) => key));
+const rootSelectedKey = computed(() => selectedKeys.value[0]);
+const lastSelectedKey = computed(
+  () => selectedKeys.value[selectedKeys.value.length - 1]
+);
+const hasSelectedValue = computed(() =>
+  selectedKeys.value.some((key) => state.selectedData[key])
+);
+const hasSelectedOptions = computed(() => {
+  const rootSelectedOptions = state.selectedOptions[rootSelectedKey.value];
+  return Array.isArray(rootSelectedOptions) && !!rootSelectedOptions.length;
 });
 
 onBeforeMount(() => {
-  initFormData();
+  if (props.components.length) {
+    initOptions();
+  } else {
+    console.warn('[UiMultiSelect]: `components` are empty');
+  }
 });
 
 watch(
   () => props.components,
   () => {
-    if (!hasRootOptions.value) {
-      initRootOptions();
-    }
+    initRootOptions(); // NOTE: for static options
   }
 );
 
 watch(
   () => props.formData,
   (val) => {
-    if (hasRootOptions.value) {
-      selectedDataKeys.value.forEach((key) => {
-        const value = val[key];
-        if (state.selectedDataSource[key] !== value) {
-          state.selectedDataSource[key] = value;
-          getNextSelectKey(key, value);
-        }
-      });
-    }
+    updateOptions(val);
   },
   {
-    deep: true
+    deep: true,
+    immediate: true // NOTE: for dynamic form config
   }
 );
 
-function initFormData() {
-  if (props.components.length) {
+async function setSelectedOptions(parentValue, { key, options }) {
+  let optionsMap = state.optionsMap[key];
+
+  if (getType(optionsMap) !== 'map') {
+    optionsMap = new Map();
+  }
+
+  if (!optionsMap.has(parentValue)) {
+    const currentFormData = Object.assign(
+      {},
+      props.formData,
+      state.selectedData
+    );
+
+    const selectedOptions =
+      getType(options) === 'function'
+        ? await options(currentFormData)
+        : options;
+
+    if (selectedOptions.length) {
+      optionsMap.set(parentValue, selectedOptions);
+    }
+  }
+
+  const selectedOptions = optionsMap.get(parentValue) || [];
+  state.selectedOptions[key] = selectedOptions;
+}
+
+function initRootOptions() {
+  if (!hasSelectedOptions.value) {
+    setSelectedOptions(0, props.components[0]);
+  }
+}
+
+async function initOptions() {
+  if (!hasSelectedValue.value) {
     for (const { key, value } of props.components) {
       state.selectedData[key] = value;
-      state.optionsMap[key] = [];
-      state.subOptionsSourceMap[key] = new Map();
+      state.selectedOptions[key] = [];
+      state.optionsMap[key] = new Map();
     }
-    emit(UI_MULTI_SELECT.EVENTS.CHANGE, state.selectedData);
-  } else {
-    console.warn('components are empty');
   }
 }
 
-async function initRootOptions() {
-  const { key, options } = props.components[0];
-  const rootOptions =
-    getType(options) === 'function' ? await options(props.formData) : options;
-  state.optionsMap[key] = rootOptions;
-}
+async function updateOptions(formData) {
+  let updateSelectedKeys = [];
+  selectedKeys.value.forEach((key) => {
+    const newValue = formData[key];
+    if (state.selectedData[key] !== newValue) {
+      state.selectedData[key] = newValue;
 
-function getNextSelectKey(parentKey, parentValue) {
-  const index = selectedDataKeys.value.findIndex((key) => key === parentKey);
-  const nextKey = selectedDataKeys.value[index + 1];
-  if (nextKey) {
-    parentValue ? getNextOptions(nextKey) : resetSelectedData(index);
+      if (newValue) {
+        updateSelectedKeys.push({
+          key,
+          newValue
+        });
+      }
+    }
+  });
+
+  if (updateSelectedKeys.length) {
+    for await (const { key, newValue } of updateSelectedKeys) {
+      if (key !== lastSelectedKey.value) {
+        await getNextSelected(key, newValue);
+      }
+    }
   }
 }
 
-async function getNextOptions(currentKey) {
+async function getNextSelected(parentKey, parentValue) {
+  const selectedIndex = selectedKeys.value.findIndex(
+    (key) => key === parentKey
+  );
+  const nextSelectedKey = selectedKeys.value[selectedIndex + 1];
+  if (nextSelectedKey) {
+    parentValue
+      ? getNextOptions(nextSelectedKey, parentValue)
+      : clearSelectedData(selectedIndex);
+  }
+}
+
+function getNextOptions(key, parentValue) {
   const currentComponent = props.components.find(
-    ({ key }) => key === currentKey
+    (component) => component.key === key
   );
   const { options } = currentComponent;
-  const currentOptions =
-    getType(options) === 'function' ? await options(props.formData) : options;
-  state.optionsMap[currentKey] = currentOptions;
+
+  setSelectedOptions(parentValue, { key, options });
 }
 
-function resetSelectedData(parentIndex) {
-  const nextSelectedDataKeys = selectedDataKeys.value.filter(
+function clearSelectedData(parentIndex) {
+  const nextSelectedDataKeys = selectedKeys.value.filter(
     (key, index) => index > parentIndex
   );
   nextSelectedDataKeys.forEach((key) => {
     state.selectedDataSource[key] = '';
     state.selectedData[key] = '';
-    state.optionsMap[key] = [];
+    state.selectedOptions[key] = [];
   });
-  emit(UI_MULTI_SELECT.EVENTS.CHANGE, state.selectedData);
 }
 
 async function handleChange(key, value) {
   state.selectedData[key] = value;
+  if (key !== lastSelectedKey.value) {
+    getNextSelected(key, value);
+  }
+
   emit(UI_MULTI_SELECT.EVENTS.CHANGE, state.selectedData);
 }
 </script>

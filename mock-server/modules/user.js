@@ -6,17 +6,32 @@ export function createUserApis(server) {
 
     return responseHandler({
       id,
-      a: 'a1',
+      a: 'a2',
       b: 'b2',
-      c: 'c3',
+      c: '<p>c2</p>',
       d: 2,
       e: [4],
       f: 6,
-      g: [7, 9],
-      h: '2022-06-11',
-      j: true,
-      k: 50,
-      l: 'hello world'
+      g: [8, 9],
+      h: '2022-06-22',
+      i: ['2022-06-15', '2022-06-25'],
+      j: 'on',
+      k: 60,
+      l: 2,
+      m: 22,
+      n: 222,
+      o: 'o2',
+      p: 'p2',
+      q: '',
+      r: '',
+      s: '',
+      t: '',
+      u: '',
+      v: '',
+      w: '',
+      x: '',
+      y: '',
+      z: 'zzz'
     });
   });
 }

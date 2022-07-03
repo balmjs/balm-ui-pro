@@ -78,7 +78,7 @@ export default ({
       label: 'Chips',
       component: 'ui-chips',
       key: 'g',
-      value: [],
+      value: [8],
       attrOrProp: {
         type: 'filter',
         options: chipsOptions

@@ -24,14 +24,13 @@
       </template>
       <template v-else>
         <slot :name="customSlots.componentItem">
-          <template v-if="config.key">
+          <template v-if="hasSubComponents">
             <component
               :is="config.component"
-              v-model="formData[config.key]"
+              :components="config.components"
               v-bind="
                 Object.assign(
                   {
-                    componentKey,
                     formData,
                     formDataSource
                   },
@@ -44,10 +43,11 @@
           <template v-else>
             <component
               :is="config.component"
-              :components="config.components"
+              v-model="formData[config.key]"
               v-bind="
                 Object.assign(
                   {
+                    componentKey,
                     formData,
                     formDataSource
                   },
@@ -108,6 +108,7 @@ const state = reactive({
 });
 const { formData } = toRefs(state);
 
+const hasSubComponents = computed(() => Array.isArray(props.config.components));
 const eventName = computed(() => {
   return props.config.event || UI_FORM_ITEM.EVENTS.update;
 });
@@ -140,7 +141,7 @@ watch(
   (val) => (state.formData = val)
 );
 
-function displayFormItem({ show, key, value }) {
+function displayFormItem({ show }) {
   const display =
     getType(show) === 'function'
       ? show(state.formData)
@@ -157,8 +158,8 @@ function handleChange({ component, key }, value) {
   props.config.debug &&
     console.info[(`[${name}] ${component}@${eventName.value}`, key, value)];
 
-  key
-    ? emit(UI_FORM_ITEM.EVENTS.update, key, value)
-    : emit(UI_FORM_ITEM.EVENTS.update, value);
+  hasSubComponents.value
+    ? emit(UI_FORM_ITEM.EVENTS.update, Object.keys(value), Object.values(value))
+    : emit(UI_FORM_ITEM.EVENTS.update, key, value);
 }
 </script>

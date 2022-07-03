@@ -95,7 +95,7 @@ const http = useHttp();
 const state = reactive({
   formData: {
     a: 'hello',
-    f: 5
+    b: 'world'
   },
   modelConfig: defaultModelConfig,
   modelOptions: {
@@ -137,6 +137,12 @@ onMounted(async () => {
   const chipsOptions = await http.post('/mock/chips/options');
   const multiSelectOptions1 = await http.post('/mock/multi-select/options1');
 
+  state.modelOptions.selectOptions = selectOptions;
+  state.modelOptions.checkboxOptions = checkboxOptions;
+  state.modelOptions.radioOptions = radioOptions;
+  state.modelOptions.chipsOptions = chipsOptions;
+  state.modelOptions.multiSelectOptions1 = multiSelectOptions1;
+
   if (id.value) {
     state.formData = await http.get(`/user/${id.value}`, {
       baseURL: '/api/mock'
@@ -144,17 +150,23 @@ onMounted(async () => {
   } else {
     setTimeout(() => {
       state.formData = {
-        a: 'world',
+        a: 'a1',
+        b: 'b1',
+        c: '<p>c1</p>',
         d: 1,
         f: 5,
-        g: [8]
+        g: [7, 8],
+        h: '2022-06-11',
+        i: ['2022-06-05', '2022-06-15'],
+        j: 'off',
+        k: 30,
+        l: 1,
+        m: 11,
+        n: 111,
+        o: 'o1',
+        p: 'p1',
+        x: 'xyz'
       };
-
-      state.modelOptions.selectOptions = selectOptions;
-      state.modelOptions.checkboxOptions = checkboxOptions;
-      state.modelOptions.radioOptions = radioOptions;
-      state.modelOptions.chipsOptions = chipsOptions;
-      state.modelOptions.multiSelectOptions1 = multiSelectOptions1;
     }, 1e3);
   }
 });

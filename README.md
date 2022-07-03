@@ -186,7 +186,7 @@ const modelConfig = ({
       label: 'Input',
       component: 'ui-textfield',
       key: 'a',
-      value: '2'
+      value: ''
     },
     {
       label: 'Autocomplete',

@@ -226,14 +226,14 @@ const { formData, formConfig, formDataSource } = toRefs(state);
 const isFunctionConfig = computed(
   () => getType(props.modelConfig) === 'function'
 );
-const currentFormConfig = computed(() =>
+const formDataConfig = computed(() =>
   state.formConfig.filter(
     ({ key, components }) =>
       getType(key) === 'string' || Array.isArray(components)
   )
 );
 const hasFormDataSource = computed(
-  () => Object.keys(state.formDataSource).length
+  () => !!Object.keys(state.formDataSource).length
 );
 const currentFormData = computed(() =>
   Object.assign({}, state.formDataSource, state.formData)
@@ -241,8 +241,9 @@ const currentFormData = computed(() =>
 
 onBeforeMount(() => {
   setFormConfig(props.modelConfig, true);
+
   const synchronized = updateFormData();
-  !synchronized && emit(UI_FORM_VIEW.EVENTS.update, state.formData);
+  !synchronized && syncFormData();
 });
 
 onBeforeUnmount(() => {
@@ -252,9 +253,14 @@ onBeforeUnmount(() => {
 watch(
   () => props.modelValue,
   async (val, oldVal) => {
-    state.formDataSource = Object.assign({}, val);
+    state.formDataSource = Object.assign({}, oldVal, val);
 
-    isFunctionConfig.value && (await setFormConfig());
+    if (
+      isFunctionConfig.value &&
+      JSON.stringify(val) !== JSON.stringify(oldVal)
+    ) {
+      await setFormConfig();
+    }
 
     if (hasFormDataSource.value) {
       updateFormData();
@@ -276,7 +282,7 @@ watch(
         updateFormData();
       } else {
         const synchronized = Object.keys(currentFormData.value).length;
-        !synchronized && emit(UI_FORM_VIEW.EVENTS.update, state.formData);
+        !synchronized && syncFormData();
       }
     }
   }
@@ -320,74 +326,72 @@ async function setFormConfig(
   }
 }
 
+function syncFormData() {
+  emit(UI_FORM_VIEW.EVENTS.update, state.formData);
+}
+
 function initFormData(needSync = false) {
   state.formData = {};
 
-  currentFormConfig.value.forEach(({ key, value, components }) => {
-    if (key) {
-      state.formData[key] = value;
+  formDataConfig.value.forEach(({ key, value, components }) => {
+    if (Array.isArray(components)) {
+      components.forEach(({ key, value }) => {
+        key && (state.formData[key] = value);
+      });
     } else {
-      if (Array.isArray(components)) {
-        components.forEach(({ key, value }) => {
-          state.formData[key] = value;
-        });
-      }
+      key && (state.formData[key] = value);
     }
   });
 
-  needSync && emit(UI_FORM_VIEW.EVENTS.update, state.formData);
+  needSync && syncFormData();
 }
 
 function updateFormData(newFormData = state.formDataSource) {
   let needSync = false;
 
   const newFormDataKeys = Object.keys(newFormData);
-  const newFormConfig = currentFormConfig.value.filter(
+  const newFormConfig = formDataConfig.value.filter(
     ({ key, components }) =>
       newFormDataKeys.includes(key) ||
       (Array.isArray(components) &&
         components.some((component) => newFormDataKeys.includes(component.key)))
   );
 
-  newFormConfig.forEach(({ key, value, components }) => {
-    if (key) {
-      const newValue = newFormData[key];
-      if (
-        state.formData[key] !== newValue &&
-        JSON.stringify(newValue) !== JSON.stringify(value)
-      ) {
-        state.formData[key] = newValue;
-        needSync = true;
-      }
-    } else {
-      components.forEach(({ key, value }) => {
+  newFormConfig.forEach(({ key, components }) => {
+    if (Array.isArray(components)) {
+      components.forEach(({ key }) => {
         const newValue = newFormData[key];
-        if (
-          state.formData[key] !== newValue &&
-          JSON.stringify(newValue) !== JSON.stringify(value)
-        ) {
+        if (state.formData[key] !== newValue) {
           state.formData[key] = newValue;
           needSync = true;
         }
       });
+    } else {
+      const newValue = newFormData[key];
+      if (state.formData[key] !== newValue) {
+        state.formData[key] = newValue;
+        needSync = true;
+      }
     }
   });
 
-  needSync && emit(UI_FORM_VIEW.EVENTS.update, state.formData);
+  needSync && syncFormData();
 
   return needSync;
 }
 
 function handleChange(key, value) {
-  if (getType(key) === 'object') {
-    for (const [k, v] of Object.entries(key)) {
+  if (Array.isArray(key)) {
+    for (let i = 0, len = key.length; i < len; i++) {
+      const k = key[i];
+      const v = value[i];
       state.formData[k] = v;
     }
   } else {
     state.formData[key] = value;
   }
 
-  emit(UI_FORM_VIEW.EVENTS.update, state.formData);
+  syncFormData();
 }
 
 function handleAction({ type, delay }) {
