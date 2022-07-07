@@ -9,8 +9,14 @@
   >
     <ui-form
       class="mdc-form-view__form"
-      :type="useGrid ? 'horizontal' : 'vertical'"
-      v-bind="formAttrOrProp"
+      v-bind="
+        Object.assign(
+          {
+            type: useGrid ? 'horizontal' : 'vertical'
+          },
+          formAttrOrProp
+        )
+      "
     >
       <template #default="{ itemClass, subitemClass, actionClass }">
         <div class="mdc-form-view__items">
