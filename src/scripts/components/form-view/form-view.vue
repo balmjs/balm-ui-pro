@@ -9,8 +9,14 @@
   >
     <ui-form
       class="mdc-form-view__form"
-      :type="useGrid ? 'horizontal' : 'vertical'"
-      v-bind="formAttrOrProp"
+      v-bind="
+        Object.assign(
+          {
+            type: useGrid ? 'horizontal' : 'vertical'
+          },
+          formAttrOrProp
+        )
+      "
     >
       <template #default="{ itemClass, subitemClass, actionClass }">
         <div class="mdc-form-view__items">
@@ -36,9 +42,14 @@
                 :attr-or-prop="formItemAttrOrProp"
                 @change="handleChange"
               >
-                <template v-for="(_, slotName) in $scopedSlots">
+                <slot
+                  v-for="(_, name) in $slots"
+                  :slot="name"
+                  :name="name"
+                ></slot>
+                <template v-for="(_, name) in $scopedSlots">
                   <slot
-                    :name="slotName"
+                    :name="name"
                     v-bind="{
                       config: configData,
                       data: currentFormData
@@ -75,9 +86,14 @@
               :attr-or-prop="formItemAttrOrProp"
               @change="handleChange"
             >
-              <template v-for="(_, slotName) in $scopedSlots">
+              <slot
+                v-for="(_, name) in $slots"
+                :slot="name"
+                :name="name"
+              ></slot>
+              <template v-for="(_, name) in $scopedSlots">
                 <slot
-                  :name="slotName"
+                  :name="name"
                   v-bind="{
                     config: configData,
                     data: currentFormData
