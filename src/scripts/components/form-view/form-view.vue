@@ -169,7 +169,7 @@ import {
   onBeforeUnmount
 } from 'vue';
 import UiFormItem from './form-item.vue';
-import getType from '../../utils/typeof';
+import getType, { isFunction } from '../../utils/typeof';
 
 const props = defineProps({
   modelValue: {
@@ -223,9 +223,7 @@ const state = reactive({
 });
 const { formData, formConfig, formDataSource } = toRefs(state);
 
-const isFunctionConfig = computed(
-  () => getType(props.modelConfig) === 'function'
-);
+const isFunctionConfig = computed(() => isFunction(props.modelConfig));
 const formDataConfig = computed(() =>
   state.formConfig.filter(
     ({ key, components }) =>

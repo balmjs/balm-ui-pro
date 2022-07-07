@@ -2313,20 +2313,20 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-balm-ui@^10.8.2:
-  version "10.8.2"
-  resolved "https://registry.yarnpkg.com/balm-ui/-/balm-ui-10.8.2.tgz#bcf0002065d62c1f50bddf822e2ff103d8d3b311"
-  integrity sha512-C5Cp8Vhqkeu6cL76OORo8gWAiHEbQ/gZ9uEGKNtLLcLhRA4UI5Axm4Ud2pcKEShIgCdm4894WAcXWbnWwRpVrQ==
+balm-ui@^10.8.3:
+  version "10.8.3"
+  resolved "https://registry.yarnpkg.com/balm-ui/-/balm-ui-10.8.3.tgz#0e65273ff2f81c47d50161c00933583dce9e5686"
+  integrity sha512-ZacCOyhPIJs2C2ALP6Sd0Ldo4SmCi3Zu70Oc/KvSE4LZyhxPKMAuuNjs1IpbyNAywZ4njUy8kZ5HFgrklfJWIw==
   dependencies:
     deepmerge "^4.2.2"
     flatpickr "^4.6.13"
     material-components-web "^14.0.0"
     quill "^1.3.7"
 
-balm@^4.8.0:
-  version "4.8.0"
-  resolved "https://registry.yarnpkg.com/balm/-/balm-4.8.0.tgz#8ffdc4e1baab3bbbacdff1261c4cf3f093c091ce"
-  integrity sha512-UmFqGKhLztHHJZEqrLialryLQhaYfxxgFTCbN6Lhn8IEtJ8375HZXu1m7riw1EPYPeS/OizCtC42cdqZHnWc9A==
+balm@^4.9.0:
+  version "4.9.0"
+  resolved "https://registry.yarnpkg.com/balm/-/balm-4.9.0.tgz#d1df5c2d4868b659cd9a5aeb08c4b97eb24b6536"
+  integrity sha512-wKMp0aU3eXX8BDlgYvmKztw0MUC8RxiP/gxkSe9aSSlMpMKbsthtYD0KAMLSD7t1f7mnOuJU/D6/tTgsBwcE/Q==
   dependencies:
     "@babel/core" "^7.18.0"
     "@babel/plugin-transform-runtime" "^7.18.0"
@@ -2697,10 +2697,10 @@ core-js-pure@^3.20.2:
   resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.22.7.tgz#f58489d9b309fa7b26486a0f70d4ec19a418084e"
   integrity sha512-wTriFxiZI+C8msGeh7fJcbC/a0V8fdInN1oS2eK79DMBGs8iIJiXhtFJCiT3rBa8w6zroHWW3p8ArlujZ/Mz+w==
 
-core-js@^3.22.0:
-  version "3.22.7"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.22.7.tgz#8d6c37f630f6139b8732d10f2c114c3f1d00024f"
-  integrity sha512-Jt8SReuDKVNZnZEzyEQT5eK6T2RRCXkfTq7Lo09kpm+fHjgGewSbNjV+Wt4yZMhPDdzz2x1ulI5z/w4nxpBseg==
+core-js@^3.23.0:
+  version "3.23.3"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.23.3.tgz#3b977612b15da6da0c9cc4aec487e8d24f371112"
+  integrity sha512-oAKwkj9xcWNBAvGbT//WiCdOMpb9XQG92/Fe3ABFM/R16BsHgePG00mFOgKf7IsCtfj8tA1kHtf/VwErhriz5Q==
 
 core-util-is@~1.0.0:
   version "1.0.3"
@@ -2958,7 +2958,7 @@ escape-string-regexp@^4.0.0:
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz#14ba83a5d373e3d311e5afca29cf5bfad965bf34"
   integrity sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==
 
-eslint-config-prettier@^8.5.0:
+eslint-config-prettier@^8.0.0:
   version "8.5.0"
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.5.0.tgz#5a81680ec934beca02c7b1a61cf8ca34b66feab1"
   integrity sha512-obmWKLUNCnhtQRKc+tmnYuQl0pFU1ibYJQ5BGhTVB08bHe9wC8qUeG7c08dj9XX+AuPj1YSGSQIHl1pnDHZR0Q==
@@ -4873,10 +4873,10 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@^2.6.0:
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.6.2.tgz#e26d71a18a74c3d0f0597f55f01fb6c06c206032"
-  integrity sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==
+prettier@^2.7.0:
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.7.1.tgz#e235806850d057f97bb08368a4f7d899f7760c64"
+  integrity sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==
 
 pretty-hrtime@^1.0.0:
   version "1.0.3"

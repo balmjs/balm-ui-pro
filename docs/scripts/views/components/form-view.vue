@@ -131,16 +131,16 @@ const id = computed(() => route.params.id || 0);
 onMounted(async () => {
   state.modelConfig = await loadAsset('model-config/b.js');
 
-  const selectOptions = await http.post('/mock/select/options');
-  const checkboxOptions = await http.post('/mock/checkbox/options');
-  const radioOptions = await http.post('/mock/radio/options');
-  const chipsOptions = await http.post('/mock/chips/options');
+  // const selectOptions = await http.post('/mock/select/options');
+  // const checkboxOptions = await http.post('/mock/checkbox/options');
+  // const radioOptions = await http.post('/mock/radio/options');
+  // const chipsOptions = await http.post('/mock/chips/options');
   const multiSelectOptions1 = await http.post('/mock/multi-select/options1');
 
-  state.modelOptions.selectOptions = selectOptions;
-  state.modelOptions.checkboxOptions = checkboxOptions;
-  state.modelOptions.radioOptions = radioOptions;
-  state.modelOptions.chipsOptions = chipsOptions;
+  // state.modelOptions.selectOptions = selectOptions;
+  // state.modelOptions.checkboxOptions = checkboxOptions;
+  // state.modelOptions.radioOptions = radioOptions;
+  // state.modelOptions.chipsOptions = chipsOptions;
   state.modelOptions.multiSelectOptions1 = multiSelectOptions1;
 
   if (id.value) {

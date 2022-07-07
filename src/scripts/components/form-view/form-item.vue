@@ -80,7 +80,7 @@ export default {
 
 <script setup>
 import { reactive, toRefs, computed, watch, onBeforeMount } from 'vue';
-import getType from '../../utils/typeof';
+import getType, { isFunction } from '../../utils/typeof';
 
 const props = defineProps({
   config: {
@@ -142,16 +142,15 @@ watch(
 );
 
 function displayFormItem({ show }) {
-  const display =
-    getType(show) === 'function'
-      ? show(state.formData)
-      : getType(show) === 'undefined' || show;
+  const display = isFunction(show)
+    ? show(state.formData)
+    : getType(show) === 'undefined' || show;
 
   return display;
 }
 
 function getFormLabel({ label }) {
-  return getType(label) === 'function' ? label(state.formData) : label;
+  return isFunction(label) ? label(state.formData) : label;
 }
 
 function handleChange({ component, key }, value) {

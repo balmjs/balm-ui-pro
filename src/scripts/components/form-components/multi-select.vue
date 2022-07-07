@@ -31,7 +31,7 @@ export default {
 <script setup>
 import { reactive, toRefs, computed, watch, onBeforeMount } from 'vue';
 import { cssClasses, formItemProps } from '../../mixins/form-item';
-import getType from '../../utils/typeof';
+import getType, { isFunction } from '../../utils/typeof';
 
 const props = defineProps({
   ...formItemProps,
@@ -104,10 +104,9 @@ async function setSelectedOptions(parentValue, { key, options }) {
       state.selectedData
     );
 
-    const selectedOptions =
-      getType(options) === 'function'
-        ? await options(currentFormData)
-        : options;
+    const selectedOptions = isFunction(options)
+      ? await options(currentFormData)
+      : options;
 
     if (selectedOptions.length) {
       optionsMap.set(parentValue, selectedOptions);
@@ -185,7 +184,6 @@ function clearSelectedData(parentIndex) {
     (key, index) => index > parentIndex
   );
   nextSelectedDataKeys.forEach((key) => {
-    state.selectedDataSource[key] = '';
     state.selectedData[key] = '';
     state.selectedOptions[key] = [];
   });
