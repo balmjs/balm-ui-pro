@@ -133,7 +133,7 @@
 
 <script>
 import UiFormItem from './form-item';
-import getType from '../../utils/typeof';
+import getType, { isFunction } from '../../utils/typeof';
 
 const UI_FORM_VIEW = {
   EVENTS: {
@@ -205,7 +205,7 @@ export default {
   },
   computed: {
     isFunctionConfig() {
-      return getType(this.modelConfig) === 'function';
+      return isFunction(this.modelConfig);
     },
     formDataConfig() {
       return this.formConfig.filter(

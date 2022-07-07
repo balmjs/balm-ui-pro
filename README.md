@@ -291,9 +291,11 @@ const modelConfig = ({
           key: 'm',
           value: '',
           options: ({ l }) =>
-            http.post('/api/multi-select/options2', {
-              id: l
-            }),
+            l
+              ? http.post('/api/multi-select/options2', {
+                  id: l
+                })
+              : [],
           attrOrProp: {
             defaultLabel: 'Select2'
           }
@@ -302,9 +304,11 @@ const modelConfig = ({
           key: 'n',
           value: '',
           options: async ({ m }) =>
-            await http.post('/api/multi-select/options3', {
-              id: m
-            }),
+            m
+              ? await http.post('/api/multi-select/options3', {
+                  id: m
+                })
+              : [],
           attrOrProp: {
             defaultLabel: 'Select3'
           }

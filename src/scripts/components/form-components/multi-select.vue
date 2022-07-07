@@ -14,7 +14,7 @@
 <script>
 import formItemMixin from '../../mixins/form-item';
 import { cssClasses } from './constants';
-import getType from '../../utils/typeof';
+import getType, { isFunction } from '../../utils/typeof';
 
 // Define multi select constants
 const UI_MULTI_SELECT = {
@@ -92,10 +92,9 @@ export default {
           this.selectedData
         );
 
-        const selectedOptions =
-          getType(options) === 'function'
-            ? await options(currentFormData)
-            : options;
+        const selectedOptions = isFunction(options)
+          ? await options(currentFormData)
+          : options;
 
         if (selectedOptions.length) {
           optionsMap.set(parentValue, selectedOptions);

@@ -135,23 +135,15 @@ export default {
     // const checkboxOptions = await this.$http.post('/mock/checkbox/options');
     // const radioOptions = await this.$http.post('/mock/radio/options');
     // const chipsOptions = await this.$http.post('/mock/chips/options');
-    // const multiSelectOptions1 = await this.$http.post(
-    //   '/mock/multi-select/options1'
-    // );
+    const multiSelectOptions1 = await this.$http.post(
+      '/mock/multi-select/options1'
+    );
 
-    // setTimeout(() => {
-    //   this.$set(this.modelOptions, 'selectOptions', selectOptions);
-    // }, 100);
-    // setTimeout(() => {
-    //   this.$set(this.modelOptions, 'checkboxOptions', checkboxOptions);
-    // }, 200);
-    // setTimeout(() => {
-    //   this.$set(this.modelOptions, 'radioOptions', radioOptions);
-    // }, 300);
-    // setTimeout(() => {
-    //   this.$set(this.modelOptions, 'chipsOptions', chipsOptions);
-    // }, 400);
-    // this.$set(this.modelOptions, 'multiSelectOptions1', multiSelectOptions1);
+    // this.$set(this.modelOptions, 'selectOptions', selectOptions);
+    // this.$set(this.modelOptions, 'checkboxOptions', checkboxOptions);
+    // this.$set(this.modelOptions, 'radioOptions', radioOptions);
+    // this.$set(this.modelOptions, 'chipsOptions', chipsOptions);
+    this.$set(this.modelOptions, 'multiSelectOptions1', multiSelectOptions1);
 
     if (this.id) {
       this.formData = await this.$http.get(`/user/${this.id}`, {

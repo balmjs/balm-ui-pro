@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import getType from '../../utils/typeof';
+import getType, { isFunction } from '../../utils/typeof';
 
 const name = 'UiFormItem';
 const UI_FORM_ITEM = {
@@ -162,15 +162,14 @@ export default {
   },
   methods: {
     displayFormItem({ show }) {
-      const display =
-        getType(show) === 'function'
-          ? show(this.formData)
-          : getType(show) === 'undefined' || show;
+      const display = isFunction(show)
+        ? show(this.formData)
+        : getType(show) === 'undefined' || show;
 
       return display;
     },
     getFormLabel({ label }) {
-      return getType(label) === 'function' ? label(this.formData) : label;
+      return isFunction(label) ? label(this.formData) : label;
     },
     handleChange({ component, key }, value) {
       this.config.debug &&
