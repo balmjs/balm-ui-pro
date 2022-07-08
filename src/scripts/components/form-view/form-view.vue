@@ -42,13 +42,15 @@
                   :attr-or-prop="formItemAttrOrProp"
                   @update:modelValue="handleChange"
                 >
-                  <template v-for="(_, slotName) in $slots">
+                  <template v-for="(_, name) in $slots" #[name]="slotData">
                     <slot
-                      :name="slotName"
-                      v-bind="{
-                        config: configData,
-                        data: currentFormData
-                      }"
+                      :name="name"
+                      v-bind="
+                        Object.assign(slotData, {
+                          config: configData,
+                          data: currentFormData
+                        })
+                      "
                     ></slot>
                   </template>
                 </ui-form-item>
@@ -84,13 +86,15 @@
                 :attr-or-prop="formItemAttrOrProp"
                 @update:modelValue="handleChange"
               >
-                <template v-for="(_, slotName) in $slots">
+                <template v-for="(_, name) in $slots" #[name]="slotData">
                   <slot
-                    :name="slotName"
-                    v-bind="{
-                      config: configData,
-                      data: currentFormData
-                    }"
+                    :name="name"
+                    v-bind="
+                      Object.assign(slotData, {
+                        config: configData,
+                        data: currentFormData
+                      })
+                    "
                   ></slot>
                 </template>
               </ui-form-item>
