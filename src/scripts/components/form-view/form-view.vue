@@ -182,6 +182,10 @@ const props = defineProps({
     type: Object,
     default: () => ({})
   },
+  useSource: {
+    type: Boolean,
+    default: false
+  },
   modelConfig: {
     type: [Array, Function, Boolean],
     required: true
@@ -240,7 +244,9 @@ const hasFormDataSource = computed(
   () => !!Object.keys(state.formDataSource).length
 );
 const currentFormData = computed(() =>
-  Object.assign({}, state.formDataSource, state.formData)
+  props.useSource
+    ? Object.assign({}, state.formDataSource, state.formData)
+    : state.formData
 );
 
 onBeforeMount(() => {
@@ -285,7 +291,12 @@ watch(
       if (hasFormDataSource.value) {
         updateFormData();
       } else {
-        const synchronized = Object.keys(currentFormData.value).length;
+        const currentFormData = Object.assign(
+          {},
+          state.formDataSource,
+          state.formData
+        );
+        const synchronized = Object.keys(currentFormData).length;
         !synchronized && syncFormData();
       }
     }
@@ -331,7 +342,7 @@ async function setFormConfig(
 }
 
 function syncFormData() {
-  emit(UI_FORM_VIEW.EVENTS.update, state.formData);
+  emit(UI_FORM_VIEW.EVENTS.update, currentFormData.value);
 }
 
 function initFormData(needSync = false) {
