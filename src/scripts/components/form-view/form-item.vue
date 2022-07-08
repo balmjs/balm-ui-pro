@@ -1,7 +1,7 @@
 <template>
   <ui-form-field
     v-show="displayFormItem(config)"
-    :class="className"
+    :class="[className, attrOrProp.class || '']"
     v-bind="attrOrProp"
   >
     <label
