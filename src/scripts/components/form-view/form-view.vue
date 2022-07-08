@@ -178,6 +178,10 @@ export default {
       type: Object,
       default: () => ({})
     },
+    useSource: {
+      type: Boolean,
+      default: false
+    },
     modelConfig: {
       type: [Array, Function, Boolean],
       required: true
@@ -233,7 +237,9 @@ export default {
       return !!Object.keys(this.formDataSource).length;
     },
     currentFormData() {
-      return Object.assign({}, this.formDataSource, this.formData);
+      return this.useSource
+        ? Object.assign({}, this.formDataSource, this.formData)
+        : this.formData;
     }
   },
   watch: {
@@ -262,7 +268,12 @@ export default {
         if (this.hasFormDataSource) {
           this.updateFormData();
         } else {
-          const synchronized = Object.keys(this.currentFormData).length;
+          const currentFormData = Object.assign(
+            {},
+            this.formDataSource,
+            this.formData
+          );
+          const synchronized = Object.keys(currentFormData).length;
           !synchronized && this.syncFormData();
         }
       }
@@ -308,7 +319,7 @@ export default {
       }
     },
     syncFormData() {
-      this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
+      this.$emit(UI_FORM_VIEW.EVENTS.update, this.currentFormData);
     },
     initFormData(needSync = false) {
       this.formData = {};
