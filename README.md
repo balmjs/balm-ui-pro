@@ -3,12 +3,17 @@
 > Coming up...
 
 - Preview components
+
   - `<ui-form-view>`
   - `<ui-readonly-item>`
   - `<ui-checkbox-group>`
   - `<ui-radio-group>`
   - `<ui-switch-box>`
   - `<ui-multi-select>`
+
+- Preview plugins
+  - `$model`
+  - `$transform`
 
 ## Quick Start
 
