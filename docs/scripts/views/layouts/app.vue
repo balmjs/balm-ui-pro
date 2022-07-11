@@ -55,7 +55,7 @@
                   :active="isActive"
                   @click="navigate($event)"
                 >
-                  {{ item.path }}
+                  {{ item.menuName }}
                 </ui-nav-item>
               </router-link>
             </template>
@@ -81,7 +81,10 @@ export default {
   },
   data() {
     return {
-      menu: [].concat(componentsMenu, pluginsMenu),
+      menu: [].concat(componentsMenu, pluginsMenu).map((item) => {
+        item.menuName = item.name.split('.')[1];
+        return item;
+      }),
       open: false
     };
   },
