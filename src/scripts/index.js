@@ -9,6 +9,7 @@ import UiRadioGroup from './components/form-components/radio-group';
 import UiSwitchBox from './components/form-components/switch-box';
 import UiMultiSelect from './components/form-components/multi-select';
 import $model, { useApiModel, useRouterModel } from './plugins/model';
+import $transform, { useTransform } from './plugins/transform';
 
 const Components = {
   UiFormView,
@@ -20,7 +21,8 @@ const Components = {
 };
 
 const Plugins = {
-  $model
+  $model,
+  $transform
 };
 
 const install = (app, options = {}) =>
@@ -44,4 +46,4 @@ export {
   UiSwitchBox,
   UiMultiSelect
 };
-export { $model, useApiModel, useRouterModel };
+export { $model, useApiModel, useRouterModel, $transform, useTransform };

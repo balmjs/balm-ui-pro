@@ -1,6 +1,6 @@
 <template>
   <div class="mdc-detail-view">
-    <h2 class="mdc-detail-view__title">
+    <h2 v-if="hasTitle" class="mdc-detail-view__title">
       <slot name="title">{{ title }}</slot>
     </h2>
     <section class="mdc-detail-view__content">
@@ -14,9 +14,10 @@
         :action-config="actionConfig"
         v-bind="formViewAttrOrProp"
       >
-        <template v-for="(_, slotName) in $scopedSlots" #[slotName]="data">
+        <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
+        <template v-for="(_, name) in $scopedSlots">
           <slot
-            :name="slotName"
+            :name="name"
             v-bind="{
               ...data,
               formConfig: detailForm.config,
@@ -27,23 +28,17 @@
           ></slot>
         </template>
 
-        <template #after>
-          <ui-alert v-if="errorMessage" state="warning">
-            {{ errorMessage }}
-          </ui-alert>
-        </template>
-
-        <template #action="{ className }">
+        <template #actions="{ className, data }">
           <ui-alert v-if="errorMessage" state="warning">
             {{ errorMessage }}
           </ui-alert>
 
           <ui-form-field :class="className">
-            <slot name="actions" :data="detailForm.data" :submit="onSubmit">
+            <slot name="actions" :data="data">
               <ui-button outlined @click="onCancel">
                 {{ cancelText }}
               </ui-button>
-              <ui-button v-debounce="debounceConfig" raised>
+              <ui-button v-debounce="onSubmit" raised>
                 {{ submitText }}
               </ui-button>
             </slot>
@@ -62,7 +57,14 @@ export default {
 </script>
 
 <script setup>
-import { reactive, toRefs, onBeforeMount, getCurrentInstance } from 'vue';
+import {
+  reactive,
+  toRefs,
+  computed,
+  onBeforeMount,
+  getCurrentInstance,
+  useSlot
+} from 'vue';
 import { viewProps, useView } from '../../mixins/view';
 
 const props = defineProps({
@@ -78,6 +80,7 @@ const props = defineProps({
 });
 
 const instance = getCurrentInstance();
+const slots = useSlot();
 const state = reactive({
   formData: {},
   modelConfig: [],
@@ -89,10 +92,7 @@ const { formData, modelConfig, modelOptions, errorMessage } = toRefs(state);
 
 const { onSubmit } = useView(props, { instance, state });
 
-const debounceConfig = {
-  callback: () => onSubmit(),
-  delay: 100
-};
+const hasTitle = computed(() => props.title || slots.title);
 
 onBeforeMount(() => {
   if (!instance.$model) {
@@ -112,7 +112,7 @@ async function getData() {
   state.formData = await instance.$model.getDetailData(
     props.model,
     props.queryParams,
-    props.apiEndpoint ? { baseURL: props.apiEndpoint } : {}
+    props.requestConfig
   );
 }
 </script>

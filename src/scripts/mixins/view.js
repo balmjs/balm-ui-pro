@@ -1,7 +1,7 @@
 const viewProps = {
-  apiEndpoint: {
-    type: String,
-    default: ''
+  requestConfig: {
+    type: Object,
+    default: () => ({})
   },
   title: {
     type: String,
