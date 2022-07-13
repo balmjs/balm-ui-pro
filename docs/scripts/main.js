@@ -1,34 +1,29 @@
 import Vue from 'vue';
 import router from '@/routes';
+import i18n from '@/lang';
 import $http from '@/plugins/http';
 import $prism from '@/plugins/prism';
 import App from '@/views/layouts/app';
+import { setGlobalProps } from '@/config';
 // BalmUI
 import BalmUI from 'balm-ui';
 import BalmUIPlus from 'balm-ui-plus';
 import BalmUIPro from 'balm-ui-pro';
-import { customComponents } from '@/config/components';
+import { BalmUIProConfig, customComponents } from '@/config/components';
 // PWA
 // import './my-sw';
 
 function createBalmUIProApp() {
-  Vue.config.productionTip = false;
-
   Vue.use($http);
   Vue.use($prism);
   Vue.use(BalmUI);
   Vue.use(BalmUIPlus);
-  Vue.use(BalmUIPro, {
-    $model: {
-      crud: {
-        create: 'add',
-        update: 'edit'
-      }
-    }
-  });
+  Vue.use(BalmUIPro, BalmUIProConfig);
   customComponents.forEach((component) => {
     Vue.component(component.name, component);
   });
+
+  setGlobalProps(Vue);
 
   new Vue({
     el: '#app',
@@ -36,6 +31,7 @@ function createBalmUIProApp() {
       App
     },
     router,
+    i18n,
     template: '<app />'
   });
 }

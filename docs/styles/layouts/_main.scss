@@ -1,3 +1,4 @@
+@use '@material/theme' as color;
 @use '../global';
 
 a {
@@ -10,8 +11,18 @@ a {
   min-height: 100%;
 }
 
-.mdc-top-app-bar__title {
-  font-size: 20px;
+.balmui-head {
+  .github {
+    line-height: 1; // fix(ie11): css bug
+
+    & > span {
+      display: none;
+    }
+  }
+}
+
+.top-app-toolbar {
+  display: flex;
 }
 
 .balmui-body {
@@ -21,33 +32,64 @@ a {
   max-width: 100%;
 }
 
+.balmui-drawer-container {
+  min-width: global.$nav-width;
+
+  &.balmui-drawer--mobile {
+    min-width: auto;
+    .balmui-menu {
+      z-index: 9; // NOTE: > snackbar
+    }
+  }
+}
+
 .balmui-menu {
   position: fixed;
-  z-index: 2;
+  z-index: 2; // NOTE: < banner
+  width: global.$nav-width;
+
+  .mdc-drawer__header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  .balmui-version {
+    font-weight: normal;
+    .version {
+      color: color.$orange-900;
+    }
+  }
 }
 
 .balmui-content {
-  display: block;
   position: relative;
+  display: block;
   width: 100%;
-  overflow: auto;
-  padding: 16px;
 }
 
 .catalog-list {
-  h3 {
-    padding: 0 12px;
+  .mdc-deprecated-list-group__subheader {
     font-size: 18px;
-    line-height: 1;
   }
-  .mdc-list-item {
-    font-size: 14px;
-    padding-left: 40px;
+
+  .no-icon {
+    padding-left: 28px;
   }
+}
+
+.catalog-list-icon {
+  width: 24px;
+  height: 24px;
+  margin: 0 24px 0 12px;
+  background-repeat: no-repeat;
+  background-size: 100%;
 }
 
 @media screen and (min-width: #{global.$MIN_WIDTH}px) {
   .balmui-content {
     width: calc(100% - #{global.$nav-width});
+  }
+
+  #balmui-menu {
+    display: none;
   }
 }

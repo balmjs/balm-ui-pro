@@ -1,10 +1,12 @@
 <template>
   <div class="balmui-container">
-    <!-- header -->
+    <!-- App bar -->
     <ui-top-app-bar
       class="balmui-head"
-      content-selector=".balmui-body"
+      content-selector=".balmui-content"
       nav-id="balmui-menu"
+      fixed
+      @nav="$balmUI.onChange('openDrawer', !openDrawer)"
     >
       <router-link
         to="/"
@@ -18,62 +20,121 @@
         </a>
       </template>
     </ui-top-app-bar>
-    <!-- content -->
-    <main class="balmui-body">
-      <ui-drawer
-        v-model="open"
-        type="dismissible"
-        class="balmui-menu"
-        nav-id="balmui-menu"
+    <!-- Content -->
+    <div class="balmui-body">
+      <!-- Drawer -->
+      <div
+        :class="[
+          'balmui-drawer-container',
+          { 'balmui-drawer--mobile': !isWideScreen }
+        ]"
       >
-        <ui-drawer-content>
-          <ui-nav class="catalog-list">
-            <h3 :class="$theme.getTextClass('primary', 'light')">Guide</h3>
-            <router-link
-              v-slot="{ navigate, href, isActive }"
-              custom
-              :to="{ name: 'home' }"
-            >
-              <ui-nav-item
-                :href="href"
-                :active="isActive"
-                @click="navigate($event)"
-              >
-                Introduction
-              </ui-nav-item>
-            </router-link>
-            <h3 :class="$theme.getTextClass('primary', 'light')">Components</h3>
-            <template v-for="(item, index) in menu">
+        <ui-drawer v-model="openDrawer" :type="drawerType" class="balmui-menu">
+          <ui-drawer-header>
+            <ui-drawer-title>
               <router-link
-                v-slot="{ navigate, href, isActive }"
-                :key="`item${index}`"
+                v-slot="{ navigate, href }"
+                :to="{ name: 'home' }"
                 custom
-                :to="{ name: item.name }"
               >
-                <ui-nav-item
-                  :href="href"
-                  :active="isActive"
-                  @click="navigate($event)"
-                >
-                  {{ item.menuName }}
-                </ui-nav-item>
+                <a :href="href" @click="handleMenu($event, navigate)">
+                  BalmUI Pro
+                </a>
               </router-link>
-            </template>
-          </ui-nav>
-        </ui-drawer-content>
-      </ui-drawer>
-
-      <ui-drawer-app-content :class="[$tt('body1'), 'balmui-content']">
+            </ui-drawer-title>
+            <ui-drawer-subtitle>
+              <i class="balmui-version">
+                v
+                <span class="version">{{ version }}</span>
+              </i>
+            </ui-drawer-subtitle>
+          </ui-drawer-header>
+          <ui-drawer-content>
+            <ui-nav class="catalog-list">
+              <template v-for="(item, index) in menu">
+                <router-link
+                  v-if="item.url || item.isSubmenu"
+                  v-slot="{ navigate, href, isActive }"
+                  :key="`item${index}`"
+                  :to="{ name: item.url }"
+                  custom
+                >
+                  <ui-nav-item
+                    :href="href"
+                    :active="isActive"
+                    :class="{
+                      submenu: item.isSubmenu,
+                      'no-icon': !item.icon
+                    }"
+                    @click="handleMenu($event, navigate)"
+                  >
+                    <template #before="{ iconClass }">
+                      <ui-icon
+                        v-if="item.icon"
+                        :class="[
+                          'catalog-list-icon',
+                          iconClass,
+                          $theme.getTextClass('secondary', 'light')
+                        ]"
+                      >
+                        {{ item.icon }}
+                      </ui-icon>
+                    </template>
+                    <span :class="$theme.getTextClass('primary', 'light')">
+                      {{ $t(`menu.${item.name}`) }}
+                    </span>
+                  </ui-nav-item>
+                </router-link>
+                <ui-list-divider
+                  v-else-if="item === '-'"
+                  :key="`divider${index}`"
+                ></ui-list-divider>
+                <ui-list-group-subheader
+                  v-else-if="item === 'footer'"
+                  :key="`footer${index}`"
+                >
+                  Powered by
+                  <a href="https://balm.js.org/" target="_blank" rel="noopener">
+                    BalmJS
+                  </a>
+                </ui-list-group-subheader>
+                <ui-list-group-subheader
+                  v-else
+                  :key="`header${index}`"
+                  :class="$theme.getTextClass('primary', 'light')"
+                >
+                  {{ $t(`menu.${item.name}`) }}
+                  <i
+                    v-if="isWideScreen && item.name === 'guide'"
+                    :class="['balmui-version', $tt('subtitle2')]"
+                  >
+                    v
+                    <span class="version">{{ version }}</span>
+                  </i>
+                </ui-list-group-subheader>
+              </template>
+            </ui-nav>
+          </ui-drawer-content>
+        </ui-drawer>
+      </div>
+      <!-- App content -->
+      <div
+        :class="[
+          'balmui-content',
+          $theme.getThemeClass('background'),
+          $theme.getTextClass('primary', 'light')
+        ]"
+      >
         <router-view></router-view>
-      </ui-drawer-app-content>
-    </main>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import SvgGithub from '@/components/github';
-import componentsMenu from '@/routes/components';
-import pluginsMenu from '@/routes/plugins';
+import { VERSION, $MIN_WIDTH } from '@/config';
+import menu from '@/config/menu';
 
 export default {
   components: {
@@ -81,18 +142,37 @@ export default {
   },
   data() {
     return {
-      menu: [].concat(componentsMenu, pluginsMenu).map((item) => {
-        item.menuName = item.name.split('.')[1];
-        return item;
-      }),
-      open: false
+      version: VERSION,
+      menu,
+      bodyEl: document.documentElement || document.body,
+      isWideScreen: true,
+      drawerType: 'permanent',
+      openDrawer: false
     };
   },
   mounted() {
-    this.open = window.innerWidth >= 1024;
-    window.addEventListener('balmResize', () => {
-      this.open = window.innerWidth >= 1024;
-    });
+    this.init();
+    window.addEventListener('balmResize', this.init);
+  },
+  beforeDestroy() {
+    window.removeEventListener('balmResize', this.init);
+  },
+  methods: {
+    getDrawerType() {
+      this.isWideScreen = window.innerWidth >= $MIN_WIDTH;
+      return this.isWideScreen ? 'permanent' : 'modal';
+    },
+    init() {
+      this.drawerType = this.getDrawerType();
+    },
+    handleMenu(event, navigate) {
+      this.openDrawer = false;
+      if (window.innerWidth < $MIN_WIDTH) {
+        this.isWideScreen = false;
+      }
+
+      navigate(event);
+    }
   }
 };
 </script>

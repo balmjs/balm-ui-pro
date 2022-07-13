@@ -1,7 +1,7 @@
 export default [
   {
     path: 'form-view/:id?',
-    name: 'component.form-view',
+    name: 'components.form-view',
     component: () => import('@/views/components/form-view')
   }
   // {

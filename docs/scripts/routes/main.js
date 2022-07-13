@@ -14,14 +14,14 @@ const routes = [
     component: Home
   },
   {
-    path: '/component',
-    name: 'component',
+    path: '/components',
+    name: 'components',
     component: BlankLayout,
     children: componentRoutes
   },
   {
-    path: '/plugin',
-    name: 'plugin',
+    path: '/plugins',
+    name: 'plugins',
     component: BlankLayout,
     children: pluginRoutes
   },
