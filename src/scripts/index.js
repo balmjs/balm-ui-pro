@@ -8,6 +8,7 @@ import UiRadioGroup from './components/form-components/radio-group.vue';
 import UiSwitchBox from './components/form-components/switch-box.vue';
 import UiMultiSelect from './components/form-components/multi-select.vue';
 import $model, { useApiModel, useRouterModel } from './plugins/model';
+import $transform, { useTransform } from './plugins/transform';
 
 const Components = {
   UiFormView,
@@ -19,7 +20,8 @@ const Components = {
 };
 
 const Plugins = {
-  $model
+  $model,
+  $transform
 };
 
 const install = (app, options = {}) =>
@@ -43,3 +45,4 @@ export {
   UiMultiSelect
 };
 export { $model, useApiModel, useRouterModel };
+export { $transform, useTransform };
