@@ -9,14 +9,18 @@ import { setGlobalProps } from '@/config';
 import BalmUI from 'balm-ui';
 import BalmUIPlus from 'balm-ui-plus';
 import BalmUIPro from 'balm-ui-pro';
-import { BalmUIProConfig, customComponents } from '@/config/components';
+import {
+  BalmUIConfig,
+  BalmUIProConfig,
+  customComponents
+} from '@/config/components';
 // PWA
 // import './my-sw';
 
 function createBalmUIProApp() {
   Vue.use($http);
   Vue.use($prism);
-  Vue.use(BalmUI);
+  Vue.use(BalmUI, BalmUIConfig);
   Vue.use(BalmUIPlus);
   Vue.use(BalmUIPro, BalmUIProConfig);
   customComponents.forEach((component) => {
