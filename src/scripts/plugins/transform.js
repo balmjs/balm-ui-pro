@@ -48,7 +48,7 @@ class Transform {
 
 const transform = new Transform();
 
-function install(Vue, options = {}) {
+function install(app, options = {}) {
   app.config.globalProperties.$transform = transform;
   app.provide('transform', transform);
 }
