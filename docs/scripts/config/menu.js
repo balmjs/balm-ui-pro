@@ -16,22 +16,22 @@ const MATERIAL_COMPONENTS_PRO = [
     children: [
       {
         name: 'form-view'
-      },
-      {
-        name: 'readonly-item'
-      },
-      {
-        name: 'checkbox-group'
-      },
-      {
-        name: 'radio-group'
-      },
-      {
-        name: 'switch-box'
-      },
-      {
-        name: 'multi-select'
       }
+      // {
+      //   name: 'readonly-item'
+      // },
+      // {
+      //   name: 'checkbox-group'
+      // },
+      // {
+      //   name: 'radio-group'
+      // },
+      // {
+      //   name: 'switch-box'
+      // },
+      // {
+      //   name: 'multi-select'
+      // }
     ]
   },
   '-',

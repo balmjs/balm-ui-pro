@@ -2,6 +2,7 @@ import Home from '@/views/home';
 // Layouts
 import BlankLayout from '@/views/layouts/blank';
 // Routes
+import guideRoutes from './guide';
 import componentRoutes from './components';
 import pluginRoutes from './plugins';
 // Pages
@@ -14,14 +15,20 @@ const routes = [
     component: Home
   },
   {
-    path: '/component',
-    name: 'component',
+    path: '/guide',
+    name: 'guide',
+    component: BlankLayout,
+    children: guideRoutes
+  },
+  {
+    path: '/components',
+    name: 'components',
     component: BlankLayout,
     children: componentRoutes
   },
   {
-    path: '/plugin',
-    name: 'plugin',
+    path: '/plugins',
+    name: 'plugins',
     component: BlankLayout,
     children: pluginRoutes
   },

@@ -29,12 +29,7 @@
           { 'balmui-drawer--mobile': !isWideScreen }
         ]"
       >
-        <ui-drawer
-          v-model="drawerOpen"
-          type="dismissible"
-          class="balmui-menu"
-          nav-id="balmui-menu"
-        >
+        <ui-drawer v-model="drawerOpen" :type="drawerType" class="balmui-menu">
           <ui-drawer-header>
             <ui-drawer-title>
               <router-link
