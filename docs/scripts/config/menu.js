@@ -16,6 +16,12 @@ const MATERIAL_COMPONENTS_PRO = [
     children: [
       {
         name: 'form-view'
+      },
+      {
+        name: 'detail-view'
+      },
+      {
+        name: 'table-view'
       }
       // {
       //   name: 'readonly-item'

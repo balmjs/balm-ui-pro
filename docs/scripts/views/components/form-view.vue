@@ -7,7 +7,7 @@
       :action-config="actionConfig"
       @action="onAction"
     >
-      <template #before>
+      <template #before-form-view>
         <div>outer formData: {{ formData }}</div>
         <hr />
       </template>
@@ -20,7 +20,7 @@
           <ui-button raised @click="onSubmit(data)">Custom Submit</ui-button>
         </ui-form-field>
       </template> -->
-      <template #after="{ data }">
+      <template #after-form-view="{ data }">
         <div>inner formData: {{ data }}</div>
         <ui-alert v-if="message" state="warning">{{ message }}</ui-alert>
       </template>

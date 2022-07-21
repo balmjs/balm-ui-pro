@@ -8,6 +8,7 @@ export const BalmUIConfig = {
 };
 
 export const BalmUIProConfig = {
+  UiDetailView: {},
   $model: {
     crud: {
       create: 'add',
