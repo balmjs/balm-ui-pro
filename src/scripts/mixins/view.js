@@ -12,6 +12,10 @@ export default {
       type: String,
       default: ''
     },
+    modelPath: {
+      type: String,
+      default: ''
+    },
     modelOptions: {
       type: Object,
       default: () => ({})

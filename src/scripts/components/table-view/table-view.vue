@@ -45,10 +45,9 @@
         tableData: table.data,
         refreshData: getModelData
       }"
-      @multi-action="resetSelectedRows"
     ></ui-table-view-topbar>
     <section class="mdc-table-view__content">
-      <template v-if="table.data">
+      <template v-if="table.data.length">
         <ui-table
           v-model="table.selectedRows"
           v-bind="
@@ -214,6 +213,10 @@ export default {
     withoutPagination: {
       type: Boolean,
       default: false
+    },
+    needSearch: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -245,7 +248,9 @@ export default {
     if (this.model) {
       await this.getModelConfig();
     }
-    await this.getModelData();
+    if (!this.needSearch) {
+      await this.getModelData();
+    }
   },
   activated() {
     // NOTE: refresh data for `<keep-alive>`
