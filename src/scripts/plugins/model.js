@@ -147,7 +147,7 @@ const apiModel = new ApiModel();
 const routerModel = new RouterModel();
 
 function install(Vue, options = {}) {
-  const { crud, ...apiConfig } = options;
+  const { crud, apis, ...apiConfig } = options;
 
   if (getType(crud) === 'object') {
     if (
@@ -163,6 +163,12 @@ function install(Vue, options = {}) {
 
   if (getType(apiConfig) === 'object') {
     globalApiConfig = Object.assign({}, globalApiConfig, apiConfig);
+  }
+
+  if (Array.isArray(apis)) {
+    apis.forEach((api) => {
+      apiModel.createApis(...api);
+    });
   }
 
   Vue.prototype.$apiModel = apiModel;

@@ -29,7 +29,7 @@ const a = $apiModel.createApis(model, '/api/user', {
   // excludeDefaults: ['create']
 });
 
-const b = $apiModel.createApis('post', '/api/post');
+// const b = $apiModel.createApis('post', '/api/post');
 
 // const c = $apiModel.createApis('college-info', '/admin/service', {});
 
