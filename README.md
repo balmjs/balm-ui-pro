@@ -5,6 +5,8 @@
 - Preview components
 
   - `<ui-form-view>`
+  - `<ui-detail-view>`
+  - `<ui-table-view>`
   - `<ui-readonly-item>`
   - `<ui-checkbox-group>`
   - `<ui-radio-group>`
