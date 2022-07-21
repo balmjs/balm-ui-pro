@@ -4,115 +4,146 @@
       <slot name="title">{{ title }}</slot>
     </h2>
     <section class="mdc-detail-view__content">
-      <slot name="before"></slot>
-      <ui-spinner v-if="!config.length" active></ui-spinner>
+      <slot name="before-detail-view"></slot>
       <ui-form-view
-        v-show="config.length"
         v-model="formData"
-        :model-config="modelConfig"
-        :model-options="modelOptions"
-        :action-config="actionConfig"
-        v-bind="formViewAttrOrProp"
+        v-bind="
+          Object.assign(
+            {
+              modelConfig,
+              modelOptions,
+              actionConfig
+            },
+            formViewAttrOrProp
+          )
+        "
+        @action="handleAction"
       >
         <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
-        <template v-for="(_, name) in $scopedSlots">
-          <slot
-            :name="name"
-            v-bind="{
-              ...data,
-              formConfig: detailForm.config,
-              formData: detailForm.data,
-              refreshData: getData,
-              originalData: detailForm.originalData
-            }"
-          ></slot>
+        <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
+          <slot :name="name" v-bind="slotData"></slot>
         </template>
-
-        <template #actions="{ className, data }">
-          <ui-alert v-if="errorMessage" state="warning">
-            {{ errorMessage }}
-          </ui-alert>
-
-          <ui-form-field :class="className">
-            <slot name="actions" :data="data">
-              <ui-button outlined @click="onCancel">
-                {{ cancelText }}
-              </ui-button>
-              <ui-button v-debounce="onSubmit" raised>
-                {{ submitText }}
-              </ui-button>
-            </slot>
-          </ui-form-field>
+        <!-- Default error message -->
+        <template #after-form-view="slotData">
+          <template v-if="useValidator">
+            <ui-alert v-if="message" state="warning">{{ message }}</ui-alert>
+          </template>
+          <slot v-else name="after-form-view" v-bind="slotData"></slot>
         </template>
       </ui-form-view>
-      <slot name="after"></slot>
+      <slot name="after-detail-view"></slot>
     </section>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'UiDetailView'
+import viewMixins from '../../mixins/view';
+
+const UiDetailView = {
+  EVENTS: {
+    cancel: 'cancel',
+    submit: 'submit'
+  }
 };
-</script>
 
-<script setup>
-import {
-  reactive,
-  toRefs,
-  computed,
-  onBeforeMount,
-  getCurrentInstance,
-  useSlot
-} from 'vue';
-import { viewProps, useView } from '../../mixins/view';
-
-const props = defineProps({
-  ...viewProps,
-  cancelText: {
-    type: String,
-    default: 'Cancel'
+const defaultActionConfig = [
+  {
+    type: UiDetailView.EVENTS.cancel,
+    text: 'Cancel',
+    attrOrProp: {
+      outlined: true
+    }
   },
-  submitText: {
-    type: String,
-    default: 'Submit'
+  {
+    type: UiDetailView.EVENTS.submit,
+    text: 'Save',
+    attrOrProp: {
+      raised: true
+    }
   }
-});
+];
 
-const instance = getCurrentInstance();
-const slots = useSlot();
-const state = reactive({
-  formData: {},
-  modelConfig: [],
-  modelOptions: {},
-  actionConfig: [],
-  errorMessage: ''
-});
-const { formData, modelConfig, modelOptions, errorMessage } = toRefs(state);
+export default {
+  name: 'UiDetailView',
+  mixins: [viewMixins],
+  props: {
+    actionConfig: {
+      type: Array,
+      default: () => defaultActionConfig
+    },
+    formViewAttrOrProp: {
+      type: Object,
+      default: () => ({
+        formAttrOrProp: {
+          actionAlign: 'center'
+        }
+      })
+    },
+    setModelDataFn: {
+      type: Function,
+      default: () => {}
+    }
+  },
+  data() {
+    return {
+      modelConfig: [],
+      formData: {},
+      message: ''
+    };
+  },
+  async beforeMount() {
+    if (this.model) {
+      await this.getModelConfig();
+      await this.getModelData();
+    } else {
+      console.warn('[UiDetailView]', 'model is missing');
+    }
+  },
+  methods: {
+    async getModelConfig() {
+      try {
+        this.modelConfig = await this.getModelConfigFn(this);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async getModelData() {
+      try {
+        this.formData = await this.getModelDataFn(this);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async handleAction(result) {
+      const { type, message } = result;
 
-const { onSubmit } = useView(props, { instance, state });
+      switch (type) {
+        case UiDetailView.EVENTS.submit:
+          if (this.useValidator) {
+            this.message = message;
+          }
+          await this.setModelDataFn(this);
+          break;
+        case UiDetailView.EVENTS.cancel:
+          switch (this.to) {
+            case 'custom':
+              this.$emit(UiDetailView.EVENTS.cancel);
+              break;
+            case false:
+              this.$router.back();
+              break;
+            default:
+              this.replace
+                ? this.$router.replace(this.to)
+                : this.$router.push(this.to);
+          }
+          break;
+      }
 
-const hasTitle = computed(() => props.title || slots.title);
-
-onBeforeMount(() => {
-  if (!instance.$model) {
-    console.warn('[UiDetailView]', '$model is missing');
-  } else {
-    initFormConfig();
+      if (type !== UiDetailView.EVENTS.cancel) {
+        this.$emit(type, result, this);
+      }
+    }
   }
-});
-
-async function initModelConfig() {
-  state.modelConfig = await instance.$model.getModelConfig(
-    props.modelName || props.model
-  );
-}
-
-async function getData() {
-  state.formData = await instance.$model.getDetailData(
-    props.model,
-    props.queryParams,
-    props.requestConfig
-  );
-}
+};
 </script>

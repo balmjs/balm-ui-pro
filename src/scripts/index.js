@@ -3,6 +3,8 @@ import autoInstall from './config/auto-install';
 import autoInit from './config/auto-init';
 
 import UiFormView from './components/form-view/form-view';
+import UiDetailView from './components/detail-view/detail-view';
+import UiTableView from './components/table-view/table-view';
 import UiReadonlyItem from './components/form-components/readonly-item';
 import UiCheckboxGroup from './components/form-components/checkbox-group';
 import UiRadioGroup from './components/form-components/radio-group';
@@ -13,6 +15,8 @@ import $transform, { useTransform } from './plugins/transform';
 
 const Components = {
   UiFormView,
+  UiDetailView,
+  UiTableView,
   UiReadonlyItem,
   UiCheckboxGroup,
   UiRadioGroup,
@@ -41,6 +45,9 @@ export default BalmUIPro;
 export { version, install };
 export {
   UiFormView,
+  UiDetailView,
+  UiTableView,
+  UiReadonlyItem,
   UiCheckboxGroup,
   UiRadioGroup,
   UiSwitchBox,

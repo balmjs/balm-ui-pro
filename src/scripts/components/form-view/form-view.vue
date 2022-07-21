@@ -21,9 +21,13 @@
       <template #default="{ itemClass, subitemClass, actionClass }">
         <div class="mdc-form-view__items">
           <!-- For list view -->
-          <ui-grid v-if="useGrid" v-bind="gridAttrOrProp">
+          <ui-grid
+            v-if="useGrid"
+            class="mdc-form-view__grid"
+            v-bind="gridAttrOrProp"
+          >
             <slot
-              name="before"
+              name="before-form-view"
               v-bind="{
                 itemClass,
                 subitemClass,
@@ -47,19 +51,21 @@
                   :slot="name"
                   :name="name"
                 ></slot>
-                <template v-for="(_, name) in $scopedSlots">
+                <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
                   <slot
                     :name="name"
-                    v-bind="{
-                      config: configData,
-                      data: currentFormData
-                    }"
+                    v-bind="
+                      Object.assign({}, slotData, {
+                        config: configData,
+                        data: currentFormData
+                      })
+                    "
                   ></slot>
                 </template>
               </ui-form-item>
             </ui-grid-cell>
             <slot
-              name="after"
+              name="after-form-view"
               v-bind="{
                 itemClass,
                 subitemClass,
@@ -70,7 +76,7 @@
           <!-- For detail view -->
           <template v-else>
             <slot
-              name="before"
+              name="before-form-view"
               v-bind="{
                 itemClass,
                 subitemClass,
@@ -91,18 +97,20 @@
                 :slot="name"
                 :name="name"
               ></slot>
-              <template v-for="(_, name) in $scopedSlots">
+              <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
                 <slot
                   :name="name"
-                  v-bind="{
-                    config: configData,
-                    data: currentFormData
-                  }"
+                  v-bind="
+                    Object.assign({}, slotData, {
+                      config: configData,
+                      data: currentFormData
+                    })
+                  "
                 ></slot>
               </template>
             </ui-form-item>
             <slot
-              name="after"
+              name="after-form-view"
               v-bind="{
                 itemClass,
                 subitemClass,
@@ -114,6 +122,7 @@
             name="actions"
             v-bind="{
               className: [itemClass, actionClass],
+              config: formConfig,
               data: currentFormData
             }"
           >
