@@ -11,8 +11,14 @@ export const BalmUIProConfig = {
   $model: {
     crud: {
       create: 'add',
+      read: 'info',
       update: 'edit'
+    },
+    read: {
+      list: 'list',
+      detail: 'detail'
     }
+    // formatApiAction: (modelName, actionName) => `${modelName}-${actionName}`
   }
 };
 

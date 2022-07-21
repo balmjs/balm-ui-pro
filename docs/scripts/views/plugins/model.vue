@@ -31,6 +31,8 @@ const a = $apiModel.createApis(model, '/api/user', {
 
 const b = $apiModel.createApis('post', '/api/post');
 
+// const c = $apiModel.createApis('college-info', '/admin/service', {});
+
 export default {
   data() {
     return {

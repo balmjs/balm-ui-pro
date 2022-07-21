@@ -20,18 +20,23 @@ let CRUD = REST_API.operations.reduce(
   (acc, value) => ({ ...acc, [value]: value }),
   {}
 );
+let globalApiConfig = {
+  formatApiAction: (frontEndApiName, operationName) => operationName
+};
 let globalApis = {};
 
-function createCustomApis(
-  operation,
-  { frontEndApiName, backEndApi },
-  apiConfig = {}
-) {
+function createCustomApis(operation, { frontEndApiName, backEndApi }, config) {
   const apis = {};
+  const apiConfig = config[operation] || {};
+  const formatApiAction =
+    apiConfig.formatApiAction || globalApiConfig.formatApiAction;
 
   for (const [key, value] of Object.entries(apiConfig)) {
     const name = toCamelCase(`${operation}-${frontEndApiName}-${key}`);
-    const url = value ? `${backEndApi}/${value}` : backEndApi;
+
+    const url = value
+      ? `${backEndApi}/${toCamelCase(formatApiAction(frontEndApiName, value))}`
+      : backEndApi;
     apis[name] = /^\/.*/.test(value) ? value : url;
   }
 
@@ -48,6 +53,10 @@ class ApiModel {
   }
 
   createApis(frontEndApiName, backEndApi, config = {}) {
+    config = Object.assign({}, globalApiConfig, config);
+    const formatApiAction =
+      config.formatApiAction || globalApiConfig.formatApiAction;
+
     REST_API.operations.forEach((operation) => {
       let defaultApi = {};
       const { excludeDefaults } = config;
@@ -59,21 +68,21 @@ class ApiModel {
         )
       ) {
         const defaultName = toCamelCase(`${operation}-${frontEndApiName}`);
-        const defaultUrl = `${backEndApi}/${CRUD[operation]}`;
+        const defaultUrl = `${backEndApi}/${toCamelCase(
+          formatApiAction(frontEndApiName, CRUD[operation])
+        )}`;
         defaultApi = { [defaultName]: defaultUrl };
       }
 
-      const apiConfig = config[operation] || {};
       const customApis = createCustomApis(
         operation,
         {
           frontEndApiName,
           backEndApi
         },
-        apiConfig
+        config
       );
 
-      console.log(defaultApi, customApis);
       globalApis = Object.assign(globalApis, defaultApi, customApis);
     });
 
@@ -93,13 +102,19 @@ class RouterModel {
 
   createViewRoutes(name, components = {}, options = {}) {
     const { indexView, listView, detailView } = components;
-    const { indexPath, listPath, detailPath, listOptions, detailOptions } =
-      options;
+    const {
+      indexPath,
+      indexRedirect,
+      listPath,
+      detailPath,
+      listOptions,
+      detailOptions
+    } = options;
     return {
       path: indexPath || name,
       name: `${name}.index`,
       component: indexView,
-      redirect: { name: `${name}.list` },
+      redirect: indexRedirect || { name: `${name}.list` },
       children: [
         ...(listView
           ? [
@@ -132,7 +147,7 @@ const apiModel = new ApiModel();
 const routerModel = new RouterModel();
 
 function install(Vue, options = {}) {
-  const { crud } = options;
+  const { crud, ...apiConfig } = options;
 
   if (getType(crud) === 'object') {
     if (
@@ -144,6 +159,10 @@ function install(Vue, options = {}) {
     } else {
       throw new Error(`[$apiModel]: Invalid CRUD operations`);
     }
+  }
+
+  if (getType(apiConfig) === 'object') {
+    globalApiConfig = Object.assign({}, globalApiConfig, apiConfig);
   }
 
   Vue.prototype.$apiModel = apiModel;
