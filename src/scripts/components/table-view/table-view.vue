@@ -39,10 +39,11 @@
       v-bind="{
         topbarConfig,
         model,
+        topbarActionHandler,
         defaultParams,
-        searchFormData: lastSearchFormData,
         selectedRows: table.selectedRows,
         tableData: table.data,
+        searchFormData: lastSearchFormData,
         refreshData: getModelData
       }"
     ></ui-table-view-topbar>
@@ -217,6 +218,10 @@ export default {
     needSearch: {
       type: Boolean,
       default: false
+    },
+    topbarActionHandler: {
+      type: Function,
+      default: () => {}
     }
   },
   data() {

@@ -32,28 +32,52 @@ const tbody = [
 ];
 const actionConfig = [
   {
-    type: 'icon',
-    icon: 'add'
+    component: 'ui-icon',
+    text: 'add'
   },
   {
-    type: 'button',
-    text: 'Add'
+    type: 'no-slot',
+    component: 'ui-icon-button',
+    attrOrProp: {
+      icon: 'favorite'
+    }
   },
   {
-    type: 'link',
+    component: 'ui-button',
+    text: 'Add',
+    attrOrProp: {
+      icon: 'add'
+    }
+  },
+  {
     text: 'BalmJS',
     href: 'https://balm.js.org'
   },
   {
-    type: 'link',
-    text: 'FormView',
+    type: 'router-link',
+    text: 'RouterLink',
     routeName: 'components.form-view'
+  },
+  {
+    text: 'Link',
+    onClick: () => {
+      console.log('link button');
+    }
   }
 ];
 const topbarConfig = [
   {
-    type: 'add',
+    type: 'router-link',
+    icon: 'add',
     text: 'Create'
+  },
+  {
+    type: 'multi-update',
+    text: 'Update'
+  },
+  {
+    type: 'multi-delete',
+    text: 'Delete'
   }
 ];
 

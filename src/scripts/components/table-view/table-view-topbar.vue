@@ -1,18 +1,20 @@
 <template>
   <section class="mdc-table-view__topbar">
-    <ui-button
-      v-for="(action, index) in topbarConfig"
-      :key="`button-${index}`"
-      v-bind="
-        action.buttonAttrOrProp || {
-          raised: true,
-          icon: actionIcon(action)
-        }
-      "
-      @click="handleClick(action)"
-    >
-      {{ action.text }}
-    </ui-button>
+    <template v-for="(action, index) in topbarConfig">
+      <ui-button
+        :key="`button-${index}`"
+        v-bind="
+          action.buttonAttrOrProp || {
+            class: 'action',
+            raised: true,
+            icon: actionIcon(action)
+          }
+        "
+        @click="handleClick(action)"
+      >
+        {{ action.text }}
+      </ui-button>
+    </template>
   </section>
 </template>
 
@@ -28,11 +30,11 @@ export default {
       type: String,
       default: ''
     },
-    defaultParams: {
-      type: Object,
-      default: () => ({})
+    topbarActionHandler: {
+      type: Function,
+      default: () => {}
     },
-    searchFormData: {
+    defaultParams: {
       type: Object,
       default: () => ({})
     },
@@ -43,6 +45,10 @@ export default {
     tableData: {
       type: Array,
       default: () => []
+    },
+    searchFormData: {
+      type: Object,
+      default: () => ({})
     },
     refreshData: {
       type: Function,
@@ -74,14 +80,20 @@ export default {
 
       return result;
     },
-    handleClick({ type, routeName }) {
-      if (/^multi-.*/.test(type)) {
-        // TODO
+    handleClick(action) {
+      if (action.type === 'router-link') {
+        const to = action.to || {
+          name: action.routeName || `${this.model}.detail`
+        };
+        this.$router.push(to);
       } else {
-        console.log(routeName || `${this.model}.detail`);
-        this.$router.push({
-          name: routeName || `${this.model}.detail`
-        });
+        const data = {
+          defaultParams: this.defaultParams,
+          selectedRows: this.selectedRows,
+          tableData: this.tableData,
+          searchFormData: this.searchFormData
+        };
+        this.topbarActionHandler(action, data, this.refreshData);
       }
     }
   }

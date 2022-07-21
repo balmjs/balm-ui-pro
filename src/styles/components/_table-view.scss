@@ -7,6 +7,10 @@
 
 .mdc-table-view__topbar {
   margin-bottom: 12px;
+
+  .action {
+    margin: 0 6px 6px 0;
+  }
 }
 
 .mdc-table-view__actions {
@@ -15,7 +19,7 @@
   align-items: center;
 
   .action {
-    margin: 0 4px;
+    margin: 4px;
     cursor: pointer;
   }
 }
