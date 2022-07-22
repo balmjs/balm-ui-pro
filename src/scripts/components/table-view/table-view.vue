@@ -215,7 +215,7 @@ export default {
       type: Boolean,
       default: false
     },
-    needSearch: {
+    useValidator: {
       type: Boolean,
       default: false
     },
@@ -257,7 +257,7 @@ export default {
     if (this.model) {
       await this.getModelConfig();
     }
-    if (!this.needSearch) {
+    if (!this.useValidator) {
       await this.getModelData();
     }
   },
@@ -294,14 +294,18 @@ export default {
       }
     },
     async handleAction(result) {
-      const { type, message } = result;
+      const { type } = result;
 
       switch (type) {
         case UiTableView.EVENTS.submit:
+          let canSubmit = true;
+
           if (this.useValidator) {
-            this.$set(this.searchForm, 'message', message);
+            canSubmit = result.valid;
+            this.$set(this.searchForm, 'message', result.message);
           }
-          await this.getModelData();
+
+          canSubmit && (await this.getModelData());
           break;
         case UiTableView.EVENTS.reset:
           // NOTE: automatic processing in `<ui-form-view>`

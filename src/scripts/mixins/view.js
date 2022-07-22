@@ -35,10 +35,6 @@ export default {
     getModelDataFn: {
       type: Function,
       default: () => {}
-    },
-    useValidator: {
-      type: Boolean,
-      default: true
     }
   },
   computed: {

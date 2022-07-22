@@ -87,6 +87,10 @@ export default {
       type: Boolean,
       default: false
     },
+    useValidator: {
+      type: Boolean,
+      default: true
+    },
     setModelDataFn: {
       type: Function,
       default: () => {}
@@ -133,15 +137,15 @@ export default {
       }
     },
     async handleAction(result) {
-      const { type, valid, message } = result;
+      const { type } = result;
 
       switch (type) {
         case UiDetailView.EVENTS.submit:
           let canSubmit = true;
 
           if (this.useValidator) {
-            canSubmit = valid;
-            this.message = message;
+            canSubmit = result.valid;
+            this.message = result.message;
           }
 
           if (canSubmit) {
