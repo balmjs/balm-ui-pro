@@ -405,9 +405,11 @@ export default {
       if (Array.isArray(key)) {
         for (let i = 0, len = key.length; i < len; i++) {
           this.$set(this.formData, key[i], value[i]);
+          this.$emit(`${UI_FORM_VIEW.EVENTS.update}:${key[i]}`, value[i]);
         }
       } else {
         this.$set(this.formData, key, value);
+        this.$emit(`${UI_FORM_VIEW.EVENTS.update}:${key}`, value);
       }
 
       this.syncFormData();
