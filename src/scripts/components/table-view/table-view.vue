@@ -39,7 +39,7 @@
       v-bind="{
         topbarConfig,
         model,
-        topbarActionHandler,
+        topbarHandler,
         defaultParams,
         selectedRows: table.selectedRows,
         tableData: table.data,
@@ -73,10 +73,10 @@
               v-if="actionConfig.length"
               v-bind="{
                 actionConfig,
-                requestConfig,
                 model,
                 data,
                 keyName,
+                actionHandler,
                 refreshData: getModelData
               }"
             ></ui-table-view-actions>
@@ -219,7 +219,11 @@ export default {
       type: Boolean,
       default: false
     },
-    topbarActionHandler: {
+    actionHandler: {
+      type: Function,
+      default: () => {}
+    },
+    topbarHandler: {
       type: Function,
       default: () => {}
     }

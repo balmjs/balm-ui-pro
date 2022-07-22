@@ -46,7 +46,10 @@
           :target="action.target || '_blank'"
           rel="noopener"
         >
-          {{ configAction('text', action) }}
+          <ui-icon v-if="action.icon">
+            {{ configAction('icon', action) }}
+          </ui-icon>
+          <span v-if="action.text">{{ configAction('text', action) }}</span>
         </a>
         <a
           v-else
@@ -56,7 +59,10 @@
           href="javascript:void(0)"
           @click="handleClick(action)"
         >
-          {{ configAction('text', action) }}
+          <ui-icon v-if="action.icon">
+            {{ configAction('icon', action) }}
+          </ui-icon>
+          <span v-if="action.text">{{ configAction('text', action) }}</span>
         </a>
       </template>
     </template>
@@ -64,12 +70,8 @@
 </template>
 
 <script>
+import { TYPES, getRouteLocationRaw } from './constants';
 import { isFunction } from '../../utils/typeof';
-
-const TYPES = {
-  noSlot: 'no-slot',
-  routerLink: 'router-link'
-};
 
 export default {
   name: 'UiTableViewActions',
@@ -77,10 +79,6 @@ export default {
     actionConfig: {
       type: Array,
       default: () => []
-    },
-    requestConfig: {
-      type: Object,
-      default: () => ({})
     },
     model: {
       type: String,
@@ -93,6 +91,10 @@ export default {
     data: {
       type: Object,
       default: () => ({})
+    },
+    actionHandler: {
+      type: Function,
+      default: () => {}
     },
     refreshData: {
       type: Function,
@@ -123,22 +125,22 @@ export default {
             if (this.data[this.keyName]) {
               params[this.keyName] = this.data[this.keyName];
             }
-            const { routeName, routeParams } = action;
-            result = {
-              name: routeName || `${this.model}.detail`,
-              params: isFunction(routeParams) ? routeParams(this.data) : params
-            };
+            result = getRouteLocationRaw(action, {
+              model: this.model,
+              data: this.data,
+              params
+            });
             break;
         }
       }
 
       return result;
     },
-    handleClick({ onClick }) {
-      if (isFunction(onClick)) {
-        onClick(this.data, this.refreshData);
+    handleClick(action) {
+      if (isFunction(action.handler)) {
+        action.handler(this.data, this.refreshData);
       } else {
-        console.warn('`onClick` function is missing');
+        this.actionHandler(action, this.data, this.refreshData);
       }
     }
   }

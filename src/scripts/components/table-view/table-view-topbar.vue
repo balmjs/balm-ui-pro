@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { TYPES, getRouteLocationRaw } from './constants';
+
 export default {
   name: 'UiTableViewTopbar',
   props: {
@@ -30,7 +32,7 @@ export default {
       type: String,
       default: ''
     },
-    topbarActionHandler: {
+    topbarHandler: {
       type: Function,
       default: () => {}
     },
@@ -81,19 +83,20 @@ export default {
       return result;
     },
     handleClick(action) {
-      if (action.type === 'router-link') {
-        const to = action.to || {
-          name: action.routeName || `${this.model}.detail`
-        };
+      const data = {
+        defaultParams: this.defaultParams,
+        selectedRows: this.selectedRows,
+        tableData: this.tableData,
+        searchFormData: this.searchFormData
+      };
+      if (action.type === TYPES.routerLink) {
+        const to = getRouteLocationRaw(action, {
+          model: this.model,
+          data
+        });
         this.$router.push(to);
       } else {
-        const data = {
-          defaultParams: this.defaultParams,
-          selectedRows: this.selectedRows,
-          tableData: this.tableData,
-          searchFormData: this.searchFormData
-        };
-        this.topbarActionHandler(action, data, this.refreshData);
+        this.topbarHandler(action, data, this.refreshData);
       }
     }
   }

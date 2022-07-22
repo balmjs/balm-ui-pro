@@ -9,6 +9,8 @@
       :topbar-config="topbarConfig"
       :get-model-config-fn="getModelConfig"
       :get-model-data-fn="getModelData"
+      :action-handler="actionHandler"
+      :topbar-handler="topbarHandler"
     >
       <!-- <template #pagination="{ currentMinRow, currentMaxRow, total }">
         {{ currentMinRow }} - {{ currentMaxRow }} / {{ total }}
@@ -97,6 +99,12 @@ export default {
     async getModelData({ model }) {
       console.log('getModelData', model);
       return await this.$http.get('/mock/user/list');
+    },
+    actionHandler(type, data, refresh) {
+      console.log('actionHandler', type, data);
+    },
+    topbarHandler(type, data, refresh) {
+      console.log('topbarHandler', type, data);
     }
   }
 };

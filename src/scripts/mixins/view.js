@@ -20,14 +20,6 @@ export default {
       type: Object,
       default: () => ({})
     },
-    to: {
-      type: [Boolean, Object, String],
-      default: false
-    },
-    replace: {
-      type: Boolean,
-      default: false
-    },
     keyName: {
       type: String,
       default: 'id'
@@ -43,10 +35,6 @@ export default {
     getModelDataFn: {
       type: Function,
       default: () => {}
-    },
-    requestConfig: {
-      type: Object,
-      default: () => ({})
     },
     useValidator: {
       type: Boolean,

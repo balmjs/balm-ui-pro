@@ -79,6 +79,14 @@ export default {
         }
       })
     },
+    to: {
+      type: [Boolean, Object, String],
+      default: false
+    },
+    replace: {
+      type: Boolean,
+      default: false
+    },
     setModelDataFn: {
       type: Function,
       default: () => {}
