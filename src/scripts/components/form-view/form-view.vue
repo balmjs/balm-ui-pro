@@ -222,6 +222,10 @@ export default {
     actionConfig: {
       type: Array,
       default: () => []
+    },
+    setModelOptionsFn: {
+      type: [Function, Boolean],
+      default: false
     }
   },
   data() {
@@ -309,11 +313,42 @@ export default {
       this.formConfig = [];
       this.formData = {};
     },
+    async setModelOptions() {
+      const originalConfig = this.isFunctionConfig
+        ? await this.modelConfig({
+            data: Object.assign({}, this.formDataSource),
+            ...this.modelOptions
+          })
+        : this.modelConfig;
+
+      const modelList = originalConfig
+        .filter(({ model }) => model)
+        .map(({ model }) => model);
+
+      let defaultModelOptions = await this.setModelOptionsFn(modelList);
+
+      if (getType(defaultModelOptions) !== 'object') {
+        defaultModelOptions = {};
+        console.warn(`[UiFormView]: Invalid form model options`);
+      }
+
+      return defaultModelOptions;
+    },
     async setFormConfig(modelConfig = this.modelConfig, needInit = false) {
+      const defaultModelOptions =
+        needInit && isFunction(this.setModelOptionsFn)
+          ? await this.setModelOptions()
+          : {};
+      const currentModelOptions = Object.assign(
+        {},
+        defaultModelOptions,
+        this.modelOptions
+      );
+
       const originalConfig = this.isFunctionConfig
         ? await modelConfig({
             data: Object.assign({}, this.formDataSource),
-            ...this.modelOptions
+            ...currentModelOptions
           })
         : modelConfig;
 

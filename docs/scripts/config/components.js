@@ -1,4 +1,5 @@
 import myStore from '@/store';
+import { setModelOptionsFn } from '@/config/model';
 import UiMarkdown from '@/components/markdown';
 import UiSnippet from '@/components/snippet';
 import XFormItem from '@/components/x-form-item';
@@ -8,7 +9,9 @@ export const BalmUIConfig = {
 };
 
 export const BalmUIProConfig = {
-  UiDetailView: {},
+  UiFormView: {
+    setModelOptionsFn
+  },
   $model: {
     crud: {
       create: 'add',
