@@ -27,14 +27,6 @@ export default {
     defaultParams: {
       type: Object,
       default: () => ({})
-    },
-    getModelConfigFn: {
-      type: Function,
-      default: () => {}
-    },
-    getModelDataFn: {
-      type: Function,
-      default: () => {}
     }
   },
   computed: {

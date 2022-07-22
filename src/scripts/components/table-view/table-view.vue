@@ -215,6 +215,14 @@ export default {
       type: Boolean,
       default: false
     },
+    getModelConfigFn: {
+      type: Function,
+      default: () => {}
+    },
+    getModelDataFn: {
+      type: Function,
+      default: () => {}
+    },
     useValidator: {
       type: Boolean,
       default: false

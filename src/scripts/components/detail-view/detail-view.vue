@@ -87,13 +87,21 @@ export default {
       type: Boolean,
       default: false
     },
-    useValidator: {
-      type: Boolean,
-      default: true
+    getModelConfigFn: {
+      type: Function,
+      default: () => {}
+    },
+    getModelDataFn: {
+      type: Function,
+      default: () => {}
     },
     setModelDataFn: {
       type: Function,
       default: () => {}
+    },
+    useValidator: {
+      type: Boolean,
+      default: true
     },
     redirectOnSave: {
       type: Boolean,
