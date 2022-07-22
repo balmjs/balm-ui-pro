@@ -4,7 +4,7 @@
       <ui-button
         :key="`button-${index}`"
         v-bind="
-          action.buttonAttrOrProp || {
+          action.attrOrProp || {
             class: 'action',
             raised: true,
             icon: actionIcon(action)

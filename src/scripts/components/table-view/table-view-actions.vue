@@ -30,7 +30,7 @@
           :key="`internal-link-${index}`"
           class="action"
           :to="configAction(TYPES.routerLink, action)"
-          v-bind="action.routerLinkAttrOrProp || {}"
+          v-bind="action.attrOrProp || {}"
         >
           <ui-icon v-if="action.icon">
             {{ configAction('icon', action) }}
@@ -140,7 +140,12 @@ export default {
       if (isFunction(action.handler)) {
         action.handler(this.data, this.refreshData);
       } else {
-        this.actionHandler(action, this.data, this.refreshData);
+        const data = {
+          model: this.model,
+          keyName: this.keyName,
+          data: this.data
+        };
+        this.actionHandler(action, data, this.refreshData);
       }
     }
   }
