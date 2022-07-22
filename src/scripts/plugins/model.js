@@ -88,6 +88,26 @@ class ApiModel {
 
     return globalApis;
   }
+
+  getApi(frontEndApiName, operation, suffix = '') {
+    let name;
+
+    if (REST_API.operations.includes(operation)) {
+      const defaultName = `${operation}-${frontEndApiName}`;
+      const apiName = suffix ? `${defaultName}-${suffix}` : defaultName;
+      name = toCamelCase(apiName);
+    } else {
+      throw new Error(
+        `[$apiModel]: '${operation}' is an invalid CRUD (${REST_API.operations}) operation`
+      );
+    }
+
+    if (getType(globalApis[name]) === 'undefined') {
+      throw new Error(`[$apiModel]: '${name}' is an invalid API name`);
+    }
+
+    return globalApis[name];
+  }
 }
 
 class RouterModel {

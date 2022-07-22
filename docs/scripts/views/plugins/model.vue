@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div>model: {{ model }}</div>
     <div>apis: {{ apis }}</div>
     <hr />
     <div>routes: {{ routes }}</div>
@@ -14,20 +13,22 @@ const model = 'user';
 
 const $apiModel = useApiModel();
 
-const a = $apiModel.createApis(model, '/api/user', {
-  // create: {},
-  read: {
-    list: 'index',
-    detail: 'info'
-  }
-  // update: {
-  //   status: 'xxx/status'
-  // },
-  // delete: {
-  //   id: 'id'
-  // },
-  // excludeDefaults: ['create']
-});
+console.log($apiModel.getApi('user', 'read', 'list'));
+
+// const a = $apiModel.createApis(model, '/api/user', {
+//   // create: {},
+//   read: {
+//     list: 'index',
+//     detail: 'info'
+//   }
+//   // update: {
+//   //   status: 'xxx/status'
+//   // },
+//   // delete: {
+//   //   id: 'id'
+//   // },
+//   // excludeDefaults: ['create']
+// });
 
 // const b = $apiModel.createApis('post', '/api/post');
 
@@ -36,7 +37,6 @@ const a = $apiModel.createApis(model, '/api/user', {
 export default {
   data() {
     return {
-      model,
       apis: this.$apiModel.apis,
       routes: this.$routerModel.createViewRoutes(
         model,

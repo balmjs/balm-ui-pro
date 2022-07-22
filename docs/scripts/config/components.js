@@ -22,8 +22,20 @@ export const BalmUIProConfig = {
       list: 'list',
       detail: 'detail'
     },
-    formatApiAction: (modelName, actionName) => `${modelName}-${actionName}`,
-    apis: [['college-info', '/admin/service']]
+    // formatApiAction: (modelName, actionName) => `${modelName}-${actionName}`,
+    apis: [
+      [
+        'user',
+        '/api/user',
+        {
+          // read: {
+          //   list: 'index',
+          //   detail: 'info'
+          // }
+        }
+      ]
+      // ['college-info', '/api/service']
+    ]
   }
 };
 
