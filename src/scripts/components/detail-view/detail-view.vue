@@ -90,6 +90,10 @@ export default {
     setModelDataFn: {
       type: Function,
       default: () => {}
+    },
+    redirectOnSave: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -122,15 +126,28 @@ export default {
         console.log(e);
       }
     },
+    redirect() {
+      if (this.to !== 'custom') {
+        const to = this.to || `${this.model}.list`;
+        this.replace ? this.$router.replace(to) : this.$router.push(to);
+      }
+    },
     async handleAction(result) {
-      const { type, message } = result;
+      const { type, valid, message } = result;
 
       switch (type) {
         case UiDetailView.EVENTS.submit:
+          let canSubmit = true;
+
           if (this.useValidator) {
+            canSubmit = valid;
             this.message = message;
           }
-          await this.setModelDataFn(this);
+
+          if (canSubmit) {
+            await this.setModelDataFn(this);
+            this.redirectOnSave && this.redirect();
+          }
           break;
         case UiDetailView.EVENTS.cancel:
           switch (this.to) {
@@ -141,9 +158,7 @@ export default {
               this.$router.back();
               break;
             default:
-              this.replace
-                ? this.$router.replace(this.to)
-                : this.$router.push(this.to);
+              this.redirect();
           }
           break;
       }
