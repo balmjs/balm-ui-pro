@@ -233,7 +233,8 @@ export default {
       NATIVE_BUTTON_TYPES,
       formConfig: [],
       formData: {},
-      formDataSource: this.modelValue
+      formDataSource: this.modelValue,
+      defaultModelOptions: {}
     };
   },
   computed: {
@@ -325,23 +326,21 @@ export default {
         .filter(({ model }) => model)
         .map(({ model }) => model);
 
-      let defaultModelOptions = await this.setModelOptionsFn(modelList);
+      this.defaultModelOptions = await this.setModelOptionsFn(modelList);
 
-      if (getType(defaultModelOptions) !== 'object') {
-        defaultModelOptions = {};
+      if (getType(this.defaultModelOptions) !== 'object') {
+        this.defaultModelOptions = {};
         console.warn(`[UiFormView]: Invalid form model options`);
       }
-
-      return defaultModelOptions;
     },
     async setFormConfig(modelConfig = this.modelConfig, needInit = false) {
-      const defaultModelOptions =
-        needInit && isFunction(this.setModelOptionsFn)
-          ? await this.setModelOptions()
-          : {};
+      if (needInit && isFunction(this.setModelOptionsFn)) {
+        await this.setModelOptions();
+      }
+
       const currentModelOptions = Object.assign(
         {},
-        defaultModelOptions,
+        this.defaultModelOptions,
         this.modelOptions
       );
 
