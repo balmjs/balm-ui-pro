@@ -20,20 +20,21 @@
     >
       <template #default="{ itemClass, subitemClass, actionClass }">
         <div class="mdc-form-view__items">
-          <!-- For list view -->
+          <!-- Before from view -->
+          <slot
+            name="before-form-view"
+            v-bind="{
+              itemClass,
+              subitemClass,
+              data: currentFormData
+            }"
+          ></slot>
+          <!-- List view -->
           <ui-grid
             v-if="useGrid"
             class="mdc-form-view__grid"
             v-bind="gridAttrOrProp"
           >
-            <slot
-              name="before-form-view"
-              v-bind="{
-                itemClass,
-                subitemClass,
-                data: currentFormData
-              }"
-            ></slot>
             <ui-grid-cell
               v-for="(configData, configIndex) in formConfig"
               :key="`form-item-${configData.key || configIndex}`"
@@ -64,25 +65,9 @@
                 </template>
               </ui-form-item>
             </ui-grid-cell>
-            <slot
-              name="after-form-view"
-              v-bind="{
-                itemClass,
-                subitemClass,
-                data: currentFormData
-              }"
-            ></slot>
           </ui-grid>
-          <!-- For detail view -->
+          <!-- Detail view -->
           <template v-else>
-            <slot
-              name="before-form-view"
-              v-bind="{
-                itemClass,
-                subitemClass,
-                data: currentFormData
-              }"
-            ></slot>
             <ui-form-item
               v-for="(configData, configIndex) in formConfig"
               :key="`form-item-${configData.key || configIndex}`"
@@ -109,15 +94,17 @@
                 ></slot>
               </template>
             </ui-form-item>
-            <slot
-              name="after-form-view"
-              v-bind="{
-                itemClass,
-                subitemClass,
-                data: currentFormData
-              }"
-            ></slot>
           </template>
+          <!-- After from view -->
+          <slot
+            name="after-form-view"
+            v-bind="{
+              itemClass,
+              subitemClass,
+              data: currentFormData
+            }"
+          ></slot>
+          <!-- Action view -->
           <slot
             name="actions"
             v-bind="{
@@ -454,7 +441,8 @@ export default {
                 }
               } else {
                 this.$emit(UI_FORM_VIEW.EVENTS.action, {
-                  type: NATIVE_BUTTON_TYPES.submit
+                  type: NATIVE_BUTTON_TYPES.submit,
+                  valid: true
                 });
               }
             },
