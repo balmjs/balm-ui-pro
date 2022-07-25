@@ -150,6 +150,7 @@ import getType, { isFunction } from '../../utils/typeof';
 const UI_FORM_VIEW = {
   EVENTS: {
     update: 'change',
+    updateFormItem: 'change:x',
     action: 'action'
   }
 };
@@ -404,12 +405,16 @@ export default {
     handleChange(key, value) {
       if (Array.isArray(key)) {
         for (let i = 0, len = key.length; i < len; i++) {
-          this.$set(this.formData, key[i], value[i]);
-          this.$emit(`${UI_FORM_VIEW.EVENTS.update}:${key[i]}`, value[i]);
+          const k = key[i];
+          const v = value[i];
+          if (this.formData[k] !== v) {
+            this.$set(this.formData, k, v);
+            this.$emit(UI_FORM_VIEW.EVENTS.updateFormItem, k, v);
+          }
         }
       } else {
         this.$set(this.formData, key, value);
-        this.$emit(`${UI_FORM_VIEW.EVENTS.update}:${key}`, value);
+        this.$emit(UI_FORM_VIEW.EVENTS.updateFormItem, key, value);
       }
 
       this.syncFormData();

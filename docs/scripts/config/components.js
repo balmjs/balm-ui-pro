@@ -35,6 +35,15 @@ export const BalmUIProConfig = {
         }
       ]
       // ['college-info', '/api/service']
+      // [
+      //   'school-file',
+      //   '/api/work/admin',
+      //   {
+      //     read: {
+      //       list: 'file/index'
+      //     }
+      //   }
+      // ]
     ]
   }
 };

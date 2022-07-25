@@ -6,6 +6,7 @@
       :model-options="modelOptions"
       :action-config="actionConfig"
       @action="onAction"
+      @change:x="onChange"
     >
       <template #before-form-view>
         <div>outer formData: {{ formData }}</div>
@@ -195,6 +196,9 @@ export default {
         a: 'xxx',
         b: 'yyy'
       };
+    },
+    onChange(key, value) {
+      console.log('onChange', key, value);
     }
   }
 };
