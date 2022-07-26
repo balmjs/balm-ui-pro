@@ -78,8 +78,6 @@ class ApiModel {
       config = Object.assign({}, globalApiConfig, apiConfig);
       config.crud = getCRUD(crud || {}, globalApiConfig.crud);
 
-      console.log(frontEndApiName, config.crud);
-
       if (Array.isArray(config.operations)) {
         const includeOperations = config.operations.filter((operation) =>
           REST_API.operations.includes(operation)
