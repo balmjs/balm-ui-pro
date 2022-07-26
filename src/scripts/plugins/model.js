@@ -16,14 +16,33 @@ const REST_API = {
   },
   operations: ['create', 'read', 'update', 'delete']
 };
-let CRUD = REST_API.operations.reduce(
+const CRUD = REST_API.operations.reduce(
   (acc, value) => ({ ...acc, [value]: value }),
   {}
 );
 let globalApiConfig = {
+  crud: {},
   formatApiAction: (frontEndApiName, operationName) => operationName
 };
 let globalApis = {};
+
+function getCRUD(crud, defaultCRUD = {}) {
+  let result = {};
+
+  if (getType(crud) === 'object') {
+    if (
+      Object.keys(crud).every((operation) =>
+        REST_API.operations.includes(operation)
+      )
+    ) {
+      result = Object.assign({}, crud);
+    } else {
+      throw new Error(`[$apiModel]: 'crud' config is invalid`);
+    }
+  }
+
+  return Object.keys(result).length ? result : defaultCRUD;
+}
 
 function createCustomApis(operation, { frontEndApiName, backEndApi }, config) {
   const apis = {};
@@ -53,38 +72,61 @@ class ApiModel {
   }
 
   createApis(frontEndApiName, backEndApi, config = {}) {
-    config = Object.assign({}, globalApiConfig, config);
-    const formatApiAction =
-      config.formatApiAction || globalApiConfig.formatApiAction;
+    if (config.hasOwnProperty('operations')) {
+      const { crud, ...apiConfig } = config;
 
-    REST_API.operations.forEach((operation) => {
-      let defaultApi = {};
-      const { excludeDefaults } = config;
-      if (
-        !(
-          excludeDefaults &&
-          Array.isArray(excludeDefaults) &&
-          excludeDefaults.includes(operation)
-        )
-      ) {
-        const defaultName = toCamelCase(`${operation}-${frontEndApiName}`);
-        const defaultUrl = `${backEndApi}/${toCamelCase(
-          formatApiAction(frontEndApiName, CRUD[operation])
-        )}`;
-        defaultApi = { [defaultName]: defaultUrl };
+      config = Object.assign({}, globalApiConfig, apiConfig);
+      config.crud = getCRUD(crud || {}, globalApiConfig.crud);
+
+      console.log(frontEndApiName, config.crud);
+
+      if (Array.isArray(config.operations)) {
+        const includeOperations = config.operations.filter((operation) =>
+          REST_API.operations.includes(operation)
+        );
+
+        for (const [key, value] of Object.entries(config.crud)) {
+          const operation = key;
+          const operationName = value;
+
+          if (includeOperations.includes(operation)) {
+            if (getType(operationName) === 'object') {
+              const customApis = createCustomApis(
+                operation,
+                {
+                  frontEndApiName,
+                  backEndApi
+                },
+                Object.assign({}, config, {
+                  [operation]: operationName
+                })
+              );
+
+              globalApis = Object.assign(globalApis, customApis);
+            } else {
+              const formatApiAction =
+                config.formatApiAction || globalApiConfig.formatApiAction;
+
+              const defaultName = toCamelCase(
+                `${operation}-${frontEndApiName}`
+              );
+              const defaultUrl = `${backEndApi}/${toCamelCase(
+                formatApiAction(frontEndApiName, operationName)
+              )}`;
+              const defaultApi = { [defaultName]: defaultUrl };
+
+              globalApis = Object.assign(globalApis, defaultApi);
+            }
+          }
+        }
+      } else {
+        throw new Error(
+          `[$apiModel]: 'operations' config must be an array (${REST_API.operations})`
+        );
       }
-
-      const customApis = createCustomApis(
-        operation,
-        {
-          frontEndApiName,
-          backEndApi
-        },
-        config
-      );
-
-      globalApis = Object.assign(globalApis, defaultApi, customApis);
-    });
+    } else {
+      console.warn(`[$apiModel]: ${frontEndApiName} model has no 'operations'`);
+    }
 
     return globalApis;
   }
@@ -169,17 +211,7 @@ const routerModel = new RouterModel();
 function install(Vue, options = {}) {
   const { crud, apis, ...apiConfig } = options;
 
-  if (getType(crud) === 'object') {
-    if (
-      Object.keys(crud).every((operation) =>
-        REST_API.operations.includes(operation)
-      )
-    ) {
-      CRUD = Object.assign({}, CRUD, crud);
-    } else {
-      throw new Error(`[$apiModel]: Invalid CRUD operations`);
-    }
-  }
+  globalApiConfig.crud = Object.assign({}, CRUD, getCRUD(crud));
 
   if (getType(apiConfig) === 'object') {
     globalApiConfig = Object.assign({}, globalApiConfig, apiConfig);
