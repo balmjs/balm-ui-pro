@@ -29,7 +29,7 @@ function createCustomApis(operation, { frontEndApiName, backEndApi }, config) {
   const apis = {};
   const apiConfig = config[operation] || {};
   const formatApiAction =
-    apiConfig.formatApiAction || globalApiConfig.formatApiAction;
+    config.formatApiAction || globalApiConfig.formatApiAction;
 
   for (const [key, value] of Object.entries(apiConfig)) {
     const name = toCamelCase(`${operation}-${frontEndApiName}-${key}`);
