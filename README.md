@@ -83,6 +83,7 @@ Vue.use(BalmUIPro);
     components?: FormItemComponentsConfig[];
     attrOrProp?: object;
     event?: string; // Defaults: 'change'
+    model?: string; // For the options of the source data
     // Custom slot
     slot?: string;
     // BalmUI validator
@@ -124,6 +125,7 @@ Vue.use(BalmUIPro);
 | Name                 | Type                                   | Description |
 | -------------------- | -------------------------------------- | ----------- |
 | `update:model-value` | `function(modelValue: object)`         |             |
+| `update:x`           | `function(key: string, value: string)` |             |
 | `action`             | `function(actionResult: ActionResult)` |             |
 
 ```ts

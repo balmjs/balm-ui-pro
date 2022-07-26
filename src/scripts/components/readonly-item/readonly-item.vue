@@ -6,7 +6,6 @@
 
 <script>
 import formItemMixin from '../../mixins/form-item';
-import { cssClasses } from './constants';
 
 export default {
   name: 'UiReadonlyItem',
@@ -16,11 +15,6 @@ export default {
       type: null,
       default: ''
     }
-  },
-  data() {
-    return {
-      cssClasses
-    };
   }
 };
 </script>

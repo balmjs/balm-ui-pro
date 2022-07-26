@@ -1,3 +1,7 @@
+const cssClasses = {
+  subitemClass: 'mdc-form__subitem'
+};
+
 export default {
   props: {
     componentKey: {
@@ -12,5 +16,10 @@ export default {
       type: Object,
       default: () => ({})
     }
+  },
+  data() {
+    return {
+      cssClasses
+    };
   }
 };

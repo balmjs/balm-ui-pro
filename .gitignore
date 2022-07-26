@@ -22,6 +22,9 @@ web_modules/
 # Build build output
 .tmp/
 dist/
+/components/
+/plugins/
+/vetur/
 
 # MacOS generated files
 .DS_Store

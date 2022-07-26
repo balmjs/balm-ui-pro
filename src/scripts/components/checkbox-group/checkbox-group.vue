@@ -18,7 +18,6 @@
 
 <script>
 import formItemMixin from '../../mixins/form-item';
-import { cssClasses } from './constants';
 
 // Define checkbox group constants
 const UI_CHECKBOX_GROUP = {
@@ -48,7 +47,6 @@ export default {
   },
   data() {
     return {
-      cssClasses,
       selectedValue: this.modelValue
     };
   },

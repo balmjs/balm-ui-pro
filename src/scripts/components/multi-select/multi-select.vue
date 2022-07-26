@@ -1,5 +1,5 @@
 <template>
-  <div :class="['mdc-multi-select', cssClasses]">
+  <div :class="['mdc-multi-select', cssClasses.subitemClass]">
     <ui-select
       v-for="(component, index) in components"
       :key="`${component.key}-${index}`"
@@ -13,7 +13,6 @@
 
 <script>
 import formItemMixin from '../../mixins/form-item';
-import { cssClasses } from './constants';
 import getType, { isFunction } from '../../utils/typeof';
 
 // Define multi select constants
@@ -34,7 +33,6 @@ export default {
   },
   data() {
     return {
-      cssClasses,
       selectedData: {},
       selectedOptions: {},
       optionsMap: {}

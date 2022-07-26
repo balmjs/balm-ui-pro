@@ -5,11 +5,11 @@ import autoInit from './config/auto-init';
 import UiFormView from './components/form-view/form-view';
 import UiDetailView from './components/detail-view/detail-view';
 import UiTableView from './components/table-view/table-view';
-import UiReadonlyItem from './components/form-components/readonly-item';
-import UiCheckboxGroup from './components/form-components/checkbox-group';
-import UiRadioGroup from './components/form-components/radio-group';
-import UiSwitchBox from './components/form-components/switch-box';
-import UiMultiSelect from './components/form-components/multi-select';
+import UiReadonlyItem from './components/readonly-item/readonly-item';
+import UiCheckboxGroup from './components/checkbox-group/checkbox-group';
+import UiRadioGroup from './components/radio-group/radio-group';
+import UiSwitchBox from './components/switch-box/switch-box';
+import UiMultiSelect from './components/multi-select/multi-select';
 import $model, { useApiModel, useRouterModel } from './plugins/model';
 import $transform, { useTransform } from './plugins/transform';
 

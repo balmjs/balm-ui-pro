@@ -203,4 +203,4 @@ const useApiModel = () => apiModel;
 const useRouterModel = () => routerModel;
 
 export default $model;
-export { install, useApiModel, useRouterModel };
+export { useApiModel, useRouterModel };

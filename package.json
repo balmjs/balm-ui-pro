@@ -1,6 +1,6 @@
 {
   "name": "balm-ui-pro",
-  "version": "0.17.1-legacy",
+  "version": "0.18.0-legacy",
   "description": "BalmUI Pro",
   "keywords": [
     "balm",
@@ -22,8 +22,11 @@
     "url": "http://elf-mouse.me"
   },
   "files": [
+    "src",
     "dist",
-    "src"
+    "components",
+    "plugins",
+    "vetur"
   ],
   "main": "dist/balm-ui-pro.js",
   "scripts": {
@@ -46,7 +49,7 @@
     "babel-plugin-prismjs": "^2.1.0",
     "balm": "^3.26.0",
     "balm-ui": "8",
-    "core-js": "^3.23.0",
+    "core-js": "^3.24.0",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -67,6 +70,7 @@
   },
   "peerDependencies": {
     "balm-ui": "^8.52.2",
-    "vue": ">=2.6.0"
+    "vue": ">=2.6.0",
+    "vue-router": ">=3 <4"
   }
 }
