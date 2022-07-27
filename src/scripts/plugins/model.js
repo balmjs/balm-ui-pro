@@ -71,59 +71,59 @@ class ApiModel {
     return globalApis;
   }
 
-  createApis(frontEndApiName, backEndApi, config = {}) {
-    if (config.hasOwnProperty('operations')) {
-      const { crud, ...apiConfig } = config;
+  createApis(frontEndApiName, backEndApi, operations = [], config = {}) {
+    const { crud, ...apiConfig } = config;
 
-      config = Object.assign({}, globalApiConfig, apiConfig);
-      config.crud = getCRUD(crud || {}, globalApiConfig.crud);
+    config = Object.assign({}, globalApiConfig, apiConfig);
+    config.crud = getCRUD(crud || {}, globalApiConfig.crud);
 
-      if (Array.isArray(config.operations)) {
-        const includeOperations = config.operations.filter((operation) =>
-          REST_API.operations.includes(operation)
-        );
-
-        for (const [key, value] of Object.entries(config.crud)) {
-          const operation = key;
-          const operationName = value;
-
-          if (includeOperations.includes(operation)) {
-            if (getType(operationName) === 'object') {
-              const customApis = createCustomApis(
-                operation,
-                {
-                  frontEndApiName,
-                  backEndApi
-                },
-                Object.assign({}, config, {
-                  [operation]: operationName
-                })
-              );
-
-              globalApis = Object.assign(globalApis, customApis);
-            } else {
-              const formatApiAction =
-                config.formatApiAction || globalApiConfig.formatApiAction;
-
-              const defaultName = toCamelCase(
-                `${operation}-${frontEndApiName}`
-              );
-              const defaultUrl = `${backEndApi}/${toCamelCase(
-                formatApiAction(frontEndApiName, operationName)
-              )}`;
-              const defaultApi = { [defaultName]: defaultUrl };
-
-              globalApis = Object.assign(globalApis, defaultApi);
-            }
-          }
-        }
-      } else {
-        throw new Error(
-          `[$apiModel]: 'operations' config must be an array (${REST_API.operations})`
+    if (Array.isArray(operations)) {
+      if (!operations.length) {
+        console.warn(
+          `[$apiModel]: ${frontEndApiName} model has no 'operations'`
         );
       }
+
+      const includeOperations = operations.filter((operation) =>
+        REST_API.operations.includes(operation)
+      );
+
+      for (const [key, value] of Object.entries(config.crud)) {
+        const operation = key;
+        const operationName = value;
+
+        if (includeOperations.includes(operation)) {
+          if (getType(operationName) === 'object') {
+            const customApis = createCustomApis(
+              operation,
+              {
+                frontEndApiName,
+                backEndApi
+              },
+              Object.assign({}, config, {
+                [operation]: operationName
+              })
+            );
+
+            globalApis = Object.assign(globalApis, customApis);
+          } else {
+            const formatApiAction =
+              config.formatApiAction || globalApiConfig.formatApiAction;
+
+            const defaultName = toCamelCase(`${operation}-${frontEndApiName}`);
+            const defaultUrl = `${backEndApi}/${toCamelCase(
+              formatApiAction(frontEndApiName, operationName)
+            )}`;
+            const defaultApi = { [defaultName]: defaultUrl };
+
+            globalApis = Object.assign(globalApis, defaultApi);
+          }
+        }
+      }
     } else {
-      console.warn(`[$apiModel]: ${frontEndApiName} model has no 'operations'`);
+      throw new Error(
+        `[$apiModel]: 'operations' config must be an array (${REST_API.operations})`
+      );
     }
 
     return globalApis;

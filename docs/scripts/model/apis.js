@@ -2,15 +2,13 @@ export default [
   [
     'user',
     '/api/user',
-    {
-      operations: ['create', 'read', 'update', 'delete']
-    }
+    ['create', 'read', 'update', 'delete']
   ],
   [
     'post',
     '/api/post',
+    ['read'],
     {
-      operations: ['read'],
       crud: {
         read: 'get'
       }
