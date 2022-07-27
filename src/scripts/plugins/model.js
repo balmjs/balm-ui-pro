@@ -150,11 +150,15 @@ class ApiModel {
   }
 }
 
+function getRouteName(name, { namespace }) {
+  return namespace ? `${namespace}.${name}` : name;
+}
+
 class RouterModel {
   createRoute(path, name, component, options = {}) {
     return {
       path,
-      name,
+      name: getRouteName(name, options),
       component,
       ...options
     };
@@ -176,7 +180,7 @@ class RouterModel {
         ? [
             this.createRoute(
               listPath || 'list',
-              `${name}.list`,
+              getRouteName(`${name}.list`, options),
               listView,
               listOptions || {}
             )
@@ -188,7 +192,7 @@ class RouterModel {
         ? [
             this.createRoute(
               detailPath || ':id?',
-              `${name}.detail`,
+              getRouteName(`${name}.detail`, options),
               detailView,
               detailOptions || {}
             )
@@ -199,9 +203,11 @@ class RouterModel {
     return indexView
       ? {
           path: indexPath || name,
-          name: `${name}.index`,
+          name: getRouteName(`${name}.index`, options),
           component: indexView,
-          redirect: indexRedirect || { name: `${name}.list` },
+          redirect: indexRedirect || {
+            name: getRouteName(`${name}.list`, options)
+          },
           children
         }
       : children;
