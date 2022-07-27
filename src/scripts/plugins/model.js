@@ -170,36 +170,41 @@ class RouterModel {
       listOptions,
       detailOptions
     } = options;
-    return {
-      path: indexPath || name,
-      name: `${name}.index`,
-      component: indexView,
-      redirect: indexRedirect || { name: `${name}.list` },
-      children: [
-        ...(listView
-          ? [
-              this.createRoute(
-                listPath || 'list',
-                `${name}.list`,
-                listView,
-                listOptions || {}
-              )
-            ]
-          : []),
-        ...(Array.isArray(detailView)
-          ? detailView
-          : detailView
-          ? [
-              this.createRoute(
-                detailPath || ':id?',
-                `${name}.detail`,
-                detailView,
-                detailOptions || {}
-              )
-            ]
-          : [])
-      ]
-    };
+
+    const children = [
+      ...(listView
+        ? [
+            this.createRoute(
+              listPath || 'list',
+              `${name}.list`,
+              listView,
+              listOptions || {}
+            )
+          ]
+        : []),
+      ...(Array.isArray(detailView)
+        ? detailView
+        : detailView
+        ? [
+            this.createRoute(
+              detailPath || ':id?',
+              `${name}.detail`,
+              detailView,
+              detailOptions || {}
+            )
+          ]
+        : [])
+    ];
+
+    return indexView
+      ? {
+          path: indexPath || name,
+          name: `${name}.index`,
+          component: indexView,
+          redirect: indexRedirect || { name: `${name}.list` },
+          children
+        }
+      : children;
   }
 }
 
