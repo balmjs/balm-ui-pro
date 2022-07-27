@@ -150,28 +150,32 @@ class ApiModel {
   }
 }
 
-function getRouteName(name, { namespace }) {
+function getRouteName(name, namespace) {
   return namespace ? `${namespace}.${name}` : name;
 }
 
 class RouterModel {
   createRoute(path, name, component, options = {}) {
+    const { namespace, ...routeOptions } = options;
+
     return {
       path,
-      name: getRouteName(name, options),
+      name: getRouteName(name, namespace),
       component,
-      ...options
+      ...routeOptions
     };
   }
 
-  createViewRoutes(name, components = {}, options = {}) {
+  createRoutes(name, components = {}, options = {}) {
     const { indexView, listView, detailView } = components;
     const {
+      namespace,
       indexPath,
       indexRedirect,
+      indexOptions,
       listPath,
-      detailPath,
       listOptions,
+      detailPath,
       detailOptions
     } = options;
 
@@ -180,7 +184,7 @@ class RouterModel {
         ? [
             this.createRoute(
               listPath || 'list',
-              getRouteName(`${name}.list`, options),
+              getRouteName(`${name}.list`, namespace),
               listView,
               listOptions || {}
             )
@@ -192,7 +196,7 @@ class RouterModel {
         ? [
             this.createRoute(
               detailPath || ':id?',
-              getRouteName(`${name}.detail`, options),
+              getRouteName(`${name}.detail`, namespace),
               detailView,
               detailOptions || {}
             )
@@ -203,12 +207,13 @@ class RouterModel {
     return indexView
       ? {
           path: indexPath || name,
-          name: getRouteName(`${name}.index`, options),
+          name: getRouteName(`${name}.index`, namespace),
           component: indexView,
           redirect: indexRedirect || {
-            name: getRouteName(`${name}.list`, options)
+            name: getRouteName(`${name}.list`, namespace)
           },
-          children
+          children,
+          ...(indexOptions || {})
         }
       : children;
   }

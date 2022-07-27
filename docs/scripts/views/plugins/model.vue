@@ -3,6 +3,8 @@
     <div>apis: {{ apis }}</div>
     <hr />
     <div>routes: {{ routes }}</div>
+    <br />
+    <div>route: {{ route }}</div>
   </div>
 </template>
 
@@ -11,27 +13,31 @@ export default {
   data() {
     return {
       apis: this.$apiModel.apis,
-      routes: this.$routerModel.createViewRoutes(
+      routes: this.$routerModel.createRoutes(
         'user',
         {
-          indexView: 'blank-layout',
-          listView: 'list-view',
-          detailView: 'detail-view'
+          indexView: 'BlankLayout',
+          listView: 'ListView',
+          detailView: 'DetailView'
         },
         {
+          // indexOptions: {},
           listPath: 'list/:type?',
-          detailPath: ':userId?',
           listOptions: {
             meta: {
               auth: true
             },
             a: 'hello'
           },
+          detailPath: ':userId?',
           detailOptions: {
             b: 'world'
           }
         }
-      )
+      ),
+      route: this.$routerModel.createRoute('/post', 'post', 'PostView', {
+        namespace: 'user'
+      })
     };
   }
 };
