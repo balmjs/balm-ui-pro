@@ -1,9 +1,5 @@
 export default [
-  [
-    'user',
-    '/api/user',
-    ['create', 'read', 'update', 'delete']
-  ],
+  ['user', '/api/user', ['create', 'read', 'update', 'delete']],
   [
     'post',
     '/api/post',
@@ -11,6 +7,9 @@ export default [
     {
       crud: {
         read: 'get'
+      },
+      read: {
+        index: 'index'
       }
     }
   ]

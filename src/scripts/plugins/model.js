@@ -1,6 +1,7 @@
 import getType from '../utils/typeof';
 import { toCamelCase } from '../utils/helpers';
 
+const NAME = '$apiModel';
 const REST_API = {
   responseStatus: {
     OK: 200,
@@ -37,7 +38,7 @@ function getCRUD(crud, defaultCRUD = {}) {
     ) {
       result = Object.assign({}, crud);
     } else {
-      throw new Error(`[$apiModel]: 'crud' config is invalid`);
+      throw new Error(`[${NAME}]: 'crud' config is invalid`);
     }
   }
 
@@ -54,12 +55,27 @@ function createCustomApis(operation, { frontEndApiName, backEndApi }, config) {
     const name = toCamelCase(`${operation}-${frontEndApiName}-${key}`);
 
     const url = value
-      ? `${backEndApi}/${toCamelCase(formatApiAction(frontEndApiName, value))}`
+      ? `${backEndApi}/${toCamelCase(
+          formatApiAction(frontEndApiName, value) + ''
+        )}`
       : backEndApi;
     apis[name] = /^\/.*/.test(value) ? value : url;
   }
 
   return apis;
+}
+
+function getOperationDefinition(operationDefinition, defaults, extras) {
+  let result = operationDefinition;
+
+  if (extras) {
+    result =
+      getType(operationDefinition) === 'object'
+        ? Object.assign({}, operationDefinition, extras)
+        : Object.assign({}, defaults, extras);
+  }
+
+  return result;
 }
 
 class ApiModel {
@@ -73,42 +89,31 @@ class ApiModel {
 
   createApis(frontEndApiName, backEndApi, operations = [], config = {}) {
     const { crud, ...apiConfig } = config;
-
-    config = Object.assign({}, globalApiConfig, apiConfig);
-    config.crud = getCRUD(crud || {}, globalApiConfig.crud);
+    const currentCRUD = getCRUD(crud || {}, globalApiConfig.crud);
+    const currentConfig = Object.assign({}, globalApiConfig, apiConfig);
 
     if (Array.isArray(operations)) {
       if (!operations.length) {
-        console.warn(
-          `[$apiModel]: ${frontEndApiName} model has no 'operations'`
-        );
+        console.warn(`[${NAME}]: ${frontEndApiName} model has no 'operations'`);
       }
 
       const includeOperations = operations.filter((operation) =>
         REST_API.operations.includes(operation)
       );
 
-      for (const [key, value] of Object.entries(config.crud)) {
+      for (const [key, value] of Object.entries(currentCRUD)) {
         const operation = key;
-        const operationName = value;
+        const operationDefinition = getOperationDefinition(
+          value,
+          { [operation]: value },
+          config[operation]
+        );
 
         if (includeOperations.includes(operation)) {
-          if (getType(operationName) === 'object') {
-            const customApis = createCustomApis(
-              operation,
-              {
-                frontEndApiName,
-                backEndApi
-              },
-              Object.assign({}, config, {
-                [operation]: operationName
-              })
-            );
-
-            globalApis = Object.assign(globalApis, customApis);
-          } else {
+          if (getType(operationDefinition) === 'string') {
+            const operationName = operationDefinition;
             const formatApiAction =
-              config.formatApiAction || globalApiConfig.formatApiAction;
+              currentConfig.formatApiAction || globalApiConfig.formatApiAction;
 
             const defaultName = toCamelCase(`${operation}-${frontEndApiName}`);
             const defaultUrl = `${backEndApi}/${toCamelCase(
@@ -117,12 +122,29 @@ class ApiModel {
             const defaultApi = { [defaultName]: defaultUrl };
 
             globalApis = Object.assign(globalApis, defaultApi);
+          } else if (getType(operationDefinition) === 'object') {
+            const customApis = createCustomApis(
+              operation,
+              {
+                frontEndApiName,
+                backEndApi
+              },
+              Object.assign({}, currentConfig, {
+                [operation]: operationDefinition
+              })
+            );
+
+            globalApis = Object.assign(globalApis, customApis);
+          } else {
+            console.warn(
+              `[${NAME}]: ${operation} operation definition must be a string or object`
+            );
           }
         }
       }
     } else {
       throw new Error(
-        `[$apiModel]: 'operations' config must be an array (${REST_API.operations})`
+        `[${NAME}]: 'operations' config must be an array (${REST_API.operations})`
       );
     }
 
@@ -138,12 +160,12 @@ class ApiModel {
       name = toCamelCase(apiName);
     } else {
       throw new Error(
-        `[$apiModel]: '${operation}' is an invalid CRUD (${REST_API.operations}) operation`
+        `[${NAME}]: '${operation}' is an invalid CRUD (${REST_API.operations}) operation`
       );
     }
 
     if (getType(globalApis[name]) === 'undefined') {
-      throw new Error(`[$apiModel]: '${name}' is an invalid API name`);
+      throw new Error(`[${NAME}]: '${name}' is an invalid API name`);
     }
 
     return globalApis[name];
@@ -237,7 +259,7 @@ function install(Vue, options = {}) {
     });
 
     if (debug) {
-      console.info('Model APIs', globalApis);
+      console.info(`[${NAME}]: Model APIs`, globalApis);
     }
   }
 
