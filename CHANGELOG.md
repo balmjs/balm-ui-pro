@@ -2,6 +2,10 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.21.0 / 2022-07-29
+
+- New plugin: `$constant`
+
 ## v0.20.1 / 2022-07-28
 
 - optimize api model operations
