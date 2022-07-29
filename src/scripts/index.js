@@ -12,6 +12,11 @@ import UiSwitchBox from './components/switch-box/switch-box';
 import UiMultiSelect from './components/multi-select/multi-select';
 import $model, { useApiModel, useRouterModel } from './plugins/model';
 import $transform, { useTransform } from './plugins/transform';
+import $constant, {
+  useConstant,
+  useConstantList,
+  useConstantMap
+} from './plugins/constant';
 
 const Components = {
   UiFormView,
@@ -26,7 +31,8 @@ const Components = {
 
 const Plugins = {
   $model,
-  $transform
+  $transform,
+  $constant
 };
 
 const install = (app, options = {}) =>
@@ -53,4 +59,14 @@ export {
   UiSwitchBox,
   UiMultiSelect
 };
-export { $model, useApiModel, useRouterModel, $transform, useTransform };
+export {
+  $model,
+  useApiModel,
+  useRouterModel,
+  $transform,
+  useTransform,
+  $constant,
+  useConstant,
+  useConstantList,
+  useConstantMap
+};
