@@ -1,5 +1,6 @@
 import myStore from '@/store';
 import myModel from '@/model';
+import myConstants from '@/model/constants';
 import { setModelOptionsFn } from '@/model/config';
 import UiMarkdown from '@/components/markdown';
 import UiSnippet from '@/components/snippet';
@@ -11,6 +12,7 @@ export const BalmUIConfig = {
 
 export const BalmUIProConfig = {
   $model: myModel,
+  $constant: myConstants,
   UiFormView: {
     setModelOptionsFn
   }

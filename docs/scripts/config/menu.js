@@ -49,6 +49,9 @@ const MATERIAL_COMPONENTS_PRO = [
       },
       {
         name: 'model'
+      },
+      {
+        name: 'constant'
       }
     ]
   },

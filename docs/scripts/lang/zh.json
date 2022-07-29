@@ -13,7 +13,8 @@
     "switch-box": "Switch Box",
     "multi-select": "Multi Select",
     "plugins": "Plugins",
-    "transform": "Transform",
-    "model": "Model"
+    "transform": "数据转换",
+    "model": "定义模型",
+    "constant": "定义常量"
   }
 }
