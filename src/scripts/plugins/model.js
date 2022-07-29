@@ -259,7 +259,7 @@ function install(Vue, options = {}) {
     });
 
     if (debug) {
-      console.info(`[${NAME}]: Model APIs`, globalApis);
+      console.info(`[${NAME}]: Model APIs`, globalApis[debug] || globalApis);
     }
   }
 
