@@ -12,5 +12,6 @@ export default {
     delete: 'delete'
   },
   // formatApiAction: (modelName, actionName) => `${modelName}-${actionName}`,
-  apis
+  apis,
+  debug: true
 };
