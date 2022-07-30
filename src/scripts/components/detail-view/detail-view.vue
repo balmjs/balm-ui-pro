@@ -3,8 +3,10 @@
     <h2 v-if="hasTitle" class="mdc-detail-view__title">
       <slot name="title">{{ title }}</slot>
     </h2>
+
     <section class="mdc-detail-view__content">
       <slot name="before-detail-view"></slot>
+
       <ui-form-view
         v-model="formData"
         v-bind="
@@ -31,6 +33,7 @@
           <slot v-else name="after-form-view" v-bind="slotData"></slot>
         </template>
       </ui-form-view>
+
       <slot name="after-detail-view"></slot>
     </section>
   </div>

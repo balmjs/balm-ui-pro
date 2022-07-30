@@ -1,14 +1,18 @@
 <template>
   <section class="mdc-table-view__topbar">
-    <template v-for="(action, index) in topbarConfig">
+    <template v-for="(action, index) in tableView.topbarConfig">
       <ui-button
+        v-if="tableView.topbarRendering(action, tableView.tableDataSource)"
         :key="`button-${index}`"
         v-bind="
-          action.attrOrProp || {
-            class: 'action',
-            raised: true,
-            icon: actionIcon(action)
-          }
+          Object.assign(
+            {
+              class: 'action',
+              raised: true,
+              icon: actionIcon(action)
+            },
+            action.attrOrProp || {}
+          )
         "
         @click="handleClick(action)"
       >
@@ -23,39 +27,10 @@ import { TYPES, getRouteLocationRaw } from './constants';
 
 export default {
   name: 'UiTableViewTopbar',
-  props: {
-    topbarConfig: {
-      type: Array,
-      default: () => []
-    },
-    model: {
-      type: String,
-      default: ''
-    },
-    topbarHandler: {
-      type: Function,
-      default: () => {}
-    },
-    defaultParams: {
-      type: Object,
-      default: () => ({})
-    },
-    selectedRows: {
-      type: Array,
-      default: () => []
-    },
-    tableData: {
-      type: Array,
-      default: () => []
-    },
-    searchFormData: {
-      type: Object,
-      default: () => ({})
-    },
-    refreshData: {
-      type: Function,
-      default: () => {}
-    }
+  data() {
+    return {
+      tableView: this.$parent
+    };
   },
   methods: {
     actionIcon({ icon, type }) {
@@ -83,20 +58,22 @@ export default {
       return result;
     },
     handleClick(action) {
+      const { defaultParams, table, lastSearchFormData } = this.tableView;
       const data = {
-        defaultParams: this.defaultParams,
-        selectedRows: this.selectedRows,
-        tableData: this.tableData,
-        searchFormData: this.searchFormData
+        defaultParams,
+        selectedRows: table.selectedRows,
+        tableData: table.data,
+        searchFormData: lastSearchFormData
       };
+
       if (action.type === TYPES.routerLink) {
         const to = getRouteLocationRaw(action, {
-          model: this.model,
+          model: this.tableView.model,
           data
         });
         this.$router.push(to);
       } else {
-        this.topbarHandler(action, data, this.refreshData);
+        this.tableView.topbarHandler(action, data, this.tableView.getModelData);
       }
     }
   }

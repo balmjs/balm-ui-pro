@@ -3,6 +3,7 @@
     <h2 v-if="hasTitle" class="mdc-table-view__title">
       <slot name="title">{{ title }}</slot>
     </h2>
+
     <section v-if="hasSearchForm" class="mdc-table-view__conditions">
       <ui-form-view
         v-model="searchForm.data"
@@ -34,19 +35,10 @@
         </template>
       </ui-form-view>
     </section>
-    <ui-table-view-topbar
-      v-if="topbarConfig.length"
-      v-bind="{
-        topbarConfig,
-        model,
-        topbarHandler,
-        defaultParams,
-        selectedRows: table.selectedRows,
-        tableData: table.data,
-        searchFormData: lastSearchFormData,
-        refreshData: getModelData
-      }"
-    ></ui-table-view-topbar>
+
+    <ui-table-view-topbar v-if="topbarConfig.length"></ui-table-view-topbar>
+    <slot v-else name="topbar" v-bind="this"></slot>
+
     <section class="mdc-table-view__content">
       <template v-if="table.data.length">
         <ui-table
@@ -77,6 +69,7 @@
                 data,
                 keyName,
                 actionHandler,
+                actionRendering,
                 refreshData: getModelData
               }"
             ></ui-table-view-actions>
@@ -182,9 +175,25 @@ export default {
       type: Array,
       default: () => []
     },
+    actionHandler: {
+      type: Function,
+      default: () => {}
+    },
+    actionRendering: {
+      type: Function,
+      default: () => true
+    },
     topbarConfig: {
       type: Array,
       default: () => []
+    },
+    topbarHandler: {
+      type: Function,
+      default: () => {}
+    },
+    topbarRendering: {
+      type: Function,
+      default: () => true
     },
     tableAttrOrProp: {
       type: Object,
@@ -226,14 +235,6 @@ export default {
     useValidator: {
       type: Boolean,
       default: false
-    },
-    actionHandler: {
-      type: Function,
-      default: () => {}
-    },
-    topbarHandler: {
-      type: Function,
-      default: () => {}
     }
   },
   data() {
@@ -246,6 +247,7 @@ export default {
       },
       lastSearchFormData: {}, // cache for last search result
       // Table data
+      tableDataSource: {},
       table: {
         selectedRows: [],
         data: [],
@@ -288,11 +290,11 @@ export default {
     },
     async getModelData() {
       try {
-        const data = await this.getModelDataFn(this);
+        this.tableDataSource = await this.getModelDataFn(this);
 
         for (const [key, value] of Object.entries(this.tableDataFormat)) {
-          if (data[value]) {
-            this.$set(this.table, key, data[value]);
+          if (this.tableDataSource[value]) {
+            this.$set(this.table, key, this.tableDataSource[value]);
           }
         }
 

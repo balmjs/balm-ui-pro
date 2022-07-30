@@ -10,6 +10,7 @@
       :get-model-config-fn="getModelConfig"
       :get-model-data-fn="getModelData"
       :action-handler="actionHandler"
+      :action-rendering="actionRendering"
       :topbar-handler="topbarHandler"
     >
       <!-- <template #pagination="{ currentMinRow, currentMaxRow, total }">
@@ -83,13 +84,19 @@ const topbarConfig = [
   }
 ];
 
+function actionRendering(action, data) {
+  // console.log(action, data);
+  return true;
+}
+
 export default {
   data() {
     return {
       thead,
       tbody,
       actionConfig,
-      topbarConfig
+      topbarConfig,
+      actionRendering
     };
   },
   methods: {
