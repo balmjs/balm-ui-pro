@@ -3,8 +3,6 @@ const DEFAULTS = {
   mapFormat: { key: 'key', value: 'value' }
 };
 
-const constantMap = new Map();
-
 function checkFormat(formatField1, formatField2, keyField) {
   if (!(formatField1 && formatField2)) {
     throw new Error(
@@ -14,8 +12,12 @@ function checkFormat(formatField1, formatField2, keyField) {
 }
 
 class Constant {
+  constructor() {
+    this.map = new Map();
+  }
+
   use(key) {
-    return constantMap.get(key);
+    return this.map.get(key);
   }
 
   /**
@@ -79,7 +81,9 @@ const constant = new Constant();
 function install(Vue, options = {}) {
   for (const [key, value] of Object.entries(options)) {
     if (Array.isArray(value)) {
-      constantMap.set(key, value);
+      constant.map.has(key)
+        ? console.warn(`[$constant]: Conflicting constant definition - ${key}`)
+        : constant.map.set(key, value);
     }
   }
 
