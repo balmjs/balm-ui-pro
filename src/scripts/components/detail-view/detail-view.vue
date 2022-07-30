@@ -140,7 +140,9 @@ export default {
     },
     redirect() {
       if (this.to !== 'custom') {
-        const to = this.to || `${this.model}.list`;
+        const to = this.to || {
+          name: `${this.model}.list`
+        };
         this.replace ? this.$router.replace(to) : this.$router.push(to);
       }
     },
