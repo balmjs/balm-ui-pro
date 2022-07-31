@@ -40,6 +40,8 @@
     <slot v-else name="topbar" v-bind="this"></slot>
 
     <section class="mdc-table-view__content">
+      <slot name="before-table-view"></slot>
+
       <template v-if="table.data.length">
         <ui-table
           v-model="table.selectedRows"
@@ -106,6 +108,8 @@
       <div v-else class="mdc-table-view__no-data">
         <slot name="no-data">{{ noData }}</slot>
       </div>
+
+      <slot name="after-table-view"></slot>
     </section>
   </div>
 </template>

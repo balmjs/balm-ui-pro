@@ -106,7 +106,7 @@
           ></slot>
           <!-- Action view -->
           <slot
-            name="actions"
+            name="form-view-actions"
             v-bind="{
               className: [itemClass, actionClass],
               config: formConfig,

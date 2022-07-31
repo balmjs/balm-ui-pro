@@ -13,6 +13,8 @@
       :action-rendering="actionRendering"
       :topbar-handler="topbarHandler"
     >
+      <template #before-form-view>xxx</template>
+      <template #after-form-view>yyy</template>
       <!-- <template #pagination="{ currentMinRow, currentMaxRow, total }">
         {{ currentMinRow }} - {{ currentMaxRow }} / {{ total }}
       </template> -->
@@ -35,6 +37,7 @@ const tbody = [
 ];
 const actionConfig = [
   {
+    if: (data) => true,
     component: 'ui-icon',
     text: 'add'
   },

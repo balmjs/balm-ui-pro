@@ -1,7 +1,7 @@
 <template>
   <div class="mdc-table-view__actions">
     <template v-for="(action, index) in actionConfig">
-      <template v-if="actionRendering(action, data)">
+      <template v-if="configAction('if', action)">
         <template v-if="action.component">
           <template v-if="action.type === TYPES.noSlot">
             <component
@@ -127,6 +127,9 @@ export default {
         result = currentAction;
 
         switch (type) {
+          case 'if':
+            result = this.actionRendering(action, this.data)
+            break;
           case 'show':
             result = true;
             break;
