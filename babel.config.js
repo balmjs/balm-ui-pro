@@ -3,7 +3,7 @@ module.exports = function (api) {
     ? {
         modules: false,
         useBuiltIns: 'entry',
-        corejs: { version: '3.22', proposals: true }
+        corejs: { version: '3.24' }
       }
     : {
         modules: false
@@ -19,6 +19,7 @@ module.exports = function (api) {
         {
           languages: [
             'markup',
+            'ini',
             'css',
             'javascript',
             'bash',

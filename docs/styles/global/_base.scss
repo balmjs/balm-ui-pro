@@ -1,5 +1,35 @@
 @use './vars' as global-vars;
 
+h1 {
+  font-size: 38px;
+  line-height: 46px;
+}
+
+h2 {
+  font-size: 30px;
+  line-height: 38px;
+}
+
+h3 {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+h4 {
+  font-size: 20px;
+  line-height: 28px;
+}
+
+h5 {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+h6 {
+  font-size: 14px;
+  line-height: 22px;
+}
+
 .octicon {
   display: inline-block;
   vertical-align: text-top;
@@ -43,4 +73,15 @@
   p {
     font-size: 24px;
   }
+}
+
+.hero {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  // height: 360px; // Fuck IE
+  min-height: 360px;
+  padding: 40px 0;
+  background-color: #f7f7f7;
 }

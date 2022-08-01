@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <docs-page name="model" without-css>
     <div>apis: {{ apis }}</div>
     <hr />
     <div>routes: {{ routes }}</div>
     <br />
     <div>route: {{ route }}</div>
-  </div>
+  </docs-page>
 </template>
 
 <script>

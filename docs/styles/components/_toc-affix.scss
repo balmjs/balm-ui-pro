@@ -1,0 +1,28 @@
+@use '../global/index' as global;
+
+.toc-affix {
+  position: sticky;
+  top: global.$topAppBar-row-height;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  background: white;
+  .mdc-deprecated-list {
+    display: flex;
+  }
+  .mdc-deprecated-list-item {
+    cursor: pointer;
+  }
+
+  &.toc-affix--bottom {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+  }
+}
+
+@media (max-width: global.$mobile-breakpoint) {
+  .toc-affix {
+    top: global.$topAppBar-mobile-row-height;
+  }
+}

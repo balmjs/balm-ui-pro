@@ -45,10 +45,10 @@ const MATERIAL_COMPONENTS_PRO = [
     name: 'plugins',
     children: [
       {
-        name: 'transform'
+        name: 'model'
       },
       {
-        name: 'model'
+        name: 'transform'
       },
       {
         name: 'constant'

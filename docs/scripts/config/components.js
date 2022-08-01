@@ -1,4 +1,6 @@
+// BalmUI
 import myStore from '@/store';
+// BalmUIPro
 import myModel, {
   setModelOptionsFn,
   getModelConfigFn,
@@ -9,8 +11,13 @@ import myModel, {
   setModelDataFn
 } from '@/model';
 import myConstants from '@/model/constants';
+// Custom
+import PurePage from '@/views/layouts/pure-page';
+import DocsPage from '@/views/layouts/docs-page';
 import UiMarkdown from '@/components/markdown';
 import UiSnippet from '@/components/snippet';
+import UiFooterNav from '@/components/footer-nav';
+import UiTocAffix from '@/components/toc-affix';
 import XFormItem from '@/components/x-form-item';
 
 export const BalmUIConfig = {
@@ -41,4 +48,12 @@ export const BalmUIProConfig = {
   }
 };
 
-export const customComponents = [UiMarkdown, UiSnippet, XFormItem];
+export const customComponents = [
+  PurePage,
+  DocsPage,
+  UiMarkdown,
+  UiSnippet,
+  UiFooterNav,
+  UiTocAffix,
+  XFormItem
+];
