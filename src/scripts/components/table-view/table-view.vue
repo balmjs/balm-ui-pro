@@ -209,8 +209,7 @@ export default {
       type: Object,
       default: () => ({
         data: 'data',
-        total: 'total',
-        page: 'page'
+        total: 'total'
       })
     },
     pageSize: {

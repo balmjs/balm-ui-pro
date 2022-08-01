@@ -26,7 +26,8 @@ const CRUD = REST_API.operations.reduce(
 
 let globalApiConfig = {
   crud: {},
-  formatApiAction: (frontEndApiName, operationName) => operationName
+  formatApiAction: (frontEndApiName, operationName) => operationName,
+  urlToCamelCase: false
 };
 
 function getCRUD(crud, defaultCRUD = {}) {
@@ -56,11 +57,10 @@ function createCustomApis(operation, { frontEndApiName, backEndApi }, config) {
   for (const [key, value] of Object.entries(apiConfig)) {
     const name = toCamelCase(`${operation}-${frontEndApiName}-${key}`);
 
-    const url = value
-      ? `${backEndApi}/${toCamelCase(
-          formatApiAction(frontEndApiName, value) + ''
-        )}`
-      : backEndApi;
+    const actionApi = globalApiConfig.urlToCamelCase
+      ? toCamelCase(formatApiAction(frontEndApiName, value) + '')
+      : formatApiAction(frontEndApiName, value);
+    const url = value ? `${backEndApi}/${actionApi}` : backEndApi;
     apis[name] = /^\/.*/.test(value) ? value : url;
   }
 
@@ -126,9 +126,12 @@ class ApiModel {
               currentConfig.formatApiAction || globalApiConfig.formatApiAction;
 
             const defaultName = toCamelCase(`${operation}-${frontEndApiName}`);
-            const defaultUrl = `${backEndApi}/${toCamelCase(
-              formatApiAction(frontEndApiName, operationName)
-            )}`;
+            const actionApi = globalApiConfig.urlToCamelCase
+              ? toCamelCase(
+                  formatApiAction(frontEndApiName, operationName) + ''
+                )
+              : formatApiAction(frontEndApiName, operationName);
+            const defaultUrl = `${backEndApi}/${actionApi}`;
             const defaultApi = { [defaultName]: defaultUrl };
 
             apis = Object.assign(apis, defaultApi);
