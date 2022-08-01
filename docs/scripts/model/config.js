@@ -5,7 +5,7 @@ const $confirm = useConfirm();
 export async function setModelOptionsFn(modelList) {
   const store = useStore();
 
-  return await store.getModelOptions(modelList);
+  return await store.setModelOptions(modelList);
 }
 
 export async function getModelConfigFn({ modelPath }) {

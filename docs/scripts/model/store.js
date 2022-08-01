@@ -20,8 +20,8 @@ export default {
 
       return config;
     },
-    async getModelOptions(modelList) {
-      console.log('getModelOptions model list', modelList);
+    async setModelOptions(modelList) {
+      console.log('setModelOptions model list', modelList);
 
       return {
         test: 'hello world'
