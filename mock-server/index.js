@@ -21,9 +21,7 @@ export function mockServer() {
     }
   });
 
-  server.passthrough(
-    ({ url }) => PROXY_API_REGEX.test(url) && !MOCK_API_REGEX.test(url)
-  );
+  server.passthrough(({ url }) => PROXY_API_REGEX.test(url));
 
   return server;
 }

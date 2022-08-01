@@ -1,7 +1,7 @@
 import { responseHandler } from '@mock-server/handler';
 
 export function createOptionsApis(server) {
-  server.post('/select/options', () => {
+  server.get('/demo/select/options', () => {
     const options = [
       {
         label: 'A',
@@ -16,7 +16,7 @@ export function createOptionsApis(server) {
     return responseHandler(options);
   });
 
-  server.post('/checkbox/options', () => {
+  server.get('/demo/checkbox/options', () => {
     const options = [
       {
         label: 'C',
@@ -31,7 +31,7 @@ export function createOptionsApis(server) {
     return responseHandler(options);
   });
 
-  server.post('/radio/options', () => {
+  server.get('/demo/radio/options', () => {
     const options = [
       {
         label: 'E',
@@ -46,7 +46,7 @@ export function createOptionsApis(server) {
     return responseHandler(options);
   });
 
-  server.post('/chips/options', () => {
+  server.get('/demo/chips/options', () => {
     const options = [
       {
         label: 'G',
@@ -65,7 +65,7 @@ export function createOptionsApis(server) {
     return responseHandler(options);
   });
 
-  server.post('/multi-select/options1', () => {
+  server.get('/demo/multi-select/options1', () => {
     const options = [
       {
         label: 'Item 1',
@@ -80,8 +80,9 @@ export function createOptionsApis(server) {
     return responseHandler(options);
   });
 
-  server.post('/multi-select/options2', (schema, request) => {
-    const params = JSON.parse(request.requestBody);
+  server.get('/demo/multi-select/options2', (schema, request) => {
+    const params = request.queryParams;
+    // console.log('options2', params);
 
     const options2 = [
       {
@@ -113,15 +114,16 @@ export function createOptionsApis(server) {
     ];
 
     const selectedOptions = options2.find(
-      (item) => item.parentId === params.id
+      (item) => item.parentId === +params.id
     );
     const options = selectedOptions ? selectedOptions.options : [];
 
     return responseHandler(options);
   });
 
-  server.post('/multi-select/options3', (schema, request) => {
-    const params = JSON.parse(request.requestBody);
+  server.get('/demo/multi-select/options3', (schema, request) => {
+    const params = request.queryParams;
+    // console.log('options3', params);
 
     const options3 = [
       {
@@ -179,7 +181,7 @@ export function createOptionsApis(server) {
     ];
 
     const selectedOptions = options3.find(
-      (item) => item.parentId === params.id
+      (item) => item.parentId === +params.id
     );
     const options = selectedOptions ? selectedOptions.options : [];
 
