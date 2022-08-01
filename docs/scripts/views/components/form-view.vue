@@ -34,7 +34,6 @@
 
 <script>
 import XFormItem from '@/components/x-form-item';
-import { loadAsset } from '@/utils';
 import modelConfig from '@/model-config/a.json';
 
 const defaultSelectOptions = [
@@ -130,14 +129,32 @@ export default {
     }
   },
   async mounted() {
-    this.modelConfig = await loadAsset('model-config/b.js');
+    this.modelConfig = await this.$store.getModelConfig('model-config/b.js');
 
-    // const selectOptions = await this.$http.post('/mock/select/options');
-    // const checkboxOptions = await this.$http.post('/mock/checkbox/options');
-    // const radioOptions = await this.$http.post('/mock/radio/options');
-    // const chipsOptions = await this.$http.post('/mock/chips/options');
-    const multiSelectOptions1 = await this.$http.post(
-      '/mock/multi-select/options1'
+    // const selectOptions = await this.$store.getModel(
+    //   'demo',
+    //   {},
+    //   { apiName: 'selectOptions' }
+    // );
+    // const checkboxOptions = await this.$store.getModel(
+    //   'demo',
+    //   {},
+    //   { apiName: 'checkboxOptions' }
+    // );
+    // const radioOptions = await this.$store.getModel(
+    //   'demo',
+    //   {},
+    //   { apiName: 'radioOptions' }
+    // );
+    // const chipsOptions = await this.$store.getModel(
+    //   'demo',
+    //   {},
+    //   { apiName: 'chipsOptions' }
+    // );
+    const multiSelectOptions1 = await this.$store.getModel(
+      'demo',
+      {},
+      { apiName: 'multiSelectOptions1' }
     );
 
     // this.$set(this.modelOptions, 'selectOptions', selectOptions);
@@ -147,8 +164,8 @@ export default {
     this.$set(this.modelOptions, 'multiSelectOptions1', multiSelectOptions1);
 
     if (this.id) {
-      this.formData = await this.$http.get(`/user/${this.id}`, {
-        baseURL: '/api/mock'
+      this.formData = await this.$store.getModelDetail('user', {
+        id: this.id
       });
     } else {
       setTimeout(() => {

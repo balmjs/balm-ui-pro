@@ -3,15 +3,12 @@
     <ui-table-view
       title="Table View"
       model="user"
+      model-path="model-config/a.json"
       :thead="thead"
       :tbody="tbody"
       :action-config="actionConfig"
       :topbar-config="topbarConfig"
-      :get-model-config-fn="getModelConfig"
-      :get-model-data-fn="getModelData"
-      :action-handler="actionHandler"
       :action-rendering="actionRendering"
-      :topbar-handler="topbarHandler"
     >
       <template #before-form-view>xxx</template>
       <template #after-form-view>yyy</template>
@@ -23,8 +20,6 @@
 </template>
 
 <script>
-import { loadAsset } from '@/utils';
-
 const thead = ['ID', 'Dessert', 'Calories', 'Fat', 'Actions'];
 const tbody = [
   'id',
@@ -62,7 +57,7 @@ const actionConfig = [
   {
     type: 'router-link',
     text: 'RouterLink',
-    routeName: 'components.form-view'
+    routeName: 'components.detail-view'
   },
   {
     text: 'Link',
@@ -75,7 +70,8 @@ const topbarConfig = [
   {
     type: 'router-link',
     icon: 'add',
-    text: 'Create'
+    text: 'Create',
+    routeName: 'components.detail-view'
   },
   {
     type: 'multi-update',
@@ -101,21 +97,6 @@ export default {
       topbarConfig,
       actionRendering
     };
-  },
-  methods: {
-    async getModelConfig({ model }) {
-      return await loadAsset('model-config/a.json');
-    },
-    async getModelData({ model }) {
-      console.log('getModelData', model);
-      return await this.$http.get('/mock/user/list');
-    },
-    actionHandler(type, data, refresh) {
-      console.log('actionHandler', type, data);
-    },
-    topbarHandler(type, data, refresh) {
-      console.log('topbarHandler', type, data);
-    }
   }
 };
 </script>

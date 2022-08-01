@@ -3,8 +3,11 @@
     <ui-detail-view
       title="Detail View"
       model="user"
-      :get-model-config-fn="getModelConfig"
-      :set-model-data-fn="setModelData"
+      model-path="model-config/b.js"
+      :model-options="modelOptions"
+      :to="{
+        name: 'components.table-view'
+      }"
       @submit="onSubmit"
     >
       <template #custom-slot>gg</template>
@@ -13,17 +16,19 @@
 </template>
 
 <script>
-import { loadAsset } from '@/utils';
-
 export default {
+  data() {
+    return {
+      modelOptions: {
+        selectOptions: [],
+        checkboxOptions: [],
+        radioOptions: [],
+        chipsOptions: [],
+        multiSelectOptions1: []
+      }
+    };
+  },
   methods: {
-    async getModelConfig({ model }) {
-      console.log('model', model);
-      return await loadAsset('model-config/b.js');
-    },
-    async setModelData() {
-      console.log('save');
-    },
     onSubmit() {
       console.log('gg');
     }

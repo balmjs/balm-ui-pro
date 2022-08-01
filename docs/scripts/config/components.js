@@ -1,7 +1,14 @@
 import myStore from '@/store';
-import myModel from '@/model';
+import myModel, {
+  setModelOptionsFn,
+  getModelConfigFn,
+  getModelListDataFn,
+  listActionHandler,
+  listTopbarHandler,
+  getModelDetailDataFn,
+  setModelDataFn
+} from '@/model';
 import myConstants from '@/model/constants';
-import { setModelOptionsFn } from '@/model/config';
 import UiMarkdown from '@/components/markdown';
 import UiSnippet from '@/components/snippet';
 import XFormItem from '@/components/x-form-item';
@@ -15,6 +22,22 @@ export const BalmUIProConfig = {
   $constant: myConstants,
   UiFormView: {
     setModelOptionsFn
+  },
+  UiTableView: {
+    getModelConfigFn,
+    getModelDataFn: getModelListDataFn,
+    tableDataFormat: {
+      data: 'data',
+      total: 'total'
+      // page: 'page'
+    },
+    actionHandler: listActionHandler,
+    topbarHandler: listTopbarHandler
+  },
+  UiDetailView: {
+    getModelConfigFn,
+    getModelDataFn: getModelDetailDataFn,
+    setModelDataFn
   }
 };
 

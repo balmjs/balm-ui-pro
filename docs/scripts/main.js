@@ -17,7 +17,9 @@ import {
 // PWA
 // import './my-sw';
 
-function createBalmUIProApp() {
+function createBalmUIProApp(mock = false) {
+  Vue.prototype.$mock = mock;
+
   Vue.use($http);
   Vue.use($prism);
   Vue.use(BalmUI, BalmUIConfig);

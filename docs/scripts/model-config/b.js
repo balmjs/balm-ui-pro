@@ -1,6 +1,8 @@
 import { useHttp } from '@/plugins/http';
+import { useStore } from 'balm-ui';
 
 const http = useHttp();
+const store = useStore();
 
 export default ({
   data,
@@ -146,9 +148,14 @@ export default ({
           value: '',
           options: ({ l }) =>
             l
-              ? http.post('/mock/multi-select/options2', {
-                  id: l
-                })
+              ? // http.post('/mock/multi-select/options2', {
+                //     id: l
+                //   })
+                store.getModel(
+                  'demo',
+                  { id: l },
+                  { apiName: 'multiSelectOptions2' }
+                )
               : [],
           attrOrProp: {
             defaultLabel: 'Select2'
@@ -159,9 +166,14 @@ export default ({
           value: '',
           options: async ({ m }) =>
             m
-              ? await http.post('/mock/multi-select/options3', {
-                  id: m
-                })
+              ? // await http.post('/mock/multi-select/options3', {
+                //     id: m
+                //   })
+                await store.getModel(
+                  'demo',
+                  { id: m },
+                  { apiName: 'multiSelectOptions3' }
+                )
               : [],
           attrOrProp: {
             defaultLabel: 'Select3'
@@ -177,14 +189,14 @@ export default ({
       }
     },
     {
-      debug: true,
+      // debug: true,
       label: 'Component slot',
       component: 'ui-textfield',
       key: 'o',
       value: ''
     },
     {
-      debug: true,
+      // debug: true,
       label: 'Custom component',
       component: 'x-form-item',
       key: 'p',
