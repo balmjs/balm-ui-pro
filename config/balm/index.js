@@ -52,6 +52,7 @@ function getConfig(balm) {
         'balm-ui-plus$': 'balm-ui/src/scripts/plus.js',
         'balm-ui-next$': 'balm-ui/src/scripts/next.js',
         'balm-ui-pro$': resolve('src/scripts/index.js'),
+        miragejs$: 'miragejs/dist/mirage-esm.js',
         '@mock-server': resolve('mock-server'),
         '@': resolve('docs/scripts')
       },
