@@ -16,6 +16,7 @@
 - Preview plugins
   - `$model`
   - `$transform`
+  - `$constant`
 
 ## Quick Start
 
@@ -115,10 +116,10 @@ Vue.use(BalmUIPro);
 
 | Name                                          | Props                               | Description                                                    |
 | --------------------------------------------- | ----------------------------------- | -------------------------------------------------------------- |
-| `before`                                      | `itemClass`, `subitemClass`, `data` | Before form items                                              |
+| `before-form-view`                            | `itemClass`, `subitemClass`, `data` | Before form items                                              |
 | custom form item slots (by form model config) | `config`, `data`                    | Custom form item slots (See all slots names by `config.debug`) |
-| `after`                                       | `itemClass`, `subitemClass`, `data` | After form items                                               |
-| `actions`                                     | `className`, `data`                 | Custom form buttons                                            |
+| `after-form-view`                             | `itemClass`, `subitemClass`, `data` | After form items                                               |
+| `form-view-actions`                           | `className`, `data`                 | Custom form buttons                                            |
 
 ### Events
 
