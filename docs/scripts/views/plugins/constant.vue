@@ -12,9 +12,9 @@
       })
     }}
     <hr />
-    object: {{ $constant.useMap('demo') }}
+    map: {{ $constant.useMap('demo') }}
     <br />
-    format object:
+    format map:
     {{
       $constant.useMap('demo', {
         key: 'value',

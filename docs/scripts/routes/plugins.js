@@ -1,17 +1,11 @@
+import { $routerModel } from './model';
+
+const Model = () => import('@/views/plugins/model');
+const Transform = () => import('@/views/plugins/transform');
+const Constant = () => import('@/views/plugins/constant');
+
 export default [
-  {
-    path: 'model',
-    name: 'plugins.model',
-    component: () => import('@/views/plugins/model')
-  },
-  {
-    path: 'transform',
-    name: 'plugins.transform',
-    component: () => import('@/views/plugins/transform')
-  },
-  {
-    path: 'constant',
-    name: 'plugins.constant',
-    component: () => import('@/views/plugins/constant')
-  }
+  $routerModel.createRoute('model', 'plugins.model', Model),
+  $routerModel.createRoute('transform', 'plugins.transform', Transform),
+  $routerModel.createRoute('constant', 'plugins.constant', Constant)
 ];

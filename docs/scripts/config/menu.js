@@ -2,12 +2,12 @@ const MATERIAL_COMPONENTS_PRO = [
   {
     name: 'guide',
     children: [
-      // {
-      //   name: 'intro'
-      // },
-      // {
-      //   name: 'quickstart'
-      // }
+      {
+        name: 'intro'
+      },
+      {
+        name: 'quickstart'
+      }
     ]
   },
   '-',

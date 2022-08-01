@@ -1,17 +1,15 @@
+import { $routerModel } from './model';
+
+const FormView = () => import('@/views/components/form-view');
+const DetailView = () => import('@/views/components/detail-view');
+const TableView = () => import('@/views/components/table-view');
+
 export default [
-  {
-    path: 'form-view/:id?',
-    name: 'components.form-view',
-    component: () => import('@/views/components/form-view')
-  },
-  {
-    path: 'detail-view/:id?',
-    name: 'components.detail-view',
-    component: () => import('@/views/components/detail-view')
-  },
-  {
-    path: 'table-view',
-    name: 'components.table-view',
-    component: () => import('@/views/components/table-view')
-  }
+  $routerModel.createRoute('form-view/:id?', 'components.form-view', FormView),
+  $routerModel.createRoute(
+    'detail-view/:id?',
+    'components.detail-view',
+    DetailView
+  ),
+  $routerModel.createRoute('table-view', 'components.table-view', TableView)
 ];

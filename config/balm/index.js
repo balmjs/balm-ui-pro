@@ -47,7 +47,6 @@ function getConfig(balm) {
       ],
       alias: {
         vue$: 'vue/dist/vue.esm.js',
-        pickerLangZh: 'flatpickr/dist/l10n/zh.js',
         'balm-ui$': 'balm-ui/src/scripts/index.js',
         'balm-ui-plus$': 'balm-ui/src/scripts/plus.js',
         'balm-ui-next$': 'balm-ui/src/scripts/next.js',
