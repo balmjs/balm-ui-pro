@@ -53,11 +53,13 @@ function createCustomApis(operation, { frontEndApiName, backEndApi }, config) {
   const apiConfig = config[operation] || {};
   const formatApiAction =
     config.formatApiAction || globalApiConfig.formatApiAction;
+  const urlToCamelCase =
+    config.urlToCamelCase || globalApiConfig.urlToCamelCase;
 
   for (const [key, value] of Object.entries(apiConfig)) {
     const name = toCamelCase(`${operation}-${frontEndApiName}-${key}`);
 
-    const actionApi = globalApiConfig.urlToCamelCase
+    const actionApi = urlToCamelCase
       ? toCamelCase(formatApiAction(frontEndApiName, value) + '')
       : formatApiAction(frontEndApiName, value);
     const url = value ? `${backEndApi}/${actionApi}` : backEndApi;
@@ -124,9 +126,11 @@ class ApiModel {
             const operationName = operationDefinition;
             const formatApiAction =
               currentConfig.formatApiAction || globalApiConfig.formatApiAction;
+            const urlToCamelCase =
+              currentConfig.urlToCamelCase || globalApiConfig.urlToCamelCase;
 
             const defaultName = toCamelCase(`${operation}-${frontEndApiName}`);
-            const actionApi = globalApiConfig.urlToCamelCase
+            const actionApi = urlToCamelCase
               ? toCamelCase(
                   formatApiAction(frontEndApiName, operationName) + ''
                 )

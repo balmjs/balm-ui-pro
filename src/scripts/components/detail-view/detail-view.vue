@@ -178,6 +178,8 @@ export default {
               this.redirect();
           }
           break;
+        default:
+          this.message = '';
       }
 
       if (type !== UiDetailView.EVENTS.cancel) {

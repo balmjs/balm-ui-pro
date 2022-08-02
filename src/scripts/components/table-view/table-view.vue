@@ -321,6 +321,7 @@ export default {
           canSubmit && (await this.getModelData());
           break;
         case UiTableView.EVENTS.reset:
+          this.$set(this.searchForm, 'message', '');
           // NOTE: automatic processing in `<ui-form-view>`
           break;
       }
