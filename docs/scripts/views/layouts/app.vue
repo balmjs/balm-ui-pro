@@ -151,6 +151,12 @@ export default {
     };
   },
   mounted() {
+    this.$bus.on('page-loaded', () => {
+      setTimeout(() => {
+        this.bodyEl.scrollTop = 0;
+      }, 1);
+    });
+
     this.init();
     window.addEventListener('balmResize', this.init);
   },

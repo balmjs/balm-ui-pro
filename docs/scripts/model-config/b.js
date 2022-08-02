@@ -32,7 +32,7 @@ export default ({
       }
     },
     {
-      label: 'Input',
+      label: 'Textfield',
       component: 'ui-textfield',
       key: 'a',
       value: '2'
@@ -92,10 +92,7 @@ export default ({
       label: 'Datepicker',
       component: 'ui-datepicker',
       key: 'h',
-      value: '',
-      attrOrProp: {
-        clear: true
-      }
+      value: ''
     },
     {
       label: 'Rangepicker',

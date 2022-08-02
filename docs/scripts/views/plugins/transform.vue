@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <docs-page name="transform" without-css>
     <p>Original Data: {{ formData }}</p>
     <hr />
     <p>Transform In Data: {{ transformInData }}</p>
     <hr />
     <p>Transform Out Data: {{ transformOutData }}</p>
-  </div>
+  </docs-page>
 </template>
 
 <script setup>

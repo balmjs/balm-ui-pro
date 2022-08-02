@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <docs-page name="form-view" without-css>
     <ui-form-view
       v-model="formData"
       :model-config="modelConfig"
@@ -22,14 +22,14 @@
         </ui-form-field>
       </template> -->
       <template #after-form-view="{ data }">
+        <hr />
         <div>inner formData: {{ data }}</div>
         <ui-alert v-if="message" state="warning">{{ message }}</ui-alert>
       </template>
     </ui-form-view>
-
-    <ui-button @click="clearFormData">Clear formData</ui-button>
-    <ui-button @click="setFormData">Set formData</ui-button>
-  </div>
+    <!-- <ui-button @click="clearFormData">Clear formData</ui-button>
+    <ui-button @click="setFormData">Set formData</ui-button> -->
+  </docs-page>
 </template>
 
 <script>
@@ -200,6 +200,8 @@ export default {
         if (valid) {
           console.log('gg');
         }
+      } else {
+        this.message = '';
       }
     },
     onSubmit(data) {

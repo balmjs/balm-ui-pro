@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <docs-page name="constant" without-css>
     constant: {{ $constant.use('demo') }}
     <hr />
     list: {{ $constant.useList('demo') }}
@@ -21,7 +21,7 @@
         value: 'label'
       })
     }}
-  </div>
+  </docs-page>
 </template>
 
 <script>

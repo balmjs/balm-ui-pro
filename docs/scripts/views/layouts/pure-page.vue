@@ -26,7 +26,7 @@ export default {
   },
   computed: {
     docs() {
-      const filename = `docs/guide/${this.name}.md`;
+      const filename = `docs/en/guide/${this.name}.md`;
       return require(`@/${filename}`); // NOTE: just one variable in `require`
     }
   }

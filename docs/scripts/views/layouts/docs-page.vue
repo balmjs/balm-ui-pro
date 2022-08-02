@@ -108,7 +108,7 @@ export default {
       });
     },
     hasRequirement() {
-      return ['store', 'typography', 'validator'].includes(this.name);
+      return ['model'].includes(this.name);
     }
   },
   created() {
@@ -139,15 +139,15 @@ export default {
           break;
         default:
           if (Array.isArray(key)) {
-            // apidocs
+            // api docs
             result = key.map((apiDocs) => {
-              let filename = `docs/${name}/${apiDocs}.md`;
+              let filename = `docs/en/${name}/${apiDocs}.md`;
               let docs = require(`@/${filename}`);
               return docs;
             });
           } else {
             // intro
-            let filename = `docs/${name}/${key}.md`;
+            let filename = `docs/en/${name}/${key}.md`;
             let docs = require(`@/${filename}`);
             result = docs;
           }
