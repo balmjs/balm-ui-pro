@@ -18,6 +18,9 @@ const MATERIAL_COMPONENTS_PRO = [
         name: 'form-view'
       },
       {
+        name: 'form-items'
+      },
+      {
         name: 'detail-view'
       },
       {

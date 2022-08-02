@@ -11,6 +11,22 @@ export const DEMO_DATA = [
   }
 ];
 
+export const MODEL_NAME_DATA = ['demo', 'user', 'post'].map((key) => ({
+  label: key,
+  key,
+  value: key
+}));
+
+export const OPERATION_DATA = ['create', 'read', 'update', 'delete'].map(
+  (key) => ({
+    label: key,
+    key,
+    value: key
+  })
+);
+
 export default {
-  demo: DEMO_DATA
+  demo: DEMO_DATA,
+  modelName: MODEL_NAME_DATA,
+  operation: OPERATION_DATA
 };

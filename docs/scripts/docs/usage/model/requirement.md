@@ -1,5 +1,5 @@
 ```ts
-type ApiModelName = string;
+type ModelName = string;
 type ApiEndpoint = string;
 type Operation = 'create' | 'read' | 'update' | 'delete';
 type ApiUrlSuffix = string;
@@ -13,7 +13,7 @@ interface CrudConfig {
 
 interface ApiConfig {
   crud?: CrudConfig;
-  formatApiAction?: (frontEndApiName: ApiModelName, operationName: string) => string;
+  formatApiAction?: (frontEndApiName: ModelName, operationName: string) => string;
   urlToCamelCase?: boolean;
 }
 
@@ -23,10 +23,10 @@ interface CustomApiConfig extends ApiConfig {
 ```
 
 ```ts
-type ApiModelDefinition = [ApiModelName, ApiEndpoint, Operation[], CustomApiConfig];
+type ApiModelDefinition = [ModelName, ApiEndpoint, Operation[], CustomApiConfig];
 
 interface GlobalApiConfig extends ApiConfig {
   apis: ApiModelDefinition[];,
-  debug?: boolean | ApiModelName;
+  debug?: boolean | ModelName;
 }
 ```

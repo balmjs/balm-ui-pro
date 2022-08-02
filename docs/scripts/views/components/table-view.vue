@@ -10,8 +10,8 @@
       :topbar-config="topbarConfig"
       :action-rendering="actionRendering"
     >
-      <template #before-form-view>xxx</template>
-      <template #after-form-view>yyy</template>
+      <!-- <template #before-form-view>xxx</template>
+      <template #after-form-view>yyy</template> -->
       <!-- <template #pagination="{ currentMinRow, currentMaxRow, total }">
         {{ currentMinRow }} - {{ currentMaxRow }} / {{ total }}
       </template> -->
@@ -51,8 +51,8 @@ const actionConfig = [
     }
   },
   {
-    text: 'BalmJS',
-    href: 'https://balm.js.org'
+    text: 'BalmUI',
+    href: 'https://v8.material.balmjs.com/'
   },
   {
     type: 'router-link',

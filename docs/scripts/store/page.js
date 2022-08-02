@@ -9,7 +9,7 @@ export default {
     initSnippet(name, count) {
       this.$store.demos = []; // reset
 
-      if (name !== 'utils' && count) {
+      if (count) {
         this.$store.demos = [''];
 
         for (let i = 1; i <= count; i++) {

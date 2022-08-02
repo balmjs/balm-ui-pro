@@ -7,20 +7,9 @@
       <slot name="hero"></slot>
     </header> -->
 
-    <ui-toc-affix v-if="name === 'icon'">
-      <ui-tab v-anchor:href="'#ui-icons'" class="v-anchor">{{
-        $t('page.icons')
-      }}</ui-tab>
-    </ui-toc-affix>
-    <ui-toc-affix v-else-if="name === 'theme'">
-      <ui-tab v-anchor:href="'#ui-colors'" class="v-anchor">{{
-        $t('page.colors')
-      }}</ui-tab>
-    </ui-toc-affix>
     <ui-toc-affix
-      v-else
+      v-if="name !== 'form-items'"
       :class="{ 'toc-affix--bottom': bottomAffix }"
-      :without-apis="name === 'store'"
       :without-css="withoutCss"
     ></ui-toc-affix>
 
@@ -31,37 +20,39 @@
 
       <slot name="before"></slot>
 
-      <h2 v-anchor:id="'ui-usage'">0. {{ $t('page.usage') }}</h2>
-      <ui-markdown
-        v-if="hasRequirement"
-        :text="docs.usage.requirement"
-      ></ui-markdown>
-      <h3>{{ $t('page.default-usage') }}</h3>
-      <ui-markdown :text="docs.usage.default"></ui-markdown>
-      <h3>{{ $t('page.individual-usage') }}</h3>
-      <ui-markdown :text="docs.usage.individual"></ui-markdown>
+      <template v-if="name !== 'form-items'">
+        <h2 v-anchor:id="'ui-usage'">0. {{ $t('page.usage') }}</h2>
+        <ui-markdown
+          v-if="hasRequirement"
+          :text="docs.usage.requirement"
+        ></ui-markdown>
+        <h3>{{ $t('page.default-usage') }}</h3>
+        <ui-markdown :text="docs.usage.default"></ui-markdown>
+        <h3>{{ $t('page.individual-usage') }}</h3>
+        <ui-markdown :text="docs.usage.individual"></ui-markdown>
 
-      <h2 v-anchor:id="'ui-demo'">1. {{ $t('page.demo') }}</h2>
+        <h2 v-anchor:id="'ui-demo'">1. {{ $t('page.demo') }}</h2>
 
-      <slot>
-        <p>Coming Up...</p>
-      </slot>
+        <slot>
+          <p>Coming Up...</p>
+        </slot>
 
-      <h2 v-anchor:id="'ui-apis'">2. {{ $t('page.apis') }}</h2>
+        <h2 v-anchor:id="'ui-apis'">2. {{ $t('page.apis') }}</h2>
 
-      <ui-markdown
-        v-for="(apidocs, index) in docs.apis"
-        :key="index"
-        :class="[
-          'component-docs',
-          apis[index] ? `component--${apis[index]}` : ''
-        ]"
-        :text="apidocs"
-      ></ui-markdown>
+        <ui-markdown
+          v-for="(apidocs, index) in docs.apis"
+          :key="index"
+          :class="[
+            'component-docs',
+            apis[index] ? `component--${apis[index]}` : ''
+          ]"
+          :text="apidocs"
+        ></ui-markdown>
 
-      <template v-if="!withoutCss">
-        <h2 v-anchor:id="'ui-sass'">3. {{ $t('page.sass') }}</h2>
-        <ui-markdown :text="docs.css"></ui-markdown>
+        <template v-if="!withoutCss">
+          <h2 v-anchor:id="'ui-sass'">3. {{ $t('page.sass') }}</h2>
+          <ui-markdown :text="docs.css"></ui-markdown>
+        </template>
       </template>
 
       <slot name="after"></slot>
@@ -108,7 +99,7 @@ export default {
       });
     },
     hasRequirement() {
-      return ['model'].includes(this.name);
+      return ['model', 'constant'].includes(this.name);
     }
   },
   created() {
@@ -171,21 +162,23 @@ export default {
 
       result.intro = this.getDocs(name, 'intro');
 
-      result.usage = this.getDocs(name, 'usage');
+      if (name !== 'form-items') {
+        result.usage = this.getDocs(name, 'usage');
 
-      if (options.apis) {
-        let apidocs;
-        if (options.apis.length) {
-          apidocs = options.apis;
-        } else {
-          const keyName = this.type === 'directive' ? `v-${name}` : name;
-          apidocs = [keyName];
+        if (options.apis) {
+          let apidocs;
+          if (options.apis.length) {
+            apidocs = options.apis;
+          } else {
+            const keyName = this.type === 'directive' ? `v-${name}` : name;
+            apidocs = [keyName];
+          }
+          result.apis = this.getDocs(name, apidocs);
         }
-        result.apis = this.getDocs(name, apidocs);
-      }
 
-      if (options.css) {
-        result.css = this.getDocs(name, 'css');
+        if (options.css) {
+          result.css = this.getDocs(name, 'css');
+        }
       }
 
       return result;

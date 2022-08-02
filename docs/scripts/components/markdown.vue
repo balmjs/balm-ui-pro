@@ -31,7 +31,7 @@ export default {
     }
   },
   watch: {
-    html(val) {
+    text(val) {
       this.html = val;
       this.init();
     }

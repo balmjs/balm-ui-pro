@@ -1,5 +1,5 @@
 ```js
 import $constant from 'balm-ui-pro/plugins/constant';
 
-Vue.use($constant);
+Vue.use($constant, ConstantConfig);
 ```

@@ -1,5 +1,6 @@
 // BalmUI
 import myStore from '@/store';
+import validatorRules from '@/config/validator-rules';
 // BalmUIPro
 import myModel, {
   setModelOptionsFn,
@@ -21,7 +22,8 @@ import UiTocAffix from '@/components/toc-affix';
 import XFormItem from '@/components/x-form-item';
 
 export const BalmUIConfig = {
-  $store: myStore
+  $store: myStore,
+  $validator: validatorRules
 };
 
 export const BalmUIProConfig = {

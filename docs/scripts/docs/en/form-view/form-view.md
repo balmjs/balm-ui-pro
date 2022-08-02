@@ -52,7 +52,7 @@
   }
   ```
 
-  > NOTE: see BalmUI $validator rule and result [docs](https://v8.material.balmjs.com/#/data-input/validator)
+  > NOTE: see BalmUI [$validator docs](https://v8.material.balmjs.com/#/data-input/validator) for BalmUIValidationRule details
 
 - `actionConfig: ActionButton[]`
 
@@ -75,11 +75,11 @@
 
 ### Events
 
-| Name                 | Type                                   | Description |
-| -------------------- | -------------------------------------- | ----------- |
-| `update:model-value` | `function(modelValue: object)`         |             |
-| `update:x`           | `function(key: string, value: string)` |             |
-| `action`             | `function(actionResult: ActionResult)` |             |
+| Name       | Type                                   | Description |
+| ---------- | -------------------------------------- | ----------- |
+| `change`   | `function(modelValue: object)`         |             |
+| `change:x` | `function(key: string, value: string)` |             |
+| `action`   | `function(actionResult: ActionResult)` |             |
 
 ```ts
 interface ActionResult {
@@ -87,3 +87,5 @@ interface ActionResult {
   ...validationResult?: BalmUIValidationResult
 }
 ```
+
+> NOTE: see BalmUI [$validator docs](https://v8.material.balmjs.com/#/data-input/validator) for BalmUIValidationResult details

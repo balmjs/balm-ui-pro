@@ -1,8 +1,4 @@
 ```ts
-type ConstantLabel = string;
-type ConstantKey = string;
-type ConstantValue = any;
-
 interface VueInstance {
   $constant: {
     use: (key: string) => Constants;
@@ -12,17 +8,6 @@ interface VueInstance {
   };
 }
 ```
-
-- Constant Data
-
-  ```ts
-  type Constant = {
-    label: ConstantLabel;
-    key: ConstantKey;
-    value: ConstantValue;
-  };
-  type Constants = Constant[];
-  ```
 
 - Constant List
 

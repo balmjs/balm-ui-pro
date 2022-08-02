@@ -1,17 +1,14 @@
+```html
 <template>
-  <docs-page name="transform" without-css demo-count="1">
-    <div>
-      <p>Original Data: {{ formData }}</p>
-      <hr />
-      <p>Transform In Data: {{ transformInData }}</p>
-      <hr />
-      <p>Transform Out Data: {{ transformOutData }}</p>
-    </div>
-    <ui-snippet :code="$store.demos[1]"></ui-snippet>
-  </docs-page>
+  <p>Original Data: {{ formData }}</p>
+  <hr />
+  <p>Transform In Data: {{ transformInData }}</p>
+  <hr />
+  <p>Transform Out Data: {{ transformOutData }}</p>
 </template>
+```
 
-<script>
+```js
 import { useTransform } from 'balm-ui-pro';
 
 const transform = useTransform();
@@ -67,4 +64,4 @@ export default {
     };
   }
 };
-</script>
+```

@@ -9,6 +9,7 @@
     "quickstart": "Get Started",
     "components": "Components",
     "form-view": "Form View",
+    "form-items": "Form Items",
     "detail-view": "Detail View",
     "table-view": "Table View",
     "readonly-item": "Readonly Item",

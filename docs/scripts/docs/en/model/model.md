@@ -15,13 +15,13 @@ interface VueInstance {
     apis: { [apiName: string]: ApiUrl };
 
     createApis: (
-      frontEndApiName: ApiModelName,
+      frontEndApiName: ModelName,
       backEndApi: ApiEndpoint,
       operations: Operation[],
       config?: CustomApiConfig
     ) => { [apiName: string]: ApiUrl };
     getApi: (
-      frontEndApiName: ApiModelName,
+      frontEndApiName: ModelName,
       operation: Operation,
       apiActionSuffix?: string
     ) => ApiUrl;
@@ -66,7 +66,7 @@ interface VueInstance {
       options?: routeOptions
     ) => VueRoute;
     createRoutes: (
-      name: string,
+      name: ModelName,
       components: RoutesComponents,
       options?: RoutesOptions
     ) => VueRoute[];
