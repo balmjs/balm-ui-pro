@@ -8,10 +8,6 @@ export default {
       type: String,
       default: ''
     },
-    modelName: {
-      type: String,
-      default: ''
-    },
     modelPath: {
       type: String,
       default: ''

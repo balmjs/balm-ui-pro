@@ -26,6 +26,6 @@ export function mockServer() {
   return server;
 }
 
-if (process.env.NODE_ENV === 'development') {
-  mockServer();
-}
+// if (process.env.NODE_ENV === 'development') {
+mockServer();
+// }

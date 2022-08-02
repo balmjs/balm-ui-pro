@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <docs-page name="detail-view" without-css>
     <ui-detail-view
       title="Detail View"
       model="user"
@@ -12,18 +12,25 @@
     >
       <template #custom-slot>gg</template>
     </ui-detail-view>
-  </div>
+  </docs-page>
 </template>
 
 <script>
+import {
+  defaultSelectOptions,
+  defaultCheckboxOptions,
+  defaultRadioOptions,
+  defaultChipsOptions
+} from './options';
+
 export default {
   data() {
     return {
       modelOptions: {
-        selectOptions: [],
-        checkboxOptions: [],
-        radioOptions: [],
-        chipsOptions: [],
+        selectOptions: defaultSelectOptions,
+        checkboxOptions: defaultCheckboxOptions,
+        radioOptions: defaultRadioOptions,
+        chipsOptions: defaultChipsOptions,
         multiSelectOptions1: []
       }
     };

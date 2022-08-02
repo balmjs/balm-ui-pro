@@ -72,3 +72,11 @@ interface VueInstance {
     ) => VueRoute[];
   }
   ```
+
+### Use `$apiModel` or `$routerModel` without `.vue` component
+
+```js
+import { useApiModel, useRouterModel } from 'balm-ui-pro';
+// OR
+// import { useApiModel, useRouterModel } from 'balm-ui-pro/plugins/model';
+```

@@ -14,10 +14,8 @@
       >
         BalmUI Pro
       </router-link>
-      <template #toolbar="{ itemClass }">
-        <a :class="itemClass" href="https://github.com/balmjs/balm-ui-pro">
-          <svg-github></svg-github>
-        </a>
+      <template #toolbar="{ toolbarItemClass }">
+        <top-app-toolbar :item-class="toolbarItemClass"></top-app-toolbar>
       </template>
     </ui-top-app-bar>
     <!-- Content -->
@@ -132,13 +130,13 @@
 </template>
 
 <script>
-import SvgGithub from '@/components/github';
+import TopAppToolbar from '@/components/top-app-toolbar';
 import { VERSION, $MIN_WIDTH } from '@/config';
 import menu from '@/config/menu';
 
 export default {
   components: {
-    SvgGithub
+    TopAppToolbar
   },
   data() {
     return {

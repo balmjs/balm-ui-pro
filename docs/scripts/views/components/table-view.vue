@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <docs-page name="table-view" without-css>
     <ui-table-view
       title="Table View"
       model="user"
@@ -16,7 +16,7 @@
         {{ currentMinRow }} - {{ currentMaxRow }} / {{ total }}
       </template> -->
     </ui-table-view>
-  </div>
+  </docs-page>
 </template>
 
 <script>

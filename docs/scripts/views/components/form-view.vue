@@ -35,54 +35,12 @@
 <script>
 import XFormItem from '@/components/x-form-item';
 import modelConfig from '@/model-config/a.json';
-
-const defaultSelectOptions = [
-  {
-    label: 'A',
-    value: 1
-  },
-  {
-    label: 'B',
-    value: 2
-  }
-];
-
-const defaultCheckboxOptions = [
-  {
-    label: 'C',
-    value: 3
-  },
-  {
-    label: 'D',
-    value: 4
-  }
-];
-
-const defaultRadioOptions = [
-  {
-    label: 'E',
-    value: 5
-  },
-  {
-    label: 'F',
-    value: 6
-  }
-];
-
-const defaultChipsOptions = [
-  {
-    label: 'G',
-    value: 7
-  },
-  {
-    label: 'H',
-    value: 8
-  },
-  {
-    label: 'I',
-    value: 9
-  }
-];
+import {
+  defaultSelectOptions,
+  defaultCheckboxOptions,
+  defaultRadioOptions,
+  defaultChipsOptions
+} from './options';
 
 const actionConfig = [
   {

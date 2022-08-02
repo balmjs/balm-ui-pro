@@ -1,5 +1,5 @@
 ```ts
-type FormData = { [key: string]: any };
+type FormData = { [key: string]: unknown };
 
 interface Transform {
   in: (data: FormData) => Transform;
@@ -13,4 +13,12 @@ interface Transform {
 interface VueInstance {
   $transform: Transform;
 }
+```
+
+### Use `$transform` without `.vue` component
+
+```js
+import { useTransform } from 'balm-ui-pro';
+// OR
+// import { useTransform } from 'balm-ui-pro/plugins/transform';
 ```

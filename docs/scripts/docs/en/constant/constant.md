@@ -34,3 +34,15 @@ interface VueInstance {
 
   type ConstantMap = { [key: ConstantKey]: ConstantValue };
   ```
+
+### Use `$constant` without `.vue` component
+
+- `useConstant` = `$constant.use`
+- `useConstantList` = `$constant.useList`
+- `useConstantMap` = `$constant.useMap`
+
+```js
+import { useConstant, useConstantList, useConstantMap } from 'balm-ui-pro';
+// OR
+// import { useConstant, useConstantList, useConstantMap } from 'balm-ui-pro/plugins/constant';
+```
