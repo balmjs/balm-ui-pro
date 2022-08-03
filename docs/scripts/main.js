@@ -15,7 +15,7 @@ import {
   customComponents
 } from '@/config/components';
 // PWA
-// import './my-sw';
+import './my-sw';
 
 function createBalmUIProApp(mock = false) {
   Vue.prototype.$mock = mock;

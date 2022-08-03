@@ -28,6 +28,23 @@ function getConfig(balm) {
       lint: true,
       entry: useDocsDev
         ? {
+            hello: [
+              '@babel/runtime-corejs3',
+              'axios',
+              'core-js',
+              'core-js-pure',
+              'prismjs',
+              'vue',
+              'vue-i18n',
+              'vue-router'
+            ],
+            'balm-ui': [
+              '@material',
+              'deepmerge',
+              'flatpickr',
+              'quill',
+              'src/scripts'
+            ],
             app: './docs/scripts/index.js'
           }
         : {
