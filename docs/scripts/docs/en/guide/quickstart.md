@@ -1,5 +1,9 @@
 # Quick Start
 
+## Tips before development
+
+BalmUI Pro is a front-end scaffolding. By default, readers have already understood some basic front-end knowledge, and understand awesome CLI and BalmUI. If you are a pure novice, it is recommended to read [Beginner's Need to know](https://v8.material.balmjs.com/#/guide/quickstart).
+
 ## Installing
 
 ```bash
