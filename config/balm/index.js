@@ -101,10 +101,12 @@ function getConfig(balm) {
         : {}
     },
     extras: {
+      excludes: ['index.js', 'service-worker.js'],
       includes: ['CNAME']
     },
     assets: {
-      cache: env.buildDocs
+      cache: env.buildDocs,
+      excludes: ['dist/img/icons/icon-*.png']
     },
     pwa: {
       enabled: env.buildDocs,
