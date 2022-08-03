@@ -1,6 +1,18 @@
-# BalmUIPro ChangeLog
+# [BalmUI Pro](https://legacy.pro.balmjs.com/) ChangeLog
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
+
+## v0.23.0 / 2022-08-03
+
+## Chore
+
+- `<ui-form-view`: clean code
+- `<ui-detail-view`, `<ui-table-view>`: optimize message
+- `$model`: optimize `urlToCamelCase` options and message
+
+### Bug Fixes
+
+- `<ui-multi-select>`: fix root options bug for dynamic form config
 
 ## v0.22.0 / 2022-08-01
 

@@ -1,6 +1,6 @@
 {
   "name": "balm-ui-pro",
-  "version": "0.22.0-legacy",
+  "version": "0.23.0-legacy",
   "description": "BalmUI Pro",
   "keywords": [
     "balm",
@@ -70,7 +70,7 @@
     "webpack": "4"
   },
   "peerDependencies": {
-    "balm-ui": "^8.52.2",
+    "balm-ui": "^8.54.0",
     "vue": ">=2.6.0",
     "vue-router": ">=3 <4"
   }

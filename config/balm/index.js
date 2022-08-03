@@ -1,3 +1,4 @@
+const pkg = require('../../package.json');
 const env = require('./env');
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
@@ -104,6 +105,11 @@ function getConfig(balm) {
     },
     assets: {
       cache: env.buildDocs
+    },
+    pwa: {
+      enabled: env.buildDocs,
+      mode: 'injectManifest',
+      version: `v${pkg.version.replace(/-legacy/g, '').replace(/\./g, '')}`
     },
     logs: {
       level: 2
