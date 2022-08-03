@@ -1,9 +1,8 @@
 <template>
-  <docs-page name="form-view" without-css>
+  <docs-page name="form-view" without-css demo-count="1">
     <ui-form-view
       v-model="formData"
       :model-config="modelConfig"
-      :model-options="modelOptions"
       :action-config="actionConfig"
       @action="onAction"
       @change:x="onChange"
@@ -29,18 +28,20 @@
     </ui-form-view>
     <!-- <ui-button @click="clearFormData">Clear formData</ui-button>
     <ui-button @click="setFormData">Set formData</ui-button> -->
+    <ui-snippet :code="$store.demos[1]"></ui-snippet>
   </docs-page>
 </template>
 
 <script>
 import XFormItem from '@/components/x-form-item';
 import modelConfig from '@/model-config/a.json';
-import {
-  defaultSelectOptions,
-  defaultCheckboxOptions,
-  defaultRadioOptions,
-  defaultChipsOptions
-} from './options';
+// import {
+//   defaultSelectOptions,
+//   defaultCheckboxOptions,
+//   defaultRadioOptions,
+//   defaultChipsOptions,
+//   switchOptions
+// } from './options';
 
 const actionConfig = [
   {
@@ -70,13 +71,14 @@ export default {
         b: 'world'
       },
       modelConfig,
-      modelOptions: {
-        selectOptions: defaultSelectOptions,
-        checkboxOptions: defaultCheckboxOptions,
-        radioOptions: defaultRadioOptions,
-        chipsOptions: defaultChipsOptions,
-        multiSelectOptions1: []
-      },
+      // modelOptions: {
+      //   selectOptions: defaultSelectOptions,
+      //   checkboxOptions: defaultCheckboxOptions,
+      //   radioOptions: defaultRadioOptions,
+      //   chipsOptions: defaultChipsOptions,
+      //   switchOptions,
+      //   multiSelectOptions1: []
+      // },
       actionConfig,
       message: ''
     };
@@ -92,34 +94,34 @@ export default {
     // const selectOptions = await this.$store.getModel(
     //   'demo',
     //   {},
-    //   { apiName: 'selectOptions' }
+    //   { apiAction: 'selectOptions' }
     // );
     // const checkboxOptions = await this.$store.getModel(
     //   'demo',
     //   {},
-    //   { apiName: 'checkboxOptions' }
+    //   { apiAction: 'checkboxOptions' }
     // );
     // const radioOptions = await this.$store.getModel(
     //   'demo',
     //   {},
-    //   { apiName: 'radioOptions' }
+    //   { apiAction: 'radioOptions' }
     // );
     // const chipsOptions = await this.$store.getModel(
     //   'demo',
     //   {},
-    //   { apiName: 'chipsOptions' }
+    //   { apiAction: 'chipsOptions' }
     // );
-    const multiSelectOptions1 = await this.$store.getModel(
-      'demo',
-      {},
-      { apiName: 'multiSelectOptions1' }
-    );
+    // const multiSelectOptions1 = await this.$store.getModel(
+    //   'demo',
+    //   {},
+    //   { apiAction: 'multiSelectOptions1' }
+    // );
 
     // this.$set(this.modelOptions, 'selectOptions', selectOptions);
     // this.$set(this.modelOptions, 'checkboxOptions', checkboxOptions);
     // this.$set(this.modelOptions, 'radioOptions', radioOptions);
     // this.$set(this.modelOptions, 'chipsOptions', chipsOptions);
-    this.$set(this.modelOptions, 'multiSelectOptions1', multiSelectOptions1);
+    // this.$set(this.modelOptions, 'multiSelectOptions1', multiSelectOptions1);
 
     if (this.id) {
       this.formData = await this.$store.getModelDetail('user', {

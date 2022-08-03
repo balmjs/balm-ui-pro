@@ -1,4 +1,18 @@
 export default [
+  ['user', '/user', ['create', 'read', 'update', 'delete']],
+  [
+    'post',
+    '/post',
+    ['read'],
+    {
+      crud: {
+        read: {
+          '': 'get',
+          index: 'index'
+        }
+      }
+    }
+  ],
   [
     'demo',
     '/demo',
@@ -13,20 +27,6 @@ export default [
           multiSelectOptions1: 'multi-select/options1',
           multiSelectOptions2: 'multi-select/options2',
           multiSelectOptions3: 'multi-select/options3'
-        }
-      }
-    }
-  ],
-  ['user', '/user', ['create', 'read', 'update', 'delete']],
-  [
-    'post',
-    '/post',
-    ['read'],
-    {
-      crud: {
-        read: {
-          '': 'get',
-          index: 'index'
         }
       }
     }

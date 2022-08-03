@@ -1,11 +1,9 @@
 ```html
-<template>
-  <p>Original Data: {{ formData }}</p>
-  <hr />
-  <p>Transform In Data: {{ transformInData }}</p>
-  <hr />
-  <p>Transform Out Data: {{ transformOutData }}</p>
-</template>
+<p>Original Data: {{ formData }}</p>
+<hr />
+<p>Transform In Data: {{ transformInData }}</p>
+<hr />
+<p>Transform Out Data: {{ transformOutData }}</p>
 ```
 
 ```js

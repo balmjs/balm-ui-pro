@@ -96,10 +96,10 @@
 | `tbody`                | array    | `[]`                                            | Table content renderer, see BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table) |
 | `actionConfig`         | array    | `ActionButton[]`                                | Table cell button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button)  |
 | `actionHandler`        | function | `() => {}`                                      | Table cell button handler                                                                                         |
-| `actionRendering`      | function | `(action: object, data: object) => true`        | Table cell button rendering handler by server-side                                                                |
+| `actionRendering`      | function | `() => true`                                    | Table cell button rendering handler by server-side                                                                |
 | `topbarConfig`         | array    | `TopbarActionButton[]`                          | Topbar button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button)      |
 | `topbarHandler`        | function | `() => {}`                                      | Topbar button handler                                                                                             |
-| `topbarRendering`      | function | `(action: object, tableData: object) => true`   | Topbar button rendering handler by server-side                                                                    |
+| `topbarRendering`      | function | `() => true`                                    | Topbar button rendering handler by server-side                                                                    |
 | `tableAttrOrProp`      | object   | `{}`                                            | See BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table)                         |
 | `tableDataFormat`      | object   | `{ data: 'data', total: 'total' }`              | Defines the table data format for API                                                                             |
 | `pageSize`             | number   | `10`                                            | Default page size                                                                                                 |

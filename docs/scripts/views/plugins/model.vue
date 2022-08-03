@@ -123,8 +123,7 @@ export default {
             this.formData.actionSuffix
           );
         } catch (e) {
-          this.message = 'Invalid API';
-          console.warn(e.toString());
+          this.message = e.toString();
         }
       }
     }

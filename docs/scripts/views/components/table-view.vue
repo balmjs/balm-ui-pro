@@ -1,5 +1,5 @@
 <template>
-  <docs-page name="table-view" without-css>
+  <docs-page name="table-view" without-css demo-count="1">
     <ui-table-view
       title="Table View"
       model="user"
@@ -16,6 +16,7 @@
         {{ currentMinRow }} - {{ currentMaxRow }} / {{ total }}
       </template> -->
     </ui-table-view>
+    <ui-snippet :code="$store.demos[1]"></ui-snippet>
   </docs-page>
 </template>
 

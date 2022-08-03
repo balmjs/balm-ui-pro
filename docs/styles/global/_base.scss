@@ -84,4 +84,9 @@ h6 {
   min-height: 360px;
   padding: 40px 0;
   background-color: #f7f7f7;
+
+  & > h1 {
+    font-size: 3.14rem;
+    font-weight: 300;
+  }
 }

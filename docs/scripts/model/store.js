@@ -1,6 +1,7 @@
 import { useApiModel } from 'balm-ui-pro';
 import { useHttp } from '@/plugins/http';
 import { API_ENDPOINT } from '@/config';
+import demoOptions from '@/views/components/options';
 
 const $apiModel = useApiModel();
 const http = useHttp();
@@ -21,11 +22,28 @@ export default {
       return config;
     },
     async setModelOptions(modelList) {
-      console.log('setModelOptions model list', modelList);
+      const modelOptions = {};
 
-      return {
-        test: 'hello world'
-      };
+      for (const model of modelList) {
+        const modelType = model.split(':');
+        const [modelName, apiAction] = modelType;
+
+        switch (modelName) {
+          case 'demo':
+            if (apiAction === 'multiSelect') {
+              modelOptions[`${apiAction}Options1`] = await this.$store.getModel(
+                modelName,
+                {},
+                { apiAction: `${apiAction}Options1` }
+              );
+            } else {
+              modelOptions[`${apiAction}Options`] = demoOptions[apiAction];
+            }
+            break;
+        }
+      }
+
+      return modelOptions;
     },
     requestConfig(config = {}) {
       const { mock, ...options } = config;
@@ -55,9 +73,9 @@ export default {
       );
     },
     getModel(model, params = {}, config = {}) {
-      const { apiName, options } = config;
-      const api = apiName
-        ? $apiModel.getApi(model, 'read', apiName)
+      const { apiAction, options } = config;
+      const api = apiAction
+        ? $apiModel.getApi(model, 'read', apiAction)
         : $apiModel.getApi(model, 'read');
 
       return http.get(api, {

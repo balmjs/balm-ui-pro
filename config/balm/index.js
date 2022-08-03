@@ -36,11 +36,13 @@ function getConfig(balm) {
               'prismjs',
               'vue',
               'vue-i18n',
-              'vue-router'
+              'vue-router',
+              'miragejs',
+              'miragejs-axios-adapter'
             ],
-            'balm-ui': [
+            'balm-ui-pro': [
               '@material',
-              'deepmerge',
+              'balm-ui',
               'flatpickr',
               'quill',
               'src/scripts'

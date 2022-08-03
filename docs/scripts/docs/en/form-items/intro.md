@@ -2,6 +2,8 @@
 
 ## BalmUI form item components:
 
+> Visit [v8.material.balmjs.com](https://v8.material.balmjs.com/) for documentation
+
 - `<ui-textfield>`
 - `<ui-autocomplete>`
 - `<ui-editor>`
@@ -16,13 +18,15 @@
 
 ## BalmUI Pro form item components:
 
+> Documentation is coming up...
+
 - `<ui-readonly-item>`
 - `<ui-checkbox-group>`
 - `<ui-radio-group>`
 - `<ui-switch-box>`
 - `<ui-multi-select>`
 
-## Custom form item components:
+## Develop custom form item components:
 
 ### Common Props
 

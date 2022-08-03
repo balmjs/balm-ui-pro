@@ -16,6 +16,7 @@
 | `gridAttrOrProp`     | object                   | `{}`       | See BalmUI `<ui-grid>` props [docs](https://v8.material.balmjs.com/#/layout/grid)                          |
 | `gridCellAttrOrProp` | object                   | `{}`       | See BalmUI `<ui-grid-cell>` props [docs](https://v8.material.balmjs.com/#/layout/grid)                     |
 | `actionConfig`       | array                    | `[]`       | Form button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button) |
+| `setModelOptionsFn`  | function, boolean        | `false`    | Form model options handler by the `model` list of form model config                                        |
 
 - `modelConfig: FormItemConfig[] | (formData: object) => FormItemConfig[] | false`
 

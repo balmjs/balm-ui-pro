@@ -11,7 +11,7 @@ export const DEMO_DATA = [
   }
 ];
 
-export const MODEL_NAME_DATA = ['demo', 'user', 'post'].map((key) => ({
+export const MODEL_NAME_DATA = ['user', 'post', 'demo'].map((key) => ({
   label: key,
   key,
   value: key

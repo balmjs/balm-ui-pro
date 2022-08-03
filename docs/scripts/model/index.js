@@ -1,5 +1,6 @@
 import apis from './apis';
 export * from './config';
+import { isDev } from '@/config';
 
 export default {
   crud: {
@@ -15,5 +16,5 @@ export default {
   // formatApiAction: (modelName, actionName) => `${modelName}-${actionName}`,
   // urlToCamelCase: true,
   apis,
-  debug: true
+  debug: isDev
 };

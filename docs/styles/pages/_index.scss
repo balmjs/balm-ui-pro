@@ -1,1 +1,9 @@
 @use './home';
+
+.mdc-form-view--use-grid {
+  .mdc-form__item > label {
+    flex-basis: 80px;
+    margin-right: 10px;
+    text-align: right;
+  }
+}

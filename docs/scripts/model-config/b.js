@@ -1,7 +1,5 @@
-import { useHttp } from '@/plugins/http';
 import { useStore } from 'balm-ui';
 
-const http = useHttp();
 const store = useStore();
 
 export default ({
@@ -10,11 +8,10 @@ export default ({
   checkboxOptions,
   radioOptions,
   chipsOptions,
-  multiSelectOptions1,
-  test
+  switchOptions,
+  multiSelectOptions1
 }) => {
   console.log('static data', data);
-  console.log('test default model options', test);
 
   const { id } = data;
 
@@ -54,6 +51,7 @@ export default ({
       component: 'ui-select',
       key: 'd',
       value: '',
+      model: 'demo:select',
       attrOrProp: {
         defaultLabel: 'default',
         options: selectOptions
@@ -65,6 +63,7 @@ export default ({
       component: 'ui-checkbox-group',
       key: 'e',
       value: data.e || [],
+      model: 'demo:checkbox',
       attrOrProp: {
         options: checkboxOptions
       }
@@ -74,6 +73,7 @@ export default ({
       component: 'ui-radio-group',
       key: 'f',
       value: '',
+      model: 'demo:radio',
       attrOrProp: {
         options: radioOptions
       }
@@ -83,6 +83,7 @@ export default ({
       component: 'ui-chips',
       key: 'g',
       value: [8],
+      model: 'demo:chips',
       attrOrProp: {
         type: 'filter',
         options: chipsOptions
@@ -105,17 +106,9 @@ export default ({
       component: 'ui-switch-box',
       key: 'j',
       value: 'off',
+      model: 'demo:switch',
       attrOrProp: {
-        options: [
-          {
-            label: 'ON',
-            value: 'on'
-          },
-          {
-            label: 'OFF',
-            value: 'off'
-          }
-        ],
+        options: switchOptions,
         switchAttrOrProp: {
           trueValue: 'on',
           falseValue: 'off'
@@ -131,6 +124,7 @@ export default ({
     {
       label: 'Multi-select',
       component: 'ui-multi-select',
+      model: 'demo:multiSelect',
       components: [
         {
           key: 'l',
@@ -151,7 +145,7 @@ export default ({
                 store.getModel(
                   'demo',
                   { id: l },
-                  { apiName: 'multiSelectOptions2' }
+                  { apiAction: 'multiSelectOptions2' }
                 )
               : [],
           attrOrProp: {
@@ -169,7 +163,7 @@ export default ({
                 await store.getModel(
                   'demo',
                   { id: m },
-                  { apiName: 'multiSelectOptions3' }
+                  { apiAction: 'multiSelectOptions3' }
                 )
               : [],
           attrOrProp: {

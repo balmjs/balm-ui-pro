@@ -45,3 +45,24 @@ export const defaultChipsOptions = [
     value: 9
   }
 ];
+
+export const switchOptions = [
+  {
+    label: 'ON',
+    value: 'on'
+  },
+  {
+    label: 'OFF',
+    value: 'off'
+  }
+];
+
+const demoOptions = {
+  select: defaultSelectOptions,
+  checkbox: defaultCheckboxOptions,
+  radio: defaultRadioOptions,
+  chips: defaultChipsOptions,
+  switch: switchOptions
+};
+
+export default demoOptions;

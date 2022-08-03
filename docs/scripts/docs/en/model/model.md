@@ -23,7 +23,7 @@ interface VueInstance {
     getApi: (
       frontEndApiName: ModelName,
       operation: Operation,
-      apiActionSuffix?: string
+      actionSuffix?: string
     ) => ApiUrl;
   }
   ```
