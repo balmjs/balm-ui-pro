@@ -18,6 +18,32 @@
         <top-app-toolbar :item-class="toolbarItemClass"></top-app-toolbar>
       </template>
     </ui-top-app-bar>
+    <!-- Global Message -->
+    <ui-banner
+      v-model="showBanner"
+      class="global-message-banner"
+      centered
+      fixed
+      with-image
+      mobile-stacked
+    >
+      <template #image>
+        <ui-icon>{{ hasNewVersion ? 'refresh' : 'celebration' }}</ui-icon>
+      </template>
+      <template v-if="hasNewVersion">New content is available.</template>
+      <!-- <template v-else>
+        You’re browsing the documentation for vue@2.x.
+        <a href="https://pro.balmjs.com/" target="_blank" rel="noopener">
+          Click here
+        </a>
+        for vue@3.x documentation.
+      </template> -->
+      <template #actions>
+        <ui-button outlined @click="$balmUI.onHide('showBanner', refresh)">{{
+          hasNewVersion ? 'Refresh' : 'GOT IT'
+        }}</ui-button>
+      </template>
+    </ui-banner>
     <!-- Content -->
     <div class="balmui-body">
       <!-- Drawer -->
@@ -145,7 +171,9 @@ export default {
       bodyEl: document.documentElement || document.body,
       isWideScreen: true,
       drawerType: 'permanent',
-      openDrawer: false
+      openDrawer: false,
+      showBanner: false,
+      hasNewVersion: false
     };
   },
   mounted() {
@@ -153,6 +181,11 @@ export default {
       setTimeout(() => {
         this.bodyEl.scrollTop = 0;
       }, 1);
+    });
+
+    this.$bus.on('refresh', () => {
+      this.hasNewVersion = true;
+      this.showBanner = true;
     });
 
     this.init();
@@ -176,6 +209,12 @@ export default {
       }
 
       navigate(event);
+    },
+    refresh() {
+      if (this.hasNewVersion) {
+        this.$store.serviceWorker.postMessage({ action: 'skipWaiting' });
+        this.hasNewVersion = false;
+      }
     }
   }
 };
