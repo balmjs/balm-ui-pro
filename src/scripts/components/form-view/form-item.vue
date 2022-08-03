@@ -34,7 +34,7 @@
                     formData,
                     formDataSource
                   },
-                  config.attrOrProp
+                  config.attrOrProp || {}
                 )
               "
               @[eventName]="handleChange(config, $event)"
@@ -51,7 +51,7 @@
                     formData,
                     formDataSource
                   },
-                  config.attrOrProp
+                  config.attrOrProp || {}
                 )
               "
               @[eventName]="handleChange(config, $event)"

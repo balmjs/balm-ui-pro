@@ -48,17 +48,17 @@ export default {
     lastSelectedKey() {
       return this.selectedKeys[this.selectedKeys.length - 1];
     },
-    hasSelectedValue() {
-      return this.selectedKeys.some((key) => this.selectedData[key]);
-    },
     hasSelectedOptions() {
       const rootSelectedOptions = this.selectedOptions[this.rootSelectedKey];
       return Array.isArray(rootSelectedOptions) && !!rootSelectedOptions.length;
     }
   },
   watch: {
-    components() {
-      this.initRootOptions(); // NOTE: for static options
+    components: {
+      handler() {
+        this.initRootOptions(); // NOTE: for static options
+      },
+      immediate: true // NOTE: for dynamic form config
     },
     formData: {
       handler(val) {
@@ -68,14 +68,23 @@ export default {
       immediate: true // NOTE: for dynamic form config
     }
   },
-  mounted() {
+  beforeMount() {
     if (this.components.length) {
       this.initOptions();
     } else {
-      console.warn('[UiMultiSelect]: `components` are empty');
+      console.warn('[UiMultiSelect]: form config `components` are empty');
     }
   },
   methods: {
+    initOptions() {
+      if (!this.hasSelectedOptions) {
+        for (const { key, value } of this.components) {
+          this.$set(this.selectedData, key, value);
+          this.$set(this.selectedOptions, key, []);
+          this.$set(this.optionsMap, key, new Map());
+        }
+      }
+    },
     async setSelectedOptions(parentValue, { key, options }) {
       let optionsMap = this.optionsMap[key];
 
@@ -94,8 +103,12 @@ export default {
           ? await options(currentFormData)
           : options;
 
-        if (selectedOptions.length) {
-          optionsMap.set(parentValue, selectedOptions);
+        if (Array.isArray(selectedOptions)) {
+          if (selectedOptions.length) {
+            optionsMap.set(parentValue, selectedOptions);
+          }
+        } else {
+          console.warn('[UiMultiSelect]: `options` must return an array');
         }
       }
 
@@ -104,16 +117,8 @@ export default {
     },
     initRootOptions() {
       if (!this.hasSelectedOptions) {
+        this.initOptions();
         this.setSelectedOptions(0, this.components[0]);
-      }
-    },
-    async initOptions() {
-      if (!this.hasSelectedValue) {
-        for (const { key, value } of this.components) {
-          this.$set(this.selectedData, key, value);
-          this.$set(this.selectedOptions, key, []);
-          this.$set(this.optionsMap, key, new Map());
-        }
       }
     },
     async updateOptions(formData) {

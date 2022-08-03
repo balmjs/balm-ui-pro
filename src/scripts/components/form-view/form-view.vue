@@ -122,14 +122,14 @@
                   v-if="buttonData.type === NATIVE_BUTTON_TYPES.submit"
                   :key="`form-submit-${buttonIndex}`"
                   v-debounce="handleAction(buttonData)"
-                  v-bind="buttonData.attrOrProp"
+                  v-bind="buttonData.attrOrProp || {}"
                 >
                   {{ buttonData.text }}
                 </ui-button>
                 <ui-button
                   v-else
                   :key="`form-button-${buttonIndex}`"
-                  v-bind="buttonData.attrOrProp"
+                  v-bind="buttonData.attrOrProp || {}"
                   @click="handleAction(buttonData)"
                 >
                   {{ buttonData.text }}
@@ -280,16 +280,16 @@ export default {
         }
       }
     },
-    async modelOptions(val) {
-      this.isFunctionConfig && (await this.setFormConfig());
+    async modelOptions() {
+      await this.setFormConfig();
 
       if (this.hasFormDataSource) {
         this.updateFormData();
       }
     }
   },
-  beforeMount() {
-    this.setFormConfig(this.modelConfig, true);
+  async beforeMount() {
+    await this.setFormConfig(this.modelConfig, true);
 
     const synchronized = this.updateFormData();
     !synchronized && this.syncFormData();
@@ -314,7 +314,9 @@ export default {
         .filter(({ model }) => model)
         .map(({ model }) => model);
 
-      this.defaultModelOptions = await this.setModelOptionsFn(modelList);
+      this.defaultModelOptions = modelList.length
+        ? await this.setModelOptionsFn(modelList)
+        : {};
 
       if (getType(this.defaultModelOptions) !== 'object') {
         this.defaultModelOptions = {};

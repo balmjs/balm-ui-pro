@@ -176,12 +176,14 @@ class ApiModel {
     return apis;
   }
 
-  getApi(frontEndApiName, operation, suffix = '') {
+  getApi(frontEndApiName, operation, actionSuffix = '') {
     let name;
 
     if (REST_API.operations.includes(operation)) {
       const defaultName = `${operation}-${frontEndApiName}`;
-      const apiName = suffix ? `${defaultName}-${suffix}` : defaultName;
+      const apiName = actionSuffix
+        ? `${defaultName}-${actionSuffix}`
+        : defaultName;
       name = toCamelCase(apiName);
     } else {
       throw new Error(
@@ -190,7 +192,9 @@ class ApiModel {
     }
 
     if (getType(globalApis[name]) === 'undefined') {
-      throw new Error(`[${API_NAME}]: '${name}' is an invalid API name`);
+      throw new Error(
+        `[${API_NAME}]: '${name}' (modelName: '${frontEndApiName}', operation: '${operation}', actionSuffix: '${actionSuffix}') is an invalid API name`
+      );
     }
 
     return globalApis[name];
