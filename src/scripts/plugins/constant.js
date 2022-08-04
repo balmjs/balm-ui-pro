@@ -67,12 +67,12 @@ class Constant {
 
     checkFormat(formatKey, formatValue, 'key');
 
-    return Object.assign(
-      {},
-      ...this.use(key).map((data) => ({
-        [data[formatKey]]: data[formatValue]
-      }))
-    );
+    return this.use(key).reduce((previousValue, currentValue) => {
+      const k = currentValue[formatKey];
+      const v = currentValue[formatValue];
+      previousValue[k] = v;
+      return previousValue;
+    }, {});
   }
 }
 
