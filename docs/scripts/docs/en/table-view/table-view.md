@@ -2,8 +2,6 @@
 <ui-table-view></ui-table-view>
 ```
 
-### Props
-
 - Search actions
 
   ```js
@@ -34,27 +32,42 @@
 - Top bar actions
 
   ```ts
+  type TopbarData = {
+    defaultParams: object;
+    selectedRows: string[];
+    tableData: object[];
+    searchFormData: object;
+  };
+  type RefreshFn = function;
+  ```
+
+  ```ts
   interface TopbarActionButton {
     type: 'router-link' | string;
     icon?: string;
     text: string;
     routeName?: string;
     attrOrProp?: object;
+    handler?: (data: TopbarData, refresh: RefreshFn) => void;
   }
 
-  type TopbarHandler = (
+  type GlobalTopbarHandler = (
     action: TopbarActionButton,
-    data: {
-      defaultParams: object;
-      selectedRows: string[];
-      tableData: object[];
-      searchFormData: object;
-    },
-    refresh: Function
+    data: TopbarData,
+    refresh: RefreshFn
   ) => void;
   ```
 
 - Table cell actions
+
+  ```ts
+  type CellData = {
+    model: string;
+    keyName: string;
+    data: object;
+  };
+  type RefreshFn = function;
+  ```
 
   ```ts
   interface ActionButton {
@@ -67,19 +80,21 @@
     routeParams?: (data: object) => {};
     href?: string;
     attrOrProp?: object;
-    component?: string;
+    component?: string;,
+    handler?: (
+      data: CellData,
+      refresh: RefreshFn
+    ) => void;
   }
 
-  type ActionHandler = (
+  type GlobalActionHandler = (
     action: ActionButton,
-    data: {
-      model: string;
-      keyName: string;
-      data: object;
-    },
-    refresh: Function
+    data: CellData,
+    refresh: RefreshFn
   ) => void;
   ```
+
+### Props
 
 | Name                   | Type     | Default                                         | Description                                                                                                       |
 | ---------------------- | -------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
@@ -95,10 +110,10 @@
 | `thead`                | array    | `[]`                                            | Table header renderer, see BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table)  |
 | `tbody`                | array    | `[]`                                            | Table content renderer, see BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table) |
 | `actionConfig`         | array    | `ActionButton[]`                                | Table cell button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button)  |
-| `actionHandler`        | function | `() => {}`                                      | Table cell button handler                                                                                         |
+| `actionHandler`        | function | `GlobalActionHandler`                           | Table cell button handler                                                                                         |
 | `actionRendering`      | function | `() => true`                                    | Table cell button rendering handler by server-side                                                                |
 | `topbarConfig`         | array    | `TopbarActionButton[]`                          | Topbar button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button)      |
-| `topbarHandler`        | function | `() => {}`                                      | Topbar button handler                                                                                             |
+| `topbarHandler`        | function | `GlobalTopbarHandler`                           | Topbar button handler                                                                                             |
 | `topbarRendering`      | function | `() => true`                                    | Topbar button rendering handler by server-side                                                                    |
 | `tableAttrOrProp`      | object   | `{}`                                            | See BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table)                         |
 | `tableDataFormat`      | object   | `{ data: 'data', total: 'total' }`              | Defines the table data format for API                                                                             |
@@ -108,3 +123,31 @@
 | `getModelConfigFn`     | function | `(vm) => {}`                                    | Loading model config                                                                                              |
 | `getModelDataFn`       | function | `(vm) => {}`                                    | Loading model data                                                                                                |
 | `useValidator`         | boolean  | `false`                                         | Enables auto validator                                                                                            |
+
+### Slots
+
+| Name                                                 | Props                            | Description                                                                                       |
+| ---------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `title`                                              |                                  | Table view title                                                                                  |
+| custom search form item slots (by form model config) | `config`, `data`                 | Custom search form item slots                                                                     |
+| `topbar`                                             |                                  | Custom table topbar (When `topbarConfig = []`)                                                    |
+| `before-table-view`                                  |                                  | Before table view                                                                                 |
+| custom table slots                                   |                                  | See BalmUI `<ui-table>` slots [docs](https://v8.material.balmjs.com/#/data-display/table)         |
+| `actions`                                            |                                  | Custom table cell actions (When `actionConfig = []`)                                              |
+| custom pagination slots                              | `currentMinRow`, `currentMaxRow` | See BalmUI `<ui-pagination>` slots [docs](https://v8.material.balmjs.com/#/navigation/pagination) |
+| `empty`                                              |                                  | Custom table no data                                                                              |
+| `after-table-view`                                   |                                  | After table view                                                                                  |
+
+### Events
+
+| Name     | Type                                               | Description                              |
+| -------- | -------------------------------------------------- | ---------------------------------------- |
+| `reset`  | `function(vm: object)`                             | Emits when the reset button is clicked.  |
+| `submit` | `function(actionResult: ActionResult, vm: object)` | Emits when the submit button is clicked. |
+
+```ts
+interface ActionResult {
+  type: string; // ActionButton.type,
+  ...validationResult?: BalmUIValidationResult
+}
+```

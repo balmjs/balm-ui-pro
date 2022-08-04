@@ -58,10 +58,10 @@ const DefaultActionConfig: ActionButton[] = [
 
 ### Events
 
-| Name     | Type                                                                            | Description                                                            |
-| -------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| `cancel` | `void`                                                                          | (The prop `to` is `'custom'`) Emits when the cancel button is clicked. |
-| `submit` | `function(type: ActionResult.type, result: BalmUIValidationResult, vm: object)` | Emits when the submit button is clicked.                               |
+| Name     | Type                                               | Description                                                            |
+| -------- | -------------------------------------------------- | ---------------------------------------------------------------------- |
+| `cancel` | `void`                                             | (The prop `to` is `'custom'`) Emits when the cancel button is clicked. |
+| `submit` | `function(actionResult: ActionResult, vm: object)` | Emits when the submit button is clicked.                               |
 
 ```ts
 interface ActionResult {

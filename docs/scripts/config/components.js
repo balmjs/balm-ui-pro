@@ -11,7 +11,7 @@ import myModel, {
   getModelDetailDataFn,
   setModelDataFn
 } from '@/model';
-import myConstants from '@/model/constants';
+import ConstantSource from '@/model/constant-source';
 // Custom
 import PurePage from '@/views/layouts/pure-page';
 import DocsPage from '@/views/layouts/docs-page';
@@ -28,7 +28,7 @@ export const BalmUIConfig = {
 
 export const BalmUIProConfig = {
   $model: myModel,
-  $constant: myConstants,
+  $constant: ConstantSource,
   UiFormView: {
     setModelOptionsFn
   },

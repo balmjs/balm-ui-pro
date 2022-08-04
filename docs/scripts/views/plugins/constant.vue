@@ -4,7 +4,6 @@
       <p>constant: {{ $constant.use('demo') }}</p>
       <hr />
       <p>list: {{ $constant.useList('demo') }}</p>
-      <br />
       <p>
         format list:
         {{

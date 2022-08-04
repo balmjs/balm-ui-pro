@@ -14,16 +14,16 @@
     }
   ];
 
-  export const ConstantConfig = {
+  export const ConstantSource = {
     demo: DEMO_DATA
   };
   ```
 
   ```js
-  import { ConstantConfig } from '@/model';
+  import { ConstantSource } from '@/model';
 
   Vue.use(BalmUIPro, {
-    $constant: ConstantConfig
+    $constant: ConstantSource
   });
   ```
 

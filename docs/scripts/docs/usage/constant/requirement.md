@@ -10,5 +10,5 @@ type Constant = {
 };
 type Constants = Constant[];
 
-type ConstantConfig = { [key: string]: Constants };
+type ConstantSource = { [key: string]: Constants };
 ```

@@ -9,6 +9,8 @@
       :action-config="actionConfig"
       :topbar-config="topbarConfig"
       :action-rendering="actionRendering"
+      @reset="onReset"
+      @submit="onSubmit"
     >
       <!-- <template #before-form-view>xxx</template>
       <template #after-form-view>yyy</template> -->
@@ -62,8 +64,8 @@ const actionConfig = [
   },
   {
     text: 'Link',
-    onClick: () => {
-      console.log('link button');
+    handler: (data, refresh) => {
+      console.log('link button', data);
     }
   }
 ];
@@ -76,7 +78,10 @@ const topbarConfig = [
   },
   {
     type: 'multi-update',
-    text: 'Update'
+    text: 'Update',
+    handler: (data, refresh) => {
+      console.log('update', data);
+    }
   },
   {
     type: 'multi-delete',
@@ -98,6 +103,14 @@ export default {
       topbarConfig,
       actionRendering
     };
+  },
+  methods: {
+    onReset(vm) {
+      console.log('reset', vm);
+    },
+    onSubmit(result, vm) {
+      console.log('submit', result, vm);
+    }
   }
 };
 </script>
