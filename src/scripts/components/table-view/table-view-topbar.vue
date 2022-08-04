@@ -24,6 +24,7 @@
 
 <script>
 import { TYPES, getRouteLocationRaw } from './constants';
+import { isFunction } from '../../utils/typeof';
 
 export default {
   name: 'UiTableViewTopbar',
@@ -73,7 +74,15 @@ export default {
         });
         this.$router.push(to);
       } else {
-        this.tableView.topbarHandler(action, data, this.tableView.getModelData);
+        if (isFunction(action.handler)) {
+          action.handler(data, this.tableView.getModelData);
+        } else {
+          this.tableView.topbarHandler(
+            action,
+            data,
+            this.tableView.getModelData
+          );
+        }
       }
     }
   }

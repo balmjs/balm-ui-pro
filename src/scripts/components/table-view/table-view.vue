@@ -105,8 +105,8 @@
           </template>
         </ui-pagination>
       </template>
-      <div v-else class="mdc-table-view__no-data">
-        <slot name="no-data">{{ noData }}</slot>
+      <div v-else class="mdc-table-view__empty">
+        <slot name="empty">{{ noData }}</slot>
       </div>
 
       <slot name="after-table-view"></slot>
@@ -326,9 +326,9 @@ export default {
           break;
       }
 
-      if (type !== UiTableView.EVENTS.reset) {
-        this.$emit(type, result, this);
-      }
+      type === UiTableView.EVENTS.reset
+        ? this.$emit(type, this)
+        : this.$emit(type, result, this);
     },
     resetSelectedRows() {
       this.$set(this.table, 'selectedRows', []);
