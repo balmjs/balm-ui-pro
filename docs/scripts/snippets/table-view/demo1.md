@@ -3,12 +3,11 @@
   ```js
   export default {
     methods: {
-      async getModelConfig(subPath, mainPath = '') {
+      async getModelConfig(modelPath) {
         let config = [];
 
         try {
-          const modelConfigFile = mainPath ? `${mainPath}/${subPath}` : subPath;
-          const module = await import(`@/${modelConfigFile}`);
+          const module = await import(`@/views/${modelPath}`);
           config = module.default;
         } catch (err) {
           console.warn(err.toString());
