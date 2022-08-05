@@ -34,7 +34,7 @@
 
 <script>
 import XFormItem from '@/components/x-form-item';
-import modelConfig from '@/model-config/a.json';
+import modelConfig from '@/views/model-config/a.json';
 // import {
 //   defaultSelectOptions,
 //   defaultCheckboxOptions,

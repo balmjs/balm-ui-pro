@@ -1,6 +1,6 @@
 import { useApiModel } from 'balm-ui-pro';
 import { useHttp } from '@/plugins/http';
-import { API_ENDPOINT } from '@/config';
+import { isDev, API_ENDPOINT } from '@/config';
 import demoOptions from '@/views/components/options';
 
 const $apiModel = useApiModel();
@@ -8,15 +8,14 @@ const http = useHttp();
 
 export default {
   methods: {
-    async getModelConfig(subPath, mainPath = '') {
+    async getModelConfig(modelPath) {
       let config = [];
 
       try {
-        const modelConfigFile = mainPath ? `${mainPath}/${subPath}` : subPath;
-        const module = await import(`@/${modelConfigFile}`);
+        const module = await import(`@/views/${modelPath}`);
         config = module.default;
       } catch (err) {
-        console.warn(err.toString());
+        isDev && console.warn(err.toString());
       }
 
       return config;
