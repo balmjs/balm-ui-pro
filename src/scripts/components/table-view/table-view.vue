@@ -3,6 +3,7 @@
     <h2 v-if="hasTitle" class="mdc-table-view__title">
       <slot name="title">{{ title }}</slot>
     </h2>
+
     <section v-if="hasSearchForm" class="mdc-table-view__conditions">
       <ui-form-view
         v-model="searchForm.data"
@@ -33,6 +34,7 @@
         </template>
       </ui-form-view>
     </section>
+
     <ui-table-view-topbar
       v-if="topbarConfig.length"
       v-bind="{
@@ -46,7 +48,11 @@
         refreshData: getModelData
       }"
     ></ui-table-view-topbar>
+    <slot v-else name="topbar" v-bind="instance"></slot>
+
     <section class="mdc-table-view__content">
+      <slot name="before-table-view"></slot>
+
       <template v-if="table.data.length">
         <ui-table
           v-model="table.selectedRows"
@@ -108,9 +114,11 @@
           </template>
         </ui-pagination>
       </template>
-      <div v-else class="mdc-table-view__no-data">
-        <slot name="no-data">{{ noData }}</slot>
+      <div v-else class="mdc-table-view__empty">
+        <slot name="empty">{{ noData }}</slot>
       </div>
+
+      <slot name="after-table-view"></slot>
     </section>
   </div>
 </template>
@@ -195,9 +203,25 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  actionHandler: {
+    type: Function,
+    default: () => {}
+  },
+  actionRendering: {
+    type: Function,
+    default: () => true
+  },
   topbarConfig: {
     type: Array,
     default: () => []
+  },
+  topbarHandler: {
+    type: Function,
+    default: () => {}
+  },
+  topbarRendering: {
+    type: Function,
+    default: () => true
   },
   tableAttrOrProp: {
     type: Object,
@@ -209,8 +233,7 @@ const props = defineProps({
     type: Object,
     default: () => ({
       data: 'data',
-      total: 'total',
-      page: 'page'
+      total: 'total'
     })
   },
   pageSize: {
@@ -239,14 +262,6 @@ const props = defineProps({
   useValidator: {
     type: Boolean,
     default: false
-  },
-  actionHandler: {
-    type: Function,
-    default: () => {}
-  },
-  topbarHandler: {
-    type: Function,
-    default: () => {}
   }
 });
 let emit = defineEmits([]);
@@ -262,6 +277,7 @@ const state = reactive({
   },
   lastSearchFormData: {}, // cache for last search result
   // Table data
+  tableDataSource: {},
   table: {
     selectedRows: [],
     data: [],
@@ -308,11 +324,11 @@ async function getModelConfig() {
 
 async function getModelData() {
   try {
-    const data = await props.getModelDataFn(instance);
+    state.tableDataSource = await props.getModelDataFn(instance);
 
     for (const [key, value] of Object.entries(props.tableDataFormat)) {
-      if (data[value]) {
-        state.table[key] = data[value];
+      if (state.tableDataSource[value]) {
+        state.table[key] = state.tableDataSource[value];
       }
     }
 
@@ -337,13 +353,14 @@ async function handleAction(result) {
       canSubmit && (await getModelData());
       break;
     case UiTableView.EVENTS.reset:
+      state.searchForm.message = '';
       // NOTE: automatic processing in `<ui-form-view>`
       break;
   }
 
-  if (type !== UiTableView.EVENTS.reset) {
-    emit(type, result, instance);
-  }
+  type === UiTableView.EVENTS.reset
+    ? emit(type, instance)
+    : emit(type, result, instance);
 }
 
 function resetSelectedRows() {

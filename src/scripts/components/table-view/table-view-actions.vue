@@ -4,64 +4,70 @@
       v-for="(action, index) in actionConfig"
       :key="`table-action-${index}`"
     >
-      <template v-if="action.component">
-        <template v-if="action.type === TYPES.noSlot">
-          <component
-            :is="action.component"
-            v-show="configAction('show', action)"
-            v-bind="Object.assign({ class: 'action' }, action.attrOrProp || {})"
-            @click="handleClick(action)"
-          ></component>
+      <template v-if="configAction('if', action)">
+        <template v-if="action.component">
+          <template v-if="action.type === TYPES.noSlot">
+            <component
+              :is="action.component"
+              v-show="configAction('show', action)"
+              v-bind="
+                Object.assign({ class: 'action' }, action.attrOrProp || {})
+              "
+              @click="handleClick(action)"
+            ></component>
+          </template>
+          <template v-else>
+            <component
+              :is="action.component"
+              v-show="configAction('show', action)"
+              v-bind="
+                Object.assign({ class: 'action' }, action.attrOrProp || {})
+              "
+              @click="handleClick(action)"
+            >
+              {{ configAction('text', action) }}
+            </component>
+          </template>
         </template>
         <template v-else>
-          <component
-            :is="action.component"
+          <router-link
+            v-if="action.type === TYPES.routerLink"
             v-show="configAction('show', action)"
-            v-bind="Object.assign({ class: 'action' }, action.attrOrProp || {})"
+            class="action internal-link"
+            :to="configAction(TYPES.routerLink, action)"
+            v-bind="action.attrOrProp || {}"
+          >
+            <ui-icon v-if="action.icon">
+              {{ configAction('icon', action) }}
+            </ui-icon>
+            <span v-if="action.text">{{ configAction('text', action) }}</span>
+          </router-link>
+          <a
+            v-else-if="action.href"
+            v-show="configAction('show', action)"
+            class="action external-link"
+            :href="configAction('href', action)"
+            :target="action.target || '_blank'"
+            rel="noopener"
+          >
+            <ui-icon v-if="action.icon">
+              {{ configAction('icon', action) }}
+            </ui-icon>
+            <span v-if="action.text">{{ configAction('text', action) }}</span>
+          </a>
+          <a
+            v-else
+            v-show="configAction('show', action)"
+            class="action link"
+            href="javascript:void(0)"
             @click="handleClick(action)"
           >
-            {{ configAction('text', action) }}
-          </component>
+            <ui-icon v-if="action.icon">
+              {{ configAction('icon', action) }}
+            </ui-icon>
+            <span v-if="action.text">{{ configAction('text', action) }}</span>
+          </a>
         </template>
-      </template>
-      <template v-else>
-        <router-link
-          v-if="action.type === TYPES.routerLink"
-          v-show="configAction('show', action)"
-          class="action"
-          :to="configAction(TYPES.routerLink, action)"
-          v-bind="action.attrOrProp || {}"
-        >
-          <ui-icon v-if="action.icon">
-            {{ configAction('icon', action) }}
-          </ui-icon>
-          <span v-if="action.text">{{ configAction('text', action) }}</span>
-        </router-link>
-        <a
-          v-else-if="action.href"
-          v-show="configAction('show', action)"
-          class="action"
-          :href="configAction('href', action)"
-          :target="action.target || '_blank'"
-          rel="noopener"
-        >
-          <ui-icon v-if="action.icon">
-            {{ configAction('icon', action) }}
-          </ui-icon>
-          <span v-if="action.text">{{ configAction('text', action) }}</span>
-        </a>
-        <a
-          v-else
-          v-show="configAction('show', action)"
-          class="action"
-          href="javascript:void(0)"
-          @click="handleClick(action)"
-        >
-          <ui-icon v-if="action.icon">
-            {{ configAction('icon', action) }}
-          </ui-icon>
-          <span v-if="action.text">{{ configAction('text', action) }}</span>
-        </a>
       </template>
     </template>
   </div>
@@ -101,6 +107,10 @@ const props = defineProps({
     type: Function,
     default: () => {}
   },
+  actionRendering: {
+    type: Function,
+    default: () => true
+  },
   refreshData: {
     type: Function,
     default: () => {}
@@ -117,6 +127,9 @@ function configAction(type, action) {
     result = currentAction;
 
     switch (type) {
+      case 'if':
+        result = props.actionRendering(action, props.data);
+        break;
       case 'show':
         result = true;
         break;
@@ -146,6 +159,7 @@ function handleClick(action) {
       keyName: props.keyName,
       data: props.data
     };
+
     props.actionHandler(action, data, props.refreshData);
   }
 }
