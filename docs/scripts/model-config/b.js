@@ -8,9 +8,11 @@ export default ({
   checkboxOptions,
   radioOptions,
   chipsOptions,
-  multiSelectOptions1
+  multiSelectOptions1,
+  test
 }) => {
   console.log('static data', data);
+  console.log('test', test);
 
   const { id } = data;
 

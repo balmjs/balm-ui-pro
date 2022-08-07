@@ -20,16 +20,21 @@
     >
       <template #default="{ itemClass, subitemClass, actionClass }">
         <div class="mdc-form-view__items">
-          <!-- For list view -->
-          <ui-grid v-if="useGrid" v-bind="gridAttrOrProp">
-            <slot
-              name="before"
-              v-bind="{
-                itemClass,
-                subitemClass,
-                data: currentFormData
-              }"
-            ></slot>
+          <!-- Before from view -->
+          <slot
+            name="before-form-view"
+            v-bind="{
+              itemClass,
+              subitemClass,
+              data: currentFormData
+            }"
+          ></slot>
+          <!-- List view -->
+          <ui-grid
+            v-if="useGrid"
+            class="mdc-form-view__grid"
+            v-bind="gridAttrOrProp"
+          >
             <template
               v-for="(configData, configIndex) in formConfig"
               :key="`form-item-${configData.key || configIndex}`"
@@ -40,11 +45,14 @@
                   :model-value="formData"
                   :form-data-source="formDataSource"
                   :attr-or-prop="formItemAttrOrProp"
-                  @update:modelValue="handleChange"
+                  @update:model-value="handleChange"
                 >
-                  <template v-for="(_, name) in $slots" #[name]="slotData">
+                  <template
+                    v-for="(_, slotName) in $slots"
+                    #[slotName]="slotData"
+                  >
                     <slot
-                      :name="name"
+                      :name="slotName"
                       v-bind="
                         Object.assign(slotData, {
                           config: configData,
@@ -56,25 +64,9 @@
                 </ui-form-item>
               </ui-grid-cell>
             </template>
-            <slot
-              name="after"
-              v-bind="{
-                itemClass,
-                subitemClass,
-                data: currentFormData
-              }"
-            ></slot>
           </ui-grid>
-          <!-- For detail view -->
+          <!-- Detail view -->
           <template v-else>
-            <slot
-              name="before"
-              v-bind="{
-                itemClass,
-                subitemClass,
-                data: currentFormData
-              }"
-            ></slot>
             <template
               v-for="(configData, configIndex) in formConfig"
               :key="`form-item-${configData.key || configIndex}`"
@@ -84,11 +76,14 @@
                 :model-value="formData"
                 :form-data-source="formDataSource"
                 :attr-or-prop="formItemAttrOrProp"
-                @update:modelValue="handleChange"
+                @update:model-value="handleChange"
               >
-                <template v-for="(_, name) in $slots" #[name]="slotData">
+                <template
+                  v-for="(_, slotName) in $slots"
+                  #[slotName]="slotData"
+                >
                   <slot
-                    :name="name"
+                    :name="slotName"
                     v-bind="
                       Object.assign(slotData, {
                         config: configData,
@@ -99,19 +94,23 @@
                 </template>
               </ui-form-item>
             </template>
-            <slot
-              name="after"
-              v-bind="{
-                itemClass,
-                subitemClass,
-                data: currentFormData
-              }"
-            ></slot>
           </template>
+          <!-- After from view -->
           <slot
-            name="actions"
+            name="after-form-view"
+            v-bind="{
+              itemClass,
+              subitemClass,
+              data: currentFormData
+            }"
+          ></slot>
+          <!-- Action view -->
+
+          <slot
+            name="form-view-actions"
             v-bind="{
               className: [itemClass, actionClass],
+              config: formConfig,
               data: currentFormData
             }"
           >
@@ -126,13 +125,13 @@
                 <ui-button
                   v-if="buttonData.type === NATIVE_BUTTON_TYPES.submit"
                   v-debounce="handleAction(buttonData)"
-                  v-bind="buttonData.attrOrProp"
+                  v-bind="buttonData.attrOrProp || {}"
                 >
                   {{ buttonData.text }}
                 </ui-button>
                 <ui-button
                   v-else
-                  v-bind="buttonData.attrOrProp"
+                  v-bind="buttonData.attrOrProp || {}"
                   @click="handleAction(buttonData)"
                 >
                   {{ buttonData.text }}
@@ -147,9 +146,12 @@
 </template>
 
 <script>
+const name = 'UiFormView';
+
 const UI_FORM_VIEW = {
   EVENTS: {
     update: 'update:modelValue',
+    updateFormItem: 'update:x',
     action: 'action'
   }
 };
@@ -161,7 +163,7 @@ const NATIVE_BUTTON_TYPES = {
 };
 
 export default {
-  name: 'UiFormView',
+  name,
   customOptions: {
     NATIVE_BUTTON_TYPES
   }
@@ -221,11 +223,16 @@ const props = defineProps({
   actionConfig: {
     type: Array,
     default: () => []
+  },
+  setModelOptionsFn: {
+    type: [Function, Boolean],
+    default: false
   }
 });
 
 const emit = defineEmits([
   UI_FORM_VIEW.EVENTS.update,
+  UI_FORM_VIEW.EVENTS.updateFormItem,
   UI_FORM_VIEW.EVENTS.action
 ]);
 
@@ -233,7 +240,8 @@ const validator = inject('validator');
 const state = reactive({
   formConfig: [],
   formData: {},
-  formDataSource: props.modelValue
+  formDataSource: props.modelValue,
+  defaultModelOptions: {}
 });
 const { formData, formConfig, formDataSource } = toRefs(state);
 
@@ -323,25 +331,57 @@ function resetFormView() {
   state.formData = {};
 }
 
+async function setModelOptions() {
+  const originalConfig = isFunctionConfig.value
+    ? await props.modelConfig({
+        data: Object.assign({}, state.formDataSource),
+        ...props.modelOptions
+      })
+    : props.modelConfig;
+
+  const modelList = originalConfig
+    .filter(({ model }) => model)
+    .map(({ model }) => model);
+
+  state.defaultModelOptions = modelList.length
+    ? await props.setModelOptionsFn(modelList)
+    : {};
+
+  if (getType(state.defaultModelOptions) !== 'object') {
+    state.defaultModelOptions = {};
+    console.warn(`[${name}]: Invalid form model options`);
+  }
+}
+
 async function setFormConfig(
   modelConfig = props.modelConfig,
   needInit = false
 ) {
+  if (needInit && isFunction(props.setModelOptionsFn)) {
+    await setModelOptions();
+  }
+
+  const currentModelOptions = Object.assign(
+    {},
+    state.defaultModelOptions,
+    props.modelOptions
+  );
+
   const originalConfig = isFunctionConfig.value
     ? await modelConfig({
         data: Object.assign({}, state.formDataSource),
-        ...props.modelOptions
+        ...currentModelOptions
       })
     : modelConfig;
 
   if (Array.isArray(originalConfig)) {
     state.formConfig = originalConfig.filter(
-      (configData) => getType(configData.if) === 'undefined' || configData.if
+      (configData) => !configData.hasOwnProperty('if') || configData.if
     );
 
     needInit && initFormData();
   } else {
-    console.warn(`[UiFormView]: Invalid form model config`);
+    console.warn(`[${name}]: Invalid form model config`);
   }
 }
 
@@ -404,10 +444,14 @@ function handleChange(key, value) {
     for (let i = 0, len = key.length; i < len; i++) {
       const k = key[i];
       const v = value[i];
-      state.formData[k] = v;
+      if (state.formData[k] !== v) {
+        state.formData[k] = v;
+        emit(UI_FORM_VIEW.EVENTS.updateFormItem, k, v);
+      }
     }
   } else {
     state.formData[key] = value;
+    emit(UI_FORM_VIEW.EVENTS.updateFormItem, key, value);
   }
 
   syncFormData();
@@ -436,7 +480,7 @@ function handleAction({ type, delay }) {
 
               validator.clear();
             } else {
-              console.warn(`[UiFormView]: BalmUI $validator plugin is missing`);
+              console.warn(`[${name}]: BalmUI $validator plugin is missing`);
             }
           } else {
             emit(UI_FORM_VIEW.EVENTS.action, {

@@ -1,32 +1,25 @@
+import { computed } from 'vue';
+
 const viewProps = {
-  apiEndpoint: {
-    type: String,
-    default: ''
-  },
   title: {
     type: String,
     default: ''
   },
   model: {
     type: String,
-    default: '',
-    required: true
+    default: ''
   },
   modelName: {
     type: String,
     default: ''
   },
-  formModelOptions: {
-    type: Object,
-    default: () => ({})
-  },
-  formViewAttrOrProp: {
-    type: Object,
-    default: () => ({})
-  },
-  routeName: {
+  modelPath: {
     type: String,
     default: ''
+  },
+  modelOptions: {
+    type: Object,
+    default: () => ({})
   },
   keyName: {
     type: String,
@@ -35,31 +28,13 @@ const viewProps = {
   defaultParams: {
     type: Object,
     default: () => ({})
-  },
-  validations: {
-    type: Object,
-    default: () => ({})
   }
 };
 
-function useView(props, { instance, state }) {
-  const useValidator = computed(() => Object.keys(props.validations).length);
+function useView(props, slots) {
+  const hasTitle = computed(() => props.title || slots.title);
 
-  function onSubmit(formData, fn, params = '') {
-    if (useValidator) {
-      const { valid, message } = instance.$validate(formData);
-      state.errorMessage = message;
-
-      if (valid) {
-        fn(params);
-      }
-    } else {
-      state.errorMessage = '';
-      fn(params);
-    }
-  }
-
-  return onSubmit;
+  return hasTitle;
 }
 
 export { viewProps, useView };

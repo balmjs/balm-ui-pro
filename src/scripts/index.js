@@ -2,16 +2,25 @@ import version from './version';
 import autoInstall from './config/auto-install';
 
 import UiFormView from './components/form-view/form-view.vue';
-import UiReadonlyItem from './components/form-components/readonly-item.vue';
-import UiCheckboxGroup from './components/form-components/checkbox-group.vue';
-import UiRadioGroup from './components/form-components/radio-group.vue';
-import UiSwitchBox from './components/form-components/switch-box.vue';
-import UiMultiSelect from './components/form-components/multi-select.vue';
+import UiDetailView from './components/detail-view/detail-view.vue';
+import UiTableView from './components/table-view/table-view.vue';
+import UiReadonlyItem from './components/readonly-item/readonly-item.vue';
+import UiCheckboxGroup from './components/checkbox-group/checkbox-group.vue';
+import UiRadioGroup from './components/radio-group/radio-group.vue';
+import UiSwitchBox from './components/switch-box/switch-box.vue';
+import UiMultiSelect from './components/multi-select/multi-select.vue';
 import $model, { useApiModel, useRouterModel } from './plugins/model';
 import $transform, { useTransform } from './plugins/transform';
+import $constant, {
+  useConstant,
+  useConstantList,
+  useConstantMap
+} from './plugins/constant';
 
 const Components = {
   UiFormView,
+  UiDetailView,
+  UiTableView,
   UiReadonlyItem,
   UiCheckboxGroup,
   UiRadioGroup,
@@ -21,7 +30,8 @@ const Components = {
 
 const Plugins = {
   $model,
-  $transform
+  $transform,
+  $constant
 };
 
 const install = (app, options = {}) =>
@@ -38,6 +48,8 @@ export default BalmUIPro;
 export { version, install };
 export {
   UiFormView,
+  UiDetailView,
+  UiTableView,
   UiReadonlyItem,
   UiCheckboxGroup,
   UiRadioGroup,
@@ -46,3 +58,4 @@ export {
 };
 export { $model, useApiModel, useRouterModel };
 export { $transform, useTransform };
+export { $constant, useConstant, useConstantList, useConstantMap };

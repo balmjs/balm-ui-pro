@@ -128,7 +128,7 @@
 
 <script setup>
 import { reactive, toRefs, onMounted, onBeforeUnmount } from 'vue';
-import { useI18n } from 'vue-i18n/index';
+import { useI18n } from 'vue-i18n';
 import SvgGithub from '@/components/github';
 import { VERSION, $MIN_WIDTH } from '@/config';
 import menu from '@/config/menu';
@@ -151,6 +151,11 @@ function init() {
 onMounted(() => {
   init();
   window.addEventListener('balmResize', init);
+
+  // NOTE: for lang init
+  setTimeout(() => {
+    locale.value = 'en';
+  }, 1);
 });
 
 onBeforeUnmount(() => {

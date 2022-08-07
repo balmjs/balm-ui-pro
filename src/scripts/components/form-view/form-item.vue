@@ -1,7 +1,7 @@
 <template>
   <ui-form-field
     v-show="displayFormItem(config)"
-    :class="className"
+    :class="[className, attrOrProp.class || '']"
     v-bind="attrOrProp"
   >
     <label
@@ -34,7 +34,7 @@
                     formData,
                     formDataSource
                   },
-                  config.attrOrProp
+                  config.attrOrProp || {}
                 )
               "
               @[eventName]="handleChange(config, $event)"
@@ -51,7 +51,7 @@
                     formData,
                     formDataSource
                   },
-                  config.attrOrProp
+                  config.attrOrProp || {}
                 )
               "
               @[eventName]="handleChange(config, $event)"

@@ -54,6 +54,7 @@ function getConfig(balm) {
       ],
       alias: {
         vue$: 'vue/dist/vue.esm-bundler.js',
+        'vue-i18n$': 'vue-i18n/dist/vue-i18n.esm-bundler.js',
         'balm-ui$': 'balm-ui/src/scripts/balm-ui.js',
         'balm-ui-plus$': 'balm-ui/src/scripts/balm-ui-plus.js',
         'balm-ui-next$': 'balm-ui/src/scripts/balm-ui-next.js',

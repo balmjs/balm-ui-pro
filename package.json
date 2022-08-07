@@ -52,17 +52,17 @@
     "@vue/compiler-sfc": "^3.2.30",
     "axios": "^0.27.2",
     "babel-plugin-prismjs": "^2.1.0",
-    "balm": "^4.9.0",
-    "balm-ui": "^10.8.3",
-    "core-js": "^3.23.0",
+    "balm": "^4.10.0",
+    "balm-ui": "^10.10.0",
+    "core-js": "^3.24.0",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^8.0.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^9.0.0",
-    "html-loader": "^3.1.0",
+    "html-loader": "^4.1.0",
     "markdown-loader": "^8.0.0",
-    "miragejs": "0.1.43",
-    "miragejs-axios-adapter": "^0.1.0",
+    "miragejs": "^0.1.45",
+    "miragejs-axios-adapter": "^0.1.1",
     "prettier": "^2.7.0",
     "prismjs": "^1.28.0",
     "rollup-plugin-vue": "^6.0.0",
@@ -71,10 +71,11 @@
     "vue-i18n": "^9.0.0",
     "vue-loader": "^17.0.0",
     "vue-router": "^4.0.0",
-    "webpack": "^5.73.0"
+    "webpack": "^5.74.0"
   },
   "peerDependencies": {
-    "balm-ui": "^10.8.3",
-    "vue": ">=3"
+    "balm-ui": "^10.10.0",
+    "vue": ">=3",
+    "vue-router": ">=4"
   }
 }

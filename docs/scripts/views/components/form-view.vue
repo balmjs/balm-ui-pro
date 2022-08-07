@@ -6,6 +6,7 @@
       :model-options="modelOptions"
       :action-config="actionConfig"
       @action="onAction"
+      @update:x="onTest"
     >
       <template #before>
         <div>outer formData: {{ formData }}</div>
@@ -196,5 +197,9 @@ function setFormData() {
     a: 'xxx',
     b: 'yyy'
   };
+}
+
+function onTest(key, value) {
+  console.log('change:x', key, value);
 }
 </script>

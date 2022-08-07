@@ -1,0 +1,37 @@
+.mdc-table-view {
+}
+
+.mdc-table-view__conditions {
+  margin-bottom: 12px;
+}
+
+.mdc-table-view__topbar {
+  margin-bottom: 12px;
+
+  .action {
+    margin: 0 6px 6px 0;
+  }
+}
+
+.mdc-table-view__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  .action {
+    margin: 4px;
+    cursor: pointer;
+  }
+}
+
+.mdc-data-table__cell--center {
+  .mdc-table-view__actions {
+    justify-content: center;
+  }
+}
+
+.mdc-data-table__cell--right {
+  .mdc-table-view__actions {
+    justify-content: flex-end;
+  }
+}

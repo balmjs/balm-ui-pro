@@ -1,108 +1,216 @@
 <template>
   <div class="mdc-detail-view">
-    <h2 class="mdc-detail-view__title"></h2>
+    <h2 v-if="hasTitle" class="mdc-detail-view__title">
+      <slot name="title">{{ title }}</slot>
+    </h2>
+
     <section class="mdc-detail-view__content">
-      <slot name="before"></slot>
-      <ui-spinner v-if="!config.length" active></ui-spinner>
+      <slot name="before-detail-view"></slot>
+
       <ui-form-view
-        v-show="config.length"
         v-model="formData"
-        :model-config="modelConfig"
-        :model-options="modelOptions"
-        v-bind="formViewAttrOrProp"
+        v-bind="
+          Object.assign(
+            {
+              modelConfig,
+              modelOptions,
+              actionConfig
+            },
+            formViewAttrOrProp
+          )
+        "
+        @action="handleAction"
       >
-        <template v-for="(_, slotName) in $slots" #[slotName]="data">
-          <slot
-            :name="slotName"
-            v-bind="{
-              ...data,
-              formConfig: detailForm.config,
-              formData: detailForm.data,
-              refreshData: getData,
-              originalData: detailForm.originalData
-            }"
-          ></slot>
+        <template v-for="(_, slotName) in $slots" #[slotName]="slotData">
+          <slot :name="slotName" v-bind="slotData"></slot>
         </template>
-
-        <template #after="{ className: { itemClass, subitemClass } }">
-          <ui-alert v-if="errorMessage" state="warning">
-            {{ errorMessage }}
-          </ui-alert>
-
-          <ui-form-field :class="[itemClass, subitemClass]">
-            <slot name="actions" :data="detailForm.data" :submit="onSubmit">
-              <ui-button outlined @click="onCancel">
-                {{ cancelText }}
-              </ui-button>
-              <ui-button v-debounce="debounceConfig" raised>
-                {{ submitText }}
-              </ui-button>
-            </slot>
-          </ui-form-field>
+        <!-- Default error message -->
+        <template #after-form-view="slotData">
+          <template v-if="useValidator">
+            <ui-alert v-if="message" state="warning">{{ message }}</ui-alert>
+          </template>
+          <slot v-else name="after-form-view" v-bind="slotData"></slot>
         </template>
       </ui-form-view>
-      <slot name="after"></slot>
+
+      <slot name="after-detail-view"></slot>
     </section>
   </div>
 </template>
 
 <script>
+const name = 'UiDetailView';
+
+const UiDetailView = {
+  EVENTS: {
+    cancel: 'cancel',
+    submit: 'submit'
+  }
+};
+
+const defaultActionConfig = [
+  {
+    type: UiDetailView.EVENTS.cancel,
+    text: 'Cancel',
+    attrOrProp: {
+      outlined: true
+    }
+  },
+  {
+    type: UiDetailView.EVENTS.submit,
+    text: 'Save',
+    attrOrProp: {
+      raised: true
+    }
+  }
+];
+
 export default {
-  name: 'UiDetailView'
+  name,
+  customOptions: {}
 };
 </script>
 
 <script setup>
-import { reactive, toRefs, onBeforeMount, getCurrentInstance } from 'vue';
+import {
+  reactive,
+  toRefs,
+  onBeforeMount,
+  useSlots,
+  getCurrentInstance
+} from 'vue';
+import { useRouter } from 'vue-router';
 import { viewProps, useView } from '../../mixins/view';
+
+const router = useRouter();
 
 const props = defineProps({
   ...viewProps,
-  cancelText: {
-    type: String,
-    default: 'Cancel'
+  actionConfig: {
+    type: Array,
+    default: () => defaultActionConfig
   },
-  submitText: {
-    type: String,
-    default: 'Submit'
+  formViewAttrOrProp: {
+    type: Object,
+    default: () => ({
+      formAttrOrProp: {
+        actionAlign: 'center'
+      }
+    })
+  },
+  to: {
+    type: [Boolean, Object, String],
+    default: false
+  },
+  replace: {
+    type: Boolean,
+    default: false
+  },
+  getModelConfigFn: {
+    type: Function,
+    default: () => {}
+  },
+  getModelDataFn: {
+    type: Function,
+    default: () => {}
+  },
+  setModelDataFn: {
+    type: Function,
+    default: () => {}
+  },
+  useValidator: {
+    type: Boolean,
+    default: true
+  },
+  redirectOnSave: {
+    type: Boolean,
+    default: true
   }
 });
+let emit = defineEmits([]);
+const slots = useSlots();
 
 const instance = getCurrentInstance();
 const state = reactive({
-  formData: {},
   modelConfig: [],
-  modelOptions: {},
-  errorMessage: ''
+  formData: {},
+  message: ''
 });
-const { formData, modelConfig, modelOptions, errorMessage } = toRefs(state);
+const { modelConfig, formData, message } = toRefs(state);
 
-const { onSubmit } = useView(props, { instance, state });
+const { hasTitle } = useView(props, slots);
 
-const debounceConfig = {
-  callback: () => onSubmit(),
-  delay: 100
-};
+onBeforeMount(async () => {
+  if (props.model) {
+    emit = defineEmits(props.actionConfig.map(({ type }) => type));
 
-onBeforeMount(() => {
-  if (!instance.$model) {
-    console.warn('[UiDetailView]', '$model is missing');
+    await getModelConfig();
+    await getModelData();
   } else {
-    initFormConfig();
+    console.warn(`[${name}]: 'model' is missing`);
   }
 });
 
-async function initModelConfig() {
-  state.modelConfig = await instance.$model.getModelConfig(
-    props.modelName || props.model
-  );
+async function getModelConfig() {
+  try {
+    state.modelConfig = await props.getModelConfigFn(instance);
+  } catch (e) {
+    console.log(e);
+  }
 }
 
-async function getData() {
-  state.formData = await instance.$model.getDetailData(
-    props.model,
-    props.queryParams,
-    props.apiEndpoint ? { baseURL: props.apiEndpoint } : {}
-  );
+async function getModelData() {
+  try {
+    state.formData = await props.getModelDataFn(instance);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function redirect() {
+  if (props.to !== 'custom') {
+    const to = props.to || {
+      name: `${props.model}.list`
+    };
+    props.replace ? router.replace(to) : router.push(to);
+  }
+}
+
+async function handleAction(result) {
+  const { type } = result;
+
+  switch (type) {
+    case UiDetailView.EVENTS.submit:
+      let canSubmit = true;
+
+      if (props.useValidator) {
+        canSubmit = result.valid;
+        state.message = result.message;
+      }
+
+      if (canSubmit) {
+        await props.setModelDataFn(instance);
+        props.redirectOnSave && redirect();
+      }
+      break;
+    case UiDetailView.EVENTS.cancel:
+      switch (props.to) {
+        case 'custom':
+          emit(UiDetailView.EVENTS.cancel);
+          break;
+        case false:
+          router.back();
+          break;
+        default:
+          redirect();
+      }
+      break;
+    default:
+      state.message = '';
+  }
+
+  if (type !== UiDetailView.EVENTS.cancel) {
+    emit(type, result, instance);
+  }
 }
 </script>
