@@ -8,7 +8,7 @@
         v-model="selectedData[component.key]"
         :options="selectedOptions[component.key]"
         v-bind="component.attrOrProp || {}"
-        @update:modelValue="handleChange(component.key, $event)"
+        @update:model-value="handleChange(component.key, $event)"
       ></ui-select>
     </template>
   </div>
@@ -56,9 +56,6 @@ const rootSelectedKey = computed(() => selectedKeys.value[0]);
 const lastSelectedKey = computed(
   () => selectedKeys.value[selectedKeys.value.length - 1]
 );
-const hasSelectedValue = computed(() =>
-  selectedKeys.value.some((key) => state.selectedData[key])
-);
 const hasSelectedOptions = computed(() => {
   const rootSelectedOptions = state.selectedOptions[rootSelectedKey.value];
   return Array.isArray(rootSelectedOptions) && !!rootSelectedOptions.length;
@@ -68,7 +65,7 @@ onBeforeMount(() => {
   if (props.components.length) {
     initOptions();
   } else {
-    console.warn('[UiMultiSelect]: `components` are empty');
+    console.warn('[UiMultiSelect]: form config `components` are empty');
   }
 });
 
@@ -76,6 +73,9 @@ watch(
   () => props.components,
   () => {
     initRootOptions(); // NOTE: for static options
+  },
+  {
+    immediate: true // NOTE: for dynamic form config
   }
 );
 
@@ -89,6 +89,16 @@ watch(
     immediate: true // NOTE: for dynamic form config
   }
 );
+
+function initOptions() {
+  if (!hasSelectedOptions.value) {
+    for (const { key, value } of props.components) {
+      state.selectedData[key] = value;
+      state.selectedOptions[key] = [];
+      state.optionsMap[key] = new Map();
+    }
+  }
+}
 
 async function setSelectedOptions(parentValue, { key, options }) {
   let optionsMap = state.optionsMap[key];
@@ -108,8 +118,12 @@ async function setSelectedOptions(parentValue, { key, options }) {
       ? await options(currentFormData)
       : options;
 
-    if (selectedOptions.length) {
-      optionsMap.set(parentValue, selectedOptions);
+    if (Array.isArray(selectedOptions)) {
+      if (selectedOptions.length) {
+        optionsMap.set(parentValue, selectedOptions);
+      }
+    } else {
+      console.warn('[UiMultiSelect]: `options` must return an array');
     }
   }
 
@@ -119,17 +133,8 @@ async function setSelectedOptions(parentValue, { key, options }) {
 
 function initRootOptions() {
   if (!hasSelectedOptions.value) {
+    initOptions();
     setSelectedOptions(0, props.components[0]);
-  }
-}
-
-async function initOptions() {
-  if (!hasSelectedValue.value) {
-    for (const { key, value } of props.components) {
-      state.selectedData[key] = value;
-      state.selectedOptions[key] = [];
-      state.optionsMap[key] = new Map();
-    }
   }
 }
 
