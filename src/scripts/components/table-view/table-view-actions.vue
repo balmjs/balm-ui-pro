@@ -10,9 +10,8 @@
             <component
               :is="action.component"
               v-show="configAction('show', action)"
-              v-bind="
-                Object.assign({ class: 'action' }, action.attrOrProp || {})
-              "
+              :class="['action', 'button-without-slot']"
+              v-bind="action.attrOrProp || {}"
               @click="handleClick(action)"
             ></component>
           </template>
@@ -20,9 +19,8 @@
             <component
               :is="action.component"
               v-show="configAction('show', action)"
-              v-bind="
-                Object.assign({ class: 'action' }, action.attrOrProp || {})
-              "
+              :class="['action', 'button-with-slot']"
+              v-bind="action.attrOrProp || {}"
               @click="handleClick(action)"
             >
               {{ configAction('text', action) }}
@@ -47,8 +45,15 @@
             v-show="configAction('show', action)"
             class="action external-link"
             :href="configAction('href', action)"
-            :target="action.target || '_blank'"
-            rel="noopener"
+            v-bind="
+              Object.assign(
+                {
+                  target: '_blank',
+                  rel: 'noopener'
+                },
+                action.attrOrProp || {}
+              )
+            "
           >
             <ui-icon v-if="action.icon">
               {{ configAction('icon', action) }}

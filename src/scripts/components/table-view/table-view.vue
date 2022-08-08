@@ -35,19 +35,7 @@
       </ui-form-view>
     </section>
 
-    <ui-table-view-topbar
-      v-if="topbarConfig.length"
-      v-bind="{
-        topbarConfig,
-        model,
-        topbarHandler,
-        defaultParams,
-        selectedRows: table.selectedRows,
-        tableData: table.data,
-        searchFormData: lastSearchFormData,
-        refreshData: getModelData
-      }"
-    ></ui-table-view-topbar>
+    <ui-table-view-topbar v-if="topbarConfig.length"></ui-table-view-topbar>
     <slot v-else name="topbar" v-bind="instance"></slot>
 
     <section class="mdc-table-view__content">

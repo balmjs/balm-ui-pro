@@ -1,16 +1,20 @@
 <template>
   <section class="mdc-table-view__topbar">
     <template
-      v-for="(action, index) in topbarConfig"
+      v-for="(action, index) in tableView.topbarConfig"
       :key="`topbar-action-${index}`"
     >
       <ui-button
+        v-if="tableView.topbarRendering(action, tableView.tableDataSource)"
         v-bind="
-          action.attrOrProp || {
-            class: 'action',
-            raised: true,
-            icon: actionIcon(action)
-          }
+          Object.assign(
+            {
+              class: 'action',
+              raised: true,
+              icon: actionIcon(action)
+            },
+            action.attrOrProp || {}
+          )
         "
         @click="handleClick(action)"
       >
@@ -30,45 +34,13 @@ export default {
 </script>
 
 <script setup>
+import { getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
 import { getRouteLocationRaw } from './constants';
 
 const router = useRouter();
-
-const props = defineProps({
-  topbarConfig: {
-    type: Array,
-    default: () => []
-  },
-  model: {
-    type: String,
-    default: ''
-  },
-  topbarHandler: {
-    type: Function,
-    default: () => {}
-  },
-  defaultParams: {
-    type: Object,
-    default: () => ({})
-  },
-  selectedRows: {
-    type: Array,
-    default: () => []
-  },
-  tableData: {
-    type: Array,
-    default: () => []
-  },
-  searchFormData: {
-    type: Object,
-    default: () => ({})
-  },
-  refreshData: {
-    type: Function,
-    default: () => {}
-  }
-});
+const instance = getCurrentInstance();
+const tableView = instance.parent;
 
 function actionIcon({ icon, type }) {
   let result = icon || '';
@@ -96,20 +68,26 @@ function actionIcon({ icon, type }) {
 }
 
 function handleClick(action) {
+  const { defaultParams, table, lastSearchFormData } = tableView;
+
   const data = {
-    defaultParams: props.defaultParams,
-    selectedRows: props.selectedRows,
-    tableData: props.tableData,
-    searchFormData: props.searchFormData
+    defaultParams,
+    selectedRows: table.selectedRows,
+    tableData: table.data,
+    searchFormData: lastSearchFormData
   };
   if (action.type === TYPES.routerLink) {
     const to = getRouteLocationRaw(action, {
-      model: props.model,
+      model: tableView.model,
       data
     });
     router.push(to);
   } else {
-    props.topbarHandler(action, data, props.refreshData);
+    if (isFunction(action.handler)) {
+      action.handler(data, tableView.getModelData);
+    } else {
+      tableView.topbarHandler(action, data, tableView.refreshData);
+    }
   }
 }
 </script>

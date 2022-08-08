@@ -1,5 +1,7 @@
 import getType from '../utils/typeof';
 
+const NAME = '$transform';
+
 class Transform {
   constructor() {
     this.originalDataMap = new Map();
@@ -10,7 +12,7 @@ class Transform {
     if (getType(data) === 'object') {
       this.originalDataMap = new Map(Object.entries(data));
     } else {
-      throw new Error('Invalid object data');
+      throw new Error(`[${$NAME}]: invalid object data`);
     }
     return this;
   }
@@ -34,7 +36,7 @@ class Transform {
         this.originalDataMap.delete(key);
       }
     } else {
-      throw new Error('Out keys must be a string or array');
+      throw new Error(`[${$NAME}]: out keys must be a string or array`);
     }
 
     return this;
