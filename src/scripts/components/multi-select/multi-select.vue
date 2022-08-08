@@ -101,7 +101,7 @@ export default {
 
         const selectedOptions = isFunction(options)
           ? await options(currentFormData)
-          : options;
+          : options || [];
 
         if (Array.isArray(selectedOptions)) {
           if (selectedOptions.length) {

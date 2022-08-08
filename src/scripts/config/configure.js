@@ -4,13 +4,16 @@ import getType from '../utils/typeof';
 const setPropsDefaultValue = ({ componentProps, propName, props }) => {
   let newValue = props[propName];
 
-  if (getType(newValue) === 'object') {
-    const defaultValue = componentProps[propName].default;
-    componentProps[propName].default = () => merge(defaultValue, newValue);
-  } else if (Array.isArray(newValue)) {
-    componentProps[propName].default = () => newValue;
-  } else {
-    componentProps[propName].default = newValue;
+  switch (getType(newValue)) {
+    case 'array':
+      componentProps[propName].default = () => newValue;
+      break;
+    case 'object':
+      const defaultValue = componentProps[propName].default;
+      componentProps[propName].default = () => merge(defaultValue, newValue);
+      break;
+    default:
+      componentProps[propName].default = newValue;
   }
 };
 

@@ -10,7 +10,8 @@ import UiCheckboxGroup from './components/checkbox-group/checkbox-group';
 import UiRadioGroup from './components/radio-group/radio-group';
 import UiSwitchBox from './components/switch-box/switch-box';
 import UiMultiSelect from './components/multi-select/multi-select';
-import $model, { useApiModel, useRouterModel } from './plugins/model';
+import $apiModel, { useApiModel } from './plugins/api-model';
+import $routerModel, { useRouterModel } from './plugins/router-model';
 import $transform, { useTransform } from './plugins/transform';
 import $constant, {
   useConstant,
@@ -30,7 +31,8 @@ const Components = {
 };
 
 const Plugins = {
-  $model,
+  $apiModel,
+  $routerModel,
   $transform,
   $constant
 };
@@ -60,8 +62,9 @@ export {
   UiMultiSelect
 };
 export {
-  $model,
+  $apiModel,
   useApiModel,
+  $routerModel,
   useRouterModel,
   $transform,
   useTransform,
