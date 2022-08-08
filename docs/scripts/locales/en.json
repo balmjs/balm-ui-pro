@@ -19,7 +19,8 @@
     "multi-select": "Multi Select",
     "plugins": "Plugins",
     "transform": "Transform",
-    "model": "Model",
+    "api-model": "API Model",
+    "router-model": "Router Model",
     "constant": "Constant"
   },
   "page": {

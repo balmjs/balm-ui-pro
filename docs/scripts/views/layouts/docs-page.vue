@@ -99,7 +99,7 @@ export default {
       });
     },
     hasRequirement() {
-      return ['model', 'constant'].includes(this.name);
+      return ['api-model', 'constant'].includes(this.name);
     }
   },
   created() {

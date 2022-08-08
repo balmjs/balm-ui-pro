@@ -1,4 +1,4 @@
-- `model/store.js`
+- `store/model.js`
 
   ```js
   export default {
@@ -29,7 +29,7 @@
   };
   ```
 
-- `model/index.js`
+- `config/views/form-view.js`
 
   ```js
   import { useStore } from 'balm-ui';
@@ -42,7 +42,7 @@
   ```
 
   ```js
-  import { setModelOptionsFn } from '@/model';
+  import { setModelOptionsFn } from '@/config/views/form-view';
 
   Vue.use(BalmUIPro, {
     UiFormView: {

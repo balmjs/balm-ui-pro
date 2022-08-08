@@ -1,4 +1,4 @@
-export const DEMO_DATA = [
+const DEMO_DATA = [
   {
     label: 'Label A',
     key: 'a',
@@ -11,19 +11,17 @@ export const DEMO_DATA = [
   }
 ];
 
-export const MODEL_NAME_DATA = ['user', 'post', 'demo'].map((key) => ({
+const MODEL_NAME_DATA = ['user', 'post', 'demo'].map((key) => ({
   label: key,
   key,
   value: key
 }));
 
-export const OPERATION_DATA = ['create', 'read', 'update', 'delete'].map(
-  (key) => ({
-    label: key,
-    key,
-    value: key
-  })
-);
+const OPERATION_DATA = ['create', 'read', 'update', 'delete'].map((key) => ({
+  label: key,
+  key,
+  value: key
+}));
 
 export default {
   demo: DEMO_DATA,

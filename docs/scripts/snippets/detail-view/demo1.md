@@ -1,17 +1,18 @@
-- `model/store.js`
+- `store/model.js`
 
   ```js
+  import { isDev } from '@/config';
+
   export default {
     methods: {
-      async getModelConfig(subPath, mainPath = '') {
+      async getModelConfig(modelPath) {
         let config = [];
 
         try {
-          const modelConfigFile = mainPath ? `${mainPath}/${subPath}` : subPath;
-          const module = await import(`@/${modelConfigFile}`);
+          const module = await import(`@/views/${modelPath}`);
           config = module.default;
         } catch (err) {
-          console.warn(err.toString());
+          isDev && console.warn(err.toString());
         }
 
         return config;
@@ -21,7 +22,7 @@
   };
   ```
 
-- `model/index.js`
+- `config/views/detail-view.js`
 
   ```js
   import { useStore } from 'balm-ui';
@@ -63,7 +64,7 @@
     getModelConfigFn,
     getModelDetailDataFn,
     setModelDataFn
-  } from '@/model';
+  } from '@/config/views/detail-view';
 
   Vue.use(BalmUIPro, {
     UiDetailView: {

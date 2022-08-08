@@ -1,8 +1,10 @@
 <template>
-  <docs-page name="model" without-css demo-count="2">
+  <docs-page name="api-model" without-css demo-count="1">
     <section class="demo-wrapper">
-      <h6 :class="$tt('headline6')">1.1 Api Model</h6>
-      <div>APIs: {{ apis }}</div>
+      <div>
+        APIs:
+        <pre>{{ apis }}</pre>
+      </div>
       <hr />
       <ui-form-view
         v-model="formData"
@@ -17,14 +19,6 @@
         </template>
       </ui-form-view>
       <ui-snippet :code="$store.demos[1]"></ui-snippet>
-    </section>
-
-    <section class="demo-wrapper">
-      <h6 :class="$tt('headline6')">1.2 Router Model</h6>
-      <div>routes: {{ routes }}</div>
-      <br />
-      <div>route: {{ route }}</div>
-      <ui-snippet :code="$store.demos[2]"></ui-snippet>
     </section>
   </docs-page>
 </template>
@@ -83,36 +77,15 @@ export default {
         actionSuffix: ''
       },
       message: '',
-      apiUrl: '',
-      routes: this.$routerModel.createRoutes(
-        'user',
-        {
-          indexView: 'IndexView',
-          listView: 'ListView',
-          detailView: 'DetailView'
-        },
-        {
-          // indexOptions: {},
-          listPath: 'list/:type?',
-          listOptions: {
-            meta: {
-              auth: true
-            },
-            a: 'hello'
-          },
-          detailPath: ':userId?',
-          detailOptions: {
-            b: 'world'
-          }
-        }
-      ),
-      route: this.$routerModel.createRoute('/post', 'post', 'PostView', {
-        namespace: 'user'
-      })
+      apiUrl: ''
     };
   },
+  mounted() {
+    this.$apiModel.debug();
+  },
   methods: {
-    onAction({ valid, message }) {
+    onAction(result) {
+      const { valid, message } = result;
       this.message = message;
 
       if (valid) {

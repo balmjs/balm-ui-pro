@@ -48,7 +48,10 @@ const MATERIAL_COMPONENTS_PRO = [
     name: 'plugins',
     children: [
       {
-        name: 'model'
+        name: 'api-model'
+      },
+      {
+        name: 'router-model'
       },
       {
         name: 'transform'

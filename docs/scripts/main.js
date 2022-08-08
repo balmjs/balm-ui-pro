@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import router from '@/routes';
-import i18n from '@/lang';
+import i18n from '@/locales';
 import $http from '@/plugins/http';
 import $prism from '@/plugins/prism';
 import App from '@/views/layouts/app';
@@ -9,11 +9,8 @@ import { setGlobalProps } from '@/config';
 import BalmUI from 'balm-ui';
 import BalmUIPlus from 'balm-ui-plus';
 import BalmUIPro from 'balm-ui-pro';
-import {
-  BalmUIConfig,
-  BalmUIProConfig,
-  customComponents
-} from '@/config/components';
+import { BalmUIConfig, customComponents } from '@/config/components';
+import BalmUIProConfig from '@/config/pro';
 // PWA
 import './my-sw';
 

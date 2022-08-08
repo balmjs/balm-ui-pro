@@ -1,4 +1,4 @@
-- `model/index.js`
+- `constants/index.js`
 
   ```js
   const DEMO_DATA = [
@@ -14,16 +14,16 @@
     }
   ];
 
-  export const ConstantSource = {
+  export default {
     demo: DEMO_DATA
   };
   ```
 
   ```js
-  import { ConstantSource } from '@/model';
+  import constantSource from '@/model';
 
   Vue.use(BalmUIPro, {
-    $constant: ConstantSource
+    $constant: constantSource
   });
   ```
 

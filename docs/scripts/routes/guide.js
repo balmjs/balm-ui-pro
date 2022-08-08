@@ -4,6 +4,10 @@ const Intro = () => import('@/views/guide/intro');
 const Quickstart = () => import('@/views/guide/quickstart');
 
 export default [
-  $routerModel.createRoute('intro', 'guide.intro', Intro),
-  $routerModel.createRoute('quickstart', 'guide.quickstart', Quickstart)
+  $routerModel.createRoute('intro', 'intro', Intro, {
+    namespace: 'guide'
+  }),
+  $routerModel.createRoute('quickstart', 'quickstart', Quickstart, {
+    namespace: 'guide'
+  })
 ];

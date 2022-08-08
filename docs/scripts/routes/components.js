@@ -6,12 +6,16 @@ const DetailView = () => import('@/views/components/detail-view');
 const TableView = () => import('@/views/components/table-view');
 
 export default [
-  $routerModel.createRoute('form-view/:id?', 'components.form-view', FormView),
-  $routerModel.createRoute('form-items', 'components.form-items', FormItems),
-  $routerModel.createRoute(
-    'detail-view/:id?',
-    'components.detail-view',
-    DetailView
-  ),
-  $routerModel.createRoute('table-view', 'components.table-view', TableView)
+  $routerModel.createRoute('form-view/:id?', 'form-view', FormView, {
+    namespace: 'components'
+  }),
+  $routerModel.createRoute('form-items', 'form-items', FormItems, {
+    namespace: 'components'
+  }),
+  $routerModel.createRoute('detail-view/:id?', 'detail-view', DetailView, {
+    namespace: 'components'
+  }),
+  $routerModel.createRoute('table-view', 'table-view', TableView, {
+    namespace: 'components'
+  })
 ];

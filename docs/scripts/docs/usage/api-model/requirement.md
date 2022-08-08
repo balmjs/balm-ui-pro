@@ -27,6 +27,5 @@ type ApiModelDefinition = [ModelName, ApiEndpoint, Operation[], CustomApiConfig]
 
 interface GlobalApiConfig extends ApiConfig {
   apis: ApiModelDefinition[];,
-  debug?: boolean | ModelName;
 }
 ```

@@ -1,4 +1,4 @@
-- `model/index.js`
+- `config/apis.js`
 
   ```js
   const apis = [
@@ -36,7 +36,7 @@
     ]
   ];
 
-  export const ModelConfig = {
+  export default {
     crud: {
       create: 'add',
       // read: 'get',
@@ -49,20 +49,19 @@
     },
     // formatApiAction: (modelName, actionName) => `${modelName}-${actionName}`,
     // urlToCamelCase: true,
-    apis,
-    debug: true
+    apis
   };
   ```
 
   ```js
-  import { ModelConfig } from '@/model';
+  import apiModelConfig from '@/config/apis';
 
   Vue.use(BalmUIPro, {
-    $model: ModelConfig
+    $model: apiModelConfig
   });
   ```
 
-- `model/store.js`
+- `store/model.js`
 
   ```js
   import { useApiModel } from 'balm-ui-pro';

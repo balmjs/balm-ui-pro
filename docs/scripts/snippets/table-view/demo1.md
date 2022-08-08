@@ -1,4 +1,4 @@
-- `model/store.js`
+- `store/model.js`
 
   ```js
   export default {
@@ -20,7 +20,7 @@
   };
   ```
 
-- `model/index.js`
+- `config/views/table-view.js`
 
   ```js
   import { useStore } from 'balm-ui';
@@ -58,7 +58,7 @@
     getModelListDataFn,
     listActionHandler,
     listTopbarHandler
-  } from '@/model';
+  } from '@/config/views/table-view';
 
   Vue.use(BalmUIPro, {
     UiTableView: {
