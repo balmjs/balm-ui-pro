@@ -15,7 +15,7 @@ const components = [
   'multi-select'
 ];
 
-const plugins = ['model', 'transform', 'constant'];
+const plugins = ['api-model', 'router-model', 'transform', 'constant'];
 
 const output = {
   dist: './dist',

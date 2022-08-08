@@ -2,6 +2,16 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.24.0 / 2022-08-08
+
+### Feature
+
+- New plugins: `$apiModel` and `$routerModel`
+
+### BREAKING CHANGES
+
+- splits `$model` plugin to `$apiModel` and `$routerModel`
+
 ## v0.23.1 / 2022-08-03
 
 ### Bug Fixes
