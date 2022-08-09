@@ -4,8 +4,9 @@
       <slot name="title">{{ title }}</slot>
     </h2>
 
-    <section v-if="hasSearchForm" class="mdc-table-view__conditions">
+    <section v-if="modelPath" class="mdc-table-view__conditions">
       <ui-form-view
+        ref="searchForm"
         v-model="searchForm.data"
         v-bind="
           Object.assign(
@@ -18,6 +19,7 @@
             formViewAttrOrProp
           )
         "
+        @loaded="initModelData"
         @action="handleAction"
       >
         <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
@@ -68,8 +70,8 @@
               v-bind="{
                 actionConfig,
                 model,
-                data,
                 keyName,
+                data,
                 actionHandler,
                 actionRendering,
                 refreshData: getModelData
@@ -118,8 +120,10 @@
 import UiTableViewTopbar from './table-view-topbar';
 import UiTableViewActions from './table-view-actions';
 import viewMixins from '../../mixins/view';
+import getType from '../../utils/typeof';
 
 const UiTableView = {
+  name: 'UiTableView',
   EVENTS: {
     reset: 'reset',
     submit: 'submit'
@@ -144,7 +148,7 @@ const defaultSearchActionConfig = [
 ];
 
 export default {
-  name: 'UiTableView',
+  name: UiTableView.name,
   components: {
     UiTableViewTopbar,
     UiTableViewActions
@@ -267,11 +271,10 @@ export default {
     }
   },
   async beforeMount() {
-    if (this.model) {
-      await this.getModelConfig();
-    }
-    if (!this.useValidator) {
-      await this.getModelData();
+    if (this.modelPath) {
+      this.getModelConfig();
+    } else {
+      this.initModelData();
     }
   },
   activated() {
@@ -286,24 +289,30 @@ export default {
     async getModelConfig() {
       try {
         const modelConfig = await this.getModelConfigFn(this);
-        this.$set(this.searchForm, 'config', modelConfig);
+        modelConfig && this.$set(this.searchForm, 'config', modelConfig);
       } catch (e) {
-        console.log(e);
+        console.warn(`[${UiTableView.name}]: ${e.toString()}`);
       }
+    },
+    initModelData(formData = {}) {
+      this.searchForm.data = formData;
+      !this.useValidator && this.getModelData();
     },
     async getModelData() {
       try {
         this.tableDataSource = await this.getModelDataFn(this);
 
-        for (const [key, value] of Object.entries(this.tableDataFormat)) {
-          if (this.tableDataSource[value]) {
-            this.$set(this.table, key, this.tableDataSource[value]);
+        if (getType(this.tableDataSource) === 'object') {
+          for (const [key, value] of Object.entries(this.tableDataFormat)) {
+            if (this.tableDataSource[value]) {
+              this.$set(this.table, key, this.tableDataSource[value]);
+            }
           }
-        }
 
-        this.lastSearchFormData = Object.assign({}, this.searchForm.data);
+          this.lastSearchFormData = Object.assign({}, this.searchForm.data);
+        }
       } catch (e) {
-        console.log(e);
+        console.warn(`[${UiTableView.name}]: ${e.toString()}`);
       }
     },
     async handleAction(result) {

@@ -59,9 +59,9 @@ export default {
       return result;
     },
     handleClick(action) {
-      const { defaultParams, table, lastSearchFormData } = this.tableView;
+      const { modelOptions, table, lastSearchFormData } = this.tableView;
       const data = {
-        defaultParams,
+        modelOptions,
         selectedRows: table.selectedRows,
         tableData: table.data,
         searchFormData: lastSearchFormData

@@ -8,9 +8,8 @@
               :is="action.component"
               v-show="configAction('show', action)"
               :key="`button-without-slot-${index}`"
-              v-bind="
-                Object.assign({ class: 'action' }, action.attrOrProp || {})
-              "
+              class="action button-without-slot"
+              v-bind="action.attrOrProp || {}"
               @click.native="handleClick(action)"
             ></component>
           </template>
@@ -19,9 +18,8 @@
               :is="action.component"
               v-show="configAction('show', action)"
               :key="`button-with-slot-${index}`"
-              v-bind="
-                Object.assign({ class: 'action' }, action.attrOrProp || {})
-              "
+              class="action button-with-slot"
+              v-bind="action.attrOrProp || {}"
               @click.native="handleClick(action)"
             >
               {{ configAction('text', action) }}
@@ -33,7 +31,7 @@
             v-if="action.type === TYPES.routerLink"
             v-show="configAction('show', action)"
             :key="`internal-link-${index}`"
-            class="action"
+            class="action internal-link"
             :to="configAction(TYPES.routerLink, action)"
             v-bind="action.attrOrProp || {}"
           >
@@ -46,10 +44,17 @@
             v-else-if="action.href"
             v-show="configAction('show', action)"
             :key="`external-link-${index}`"
-            class="action"
+            class="action external-link"
             :href="configAction('href', action)"
-            :target="action.target || '_blank'"
-            rel="noopener"
+            v-bind="
+              Object.assign(
+                {
+                  target: '_blank',
+                  rel: 'noopener'
+                },
+                action.attrOrProp || {}
+              )
+            "
           >
             <ui-icon v-if="action.icon">
               {{ configAction('icon', action) }}
@@ -60,7 +65,7 @@
             v-else
             v-show="configAction('show', action)"
             :key="`link-${index}`"
-            class="action"
+            class="action link"
             href="javascript:void(0)"
             @click="handleClick(action)"
           >
@@ -90,8 +95,12 @@ export default {
       type: String,
       default: ''
     },
+    modelOptions: {
+      type: Object,
+      default: () => ({})
+    },
     keyName: {
-      type: String,
+      type: [String, Array],
       default: 'id'
     },
     data: {
@@ -128,16 +137,22 @@ export default {
 
         switch (type) {
           case 'if':
-            result = this.actionRendering(action, this.data)
+            result = this.actionRendering(action, this.data);
             break;
           case 'show':
             result = true;
             break;
           case TYPES.routerLink:
+            const keyName = action.keyName || this.keyName;
+            const paramsKeys = Array.isArray(keyName) ? keyName : [keyName];
+
             const params = {};
-            if (this.data[this.keyName]) {
-              params[this.keyName] = this.data[this.keyName];
-            }
+            paramsKeys.forEach((key) => {
+              if (this.data[key]) {
+                params[key] = this.data[key];
+              }
+            });
+
             result = getRouteLocationRaw(action, {
               model: this.model,
               data: this.data,
@@ -155,6 +170,7 @@ export default {
       } else {
         const data = {
           model: this.model,
+          modelOptions: this.modelOptions,
           keyName: this.keyName,
           data: this.data
         };

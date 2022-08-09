@@ -19,6 +19,7 @@
             formViewAttrOrProp
           )
         "
+        @loaded="initModelData"
         @action="handleAction"
       >
         <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
@@ -41,8 +42,10 @@
 
 <script>
 import viewMixins from '../../mixins/view';
+import getType from '../../utils/typeof';
 
 const UiDetailView = {
+  name: 'UiDetailView',
   EVENTS: {
     cancel: 'cancel',
     submit: 'submit'
@@ -67,7 +70,7 @@ const defaultActionConfig = [
 ];
 
 export default {
-  name: 'UiDetailView',
+  name: UiDetailView.name,
   mixins: [viewMixins],
   props: {
     actionConfig: {
@@ -119,11 +122,8 @@ export default {
     };
   },
   async beforeMount() {
-    if (this.model) {
+    if (this.modelPath) {
       await this.getModelConfig();
-      await this.getModelData();
-    } else {
-      console.warn('[UiDetailView]', 'model is missing');
     }
   },
   methods: {
@@ -134,11 +134,19 @@ export default {
         console.log(e);
       }
     },
+    initModelData(formData = {}) {
+      this.formData = formData;
+      this.getModelData();
+    },
     async getModelData() {
       try {
-        this.formData = await this.getModelDataFn(this);
+        const formData = await this.getModelDataFn(this);
+
+        if (getType(formData) === 'object' && Object.keys(formData).length) {
+          this.formData = formData;
+        }
       } catch (e) {
-        console.log(e);
+        console.warn(`[${UiDetailView.name}]: ${e.toString()}`);
       }
     },
     redirect() {

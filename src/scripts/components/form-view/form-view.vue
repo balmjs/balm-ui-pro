@@ -148,7 +148,9 @@ import UiFormItem from './form-item';
 import getType, { isFunction } from '../../utils/typeof';
 
 const UI_FORM_VIEW = {
+  name: 'UiFormView',
   EVENTS: {
+    loaded: 'loaded',
     update: 'change',
     updateFormItem: 'change:x',
     action: 'action'
@@ -162,7 +164,7 @@ const NATIVE_BUTTON_TYPES = {
 };
 
 export default {
-  name: 'UiFormView',
+  name: UI_FORM_VIEW.name,
   components: {
     UiFormItem
   },
@@ -305,7 +307,7 @@ export default {
     async setModelOptions() {
       const originalConfig = this.isFunctionConfig
         ? await this.modelConfig({
-            data: Object.assign({}, this.formDataSource),
+            data: this.formDataSource,
             ...this.modelOptions
           })
         : this.modelConfig;
@@ -320,7 +322,7 @@ export default {
 
       if (getType(this.defaultModelOptions) !== 'object') {
         this.defaultModelOptions = {};
-        console.warn(`[UiFormView]: Invalid form model options`);
+        console.warn(`[${UI_FORM_VIEW.name}]: Invalid form model options`);
       }
     },
     async setFormConfig(modelConfig = this.modelConfig, needInit = false) {
@@ -336,7 +338,7 @@ export default {
 
       const originalConfig = this.isFunctionConfig
         ? await modelConfig({
-            data: Object.assign({}, this.formDataSource),
+            data: this.formDataSource,
             ...currentModelOptions
           })
         : modelConfig;
@@ -346,9 +348,15 @@ export default {
           (configData) => !configData.hasOwnProperty('if') || configData.if
         );
 
-        needInit && this.initFormData();
+        if (needInit) {
+          this.initFormData();
+
+          if (Object.keys(this.formData).length) {
+            this.$emit(UI_FORM_VIEW.EVENTS.loaded, this.formData);
+          }
+        }
       } else {
-        console.warn(`[UiFormView]: Invalid form model config`);
+        console.warn(`[${UI_FORM_VIEW.name}]: invalid form model config`);
       }
     },
     syncFormData() {
@@ -445,7 +453,7 @@ export default {
                   this.$validations.clear();
                 } else {
                   console.warn(
-                    `[UiFormView]: BalmUI $validator plugin is missing`
+                    `[${UI_FORM_VIEW.name}]: BalmUI $validator plugin is missing`
                   );
                 }
               } else {

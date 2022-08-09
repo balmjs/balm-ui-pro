@@ -6,7 +6,7 @@ export default {
     },
     model: {
       type: String,
-      default: ''
+      required: true
     },
     modelPath: {
       type: String,
@@ -17,12 +17,8 @@ export default {
       default: () => ({})
     },
     keyName: {
-      type: String,
+      type: [String, Array],
       default: 'id'
-    },
-    defaultParams: {
-      type: Object,
-      default: () => ({})
     }
   },
   computed: {
