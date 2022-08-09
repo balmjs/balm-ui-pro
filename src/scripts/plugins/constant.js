@@ -1,3 +1,5 @@
+const NAME = '$constant';
+
 const DEFAULTS = {
   listFormat: { label: 'label', value: 'value' },
   mapFormat: { key: 'key', value: 'value' }
@@ -6,7 +8,7 @@ const DEFAULTS = {
 function checkFormat(formatField1, formatField2, keyField) {
   if (!(formatField1 && formatField2)) {
     throw new Error(
-      `[$constant]: constant format must assign '${keyField}' and 'value'`
+      `[${NAME}]: constant format must assign '${keyField}' and 'value'`
     );
   }
 }
@@ -82,7 +84,7 @@ function install(Vue, options = {}) {
   for (const [key, value] of Object.entries(options)) {
     if (Array.isArray(value)) {
       constant.map.has(key)
-        ? console.warn(`[$constant]: Conflicting constant definition - ${key}`)
+        ? console.warn(`[${NAME}]: conflicting constant definition - ${key}`)
         : constant.map.set(key, value);
     }
   }
