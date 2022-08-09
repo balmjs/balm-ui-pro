@@ -1,6 +1,14 @@
 import { responseHandler } from '@mock-server/handler';
 
 export function createUserApis(server) {
+  server.post('/user/add', (schema, request) => {
+    return responseHandler({});
+  });
+
+  server.post('/user/edit', (schema, request) => {
+    return responseHandler({});
+  });
+
   server.get('/user/list', (schema, request) => {
     const { page } = request.queryParams;
     const id = 8 * (page - 1) + 1;

@@ -1,15 +1,18 @@
 import { useStore } from 'balm-ui';
+import { isDev } from '@/config';
 
 export function setModelOptionsFn(modelList) {
-  // const store = useStore();
+  const store = useStore();
 
-  console.warn('setModelOptionsFn', modelList);
+  isDev && console.info('setModelOptionsFn', modelList);
 
-  return async () => {}; // store.setModelOptions(modelList);
+  return store.setModelOptions(modelList);
 }
 
 export async function getModelConfigFn({ modelPath }) {
   const store = useStore();
+
+  isDev && console.info('getModelConfigFn', modelPath);
 
   return await store.getModelConfig(modelPath);
 }

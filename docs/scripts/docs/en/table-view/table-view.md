@@ -33,7 +33,7 @@
 
   ```ts
   type TopbarData = {
-    defaultParams: object;
+    modelOptions: object;
     selectedRows: string[];
     tableData: object[];
     searchFormData: object;
@@ -63,7 +63,8 @@
   ```ts
   type CellData = {
     model: string;
-    keyName: string;
+    modelOptions: object;
+    keyName: string | string[];
     data: object;
   };
   type RefreshFn = function;
@@ -96,33 +97,32 @@
 
 ### Props
 
-| Name                   | Type     | Default                                         | Description                                                                                                       |
-| ---------------------- | -------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `title`                | string   | `''`                                            | Detail view title                                                                                                 |
-| `model`                | string   | `''`                                            | Model name                                                                                                        |
-| `modelPath`            | string   | `''`                                            | The file path of model config                                                                                     |
-| `modelOptions`         | object   | `{}`                                            | The options of model config                                                                                       |
-| `keyName`              | string   | `'id'`                                          | The primary key of model data                                                                                     |
-| `defaultParams`        | object   | `{}`                                            | The default params of detail view                                                                                 |
-| `searchActionConfig`   | array    | `DefaultSearchActionConfig`                     | Search form button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button) |
-| `formViewAttrOrProp`   | object   | `{ formAttrOrProp: { actionAlign: 'center' } }` | See `<ui-form-view>` props [docs](/#/components/form-view)                                                        |
-| `noData`               | string   | `No Data`                                       | No data message                                                                                                   |
-| `thead`                | array    | `[]`                                            | Table header renderer, see BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table)  |
-| `tbody`                | array    | `[]`                                            | Table content renderer, see BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table) |
-| `actionConfig`         | array    | `ActionButton[]`                                | Table cell button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button)  |
-| `actionHandler`        | function | `GlobalActionHandler`                           | Table cell button handler                                                                                         |
-| `actionRendering`      | function | `() => true`                                    | Table cell button rendering handler by server-side                                                                |
-| `topbarConfig`         | array    | `TopbarActionButton[]`                          | Topbar button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button)      |
-| `topbarHandler`        | function | `GlobalTopbarHandler`                           | Topbar button handler                                                                                             |
-| `topbarRendering`      | function | `() => true`                                    | Topbar button rendering handler by server-side                                                                    |
-| `tableAttrOrProp`      | object   | `{}`                                            | See BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table)                         |
-| `tableDataFormat`      | object   | `{ data: 'data', total: 'total' }`              | Defines the table data format for API                                                                             |
-| `pageSize`             | number   | `10`                                            | Default page size                                                                                                 |
-| `paginationAttrOrProp` | object   | `{}`                                            | See BalmUI `<ui-pagination>` props [docs](https://v8.material.balmjs.com/#/navigation/pagination)                 |
-| `withoutPagination`    | boolean  | `false`                                         | No pagination                                                                                                     |
-| `getModelConfigFn`     | function | `(vm) => {}`                                    | Loading model config                                                                                              |
-| `getModelDataFn`       | function | `(vm) => {}`                                    | Loading model data                                                                                                |
-| `useValidator`         | boolean  | `false`                                         | Enables auto validator                                                                                            |
+| Name                   | Type          | Default                                         | Description                                                                                                       |
+| ---------------------- | ------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `title`                | string        | `''`                                            | Detail view title                                                                                                 |
+| `model`                | string        | _required_                                      | Model name                                                                                                        |
+| `modelPath`            | string        | `''`                                            | The file path of model config                                                                                     |
+| `modelOptions`         | object        | `{}`                                            | The options of model config                                                                                       |
+| `keyName`              | string, array | `'id'`                                          | The primary key of model data                                                                                     |
+| `searchActionConfig`   | array         | `DefaultSearchActionConfig`                     | Search form button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button) |
+| `formViewAttrOrProp`   | object        | `{ formAttrOrProp: { actionAlign: 'center' } }` | See `<ui-form-view>` props [docs](/#/components/form-view)                                                        |
+| `noData`               | string        | `No Data`                                       | No data message                                                                                                   |
+| `thead`                | array         | `[]`                                            | Table header renderer, see BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table)  |
+| `tbody`                | array         | `[]`                                            | Table content renderer, see BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table) |
+| `actionConfig`         | array         | `ActionButton[]`                                | Table cell button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button)  |
+| `actionHandler`        | function      | `GlobalActionHandler`                           | Table cell button handler                                                                                         |
+| `actionRendering`      | function      | `() => true`                                    | Table cell button rendering handler by server-side                                                                |
+| `topbarConfig`         | array         | `TopbarActionButton[]`                          | Topbar button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button)      |
+| `topbarHandler`        | function      | `GlobalTopbarHandler`                           | Topbar button handler                                                                                             |
+| `topbarRendering`      | function      | `() => true`                                    | Topbar button rendering handler by server-side                                                                    |
+| `tableAttrOrProp`      | object        | `{}`                                            | See BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table)                         |
+| `tableDataFormat`      | object        | `{ data: 'data', total: 'total' }`              | Defines the table data format for API                                                                             |
+| `pageSize`             | number        | `10`                                            | Default page size                                                                                                 |
+| `paginationAttrOrProp` | object        | `{}`                                            | See BalmUI `<ui-pagination>` props [docs](https://v8.material.balmjs.com/#/navigation/pagination)                 |
+| `withoutPagination`    | boolean       | `false`                                         | No pagination                                                                                                     |
+| `getModelConfigFn`     | function      | `(vm) => {}`                                    | Loading model config                                                                                              |
+| `getModelDataFn`       | function      | `(vm) => {}`                                    | Loading model data                                                                                                |
+| `useValidator`         | boolean       | `false`                                         | Enables auto validator                                                                                            |
 
 ### Slots
 

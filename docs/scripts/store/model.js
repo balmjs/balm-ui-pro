@@ -14,8 +14,8 @@ export default {
       try {
         const module = await import(`@/views/${modelPath}`);
         config = module.default;
-      } catch (err) {
-        isDev && console.warn(err.toString());
+      } catch (e) {
+        isDev && console.warn(e.toString());
       }
 
       return config;

@@ -8,7 +8,7 @@
       @change:x="onChange"
     >
       <template #before-form-view>
-        <div>outer formData: {{ formData }}</div>
+        <div>outer formData: {{ formDataSource }}</div>
         <hr />
       </template>
       <template #form-item__ui-textfield--l>
@@ -66,6 +66,7 @@ export default {
   },
   data() {
     return {
+      formDataSource: {},
       formData: {
         a: 'hello',
         b: 'world'
@@ -124,12 +125,13 @@ export default {
     // this.$set(this.modelOptions, 'multiSelectOptions1', multiSelectOptions1);
 
     if (this.id) {
-      this.formData = await this.$store.getModelDetail('user', {
+      this.formDataSource = await this.$store.getModelDetail('user', {
         id: this.id
       });
+      this.formData = Object.assign({}, this.formDataSource);
     } else {
       setTimeout(() => {
-        this.formData = {
+        this.formDataSource = {
           a: 'a1',
           b: 'b1',
           c: '<p>c1</p>',
@@ -147,6 +149,7 @@ export default {
           p: 'p1',
           x: 'xyz'
         };
+        this.formData = Object.assign({}, this.formDataSource);
       }, 1e3);
     }
   },
@@ -178,6 +181,7 @@ export default {
     },
     onChange(key, value) {
       console.log('onChange', key, value);
+      this.$set(this.formDataSource, key, value);
     }
   }
 };

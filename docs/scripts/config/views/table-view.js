@@ -1,4 +1,5 @@
 import { useStore, useConfirm } from 'balm-ui';
+import { isDev } from '@/config';
 
 const $confirm = useConfirm();
 
@@ -11,13 +12,15 @@ export async function getModelListDataFn({ model, searchForm, table }) {
     page
   });
 
+  isDev && console.info('getModelListDataFn', model, params);
+
   return await store.getModelList(model, params);
 }
 
 export async function listActionHandler(action, data, refresh) {
-  console.log('listActionHandler', action);
+  isDev && console.log('listActionHandler', action, data);
 }
 
 export async function listTopbarHandler(action, data, refresh) {
-  console.log('listTopbarHandler', action);
+  isDev && console.log('listTopbarHandler', action, data);
 }
