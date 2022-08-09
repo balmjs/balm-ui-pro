@@ -283,7 +283,7 @@ export default {
       }
     },
     async modelOptions() {
-      await this.setFormConfig();
+      this.isFunctionConfig && (await this.setFormConfig());
 
       if (this.hasFormDataSource) {
         this.updateFormData();
