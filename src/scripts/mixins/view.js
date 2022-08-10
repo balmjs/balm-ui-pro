@@ -1,5 +1,10 @@
 import { isFunction } from '../utils/typeof';
 
+const FORM_VIEW_EVENTS = {
+  updateFormItem: 'change:x',
+  action: 'action'
+};
+
 export default {
   props: {
     title: {
@@ -29,6 +34,9 @@ export default {
     }
   },
   methods: {
+    handleChange(key, value) {
+      this.$emit(FORM_VIEW_EVENTS.updateFormItem, key, value);
+    },
     exposeAction(action, result = {}) {
       const { handler, ...actionConfig } = action;
       const customHandler = isFunction(handler) ? handler : false;
@@ -45,7 +53,7 @@ export default {
 
       customHandler
         ? customHandler(actionConfig, data, refreshData)
-        : this.$emit('action', actionConfig, data, refreshData);
+        : this.$emit(FORM_VIEW_EVENTS.action, actionConfig, data, refreshData);
     }
   }
 };

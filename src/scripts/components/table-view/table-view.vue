@@ -19,6 +19,7 @@
           )
         "
         @loaded="initModelData"
+        @change:x="handleChange"
         @action="handleAction"
       >
         <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
@@ -127,7 +128,6 @@ import getType from '../../utils/typeof';
 const UiTableView = {
   name: 'UiTableView',
   EVENTS: {
-    action: 'action',
     submit: 'submit',
     reset: 'reset'
   }

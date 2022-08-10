@@ -20,6 +20,7 @@
           )
         "
         @loaded="initModelData"
+        @change:x="handleChange"
         @action="handleAction"
       >
         <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
@@ -47,7 +48,6 @@ import getType from '../../utils/typeof';
 const UiDetailView = {
   name: 'UiDetailView',
   EVENTS: {
-    action: 'action',
     submit: 'submit',
     reset: 'reset',
     cancel: 'cancel'
