@@ -1,11 +1,8 @@
-.mdc-table-view {
-}
-
 .mdc-table-view__conditions {
   margin-bottom: 12px;
 }
 
-.mdc-table-view__topbar {
+.mdc-table-view__top-actions {
   margin-bottom: 12px;
 
   .action {
@@ -13,7 +10,7 @@
   }
 }
 
-.mdc-table-view__actions {
+.mdc-table-view__row-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;

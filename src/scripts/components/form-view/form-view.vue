@@ -1,11 +1,9 @@
 <template>
   <div
-    :class="[
-      'mdc-form-view',
-      {
-        'mdc-form-view--use-grid': useGrid
-      }
-    ]"
+    :class="{
+      'mdc-form-view': true,
+      'mdc-form-view--use-grid': useGrid
+    }"
   >
     <ui-form
       class="mdc-form-view__form"
@@ -429,26 +427,32 @@ export default {
 
       this.syncFormData();
     },
-    handleAction({ type, delay }) {
+    exposeAction(action, result = {}) {
+      const { handler, ...actionConfig } = action;
+      const customHandler = isFunction(handler) ? handler : false;
+
+      customHandler
+        ? customHandler(actionConfig, result)
+        : this.$emit(UI_FORM_VIEW.EVENTS.action, actionConfig, result);
+    },
+    handleAction(action) {
       let debounceConfig = {};
 
-      switch (type) {
+      switch (action.type) {
         case NATIVE_BUTTON_TYPES.submit:
           debounceConfig = {
             callback: () => {
               const validations = this.formConfig.filter(
                 ({ validator }) => validator
               );
+
               if (validations.length) {
                 if (this.$validate) {
                   this.$validations.set(validations);
 
                   const result = this.$validate(this.formData);
 
-                  this.$emit(UI_FORM_VIEW.EVENTS.action, {
-                    type: NATIVE_BUTTON_TYPES.submit,
-                    ...result
-                  });
+                  this.exposeAction(action, result);
 
                   this.$validations.clear();
                 } else {
@@ -457,13 +461,10 @@ export default {
                   );
                 }
               } else {
-                this.$emit(UI_FORM_VIEW.EVENTS.action, {
-                  type: NATIVE_BUTTON_TYPES.submit,
-                  valid: true
-                });
+                this.exposeAction(action, { valid: true });
               }
             },
-            delay: delay || 250
+            delay: action.delay || 250
           };
           break;
         case NATIVE_BUTTON_TYPES.reset:
@@ -471,11 +472,9 @@ export default {
           break;
       }
 
-      return type === NATIVE_BUTTON_TYPES.submit
+      return action.type === NATIVE_BUTTON_TYPES.submit
         ? debounceConfig
-        : this.$emit(UI_FORM_VIEW.EVENTS.action, {
-            type: type || NATIVE_BUTTON_TYPES.button
-          });
+        : this.exposeAction(action);
     }
   }
 };

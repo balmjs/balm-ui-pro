@@ -6,7 +6,6 @@
 
     <section v-if="modelPath" class="mdc-table-view__conditions">
       <ui-form-view
-        ref="searchForm"
         v-model="searchForm.data"
         v-bind="
           Object.assign(
@@ -38,8 +37,10 @@
       </ui-form-view>
     </section>
 
-    <ui-table-view-topbar v-if="topbarConfig.length"></ui-table-view-topbar>
-    <slot v-else name="topbar" v-bind="this"></slot>
+    <ui-table-view-top-actions
+      v-if="topActionConfig.length"
+    ></ui-table-view-top-actions>
+    <slot v-else name="top-actions" v-bind="this"></slot>
 
     <section class="mdc-table-view__content">
       <slot name="before-table-view"></slot>
@@ -65,18 +66,19 @@
           </template>
           <!-- Default actions -->
           <template #actions="{ data }">
-            <ui-table-view-actions
-              v-if="actionConfig.length"
+            <ui-table-view-row-actions
+              v-if="rowActionConfig.length"
               v-bind="{
-                actionConfig,
-                model,
-                keyName,
                 data,
-                actionHandler,
-                actionRendering,
+                model,
+                modelOptions,
+                keyName,
+                actionConfig: rowActionConfig,
+                actionHandler: rowActionHandler,
+                actionRendering: rowActionRendering,
                 refreshData: getModelData
               }"
-            ></ui-table-view-actions>
+            ></ui-table-view-row-actions>
             <slot v-else name="actions" v-bind="data"></slot>
           </template>
         </ui-table>
@@ -117,16 +119,17 @@
 </template>
 
 <script>
-import UiTableViewTopbar from './table-view-topbar';
-import UiTableViewActions from './table-view-actions';
+import UiTableViewTopActions from './table-view-top-actions';
+import UiTableViewRowActions from './table-view-row-actions';
 import viewMixins from '../../mixins/view';
 import getType from '../../utils/typeof';
 
 const UiTableView = {
   name: 'UiTableView',
   EVENTS: {
-    reset: 'reset',
-    submit: 'submit'
+    action: 'action',
+    submit: 'submit',
+    reset: 'reset'
   }
 };
 
@@ -150,8 +153,8 @@ const defaultSearchActionConfig = [
 export default {
   name: UiTableView.name,
   components: {
-    UiTableViewTopbar,
-    UiTableViewActions
+    UiTableViewTopActions,
+    UiTableViewRowActions
   },
   mixins: [viewMixins],
   props: {
@@ -179,27 +182,27 @@ export default {
       type: Array,
       default: () => []
     },
-    actionConfig: {
+    rowActionConfig: {
       type: Array,
       default: () => []
     },
-    actionHandler: {
+    rowActionHandler: {
       type: Function,
       default: () => {}
     },
-    actionRendering: {
+    rowActionRendering: {
       type: Function,
       default: () => true
     },
-    topbarConfig: {
+    topActionConfig: {
       type: Array,
       default: () => []
     },
-    topbarHandler: {
+    topActionHandler: {
       type: Function,
       default: () => {}
     },
-    topbarRendering: {
+    topActionRendering: {
       type: Function,
       default: () => true
     },
@@ -252,15 +255,15 @@ export default {
         data: {},
         message: ''
       },
-      lastSearchFormData: {}, // cache for last search result
+      lastSearchFormData: {}, // cached for last search result
       // Table data
-      tableDataSource: {},
       table: {
         selectedRows: [],
         data: [],
         total: 0,
         page: 1
-      }
+      },
+      tableDataSource: {}
     };
   },
   computed: {
@@ -315,10 +318,8 @@ export default {
         console.warn(`[${UiTableView.name}]: ${e.toString()}`);
       }
     },
-    async handleAction(result) {
-      const { type } = result;
-
-      switch (type) {
+    async handleAction(action, result) {
+      switch (action.type) {
         case UiTableView.EVENTS.submit:
           let canSubmit = true;
 
@@ -327,7 +328,9 @@ export default {
             this.$set(this.searchForm, 'message', result.message);
           }
 
-          canSubmit && (await this.getModelData());
+          if (canSubmit && action.submit !== false) {
+            await this.getModelData();
+          }
           break;
         case UiTableView.EVENTS.reset:
           this.$set(this.searchForm, 'message', '');
@@ -335,9 +338,7 @@ export default {
           break;
       }
 
-      type === UiTableView.EVENTS.reset
-        ? this.$emit(type, this)
-        : this.$emit(type, result, this);
+      this.exposeAction(action, result);
     },
     resetSelectedRows() {
       this.$set(this.table, 'selectedRows', []);

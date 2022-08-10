@@ -1,5 +1,5 @@
 <template>
-  <div class="mdc-table-view__actions">
+  <div class="mdc-table-view__row-actions">
     <template v-for="(action, index) in actionConfig">
       <template v-if="configAction('if', action)">
         <template v-if="action.component">
@@ -10,7 +10,7 @@
               :key="`button-without-slot-${index}`"
               class="action button-without-slot"
               v-bind="action.attrOrProp || {}"
-              @click.native="handleClick(action)"
+              @click.native="handleAction(action)"
             ></component>
           </template>
           <template v-else>
@@ -20,7 +20,7 @@
               :key="`button-with-slot-${index}`"
               class="action button-with-slot"
               v-bind="action.attrOrProp || {}"
-              @click.native="handleClick(action)"
+              @click.native="handleAction(action)"
             >
               {{ configAction('text', action) }}
             </component>
@@ -67,7 +67,7 @@
             :key="`link-${index}`"
             class="action link"
             href="javascript:void(0)"
-            @click="handleClick(action)"
+            @click="handleAction(action)"
           >
             <ui-icon v-if="action.icon">
               {{ configAction('icon', action) }}
@@ -87,9 +87,9 @@ import { isFunction } from '../../utils/typeof';
 export default {
   name: 'UiTableViewActions',
   props: {
-    actionConfig: {
-      type: Array,
-      default: () => []
+    data: {
+      type: Object,
+      default: () => ({})
     },
     model: {
       type: String,
@@ -103,9 +103,9 @@ export default {
       type: [String, Array],
       default: 'id'
     },
-    data: {
-      type: Object,
-      default: () => ({})
+    actionConfig: {
+      type: Array,
+      default: () => []
     },
     actionHandler: {
       type: Function,
@@ -164,18 +164,19 @@ export default {
 
       return result;
     },
-    handleClick(action) {
-      if (isFunction(action.handler)) {
-        action.handler(this.data, this.refreshData);
-      } else {
-        const data = {
-          model: this.model,
-          modelOptions: this.modelOptions,
-          keyName: this.keyName,
-          data: this.data
-        };
+    handleAction(action) {
+      const { model, modelOptions, keyName, refreshData } = this;
+      const data = {
+        model,
+        modelOptions,
+        keyName,
+        data: this.data
+      };
 
-        this.actionHandler(action, data, this.refreshData);
+      if (isFunction(action.handler)) {
+        action.handler(data, refreshData);
+      } else {
+        this.actionHandler(action, data, refreshData);
       }
     }
   }

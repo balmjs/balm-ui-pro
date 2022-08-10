@@ -47,8 +47,10 @@ import getType from '../../utils/typeof';
 const UiDetailView = {
   name: 'UiDetailView',
   EVENTS: {
-    cancel: 'cancel',
-    submit: 'submit'
+    action: 'action',
+    submit: 'submit',
+    reset: 'reset',
+    cancel: 'cancel'
   }
 };
 
@@ -86,8 +88,8 @@ export default {
       })
     },
     to: {
-      type: [Boolean, Object, String],
-      default: false
+      type: [Object, String],
+      default: 'back'
     },
     replace: {
       type: Boolean,
@@ -157,42 +159,35 @@ export default {
         this.replace ? this.$router.replace(to) : this.$router.push(to);
       }
     },
-    async handleAction(result) {
-      const { type } = result;
-
-      switch (type) {
+    async handleAction(action, data) {
+      switch (action.type) {
         case UiDetailView.EVENTS.submit:
           let canSubmit = true;
 
           if (this.useValidator) {
-            canSubmit = result.valid;
-            this.message = result.message;
+            canSubmit = data.valid;
+            this.message = data.message;
           }
 
-          if (canSubmit) {
+          if (canSubmit && action.submit !== false) {
             await this.setModelDataFn(this);
             this.redirectOnSave && this.redirect();
           }
           break;
+        case UiDetailView.EVENTS.reset:
+          this.message = '';
+          // NOTE: automatic processing in `<ui-form-view>`
+          break;
         case UiDetailView.EVENTS.cancel:
-          switch (this.to) {
-            case 'custom':
-              this.$emit(UiDetailView.EVENTS.cancel);
-              break;
-            case false:
-              this.$router.back();
-              break;
-            default:
-              this.redirect();
+          if (this.to === 'back') {
+            this.$router.back();
+          } else {
+            this.redirect();
           }
           break;
-        default:
-          this.message = '';
       }
 
-      if (type !== UiDetailView.EVENTS.cancel) {
-        this.$emit(type, result, this);
-      }
+      this.exposeAction(action, data);
     }
   }
 };

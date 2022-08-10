@@ -1,8 +1,8 @@
 <template>
-  <section class="mdc-table-view__topbar">
-    <template v-for="(action, index) in tableView.topbarConfig">
+  <section class="mdc-table-view__top-actions">
+    <template v-for="(action, index) in tableView.topActionConfig">
       <ui-button
-        v-if="tableView.topbarRendering(action, tableView.tableDataSource)"
+        v-if="tableView.topActionRendering(action, tableView.tableDataSource)"
         :key="`button-${index}`"
         v-bind="
           Object.assign(
@@ -14,7 +14,7 @@
             action.attrOrProp || {}
           )
         "
-        @click="handleClick(action)"
+        @click="handleAction(action)"
       >
         {{ action.text }}
       </ui-button>
@@ -27,7 +27,7 @@ import { TYPES, getRouteLocationRaw } from './constants';
 import { isFunction } from '../../utils/typeof';
 
 export default {
-  name: 'UiTableViewTopbar',
+  name: 'UiTableViewTopActions',
   data() {
     return {
       tableView: this.$parent
@@ -58,30 +58,25 @@ export default {
 
       return result;
     },
-    handleClick(action) {
-      const { modelOptions, table, lastSearchFormData } = this.tableView;
+    handleAction(action) {
+      const { model, modelOptions, keyName, $data, getModelData } =
+        this.tableView;
       const data = {
+        model,
         modelOptions,
-        selectedRows: table.selectedRows,
-        tableData: table.data,
-        searchFormData: lastSearchFormData
+        keyName,
+        ...$data
       };
+      const refreshData = getModelData;
 
       if (action.type === TYPES.routerLink) {
-        const to = getRouteLocationRaw(action, {
-          model: this.tableView.model,
-          data
-        });
+        const to = getRouteLocationRaw(action, data);
         this.$router.push(to);
       } else {
         if (isFunction(action.handler)) {
-          action.handler(data, this.tableView.getModelData);
+          action.handler(data, refreshData);
         } else {
-          this.tableView.topbarHandler(
-            action,
-            data,
-            this.tableView.getModelData
-          );
+          this.tableView.topActionHandler(action, data, refreshData);
         }
       }
     }
