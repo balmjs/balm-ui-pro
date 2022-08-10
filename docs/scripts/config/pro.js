@@ -4,8 +4,8 @@ import { setModelOptionsFn, getModelConfigFn } from './views/form-view';
 import { getModelDetailDataFn, setModelDataFn } from './views/detail-view';
 import {
   getModelListDataFn,
-  listActionHandler,
-  listTopbarHandler
+  handleRowAction,
+  handleTopAction
 } from './views/table-view';
 import { isDev } from '@/config';
 
@@ -23,8 +23,8 @@ const BalmUIProConfig = {
       total: 'total'
       // page: 'page'
     },
-    actionHandler: listActionHandler,
-    topbarHandler: listTopbarHandler
+    rowActionHandler: handleRowAction,
+    topActionHandler: handleTopAction
   },
   UiDetailView: {
     getModelConfigFn,

@@ -7,8 +7,7 @@
       :to="{
         name: 'components.table-view'
       }"
-      @cancel="onCancel"
-      @submit="onSubmit"
+      @action="onAction"
     >
       <template #custom-slot>gg</template>
     </ui-detail-view>
@@ -19,11 +18,8 @@
 <script>
 export default {
   methods: {
-    onCancel() {
-      console.log('cancel');
-    },
-    onSubmit(result, vm) {
-      console.log('submit', result, vm);
+    onAction(action, data) {
+      console.log('onAction', action, data);
     }
   }
 };

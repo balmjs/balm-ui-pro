@@ -53,7 +53,7 @@
   }
   ```
 
-  > NOTE: see BalmUI [$validator docs](https://v8.material.balmjs.com/#/data-input/validator) for BalmUIValidationRule details
+  > See BalmUI [$validator docs](https://v8.material.balmjs.com/#/data-input/validator) for BalmUIValidationRule details
 
 - `actionConfig: ActionButton[]`
 
@@ -62,8 +62,15 @@
     text: string;
     type?: 'button' | 'submit' | 'reset' | string;
     attrOrProp?: object;
+    // ⚠️ NOTE: `validationResult` requires `submit` type
+    handler?: (
+      actionConfig: ActionButton,
+      validationResult?: BalmUIValidationResult
+    ) => void;
   }
   ```
+
+  > See BalmUI [$validator docs](https://v8.material.balmjs.com/#/data-input/validator) for BalmUIValidationResult details
 
 ### Slots
 
@@ -76,17 +83,8 @@
 
 ### Events
 
-| Name       | Type                                   | Description |
-| ---------- | -------------------------------------- | ----------- |
-| `change`   | `function(modelValue: object)`         |             |
-| `change:x` | `function(key: string, value: string)` |             |
-| `action`   | `function(actionResult: ActionResult)` |             |
-
-```ts
-interface ActionResult {
-  type: string; // ActionButton.type,
-  ...validationResult?: BalmUIValidationResult
-}
-```
-
-> NOTE: see BalmUI [$validator docs](https://v8.material.balmjs.com/#/data-input/validator) for BalmUIValidationResult details
+| Name       | Type                                                                              | Description                                  |
+| ---------- | --------------------------------------------------------------------------------- | -------------------------------------------- |
+| `change`   | `function(modelValue: object)`                                                    | Emits when the form view is changed.         |
+| `change:x` | `function(key: string, value: string)`                                            | Emits when the form item is changed.         |
+| `action`   | `function(actionConfig: ActionButton, validationResult?: BalmUIValidationResult)` | Emits when the form view actions is clicked. |

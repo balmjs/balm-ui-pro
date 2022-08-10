@@ -43,12 +43,12 @@
     return await store.getModelList(model, params);
   }
 
-  export async function listActionHandler(action, data, refresh) {
-    console.log('listActionHandler', action);
+  export async function handleRowAction(action, data, refresh) {
+    console.log('handleRowAction', action, data);
   }
 
-  export async function listTopbarHandler(action, data, refresh) {
-    console.log('listTopbarHandler', action);
+  export async function handleTopAction(action, data, refresh) {
+    console.log('handleTopAction', action, data);
   }
   ```
 
@@ -56,8 +56,8 @@
   import {
     getModelConfigFn,
     getModelListDataFn,
-    listActionHandler,
-    listTopbarHandler
+    handleRowAction,
+    handleTopAction
   } from '@/config/views/table-view';
 
   Vue.use(BalmUIPro, {
@@ -69,8 +69,8 @@
         total: 'total'
         // page: 'page'
       },
-      actionHandler: listActionHandler,
-      topbarHandler: listTopbarHandler
+      rowActionHandler: handleRowAction,
+      topActionHandler: handleTopAction
     }
   });
   ```
@@ -82,8 +82,8 @@
   model-path="model-config/demo.json"
   :thead="thead"
   :tbody="tbody"
-  :action-config="actionConfig"
-  :topbar-config="topbarConfig"
+  :row-action-config="rowActionConfig"
+  :top-action-config="topActionConfig"
 ></ui-table-view>
 ```
 
@@ -99,7 +99,7 @@ const tbody = [
   }
 ];
 
-const actionConfig = [
+const rowActionConfig = [
   {
     component: 'ui-icon',
     text: 'add'
@@ -134,7 +134,7 @@ const actionConfig = [
   }
 ];
 
-const topbarConfig = [
+const topActionConfig = [
   {
     type: 'router-link',
     icon: 'add',
@@ -155,8 +155,8 @@ export default {
     return {
       thead,
       tbody,
-      actionConfig,
-      topbarConfig
+      rowActionConfig,
+      topActionConfig
     };
   }
 };

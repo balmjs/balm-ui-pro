@@ -2,13 +2,32 @@
 <ui-table-view></ui-table-view>
 ```
 
+```ts
+interface ActionData {
+  model: string;
+  modelOptions: object;
+  keyName: string | string[];
+}
+```
+
 - Search actions
 
   ```js
+  interface SearchActionData extends ActionData {
+    ...$data?: TableViewData,
+    ...validationResult?: BalmUIValidationResult
+  }
+
   interface SearchActionButton {
     text: string;
     type?: 'button' | 'submit' | 'reset' | string;
     attrOrProp?: object;
+    handler?: (
+      actionConfig: SearchActionButton,
+      data: SearchActionData,
+      refresh: Function
+    ) => void;
+    submit?: false; // Just for custom `submit` type
   }
 
   const DefaultSearchActionConfig: SearchActionButton[] = [
@@ -20,7 +39,7 @@
       }
     },
     {
-      type: 'submit', // required for `useValidator`
+      type: 'submit',
       text: 'Search',
       attrOrProp: {
         raised: true
@@ -32,97 +51,92 @@
 - Top bar actions
 
   ```ts
-  type TopbarData = {
-    modelOptions: object;
-    selectedRows: string[];
-    tableData: object[];
-    searchFormData: object;
-  };
-  type RefreshFn = function;
-  ```
+  interface TopActionData extends ActionData {
+    ...$data?: TableViewData
+  }
 
-  ```ts
-  interface TopbarActionButton {
+  interface TopActionButton {
     type: 'router-link' | string;
     icon?: string;
     text: string;
     routeName?: string;
     attrOrProp?: object;
-    handler?: (data: TopbarData, refresh: RefreshFn) => void;
+    handler?: (
+      actionConfig: TopActionButton,
+      data: TopActionData,
+      refresh: Function
+    ) => void;
   }
 
-  type GlobalTopbarHandler = (
-    action: TopbarActionButton,
-    data: TopbarData,
-    refresh: RefreshFn
+  type GlobalTopActionHandler = (
+    actionConfig: TopActionButton,
+    data: TopActionData,
+    refresh: Function
   ) => void;
   ```
 
-- Table cell actions
+- Table row actions
 
   ```ts
-  type CellData = {
-    model: string;
-    modelOptions: object;
-    keyName: string | string[];
+  interface RowActionData extends ActionData {
     data: object;
-  };
-  type RefreshFn = function;
+  }
   ```
 
   ```ts
-  interface ActionButton {
-    type: 'router-link' | 'no-slot' | string;
+  interface RowActionButton {
     if?: boolean | (data: object) => boolean;
     show?: boolean | (data: object) => boolean;
+    type: 'router-link' | 'no-slot' | string;
+    component?: string;
     icon?: string;
     text: string;
     routeName?: string;
     routeParams?: (data: object) => {};
     href?: string;
     attrOrProp?: object;
-    component?: string;,
     handler?: (
-      data: CellData,
-      refresh: RefreshFn
+      actionConfig: RowActionButton,
+      data: RowActionData,
+      refresh: Function
     ) => void;
   }
 
-  type GlobalActionHandler = (
-    action: ActionButton,
-    data: CellData,
-    refresh: RefreshFn
+  type GlobalRowActionHandler = (
+    actionConfig: RowActionButton,
+    data: RowActionData,
+    refresh: Function
   ) => void;
   ```
 
 ### Props
 
-| Name                   | Type          | Default                                         | Description                                                                                                       |
-| ---------------------- | ------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `title`                | string        | `''`                                            | Detail view title                                                                                                 |
-| `model`                | string        | _required_                                      | Model name                                                                                                        |
-| `modelPath`            | string        | `''`                                            | The file path of model config                                                                                     |
-| `modelOptions`         | object        | `{}`                                            | The options of model config                                                                                       |
-| `keyName`              | string, array | `'id'`                                          | The primary key of model data                                                                                     |
-| `searchActionConfig`   | array         | `DefaultSearchActionConfig`                     | Search form button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button) |
-| `formViewAttrOrProp`   | object        | `{ formAttrOrProp: { actionAlign: 'center' } }` | See `<ui-form-view>` props [docs](/#/components/form-view)                                                        |
-| `noData`               | string        | `No Data`                                       | No data message                                                                                                   |
-| `thead`                | array         | `[]`                                            | Table header renderer, see BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table)  |
-| `tbody`                | array         | `[]`                                            | Table content renderer, see BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table) |
-| `actionConfig`         | array         | `ActionButton[]`                                | Table cell button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button)  |
-| `actionHandler`        | function      | `GlobalActionHandler`                           | Table cell button handler                                                                                         |
-| `actionRendering`      | function      | `() => true`                                    | Table cell button rendering handler by server-side                                                                |
-| `topbarConfig`         | array         | `TopbarActionButton[]`                          | Topbar button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button)      |
-| `topbarHandler`        | function      | `GlobalTopbarHandler`                           | Topbar button handler                                                                                             |
-| `topbarRendering`      | function      | `() => true`                                    | Topbar button rendering handler by server-side                                                                    |
-| `tableAttrOrProp`      | object        | `{}`                                            | See BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table)                         |
-| `tableDataFormat`      | object        | `{ data: 'data', total: 'total' }`              | Defines the table data format for API                                                                             |
-| `pageSize`             | number        | `10`                                            | Default page size                                                                                                 |
-| `paginationAttrOrProp` | object        | `{}`                                            | See BalmUI `<ui-pagination>` props [docs](https://v8.material.balmjs.com/#/navigation/pagination)                 |
-| `withoutPagination`    | boolean       | `false`                                         | No pagination                                                                                                     |
-| `getModelConfigFn`     | function      | `(vm) => {}`                                    | Loading model config                                                                                              |
-| `getModelDataFn`       | function      | `(vm) => {}`                                    | Loading model data                                                                                                |
-| `useValidator`         | boolean       | `false`                                         | Enables auto validator                                                                                            |
+| Name                   | Type          | Default                                         | Description                                                                                                         |
+| ---------------------- | ------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `title`                | string        | `''`                                            | Detail view title                                                                                                   |
+| `model`                | string        | _required_                                      | Model name                                                                                                          |
+| `modelPath`            | string        | `''`                                            | The file path of model config                                                                                       |
+| `modelOptions`         | object        | `{}`                                            | The options of model config                                                                                         |
+| `keyName`              | string, array | `'id'`                                          | The primary key of model data                                                                                       |
+| `searchActionConfig`   | array         | `DefaultSearchActionConfig`                     | Search form button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button)   |
+| `formViewAttrOrProp`   | object        | `{ formAttrOrProp: { actionAlign: 'center' } }` | See `<ui-form-view>` props [docs](/#/components/form-view)                                                          |
+| `noData`               | string        | `No Data`                                       | No data message                                                                                                     |
+| `thead`                | array         | `[]`                                            | Table header renderer, see BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table)    |
+| `tbody`                | array         | `[]`                                            | Table content renderer, see BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table)   |
+| `rowActionConfig`      | array         | `RowActionButton[]`                             | Table cell button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button)    |
+| `rowActionHandler`     | function      | `GlobalRowActionHandler`                        | Table cell button handler                                                                                           |
+| `rowActionRendering`   | function      | `() => true`                                    | Table cell button rendering handler by server-side                                                                  |
+| `topActionConfig`      | array         | `TopActionButton[]`                             | Table top bar button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button) |
+| `topActionHandler`     | function      | `GlobalTopActionHandler`                        | Table top bar button handler                                                                                        |
+| `topActionRendering`   | function      | `() => true`                                    | Table top bar button rendering handler by server-side                                                               |
+| `tableAttrOrProp`      | object        | `{}`                                            | See BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table)                           |
+| `tableDataFormat`      | object        | `{ data: 'data', total: 'total' }`              | Defines the table data format for API                                                                               |
+| `pageSize`             | number        | `10`                                            | Default page size                                                                                                   |
+| `paginationAttrOrProp` | object        | `{}`                                            | See BalmUI `<ui-pagination>` props [docs](https://v8.material.balmjs.com/#/navigation/pagination)                   |
+| `withoutPagination`    | boolean       | `false`                                         | No pagination                                                                                                       |
+| `getModelConfigFn`     | function      | `(vm) => {}`                                    | Loading model config                                                                                                |
+| `getModelDataFn`       | function      | `(vm) => {}`                                    | Loading model data                                                                                                  |
+| `useValidator`         | boolean       | `false`                                         | Enables auto validator (Just for `submit` type)                                                                     |
 
 ### Slots
 
@@ -140,14 +154,6 @@
 
 ### Events
 
-| Name     | Type                                               | Description                              |
-| -------- | -------------------------------------------------- | ---------------------------------------- |
-| `reset`  | `function(vm: object)`                             | Emits when the reset button is clicked.  |
-| `submit` | `function(actionResult: ActionResult, vm: object)` | Emits when the submit button is clicked. |
-
-```ts
-interface ActionResult {
-  type: string; // ActionButton.type,
-  ...validationResult?: BalmUIValidationResult
-}
-```
+| Name     | Type                                                                                    | Description                                   |
+| -------- | --------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `action` | `function(actionConfig: SearchActionButton, data: SearchActionData, refresh: Function)` | Emits when the table view actions is clicked. |

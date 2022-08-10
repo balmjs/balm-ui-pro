@@ -5,10 +5,20 @@
 ### Props
 
 ```js
+interface ActionData {
+  model: string;
+  modelOptions: object;
+  keyName: string | string[];
+  ...$data?: DetailViewData,
+  ...validationResult?: BalmUIValidationResult
+}
+
 interface ActionButton {
   text: string;
   type?: 'button' | 'submit' | 'reset' | string;
   attrOrProp?: object;
+  handler?: (actionConfig: ActionButton, data: ActionData, refresh: Function) => void;
+  submit?: false // Just for custom `submit` type
 }
 
 const DefaultActionConfig: ActionButton[] = [
@@ -20,7 +30,7 @@ const DefaultActionConfig: ActionButton[] = [
     }
   },
   {
-    type: 'submit', // required for `useValidator`
+    type: 'submit',
     text: 'Save',
     attrOrProp: {
       raised: true
@@ -29,22 +39,22 @@ const DefaultActionConfig: ActionButton[] = [
 ];
 ```
 
-| Name                 | Type                    | Default                                         | Description                                                                                                |
-| -------------------- | ----------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `title`              | string                  | `''`                                            | Detail view title                                                                                          |
-| `model`              | string                  | _required_                                      | Model name                                                                                                 |
-| `modelPath`          | string                  | `''`                                            | The file path of model config                                                                              |
-| `modelOptions`       | object                  | `{}`                                            | The options of model config                                                                                |
-| `keyName`            | string, array           | `'id'`                                          | The primary key of model data                                                                              |
-| `actionConfig`       | array                   | `DefaultActionConfig`                           | Form button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button) |
-| `formViewAttrOrProp` | object                  | `{ formAttrOrProp: { actionAlign: 'center' } }` | See `<ui-form-view>` props [docs](/#/components/form-view)                                                 |
-| `to`                 | boolean, object, string | `false`                                         | Custom router link                                                                                         |
-| `replace`            | boolean                 | `false`                                         | The navigation will not leave a history record                                                             |
-| `getModelConfigFn`   | function                | `(vm) => {}`                                    | Loading model config                                                                                       |
-| `getModelDataFn`     | function                | `(vm) => {}`                                    | Loading model data                                                                                         |
-| `setModelDataFn`     | function                | `(vm) => {}`                                    | Saving model data                                                                                          |
-| `useValidator`       | boolean                 | `true`                                          | Enables auto validator                                                                                     |
-| `redirectOnSave`     | boolean                 | `true`                                          | The page will auto redirect after saving model data                                                        |
+| Name                 | Type                             | Default                                         | Description                                                                                                |
+| -------------------- | -------------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `title`              | string                           | `''`                                            | Detail view title                                                                                          |
+| `model`              | string                           | _required_                                      | Model name                                                                                                 |
+| `modelPath`          | string                           | `''`                                            | The file path of model config                                                                              |
+| `modelOptions`       | object                           | `{}`                                            | The options of model config                                                                                |
+| `keyName`            | string, array                    | `'id'`                                          | The primary key of model data                                                                              |
+| `actionConfig`       | array                            | `DefaultActionConfig`                           | Form button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button) |
+| `formViewAttrOrProp` | object                           | `{ formAttrOrProp: { actionAlign: 'center' } }` | See `<ui-form-view>` props [docs](/#/components/form-view)                                                 |
+| `to`                 | 'back', 'custom', string, object | `'back'`                                        | Custom router link                                                                                         |
+| `replace`            | boolean                          | `false`                                         | The navigation will not leave a history record                                                             |
+| `getModelConfigFn`   | function                         | `(vm) => {}`                                    | Loading model config                                                                                       |
+| `getModelDataFn`     | function                         | `(vm) => {}`                                    | Loading model data                                                                                         |
+| `setModelDataFn`     | function                         | `(vm) => {}`                                    | Saving model data                                                                                          |
+| `useValidator`       | boolean                          | `true`                                          | Enables auto validator (Just for `submit` type)                                                            |
+| `redirectOnSave`     | boolean                          | `true`                                          | The page will auto redirect after saving model data                                                        |
 
 ### Slots
 
@@ -57,14 +67,6 @@ const DefaultActionConfig: ActionButton[] = [
 
 ### Events
 
-| Name     | Type                                               | Description                                                            |
-| -------- | -------------------------------------------------- | ---------------------------------------------------------------------- |
-| `cancel` | `void`                                             | (The prop `to` is `'custom'`) Emits when the cancel button is clicked. |
-| `submit` | `function(actionResult: ActionResult, vm: object)` | Emits when the submit button is clicked.                               |
-
-```ts
-interface ActionResult {
-  type: string; // ActionButton.type,
-  ...validationResult?: BalmUIValidationResult
-}
-```
+| Name     | Type                                                                        | Description                                    |
+| -------- | --------------------------------------------------------------------------- | ---------------------------------------------- |
+| `action` | `function(actionConfig: ActionButton, data: ActionData, refresh: Function)` | Emits when the detail view actions is clicked. |

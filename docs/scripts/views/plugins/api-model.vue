@@ -84,7 +84,7 @@ export default {
     this.$apiModel.debug();
   },
   methods: {
-    onAction(result) {
+    onAction(action, result) {
       const { valid, message } = result;
       this.message = message;
 

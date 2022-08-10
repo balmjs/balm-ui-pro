@@ -154,10 +154,12 @@ export default {
     }
   },
   methods: {
-    onAction({ type, valid, message }) {
-      console.log('onAction', type);
+    onAction(action, result) {
+      console.log('onAction', action, result);
 
-      if (type === 'submit') {
+      if (action.type === 'submit') {
+        const { valid, message } = result;
+
         this.message = message;
 
         if (valid) {

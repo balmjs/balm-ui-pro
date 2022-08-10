@@ -6,11 +6,10 @@
       model-path="model-config/a.json"
       :thead="thead"
       :tbody="tbody"
-      :action-config="actionConfig"
-      :topbar-config="topbarConfig"
-      :action-rendering="actionRendering"
-      @reset="onReset"
-      @submit="onSubmit"
+      :row-action-config="rowActionConfig"
+      :top-action-config="topActionConfig"
+      :row-action-rendering="rowActionRendering"
+      @action="onAction"
     >
       <!-- <template #before-form-view>xxx</template>
       <template #after-form-view>yyy</template> -->
@@ -33,7 +32,7 @@ const tbody = [
     slot: 'actions'
   }
 ];
-const actionConfig = [
+const rowActionConfig = [
   {
     if: (data) => true,
     component: 'ui-icon',
@@ -69,7 +68,7 @@ const actionConfig = [
     }
   }
 ];
-const topbarConfig = [
+const topActionConfig = [
   {
     type: 'router-link',
     icon: 'add',
@@ -89,7 +88,7 @@ const topbarConfig = [
   }
 ];
 
-function actionRendering(action, data) {
+function rowActionRendering(action, data) {
   // console.log(action, data);
   return true;
 }
@@ -99,17 +98,14 @@ export default {
     return {
       thead,
       tbody,
-      actionConfig,
-      topbarConfig,
-      actionRendering
+      rowActionConfig,
+      topActionConfig,
+      rowActionRendering
     };
   },
   methods: {
-    onReset(vm) {
-      console.log('reset', vm);
-    },
-    onSubmit(result, vm) {
-      console.log('submit', result, vm);
+    onAction(action, data) {
+      console.log('onAction', action, data);
     }
   }
 };
