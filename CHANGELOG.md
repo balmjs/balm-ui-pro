@@ -2,6 +2,22 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.25.0 / 2022-08-10
+
+### Feature
+
+- optimize `@action` event for `<ui-form-view>`, `<ui-detail-view>`, `<ui-table-view>`
+
+### BREAKING CHANGES
+
+- `<ui-table-view>`: rename props
+  - `actionConfig` -> `rowActionConfig`
+  - `actionHandler` -> `rowActionHandler`
+  - `actionRendering` -> `rowActionRendering`
+  - `topbarConfig` -> `topActionConfig`
+  - `topbarHandler` -> `topActionHandler`
+  - `topbarRendering` -> `topActionRendering`
+
 ## v0.24.1 / 2022-08-09
 
 ### Chore
