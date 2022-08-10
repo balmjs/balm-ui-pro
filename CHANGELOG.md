@@ -2,11 +2,11 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
-## v0.25.1 / 2022-08-10
+## v0.25.3 / 2022-08-10
 
 ### Feature
 
-- `<ui-detail-view>`, `<ui-table-view>`: add `change:x` event
+- `<ui-detail-view>`, `<ui-table-view>`: add `defaultParams` prop and `change:x` event
 
 ## v0.25.0 / 2022-08-10
 
