@@ -120,6 +120,7 @@ export default {
     return {
       modelConfig: [],
       formData: {},
+      formDataSource: {},
       message: ''
     };
   },
@@ -142,10 +143,14 @@ export default {
     },
     async getModelData() {
       try {
-        const formData = await this.getModelDataFn(this);
+        const formDataSource = await this.getModelDataFn(this);
 
-        if (getType(formData) === 'object' && Object.keys(formData).length) {
-          this.formData = formData;
+        if (
+          getType(formDataSource) === 'object' &&
+          Object.keys(formDataSource).length
+        ) {
+          this.formDataSource = formDataSource;
+          this.formData = Object.assign({}, formDataSource);
         }
       } catch (e) {
         console.warn(`[${UiDetailView.name}]: ${e.toString()}`);
