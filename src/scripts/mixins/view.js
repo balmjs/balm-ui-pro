@@ -26,6 +26,10 @@ export default {
     keyName: {
       type: [String, Array],
       default: 'id'
+    },
+    defaultParams: {
+      type: Object,
+      default: () => ({})
     }
   },
   computed: {
@@ -41,11 +45,12 @@ export default {
       const { handler, ...actionConfig } = action;
       const customHandler = isFunction(handler) ? handler : false;
 
-      const { model, modelOptions, keyName } = this.$props;
+      const { model, modelOptions, keyName, defaultParams } = this.$props;
       const data = {
         model,
         modelOptions,
         keyName,
+        defaultParams,
         ...this.$data,
         ...result
       };

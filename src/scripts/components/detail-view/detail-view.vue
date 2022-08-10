@@ -138,7 +138,7 @@ export default {
       }
     },
     initModelData(formData = {}) {
-      this.formData = formData;
+      this.formData = Object.assign(formData, this.defaultParams);
       this.getModelData();
     },
     async getModelData() {

@@ -74,6 +74,7 @@
                 model,
                 modelOptions,
                 keyName,
+                defaultParams,
                 actionConfig: rowActionConfig,
                 actionHandler: rowActionHandler,
                 actionRendering: rowActionRendering,
@@ -298,7 +299,7 @@ export default {
       }
     },
     initModelData(formData = {}) {
-      this.searchForm.data = formData;
+      this.searchForm.data = Object.assign(formData, this.defaultParams);
       !this.useValidator && this.getModelData();
     },
     async getModelData() {
