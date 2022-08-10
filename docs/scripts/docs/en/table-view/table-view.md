@@ -154,6 +154,7 @@ interface ActionData {
 
 ### Events
 
-| Name     | Type                                                                                    | Description                                   |
-| -------- | --------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `action` | `function(actionConfig: SearchActionButton, data: SearchActionData, refresh: Function)` | Emits when the table view actions is clicked. |
+| Name       | Type                                                                                    | Description                                   |
+| ---------- | --------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `change:x` | `function(key: string, value: string)`                                                  | Emits when the search form item is changed.   |
+| `action`   | `function(actionConfig: SearchActionButton, data: SearchActionData, refresh: Function)` | Emits when the table view actions is clicked. |

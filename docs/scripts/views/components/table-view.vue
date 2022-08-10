@@ -9,6 +9,7 @@
       :row-action-config="rowActionConfig"
       :top-action-config="topActionConfig"
       :row-action-rendering="rowActionRendering"
+      @change:x="onChange"
       @action="onAction"
     >
       <!-- <template #before-form-view>xxx</template>
@@ -104,6 +105,9 @@ export default {
     };
   },
   methods: {
+    onChange(key, value) {
+      console.log('onChange', key, value);
+    },
     onAction(action, data) {
       console.log('onAction', action, data);
     }

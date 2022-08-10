@@ -7,6 +7,7 @@
       :to="{
         name: 'components.table-view'
       }"
+      @change:x="onChange"
       @action="onAction"
     >
       <template #custom-slot>gg</template>
@@ -18,6 +19,9 @@
 <script>
 export default {
   methods: {
+    onChange(key, value) {
+      console.log('onChange', key, value);
+    },
     onAction(action, data) {
       console.log('onAction', action, data);
     }
