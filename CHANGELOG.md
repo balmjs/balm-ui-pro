@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.26.0 / 2022-08-11
+
+### BREAKING CHANGES
+
+- `<ui-detail-view>`, `<ui-table-view>`: rename prop `defaultParams` to `defaultModelValue`
+
 ## v0.25.3 / 2022-08-10
 
 ### Feature
