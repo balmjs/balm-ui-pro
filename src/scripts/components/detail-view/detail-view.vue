@@ -134,11 +134,11 @@ export default {
       try {
         this.modelConfig = await this.getModelConfigFn(this);
       } catch (e) {
-        console.log(e);
+        console.warn(`[${UiDetailView.name}]: ${e.toString()}`);
       }
     },
     initModelData(formData = {}) {
-      this.formData = Object.assign(formData, this.defaultParams);
+      this.formData = Object.assign(formData, this.defaultModelValue);
       this.getModelData();
     },
     async getModelData() {

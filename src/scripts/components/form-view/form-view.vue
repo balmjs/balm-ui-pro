@@ -175,10 +175,6 @@ export default {
       type: Object,
       default: () => ({})
     },
-    useSource: {
-      type: Boolean,
-      default: false
-    },
     modelConfig: {
       type: [Array, Function, Boolean],
       required: true
@@ -239,9 +235,7 @@ export default {
       return !!Object.keys(this.formDataSource).length;
     },
     currentFormData() {
-      return this.useSource
-        ? Object.assign({}, this.formDataSource, this.formData)
-        : this.formData;
+      return Object.assign({}, this.formDataSource, this.formData);
     }
   },
   watch: {
@@ -270,12 +264,7 @@ export default {
         if (this.hasFormDataSource) {
           this.updateFormData();
         } else {
-          const currentFormData = Object.assign(
-            {},
-            this.formDataSource,
-            this.formData
-          );
-          const synchronized = Object.keys(currentFormData).length;
+          const synchronized = Object.keys(this.currentFormData).length;
           !synchronized && this.syncFormData();
         }
       }
@@ -305,7 +294,7 @@ export default {
     async setModelOptions() {
       const originalConfig = this.isFunctionConfig
         ? await this.modelConfig({
-            data: this.formDataSource,
+            data: this.currentFormData,
             ...this.modelOptions
           })
         : this.modelConfig;
@@ -336,7 +325,7 @@ export default {
 
       const originalConfig = this.isFunctionConfig
         ? await modelConfig({
-            data: this.formDataSource,
+            data: this.currentFormData,
             ...currentModelOptions
           })
         : modelConfig;
@@ -354,11 +343,11 @@ export default {
           }
         }
       } else {
-        console.warn(`[${UI_FORM_VIEW.name}]: invalid form model config`);
+        console.warn(`[${UI_FORM_VIEW.name}]: Invalid form model config`);
       }
     },
     syncFormData() {
-      this.$emit(UI_FORM_VIEW.EVENTS.update, this.currentFormData);
+      this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
     },
     initFormData(needSync = false) {
       this.formData = {};

@@ -8,7 +8,7 @@ const DEFAULTS = {
 function checkFormat(formatField1, formatField2, keyField) {
   if (!(formatField1 && formatField2)) {
     throw new Error(
-      `[${NAME}]: constant format must assign '${keyField}' and 'value'`
+      `[${NAME}]: Constant format must assign '${keyField}' and 'value'`
     );
   }
 }
@@ -84,7 +84,7 @@ function install(Vue, options = {}) {
   for (const [key, value] of Object.entries(options)) {
     if (Array.isArray(value)) {
       constant.map.has(key)
-        ? console.warn(`[${NAME}]: conflicting constant definition - ${key}`)
+        ? console.warn(`[${NAME}]: Conflicting constant definition - ${key}`)
         : constant.map.set(key, value);
     }
   }

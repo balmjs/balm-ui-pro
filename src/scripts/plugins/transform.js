@@ -12,7 +12,7 @@ class Transform {
     if (getType(data) === 'object') {
       this.originalDataMap = new Map(Object.entries(data));
     } else {
-      throw new Error(`[${NAME}]: invalid object data`);
+      throw new Error(`[${NAME}]: Invalid object data`);
     }
     return this;
   }
@@ -36,7 +36,7 @@ class Transform {
         this.originalDataMap.delete(key);
       }
     } else {
-      throw new Error(`[${NAME}]: out keys must be a string or array`);
+      throw new Error(`[${NAME}]: Out keys must be a string or array`);
     }
 
     return this;

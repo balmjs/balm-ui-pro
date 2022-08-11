@@ -59,19 +59,12 @@ export default {
       return result;
     },
     handleAction(action) {
-      const {
-        model,
-        modelOptions,
-        keyName,
-        defaultParams,
-        $data,
-        getModelData
-      } = this.tableView;
+      const { model, modelOptions, keyName, $data, getModelData } =
+        this.tableView;
       const data = {
         model,
         modelOptions,
         keyName,
-        defaultParams,
         ...$data
       };
       const refreshData = getModelData;

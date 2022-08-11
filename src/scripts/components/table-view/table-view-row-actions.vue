@@ -103,10 +103,6 @@ export default {
       type: [String, Array],
       default: 'id'
     },
-    defaultParams: {
-      type: Object,
-      default: () => ({})
-    },
     actionConfig: {
       type: Array,
       default: () => []
@@ -169,12 +165,11 @@ export default {
       return result;
     },
     handleAction(action) {
-      const { model, modelOptions, keyName, defaultParams, refreshData } = this;
+      const { model, modelOptions, keyName, refreshData } = this;
       const data = {
         model,
         modelOptions,
         keyName,
-        defaultParams,
         data: this.data
       };
 

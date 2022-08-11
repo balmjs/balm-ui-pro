@@ -72,7 +72,7 @@ export default {
     if (this.components.length) {
       this.initOptions();
     } else {
-      console.warn('[UiMultiSelect]: form config `components` are empty');
+      console.warn('[UiMultiSelect]: Form config `components` are empty');
     }
   },
   methods: {
