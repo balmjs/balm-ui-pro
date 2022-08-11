@@ -7,7 +7,6 @@
 | Name                 | Type                     | Default    | Description                                                                                                |
 | -------------------- | ------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------- |
 | `modelValue`         | object                   | `{}`       | Form model data                                                                                            |
-| `useSource`          | boolean                  | `false`    | Binding data source                                                                                        |
 | `modelConfig`        | array, function, boolean | `required` | Form model config                                                                                          |
 | `modelOptions`       | object                   | `{}`       | The extra options of the form model config                                                                 |
 | `useGrid`            | boolean                  | `false`    | Enables layout grid for form items                                                                         |

@@ -7,7 +7,6 @@ interface ActionData {
   model: string;
   modelOptions: object;
   keyName: string | string[];
-  defaultParams: object;
 }
 ```
 
@@ -117,9 +116,9 @@ interface ActionData {
 | `title`                | string        | `''`                                            | Detail view title                                                                                                   |
 | `model`                | string        | _required_                                      | Model name                                                                                                          |
 | `modelPath`            | string        | `''`                                            | The file path of model config                                                                                       |
+| `defaultModelValue`    | object        | `{}`                                            | Sets default value of model data                                                                                    |
 | `modelOptions`         | object        | `{}`                                            | The options of model config                                                                                         |
 | `keyName`              | string, array | `'id'`                                          | The primary key of model data                                                                                       |
-| `defaultParams`        | object        | `{}`                                            | The default params of model data                                                                                    |
 | `searchActionConfig`   | array         | `DefaultSearchActionConfig`                     | Search form button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button)   |
 | `formViewAttrOrProp`   | object        | `{ formAttrOrProp: { actionAlign: 'center' } }` | See `<ui-form-view>` props [docs](/#/components/form-view)                                                          |
 | `noData`               | string        | `No Data`                                       | No data message                                                                                                     |

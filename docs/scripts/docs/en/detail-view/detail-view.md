@@ -9,7 +9,6 @@ interface ActionData {
   model: string;
   modelOptions: object;
   keyName: string | string[];
-  defaultParams: object;
   ...$data?: DetailViewData,
   ...validationResult?: BalmUIValidationResult
 }
@@ -45,9 +44,9 @@ const DefaultActionConfig: ActionButton[] = [
 | `title`              | string                           | `''`                                            | Detail view title                                                                                          |
 | `model`              | string                           | _required_                                      | Model name                                                                                                 |
 | `modelPath`          | string                           | `''`                                            | The file path of model config                                                                              |
+| `defaultModelValue`  | object                           | `{}`                                            | Sets default value of model data                                                                           |
 | `modelOptions`       | object                           | `{}`                                            | The options of model config                                                                                |
 | `keyName`            | string, array                    | `'id'`                                          | The primary key of model data                                                                              |
-| `defaultParams`      | object                           | `{}`                                            | The default params of model data                                                                           |
 | `actionConfig`       | array                            | `DefaultActionConfig`                           | Form button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button) |
 | `formViewAttrOrProp` | object                           | `{ formAttrOrProp: { actionAlign: 'center' } }` | See `<ui-form-view>` props [docs](/#/components/form-view)                                                 |
 | `to`                 | 'back', 'custom', string, object | `'back'`                                        | Custom router link                                                                                         |
