@@ -19,8 +19,8 @@
 <script>
 export default {
   methods: {
-    onChange(key, value) {
-      console.log('onChange', key, value);
+    onChange(key, value, _) {
+      console.log('onChange', key, value, _);
     },
     onAction(action, data) {
       console.log('onAction', action, data);

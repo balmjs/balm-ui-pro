@@ -138,6 +138,7 @@ interface ActionData {
 | `getModelConfigFn`     | function      | `(vm) => {}`                                    | Loading model config                                                                                                |
 | `getModelDataFn`       | function      | `(vm) => {}`                                    | Loading model data                                                                                                  |
 | `useValidator`         | boolean       | `false`                                         | Enables auto validator (Just for `submit` type)                                                                     |
+| `searchOnReset`        | boolean       | `false`                                         | The page will auto search data after resetting model data                                                           |
 
 ### Slots
 
@@ -157,5 +158,5 @@ interface ActionData {
 
 | Name       | Type                                                                                    | Description                                   |
 | ---------- | --------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `change:x` | `function(key: string, value: string)`                                                  | Emits when the search form item is changed.   |
+| `change:x` | `function(key: string, value: string, refresh: Function)`                               | Emits when the search form item is changed.   |
 | `action`   | `function(actionConfig: SearchActionButton, data: SearchActionData, refresh: Function)` | Emits when the table view actions is clicked. |

@@ -9,8 +9,11 @@ import { setGlobalProps } from '@/config';
 import BalmUI from 'balm-ui';
 import BalmUIPlus from 'balm-ui-plus';
 import BalmUIPro from 'balm-ui-pro';
-import { BalmUIConfig, customComponents } from '@/config/components';
-import BalmUIProConfig from '@/config/pro';
+import {
+  BalmUIConfig,
+  BalmUIProConfig,
+  customComponents
+} from '@/config/components';
 // PWA
 import './my-sw';
 
