@@ -2,9 +2,15 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
-## v0.26.1 / 2022-08-11
+## v0.26.2 / 2022-08-11
+
+### Feature
 
 - `<ui-table-view>`: add `searchOnReset` prop, update `change:x` event
+
+### Bug Fixes
+
+- `<ui-detail-view>`, `<ui-table-view>`: fix submit bug
 
 ### BREAKING CHANGES
 
@@ -15,11 +21,6 @@
 ### Feature
 
 - `<ui-detail-view>`, `<ui-table-view>`: add `defaultParams` prop and `change:x` event
-
-## v0.25.0 / 2022-08-10
-
-### Feature
-
 - optimize `@action` event for `<ui-form-view>`, `<ui-detail-view>`, `<ui-table-view>`
 
 ### BREAKING CHANGES
