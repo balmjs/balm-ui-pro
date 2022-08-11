@@ -133,8 +133,8 @@ export default {
     async getModelConfig() {
       try {
         this.modelConfig = await this.getModelConfigFn(this);
-      } catch (e) {
-        console.warn(`[${UiDetailView.name}]: ${e.toString()}`);
+      } catch (err) {
+        console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
       }
     },
     initModelData(formData = {}) {
@@ -152,8 +152,8 @@ export default {
           this.formDataSource = formDataSource;
           this.formData = Object.assign({}, formDataSource);
         }
-      } catch (e) {
-        console.warn(`[${UiDetailView.name}]: ${e.toString()}`);
+      } catch (err) {
+        console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
       }
     },
     redirect() {

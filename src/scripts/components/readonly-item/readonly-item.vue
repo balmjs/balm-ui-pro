@@ -1,6 +1,6 @@
 <template>
   <div :class="['mdc-readonly-item', cssClasses.subitemClass]">
-    <slot>{{ value }}</slot>
+    <slot>{{ rendering($props) || value }}</slot>
   </div>
 </template>
 
@@ -14,6 +14,10 @@ export default {
     value: {
       type: null,
       default: ''
+    },
+    rendering: {
+      type: Function,
+      default: () => ''
     }
   }
 };

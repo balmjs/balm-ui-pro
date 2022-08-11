@@ -2,11 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
-## v0.26.2 / 2022-08-11
+## v0.26.3 / 2022-08-11
 
 ### Feature
 
 - `<ui-table-view>`: add `searchOnReset` prop, update `change:x` event
+- `<ui-readonly-item>`: add `rendering` prop
 
 ### Bug Fixes
 

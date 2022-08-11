@@ -297,8 +297,8 @@ export default {
       try {
         const modelConfig = await this.getModelConfigFn(this);
         modelConfig && this.$set(this.searchForm, 'config', modelConfig);
-      } catch (e) {
-        console.warn(`[${UiTableView.name}]: ${e.toString()}`);
+      } catch (err) {
+        console.warn(`[${UiTableView.name}]: ${err.toString()}`);
       }
     },
     initModelData(formData = {}) {
@@ -318,8 +318,8 @@ export default {
 
           this.lastSearchFormData = Object.assign({}, this.searchForm.data);
         }
-      } catch (e) {
-        console.warn(`[${UiTableView.name}]: ${e.toString()}`);
+      } catch (err) {
+        console.warn(`[${UiTableView.name}]: ${err.toString()}`);
       }
     },
     async handleAction(action, result) {
