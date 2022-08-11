@@ -164,14 +164,14 @@ export default {
         this.replace ? this.$router.replace(to) : this.$router.push(to);
       }
     },
-    async handleAction(action, data) {
+    async handleAction(action, result) {
+      let canSubmit = true;
+
       switch (action.type) {
         case UiDetailView.EVENTS.submit:
-          let canSubmit = true;
-
           if (this.useValidator) {
-            canSubmit = data.valid;
-            this.message = data.message;
+            canSubmit = result.valid;
+            this.message = result.message;
           }
 
           if (canSubmit && action.submit !== false) {
@@ -192,7 +192,7 @@ export default {
           break;
       }
 
-      this.exposeAction(action, data);
+      canSubmit && this.exposeAction(action, result);
     }
   }
 };

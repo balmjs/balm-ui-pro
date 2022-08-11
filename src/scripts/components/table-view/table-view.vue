@@ -323,10 +323,10 @@ export default {
       }
     },
     async handleAction(action, result) {
+      let canSubmit = true;
+
       switch (action.type) {
         case UiTableView.EVENTS.submit:
-          let canSubmit = true;
-
           if (this.useValidator) {
             canSubmit = result.valid;
             this.$set(this.searchForm, 'message', result.message);
@@ -345,7 +345,7 @@ export default {
           break;
       }
 
-      this.exposeAction(action, result);
+      canSubmit && this.exposeAction(action, result);
     },
     resetSelectedRows() {
       this.$set(this.table, 'selectedRows', []);
