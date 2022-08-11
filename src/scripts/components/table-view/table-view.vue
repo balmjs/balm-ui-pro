@@ -245,6 +245,10 @@ export default {
     useValidator: {
       type: Boolean,
       default: false
+    },
+    searchOnReset: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -335,6 +339,9 @@ export default {
         case UiTableView.EVENTS.reset:
           this.$set(this.searchForm, 'message', '');
           // NOTE: automatic processing in `<ui-form-view>`
+          if (this.searchOnReset) {
+            this.getModelData();
+          }
           break;
       }
 

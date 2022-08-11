@@ -35,11 +35,14 @@ export default {
   computed: {
     hasTitle() {
       return this.title || this.$slots.title;
+    },
+    refreshData() {
+      return /UiTableView$/.test(this.$vnode.tag) ? this.getModelData : null;
     }
   },
   methods: {
     handleChange(key, value) {
-      this.$emit(FORM_VIEW_EVENTS.updateFormItem, key, value);
+      this.$emit(FORM_VIEW_EVENTS.updateFormItem, key, value, this.refreshData);
     },
     exposeAction(action, result = {}) {
       const { handler, ...actionConfig } = action;
@@ -53,11 +56,15 @@ export default {
         ...this.$data,
         ...result
       };
-      const refreshData = this.getModelData;
 
       customHandler
-        ? customHandler(actionConfig, data, refreshData)
-        : this.$emit(FORM_VIEW_EVENTS.action, actionConfig, data, refreshData);
+        ? customHandler(actionConfig, data, this.refreshData)
+        : this.$emit(
+            FORM_VIEW_EVENTS.action,
+            actionConfig,
+            data,
+            this.refreshData
+          );
     }
   }
 };
