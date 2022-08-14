@@ -41,21 +41,32 @@
             ></component>
           </template>
           <template v-else>
-            <component
-              :is="config.component"
-              v-model="formData[config.key]"
-              v-bind="
-                Object.assign(
-                  {
-                    componentKey,
-                    formData,
-                    formDataSource
-                  },
-                  config.attrOrProp || {}
-                )
-              "
-              @[eventName]="handleChange(config, $event)"
-            ></component>
+            <ui-readonly-item
+              v-if="config.component === 'ui-readonly-item'"
+              :value="formData[config.key]"
+              v-bind="{
+                config,
+                formData,
+                formDataSource
+              }"
+            ></ui-readonly-item>
+            <template v-else>
+              <component
+                :is="config.component"
+                v-model="formData[config.key]"
+                v-bind="
+                  Object.assign(
+                    {
+                      componentKey,
+                      formData,
+                      formDataSource
+                    },
+                    config.attrOrProp || {}
+                  )
+                "
+                @[eventName]="handleChange(config, $event)"
+              ></component>
+            </template>
           </template>
         </slot>
       </template>
@@ -65,6 +76,7 @@
 </template>
 
 <script>
+import UiReadonlyItem from '../readonly-item/readonly-item';
 import getType, { isFunction } from '../../utils/typeof';
 
 const name = 'UiFormItem';
@@ -77,6 +89,9 @@ const UI_FORM_ITEM = {
 
 export default {
   name,
+  components: {
+    UiReadonlyItem
+  },
   model: {
     prop: 'modelValue',
     event: UI_FORM_ITEM.EVENTS.update

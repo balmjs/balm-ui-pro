@@ -1,11 +1,12 @@
 <template>
   <div :class="['mdc-readonly-item', cssClasses.subitemClass]">
-    <slot>{{ rendering($props) || value }}</slot>
+    <slot>{{ currentValue }}</slot>
   </div>
 </template>
 
 <script>
 import formItemMixin from '../../mixins/form-item';
+import getType, { isFunction } from '../../utils/typeof';
 
 export default {
   name: 'UiReadonlyItem',
@@ -15,9 +16,20 @@ export default {
       type: null,
       default: ''
     },
-    rendering: {
-      type: Function,
-      default: () => ''
+    config: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+  computed: {
+    currentValue() {
+      const type = getType(this.value);
+      return isFunction(this.config.value)
+        ? this.config.value({
+            type,
+            ...this.$props
+          })
+        : this.value;
     }
   }
 };
