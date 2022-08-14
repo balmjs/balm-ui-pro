@@ -197,6 +197,15 @@ export default ({
     {
       label: 'Custom slot',
       slot: 'custom-slot'
+    },
+    {
+      label: 'Readonly Item',
+      component: 'ui-readonly-item',
+      key: 'z',
+      value: (data) => data.value,
+      attrOrProp: {
+        text: 'ox'
+      }
     }
   ];
 };

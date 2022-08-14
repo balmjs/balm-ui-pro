@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.27.0 / 2022-08-14
+
+### Refactor
+
+- `<ui-readonly-item>`: update `value` prop for `<ui-form-view>` compatibility, remove other props
+
 ## v0.26.3 / 2022-08-11
 
 ### Feature
