@@ -68,19 +68,6 @@ function createCustomApis(operation, { frontEndApiName, backEndApi }, config) {
   return apis;
 }
 
-function getOperationDefinition(operationDefinition, defaults, extras) {
-  let result = operationDefinition;
-
-  if (extras) {
-    result =
-      getType(operationDefinition) === 'object'
-        ? Object.assign({}, operationDefinition, extras)
-        : Object.assign({}, defaults, extras);
-  }
-
-  return result;
-}
-
 let globalApis = {};
 
 class ApiModel {
@@ -113,11 +100,10 @@ class ApiModel {
 
       for (const [key, value] of Object.entries(currentCRUD)) {
         const operation = key;
-        const operationDefinition = getOperationDefinition(
-          value,
-          { [operation]: value },
-          config[operation]
-        );
+        const operationDefinition =
+          getType(value) === 'object'
+            ? Object.assign({}, value, config[operation])
+            : Object.assign({}, { '': value }, config[operation]);
 
         if (includeOperations.includes(operation)) {
           if (getType(operationDefinition) === 'string') {
