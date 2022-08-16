@@ -112,8 +112,8 @@ export function createUserApis(server) {
       u: '',
       v: '',
       w: '',
-      x: '',
-      y: '',
+      x: 'x',
+      y: 'yy',
       z: 'zzz'
     });
   });
