@@ -12,24 +12,24 @@ export default {
   name: 'UiReadonlyItem',
   mixins: [formItemMixin],
   props: {
-    value: {
-      type: null,
-      default: ''
-    },
     config: {
       type: Object,
       default: () => ({})
     }
   },
   computed: {
+    currentFormData() {
+      return Object.assign({}, this.formDataSource, this.formData);
+    },
     currentValue() {
-      const type = getType(this.value);
-      return isFunction(this.config.value)
-        ? this.config.value({
-            type,
-            ...this.$props
-          })
-        : this.value;
+      const value = this.currentFormData[this.config.key];
+      const type = getType(value);
+      const data = Object.assign({}, this.$props, {
+        type,
+        value
+      });
+
+      return isFunction(this.config.value) ? this.config.value(data) : value;
     }
   }
 };

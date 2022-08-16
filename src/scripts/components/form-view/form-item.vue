@@ -43,7 +43,6 @@
           <template v-else>
             <ui-readonly-item
               v-if="config.component === 'ui-readonly-item'"
-              :value="formData[config.key]"
               v-bind="{
                 config,
                 formData,

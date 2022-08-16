@@ -293,10 +293,7 @@ export default {
     },
     async setModelOptions() {
       const originalConfig = this.isFunctionConfig
-        ? await this.modelConfig({
-            data: this.currentFormData,
-            ...this.modelOptions
-          })
+        ? await this.modelConfig(this.currentFormData, this.modelOptions)
         : this.modelConfig;
 
       const modelList = originalConfig
@@ -324,10 +321,7 @@ export default {
       );
 
       const originalConfig = this.isFunctionConfig
-        ? await modelConfig({
-            data: this.currentFormData,
-            ...currentModelOptions
-          })
+        ? await modelConfig(this.currentFormData, currentModelOptions)
         : modelConfig;
 
       if (Array.isArray(originalConfig)) {
