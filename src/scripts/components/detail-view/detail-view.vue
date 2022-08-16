@@ -158,10 +158,14 @@ export default {
     },
     redirect() {
       if (this.to !== 'custom') {
-        const to = this.to || {
-          name: `${this.model}.list`
-        };
-        this.replace ? this.$router.replace(to) : this.$router.push(to);
+        if (this.to === 'back') {
+          this.$router.back();
+        } else {
+          const to = this.to || {
+            name: `${this.model}.list`
+          };
+          this.replace ? this.$router.replace(to) : this.$router.push(to);
+        }
       }
     },
     async handleAction(action, result) {
@@ -184,11 +188,7 @@ export default {
           // NOTE: automatic processing in `<ui-form-view>`
           break;
         case UiDetailView.EVENTS.cancel:
-          if (this.to === 'back') {
-            this.$router.back();
-          } else {
-            this.redirect();
-          }
+          this.redirect();
           break;
       }
 

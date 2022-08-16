@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.28.1 / 2022-08-16
+
+### Bug Fixes
+
+- `<ui-detail-view>`: fix redirect bug
+
 ## v0.28.0 / 2022-08-16
 
 ### Feature
