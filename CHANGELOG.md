@@ -2,6 +2,23 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.28.0 / 2022-08-16
+
+### Feature
+
+- `<ui-form-view>`: update `model-config` function usage
+- `$apiModel`: add `debug` for global options
+- `$routerModel`: add `debug` and `namespace` for global options, add `indexLeadingSlash`, `indexView`, `listView`, `detailView` options for new api
+
+### Refactor
+
+- `$constant`: update `use` function, add `toList` and `toMap` for custom constants
+- `$routerModel`: update `createRoutes` api from `(modelName, components, options) => {}` to `(modelName, options) => {}`
+
+### BREAKING CHANGES
+
+- `<ui-readonly-item>`: remove `value` prop
+
 ## v0.27.0 / 2022-08-14
 
 ### Refactor
