@@ -209,7 +209,7 @@ class ApiModel {
 const apiModel = new ApiModel();
 
 function install(Vue, options = {}) {
-  const { crud, apis, ...apiConfig } = options;
+  const { debug, crud, apis, ...apiConfig } = options;
 
   globalApiConfig.crud = Object.assign({}, CRUD, getCRUD(crud));
 
@@ -222,6 +222,8 @@ function install(Vue, options = {}) {
       apiModel.createApis(...api);
     });
   }
+
+  debug && apiModel.debug(debug);
 
   Vue.prototype.$apiModel = apiModel;
 }

@@ -14,6 +14,7 @@ class Transform {
     } else {
       throw new Error(`[${NAME}]: Invalid object data`);
     }
+
     return this;
   }
 
@@ -44,6 +45,7 @@ class Transform {
 
   out() {
     this.formattedData = Object.fromEntries(this.originalDataMap);
+
     return this.formattedData;
   }
 }

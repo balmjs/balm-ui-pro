@@ -1,7 +1,11 @@
+import getType from '../utils/typeof';
+
 const NAME = '$routerModel';
 
-function getRouteName(name, namespace) {
-  return namespace ? `${namespace}.${name}` : name;
+function getRouteName(name, prefix = '', suffix = '') {
+  const prefixName = prefix ? `${prefix}.` : '';
+  const suffixName = suffix ? `.${suffix}` : '';
+  return `${prefixName}${name}${suffixName}`;
 }
 
 function saveRoutesByNamespace(map, namespace, route) {
@@ -10,6 +14,7 @@ function saveRoutesByNamespace(map, namespace, route) {
   map.set(namespace, namespaceRoutes);
 }
 
+let globalRouterConfig = {};
 let globalRoutes = [];
 
 class RouterModel {
@@ -44,16 +49,22 @@ class RouterModel {
     return route;
   }
 
-  createRoutes(name, components = {}, options = {}) {
-    const { indexView, listView, detailView } = components;
+  createRoutes(name, options = {}) {
     const {
       namespace,
+      // defaults
+      indexLeadingSlash,
       indexPath,
+      indexView,
       indexRedirect,
       indexOptions,
+      // list component
       listPath,
+      listView,
       listOptions,
+      // detail component
       detailPath,
+      detailView,
       detailOptions
     } = options;
 
@@ -62,7 +73,7 @@ class RouterModel {
         ? [
             this.createRoute(
               listPath || 'list',
-              getRouteName(`${name}.list`, namespace),
+              getRouteName(name, namespace, 'list'),
               listView,
               listOptions || {}
             )
@@ -74,7 +85,7 @@ class RouterModel {
         ? [
             this.createRoute(
               detailPath || ':id?',
-              getRouteName(`${name}.detail`, namespace),
+              getRouteName(name, namespace, 'detail'),
               detailView,
               detailOptions || {}
             )
@@ -83,11 +94,11 @@ class RouterModel {
     ];
 
     const parent = {
-      path: indexPath || name,
-      name: getRouteName(`${name}.index`, namespace),
+      path: indexPath || (indexLeadingSlash ? `/${name}` : name),
+      name: getRouteName(name, namespace, 'index'),
       component: indexView,
       redirect: indexRedirect || {
-        name: getRouteName(`${name}.list`, namespace)
+        name: getRouteName(name, namespace, 'list')
       },
       children,
       ...(indexOptions || {})
@@ -125,6 +136,10 @@ class RouterModel {
 const routerModel = new RouterModel();
 
 function install(Vue, options = {}) {
+  const { debug, namespace } = options;
+
+  debug && routerModel.debug(debug, namespace || false);
+
   Vue.prototype.$routerModel = routerModel;
 }
 
