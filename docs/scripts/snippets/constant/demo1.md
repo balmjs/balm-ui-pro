@@ -1,4 +1,4 @@
-- `constants/index.js`
+- `pro/constants/index.js`
 
   ```js
   const DEMO_DATA = [
@@ -19,26 +19,49 @@
   };
   ```
 
-  ```js
-  import constantSource from '@/model';
+```js
+import constantSource from '@/pro/constants';
 
-  Vue.use(BalmUIPro, {
-    $constant: constantSource
-  });
-  ```
+Vue.use(BalmUIPro, {
+  $constant: constantSource
+});
+```
+
+---
 
 ```html
-<p>constant: {{ $constant.use('demo') }}</p>
-<hr />
+<p>constant: {{ $constant.use('demo').valueOf() }}</p>
+
 <p>list: {{ $constant.useList('demo') }}</p>
-<br />
 <p>
   format list: {{ $constant.useList('demo', { label: 'key', value: 'value' }) }}
 </p>
-<hr />
-map: {{ $constant.useMap('demo') }}
-<br />
+
+<p>map: {{ $constant.useMap('demo') }}</p>
 <p>
   format map: {{ $constant.useMap('demo', { key: 'value', value: 'label' }) }}
 </p>
+
+<p>Custom constant: {{ $constant.use(customConstants).toMap() }}</p>
+```
+
+```js
+export default {
+  data() {
+    return {
+      customConstants: [
+        {
+          label: 'Custom 1',
+          key: 'key1',
+          value: 1
+        },
+        {
+          label: 'Custom 2',
+          key: 'key2',
+          value: 2
+        }
+      ]
+    };
+  }
+};
 ```

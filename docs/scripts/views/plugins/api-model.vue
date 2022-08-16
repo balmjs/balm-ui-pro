@@ -81,7 +81,7 @@ export default {
     };
   },
   mounted() {
-    this.$apiModel.debug();
+    // this.$apiModel.debug();
   },
   methods: {
     onAction(action, result) {

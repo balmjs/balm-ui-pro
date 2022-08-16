@@ -2,15 +2,17 @@ import { useStore } from 'balm-ui';
 
 const store = useStore();
 
-export default ({
+export default (
   data,
-  selectOptions,
-  checkboxOptions,
-  radioOptions,
-  chipsOptions,
-  switchOptions,
-  multiSelectOptions1
-}) => {
+  {
+    selectOptions,
+    checkboxOptions,
+    radioOptions,
+    chipsOptions,
+    switchOptions,
+    multiSelectOptions1
+  }
+) => {
   console.log('static data', data);
 
   const { id } = data;
@@ -198,14 +200,18 @@ export default ({
       label: 'Custom slot',
       slot: 'custom-slot'
     },
-    {
-      label: 'Readonly Item',
-      component: 'ui-readonly-item',
-      key: 'z',
-      value: (data) => data.value,
-      attrOrProp: {
-        text: 'ox'
-      }
-    }
+    ...(id
+      ? [
+          {
+            label: 'Readonly Item',
+            component: 'ui-readonly-item',
+            key: 'x',
+            value: (data) => data.value,
+            attrOrProp: {
+              text: 'ox'
+            }
+          }
+        ]
+      : [])
   ];
 };

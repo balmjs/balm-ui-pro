@@ -1,4 +1,4 @@
-- `store/model.js`
+- `pro/model.js`
 
   ```js
   import { isDev } from '@/config';
@@ -22,7 +22,7 @@
   };
   ```
 
-- `config/views/detail-view.js`
+- `pro/views/detail-view.js`
 
   ```js
   import { useStore } from 'balm-ui';
@@ -59,21 +59,23 @@
   }
   ```
 
-  ```js
-  import {
-    getModelConfigFn,
-    getModelDetailDataFn,
-    setModelDataFn
-  } from '@/config/views/detail-view';
+```js
+import {
+  getModelConfigFn,
+  getModelDetailDataFn,
+  setModelDataFn
+} from '@/pro/views/detail-view';
 
-  Vue.use(BalmUIPro, {
-    UiDetailView: {
-      getModelConfigFn,
-      getModelDataFn: getModelDetailDataFn,
-      setModelDataFn
-    }
-  });
-  ```
+Vue.use(BalmUIPro, {
+  UiDetailView: {
+    getModelConfigFn,
+    getModelDataFn: getModelDetailDataFn,
+    setModelDataFn
+  }
+});
+```
+
+---
 
 ```html
 <ui-detail-view

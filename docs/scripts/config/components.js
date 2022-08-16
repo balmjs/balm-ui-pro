@@ -2,9 +2,9 @@
 import myStore from '@/store';
 import validatorRules from '@/config/validator-rules';
 // BalmUI Pro
-import apiModelConfig from './apis';
-import constantSource from './constants';
-import proViewsConfig from './views';
+import apiModelConfig from '@/pro/apis';
+import constantSource from '@/pro/constants';
+import proViewsConfig from '@/pro/views';
 // Custom
 import PurePage from '@/views/layouts/pure-page';
 import DocsPage from '@/views/layouts/docs-page';
@@ -21,6 +21,9 @@ export const BalmUIConfig = {
 
 export const BalmUIProConfig = {
   $apiModel: apiModelConfig,
+  $routerModel: {
+    debug: true
+  },
   $constant: constantSource,
   ...proViewsConfig
 };

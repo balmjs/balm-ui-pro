@@ -26,7 +26,7 @@ export default {
     };
   },
   mounted() {
-    this.$routerModel.debug();
+    // this.$routerModel.debug();
   }
 };
 </script>

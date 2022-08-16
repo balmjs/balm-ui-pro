@@ -1,6 +1,4 @@
 import Home from '@/views/home';
-// Layouts
-import BlankLayout from '@/views/layouts/blank';
 // Routes
 import guideRoutes from './guide';
 import componentRoutes from './components';
@@ -14,24 +12,9 @@ const routes = [
     name: 'home',
     component: Home
   },
-  {
-    path: '/guide',
-    name: 'guide',
-    component: BlankLayout,
-    children: guideRoutes
-  },
-  {
-    path: '/components',
-    name: 'components',
-    component: BlankLayout,
-    children: componentRoutes
-  },
-  {
-    path: '/plugins',
-    name: 'plugins',
-    component: BlankLayout,
-    children: pluginRoutes
-  },
+  guideRoutes,
+  componentRoutes,
+  pluginRoutes,
   {
     path: '/:catchAll(.*)',
     component: NotFound

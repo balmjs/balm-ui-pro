@@ -10,13 +10,12 @@ const $routerModel = useRouterModel();
 const routes = $routerModel.createRoutes(
   'user',
   {
+    namespace: 'demo',
+    indexLeadingSlash: true,
     indexView: IndexLayout,
-    listView: UserList,
-    detailView: UserDetail
-  },
-  {
     // indexOptions: {},
     listPath: 'list/:type?',
+    listView: UserList,
     listOptions: {
       meta: {
         auth: true
@@ -24,6 +23,7 @@ const routes = $routerModel.createRoutes(
       a: 'hello'
     },
     detailPath: ':userId?',
+    detailView: UserDetail
     detailOptions: {
       b: 'world'
     }
@@ -31,6 +31,6 @@ const routes = $routerModel.createRoutes(
 );
 
 const route = $routerModel.createRoute('/post', 'post', Post, {
-  namespace: 'user'
+  namespace: 'demo'
 });
 ```

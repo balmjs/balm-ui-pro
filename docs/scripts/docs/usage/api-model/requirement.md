@@ -23,9 +23,15 @@ interface CustomApiConfig extends ApiConfig {
 ```
 
 ```ts
-type ApiModelDefinition = [ModelName, ApiEndpoint, Operation[], CustomApiConfig];
+type ApiModelDefinition = [
+  ModelName,
+  ApiEndpoint,
+  Operation[],
+  CustomApiConfig
+];
 
 interface GlobalApiConfig extends ApiConfig {
-  apis: ApiModelDefinition[];,
+  apis: ApiModelDefinition[];
+  debug?: true | ModelName;
 }
 ```

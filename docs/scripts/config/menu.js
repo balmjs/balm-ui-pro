@@ -21,14 +21,8 @@ const MATERIAL_COMPONENTS_PRO = [
         name: 'form-items'
       },
       {
-        name: 'detail-view'
+        name: 'readonly-item'
       },
-      {
-        name: 'table-view'
-      }
-      // {
-      //   name: 'readonly-item'
-      // },
       // {
       //   name: 'checkbox-group'
       // },
@@ -40,7 +34,13 @@ const MATERIAL_COMPONENTS_PRO = [
       // },
       // {
       //   name: 'multi-select'
-      // }
+      // },
+      {
+        name: 'detail-view'
+      },
+      {
+        name: 'table-view'
+      }
     ]
   },
   '-',

@@ -62,7 +62,6 @@ interface ActionData {
     routeName?: string;
     attrOrProp?: object;
     handler?: (
-      actionConfig: TopActionButton,
       data: TopActionData,
       refresh: Function
     ) => void;
@@ -96,7 +95,6 @@ interface ActionData {
     href?: string;
     attrOrProp?: object;
     handler?: (
-      actionConfig: RowActionButton,
       data: RowActionData,
       refresh: Function
     ) => void;

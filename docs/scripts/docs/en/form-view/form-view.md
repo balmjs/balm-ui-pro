@@ -4,20 +4,24 @@
 
 ### Props
 
-| Name                 | Type                     | Default    | Description                                                                                                |
-| -------------------- | ------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------- |
-| `modelValue`         | object                   | `{}`       | Form model data                                                                                            |
-| `modelConfig`        | array, function, boolean | `required` | Form model config                                                                                          |
-| `modelOptions`       | object                   | `{}`       | The extra options of the form model config                                                                 |
-| `useGrid`            | boolean                  | `false`    | Enables layout grid for form items                                                                         |
-| `formAttrOrProp`     | object                   | `{}`       | See BalmUI `<ui-form>` props [docs](https://v8.material.balmjs.com/#/layout/form)                          |
-| `formItemAttrOrProp` | object                   | `{}`       | Form items' common attrs (e.g. `class`)                                                                    |
-| `gridAttrOrProp`     | object                   | `{}`       | See BalmUI `<ui-grid>` props [docs](https://v8.material.balmjs.com/#/layout/grid)                          |
-| `gridCellAttrOrProp` | object                   | `{}`       | See BalmUI `<ui-grid-cell>` props [docs](https://v8.material.balmjs.com/#/layout/grid)                     |
-| `actionConfig`       | array                    | `[]`       | Form button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button) |
-| `setModelOptionsFn`  | function, boolean        | `false`    | Form model options handler by the `model` list of form model config                                        |
+```ts
+type ModelConfig = FormItemConfig[] | (formData: object, formOptions: object) => FormItemConfig[] | false;
+```
 
-- `modelConfig: FormItemConfig[] | (formData: object) => FormItemConfig[] | false`
+| Name                 | Type              | Default    | Description                                                                                                |
+| -------------------- | ----------------- | ---------- | ---------------------------------------------------------------------------------------------------------- |
+| `modelValue`         | object            | `{}`       | Form model data                                                                                            |
+| `modelConfig`        | ModelConfig       | `required` | Form model config                                                                                          |
+| `modelOptions`       | object            | `{}`       | The extra options of the form model config                                                                 |
+| `useGrid`            | boolean           | `false`    | Enables layout grid for form items                                                                         |
+| `formAttrOrProp`     | object            | `{}`       | See BalmUI `<ui-form>` props [docs](https://v8.material.balmjs.com/#/layout/form)                          |
+| `formItemAttrOrProp` | object            | `{}`       | Form items' common attrs (e.g. `class`)                                                                    |
+| `gridAttrOrProp`     | object            | `{}`       | See BalmUI `<ui-grid>` props [docs](https://v8.material.balmjs.com/#/layout/grid)                          |
+| `gridCellAttrOrProp` | object            | `{}`       | See BalmUI `<ui-grid-cell>` props [docs](https://v8.material.balmjs.com/#/layout/grid)                     |
+| `actionConfig`       | ActionButton[]    | `[]`       | Form button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button) |
+| `setModelOptionsFn`  | function, boolean | `false`    | Form model options handler by the `model` list of form model config                                        |
+
+- `modelConfig: ModelConfig`
 
   ```ts
   interface FormItemConfig {

@@ -13,20 +13,21 @@ interface RouteOptions {
   options?: VueRouteOptions;
 }
 
-interface RoutesComponents {
-  indexView: object;
-  listView?: object;
-  detailView?: object | object[];
-}
-
 interface RoutesOptions {
+  // defaults
   namespace?: string;
+  indexLeadingSlash?: boolean;
   indexPath?: string;
+  indexView: object;
   indexRedirect?: string;
   indexOptions?: VueRouteOptions;
+  // list component
   listPath?: string;
+  listView?: object;
   listOptions?: VueRouteOptions;
+  // detail component
   detailPath?: string;
+  detailView?: object | object[];
   detailOptions?: VueRouteOptions;
 }
 
@@ -39,11 +40,7 @@ interface RouterModel {
     component: object,
     options?: routeOptions
   ) => VueRoute;
-  createRoutes: (
-    name: ModelName,
-    components: RoutesComponents,
-    options?: RoutesOptions
-  ) => VueRoute[];
+  createRoutes: (name: ModelName, options: RoutesOptions) => VueRoute[];
 
   debug: (name?: ModelName, namespace?: boolean) => VueRoute | VueRoute[];
 }

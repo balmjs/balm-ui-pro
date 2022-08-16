@@ -1,4 +1,4 @@
-- `store/model.js`
+- `pro/model.js`
 
   ```js
   export default {
@@ -20,7 +20,7 @@
   };
   ```
 
-- `config/views/table-view.js`
+- `pro/views/table-view.js`
 
   ```js
   import { useStore } from 'balm-ui';
@@ -52,28 +52,30 @@
   }
   ```
 
-  ```js
-  import {
-    getModelConfigFn,
-    getModelListDataFn,
-    handleRowAction,
-    handleTopAction
-  } from '@/config/views/table-view';
+```js
+import {
+  getModelConfigFn,
+  getModelListDataFn,
+  handleRowAction,
+  handleTopAction
+} from '@/pro/views/table-view';
 
-  Vue.use(BalmUIPro, {
-    UiTableView: {
-      getModelConfigFn,
-      getModelDataFn: getModelListDataFn,
-      tableDataFormat: {
-        data: 'data',
-        total: 'total'
-        // page: 'page'
-      },
-      rowActionHandler: handleRowAction,
-      topActionHandler: handleTopAction
-    }
-  });
-  ```
+Vue.use(BalmUIPro, {
+  UiTableView: {
+    getModelConfigFn,
+    getModelDataFn: getModelListDataFn,
+    tableDataFormat: {
+      data: 'data',
+      total: 'total'
+      // page: 'page'
+    },
+    rowActionHandler: handleRowAction,
+    topActionHandler: handleTopAction
+  }
+});
+```
+
+---
 
 ```html
 <ui-table-view

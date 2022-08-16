@@ -1,10 +1,12 @@
-import { useApiModel } from 'balm-ui-pro';
+import { useApiModel, useRouterModel } from 'balm-ui-pro';
 import { useHttp } from '@/plugins/http';
 import { isDev, API_ENDPOINT } from '@/config';
+import indexView from '@/views/layouts/blank';
 import demoOptions from '@/views/components/options';
 
-const $apiModel = useApiModel();
 const http = useHttp();
+const $apiModel = useApiModel();
+const $routerModel = useRouterModel();
 
 export default {
   methods: {
@@ -96,3 +98,5 @@ export default {
     }
   }
 };
+
+export { $routerModel, indexView };

@@ -8,7 +8,7 @@
     </header> -->
 
     <ui-toc-affix
-      v-if="name !== 'form-items'"
+      v-if="!noUsage"
       :class="{ 'toc-affix--bottom': bottomAffix }"
       :without-css="withoutCss"
     ></ui-toc-affix>
@@ -20,7 +20,7 @@
 
       <slot name="before"></slot>
 
-      <template v-if="name !== 'form-items'">
+      <template v-if="!noUsage">
         <h2 v-anchor:id="'ui-usage'">0. {{ $t('page.usage') }}</h2>
         <ui-markdown
           v-if="hasRequirement"
@@ -98,8 +98,11 @@ export default {
         css: !this.withoutCss
       });
     },
+    noUsage() {
+      return ['form-items'].includes(this.name);
+    },
     hasRequirement() {
-      return ['api-model', 'constant'].includes(this.name);
+      return ['api-model', 'router-model', 'constant'].includes(this.name);
     }
   },
   created() {
@@ -162,7 +165,7 @@ export default {
 
       result.intro = this.getDocs(name, 'intro');
 
-      if (name !== 'form-items') {
+      if (!this.noUsage) {
         result.usage = this.getDocs(name, 'usage');
 
         if (options.apis) {

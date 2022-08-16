@@ -1,13 +1,19 @@
-import { $routerModel } from './model';
+import { $routerModel, indexView } from '@/pro/model';
 
 const Intro = () => import('@/views/guide/intro');
 const Quickstart = () => import('@/views/guide/quickstart');
 
-export default [
-  $routerModel.createRoute('intro', 'intro', Intro, {
-    namespace: 'guide'
-  }),
-  $routerModel.createRoute('quickstart', 'quickstart', Quickstart, {
-    namespace: 'guide'
-  })
-];
+const modelName = 'guide';
+
+export default $routerModel.createRoutes(modelName, {
+  indexLeadingSlash: true,
+  indexView,
+  detailView: [
+    $routerModel.createRoute('intro', `${modelName}.intro`, Intro),
+    $routerModel.createRoute(
+      'quickstart',
+      `${modelName}.quickstart`,
+      Quickstart
+    )
+  ]
+});

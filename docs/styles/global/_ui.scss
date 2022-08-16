@@ -1,4 +1,4 @@
-@use '@material/layout-grid' as layout-grid-variables with (
+@use '@material/layout-grid' with (
   $breakpoints: (
     desktop: 840px,
     tablet: 600px,
@@ -14,4 +14,8 @@
     tablet: 8px,
     phone: 8px
   )
+);
+
+@use 'balm-ui/components/form' with (
+  $form-item-margin-bottom: 10px
 );
