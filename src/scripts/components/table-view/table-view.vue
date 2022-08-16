@@ -285,10 +285,14 @@ export default {
     }
   },
   activated() {
+    const { matched } = this.$route;
+    const noKeepAlive = matched.some(
+      (route) => route.meta?.keepAlive === false
+    );
+
     // NOTE: refresh data for `<keep-alive>`
-    const { keepAlive } = this.$route.meta;
-    if (keepAlive === false) {
-      this.$set(this.table, 'page', 1);
+    if (noKeepAlive) {
+      this.resetTableData();
       this.getModelData();
     }
   },
@@ -304,6 +308,12 @@ export default {
     initModelData(formData = {}) {
       this.searchForm.data = Object.assign(formData, this.defaultModelValue);
       !this.useValidator && this.getModelData();
+    },
+    resetTableData() {
+      this.$set(this.table, 'selectedRows', []);
+      this.$set(this.table, 'data', []);
+      this.$set(this.table, 'total', 0);
+      this.$set(this.table, 'page', 1);
     },
     async getModelData() {
       try {
