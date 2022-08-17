@@ -80,7 +80,9 @@ export function createUserApis(server) {
           protein: 4.9
         }
       ],
-      total: 88
+      page: {
+        total: 88
+      }
     });
   });
 

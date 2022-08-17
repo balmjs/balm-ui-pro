@@ -15,7 +15,7 @@ export default {
     getModelDataFn: getModelListDataFn,
     tableDataFormat: {
       data: 'data',
-      total: 'total'
+      total: ({ page }) => page.total
       // page: 'page'
     },
     rowActionHandler: handleRowAction,

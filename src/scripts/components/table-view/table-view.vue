@@ -123,7 +123,7 @@
 import UiTableViewTopActions from './table-view-top-actions';
 import UiTableViewRowActions from './table-view-row-actions';
 import viewMixins from '../../mixins/view';
-import getType from '../../utils/typeof';
+import getType, { isFunction } from '../../utils/typeof';
 
 const UiTableView = {
   name: 'UiTableView',
@@ -321,9 +321,11 @@ export default {
 
         if (getType(this.tableDataSource) === 'object') {
           for (const [key, value] of Object.entries(this.tableDataFormat)) {
-            if (this.tableDataSource[value]) {
-              this.$set(this.table, key, this.tableDataSource[value]);
-            }
+            const tableDataValue = isFunction(value)
+              ? value(this.tableDataSource)
+              : this.tableDataSource[value];
+
+            this.$set(this.table, key, tableDataValue);
           }
 
           this.lastSearchFormData = Object.assign({}, this.searchForm.data);
