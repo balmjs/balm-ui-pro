@@ -7,11 +7,13 @@
       <ui-checkbox
         v-model="selectedValue"
         :input-id="`${componentKey}-${index}`"
-        :value="option.value"
+        :value="option[optionFormat.value]"
         :disabled="option.disabled || false"
         @change="handleChange"
       ></ui-checkbox>
-      <label :for="`${componentKey}-${index}`">{{ option.label }}</label>
+      <label :for="`${componentKey}-${index}`">{{
+        option[optionFormat.label]
+      }}</label>
     </ui-form-field>
   </div>
 </template>
@@ -21,13 +23,14 @@ import formItemMixin from '../../mixins/form-item';
 
 // Define checkbox group constants
 const UI_CHECKBOX_GROUP = {
+  name: 'UiCheckboxGroup',
   EVENTS: {
     CHANGE: 'change'
   }
 };
 
 export default {
-  name: 'UiCheckboxGroup',
+  name: UI_CHECKBOX_GROUP.name,
   mixins: [formItemMixin],
   model: {
     prop: 'modelValue',
@@ -54,6 +57,9 @@ export default {
     modelValue(val) {
       this.selectedValue = val;
     }
+  },
+  beforeMount() {
+    this.checkOptionFormat(UI_CHECKBOX_GROUP.name);
   },
   methods: {
     handleChange(selectedValue) {

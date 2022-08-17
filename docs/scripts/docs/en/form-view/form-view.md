@@ -32,6 +32,7 @@ type ModelConfig = FormItemConfig[] | (formData: object, formOptions: object) =>
     show?: boolean | (formData) => boolean;
     // Form label
     label?: string | (formData) => string;
+    required?: boolean;
     // Form data config
     key?: string;
     value?: string;

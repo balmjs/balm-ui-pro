@@ -7,11 +7,13 @@
       <ui-radio
         v-model="selectedValue"
         :input-id="`${componentKey}-${index}`"
-        :value="option.value"
+        :value="option[optionFormat.value]"
         :disabled="option.disabled || false"
         @change="handleChange"
       ></ui-radio>
-      <label :for="`${componentKey}-${index}`">{{ option.label }}</label>
+      <label :for="`${componentKey}-${index}`">{{
+        option[optionFormat.label]
+      }}</label>
     </ui-form-field>
   </div>
 </template>
@@ -21,13 +23,14 @@ import formItemMixin from '../../mixins/form-item';
 
 // Define radio group constants
 const UI_RADIO_GROUP = {
+  name: 'UiRadioGroup',
   EVENTS: {
     CHANGE: 'change'
   }
 };
 
 export default {
-  name: 'UiRadioGroup',
+  name: UI_RADIO_GROUP.name,
   mixins: [formItemMixin],
   model: {
     prop: 'modelValue',
@@ -54,6 +57,9 @@ export default {
     modelValue(val) {
       this.selectedValue = val;
     }
+  },
+  beforeMount() {
+    this.checkOptionFormat(UI_RADIO_GROUP.name);
   },
   methods: {
     handleChange(selectedValue) {
