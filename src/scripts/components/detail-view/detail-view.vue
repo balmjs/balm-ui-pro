@@ -14,7 +14,10 @@
             {
               modelConfig,
               modelOptions,
-              actionConfig
+              actionConfig,
+              formAttrOrProp: {
+                actionAlign: 'center'
+              }
             },
             formViewAttrOrProp
           )
@@ -81,11 +84,7 @@ export default {
     },
     formViewAttrOrProp: {
       type: Object,
-      default: () => ({
-        formAttrOrProp: {
-          actionAlign: 'center'
-        }
-      })
+      default: () => ({})
     },
     to: {
       type: [Object, String],

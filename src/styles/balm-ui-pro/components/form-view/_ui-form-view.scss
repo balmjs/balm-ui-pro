@@ -1,16 +1,18 @@
 .mdc-form-view {
+  flex: 1;
+
   .mdc-form__item > .mdc-form-item__label.required::before {
     content: '*';
     color: red;
   }
 
-  .mdc-form--horizontal .mdc-form-item__item {
+  &.mdc-form--horizontal .mdc-form-item__item {
     flex-grow: 1;
   }
+}
 
-  .mdc-form-item__ui-slider {
-    .mdc-form-item__item {
-      width: 100%;
-    }
+.mdc-form-item__ui-slider {
+  .mdc-form-item__item {
+    width: 100%;
   }
 }

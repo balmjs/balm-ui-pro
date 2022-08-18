@@ -1,74 +1,41 @@
 <template>
-  <div
+  <ui-form
     :class="{
       'mdc-form-view': true,
       'mdc-form-view--use-grid': useGrid
     }"
+    v-bind="
+      Object.assign(
+        {
+          type: useGrid ? 'horizontal' : 'vertical'
+        },
+        formAttrOrProp
+      )
+    "
   >
-    <ui-form
-      class="mdc-form-view__form"
-      v-bind="
-        Object.assign(
-          {
-            type: useGrid ? 'horizontal' : 'vertical'
-          },
-          formAttrOrProp
-        )
-      "
-    >
-      <template #default="{ itemClass, subitemClass, actionClass }">
-        <div class="mdc-form-view__items">
-          <!-- Before from view -->
-          <slot
-            name="before-form-view"
-            v-bind="{
-              itemClass,
-              subitemClass,
-              data: currentFormData
-            }"
-          ></slot>
-          <!-- List view -->
-          <ui-grid
-            v-if="useGrid"
-            class="mdc-form-view__grid"
-            v-bind="gridAttrOrProp"
+    <template #default="{ itemClass, subitemClass, actionClass }">
+      <div class="mdc-form-view__items">
+        <!-- Before from view -->
+        <slot
+          name="before-form-view"
+          v-bind="{
+            itemClass,
+            subitemClass,
+            data: currentFormData
+          }"
+        ></slot>
+        <!-- List view -->
+        <ui-grid
+          v-if="useGrid"
+          class="mdc-form-view__grid"
+          v-bind="gridAttrOrProp"
+        >
+          <ui-grid-cell
+            v-for="(configData, configIndex) in formConfig"
+            :key="`form-item-${configData.key || configIndex}`"
+            v-bind="gridCellAttrOrProp"
           >
-            <ui-grid-cell
-              v-for="(configData, configIndex) in formConfig"
-              :key="`form-item-${configData.key || configIndex}`"
-              v-bind="gridCellAttrOrProp"
-            >
-              <ui-form-item
-                :config="configData"
-                :model-value="formData"
-                :form-data-source="formDataSource"
-                :attr-or-prop="formItemAttrOrProp"
-                @change="handleChange"
-              >
-                <slot
-                  v-for="(_, name) in $slots"
-                  :slot="name"
-                  :name="name"
-                ></slot>
-                <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-                  <slot
-                    :name="name"
-                    v-bind="
-                      Object.assign({}, slotData, {
-                        config: configData,
-                        data: currentFormData
-                      })
-                    "
-                  ></slot>
-                </template>
-              </ui-form-item>
-            </ui-grid-cell>
-          </ui-grid>
-          <!-- Detail view -->
-          <template v-else>
             <ui-form-item
-              v-for="(configData, configIndex) in formConfig"
-              :key="`form-item-${configData.key || configIndex}`"
               :config="configData"
               :model-value="formData"
               :form-data-source="formDataSource"
@@ -92,53 +59,78 @@
                 ></slot>
               </template>
             </ui-form-item>
-          </template>
-          <!-- After from view -->
-          <slot
-            name="after-form-view"
-            v-bind="{
-              itemClass,
-              subitemClass,
-              data: currentFormData
-            }"
-          ></slot>
-          <!-- Action view -->
-          <slot
-            name="form-view-actions"
-            v-bind="{
-              className: [itemClass, actionClass],
-              config: formConfig,
-              data: currentFormData
-            }"
+          </ui-grid-cell>
+        </ui-grid>
+        <!-- Detail view -->
+        <template v-else>
+          <ui-form-item
+            v-for="(configData, configIndex) in formConfig"
+            :key="`form-item-${configData.key || configIndex}`"
+            :config="configData"
+            :model-value="formData"
+            :form-data-source="formDataSource"
+            :attr-or-prop="formItemAttrOrProp"
+            @change="handleChange"
           >
-            <ui-form-field
-              v-if="actionConfig.length"
-              :class="[itemClass, actionClass]"
-            >
-              <template v-for="(buttonData, buttonIndex) in actionConfig">
-                <ui-button
-                  v-if="buttonData.type === NATIVE_BUTTON_TYPES.submit"
-                  :key="`form-submit-${buttonIndex}`"
-                  v-debounce="handleAction(buttonData)"
-                  v-bind="buttonData.attrOrProp || {}"
-                >
-                  {{ buttonData.text }}
-                </ui-button>
-                <ui-button
-                  v-else
-                  :key="`form-button-${buttonIndex}`"
-                  v-bind="buttonData.attrOrProp || {}"
-                  @click="handleAction(buttonData)"
-                >
-                  {{ buttonData.text }}
-                </ui-button>
-              </template>
-            </ui-form-field>
-          </slot>
-        </div>
-      </template>
-    </ui-form>
-  </div>
+            <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
+            <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
+              <slot
+                :name="name"
+                v-bind="
+                  Object.assign({}, slotData, {
+                    config: configData,
+                    data: currentFormData
+                  })
+                "
+              ></slot>
+            </template>
+          </ui-form-item>
+        </template>
+        <!-- After from view -->
+        <slot
+          name="after-form-view"
+          v-bind="{
+            itemClass,
+            subitemClass,
+            data: currentFormData
+          }"
+        ></slot>
+        <!-- Action view -->
+        <slot
+          name="form-view-actions"
+          v-bind="{
+            className: [itemClass, actionClass],
+            config: formConfig,
+            data: currentFormData
+          }"
+        >
+          <ui-form-field
+            v-if="actionConfig.length"
+            :class="[itemClass, actionClass]"
+          >
+            <template v-for="(buttonData, buttonIndex) in actionConfig">
+              <ui-button
+                v-if="buttonData.type === NATIVE_BUTTON_TYPES.submit"
+                :key="`form-submit-${buttonIndex}`"
+                v-debounce="handleAction(buttonData)"
+                v-bind="buttonData.attrOrProp || {}"
+              >
+                {{ buttonData.text }}
+              </ui-button>
+              <ui-button
+                v-else
+                :key="`form-button-${buttonIndex}`"
+                v-bind="buttonData.attrOrProp || {}"
+                @click="handleAction(buttonData)"
+              >
+                {{ buttonData.text }}
+              </ui-button>
+            </template>
+          </ui-form-field>
+        </slot>
+      </div>
+    </template>
+  </ui-form>
 </template>
 
 <script>

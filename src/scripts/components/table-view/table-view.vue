@@ -13,7 +13,10 @@
               useGrid: true,
               modelConfig: searchForm.config,
               modelOptions,
-              actionConfig: searchActionConfig
+              actionConfig: searchActionConfig,
+              formAttrOrProp: {
+                actionAlign: 'center'
+              }
             },
             formViewAttrOrProp
           )
@@ -55,7 +58,8 @@
               {
                 data: table.data,
                 thead,
-                tbody
+                tbody,
+                fullwidth: true
               },
               tableAttrOrProp
             )
@@ -164,11 +168,7 @@ export default {
     },
     formViewAttrOrProp: {
       type: Object,
-      default: () => ({
-        formAttrOrProp: {
-          actionAlign: 'center'
-        }
-      })
+      default: () => ({})
     },
     noData: {
       type: String,
@@ -208,9 +208,7 @@ export default {
     },
     tableAttrOrProp: {
       type: Object,
-      default: () => ({
-        fullwidth: true
-      })
+      default: () => ({})
     },
     tableDataFormat: {
       type: Object,

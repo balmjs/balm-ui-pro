@@ -39,23 +39,23 @@ const DefaultActionConfig: ActionButton[] = [
 ];
 ```
 
-| Name                 | Type                             | Default                                         | Description                                                                                                |
-| -------------------- | -------------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `title`              | string                           | `''`                                            | Detail view title                                                                                          |
-| `model`              | string                           | _required_                                      | Model name                                                                                                 |
-| `modelPath`          | string                           | `''`                                            | The file path of model config                                                                              |
-| `defaultModelValue`  | object                           | `{}`                                            | Sets default value of model data                                                                           |
-| `modelOptions`       | object                           | `{}`                                            | The options of model config                                                                                |
-| `keyName`            | string, array                    | `'id'`                                          | The primary key of model data                                                                              |
-| `actionConfig`       | array                            | `DefaultActionConfig`                           | Form button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button) |
-| `formViewAttrOrProp` | object                           | `{ formAttrOrProp: { actionAlign: 'center' } }` | See `<ui-form-view>` props [docs](/#/components/form-view)                                                 |
-| `to`                 | 'back', 'custom', string, object | `'back'`                                        | Custom router link                                                                                         |
-| `replace`            | boolean                          | `false`                                         | The navigation will not leave a history record                                                             |
-| `getModelConfigFn`   | function                         | `(vm) => {}`                                    | Loading model config                                                                                       |
-| `getModelDataFn`     | function                         | `(vm) => {}`                                    | Loading model data                                                                                         |
-| `setModelDataFn`     | function                         | `(vm) => {}`                                    | Saving model data                                                                                          |
-| `useValidator`       | boolean                          | `true`                                          | Enables auto validator (Just for `submit` type)                                                            |
-| `redirectOnSave`     | boolean                          | `true`                                          | The page will auto redirect after saving model data                                                        |
+| Name                 | Type                             | Default               | Description                                                                                                |
+| -------------------- | -------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `title`              | string                           | `''`                  | Detail view title                                                                                          |
+| `model`              | string                           | _required_            | Model name                                                                                                 |
+| `modelPath`          | string                           | `''`                  | The file path of model config                                                                              |
+| `defaultModelValue`  | object                           | `{}`                  | Sets default value of model data                                                                           |
+| `modelOptions`       | object                           | `{}`                  | The options of model config                                                                                |
+| `keyName`            | string, array                    | `'id'`                | The primary key of model data                                                                              |
+| `actionConfig`       | array                            | `DefaultActionConfig` | Form button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button) |
+| `formViewAttrOrProp` | object                           | `{}`                  | See `<ui-form-view>` props [docs](/#/components/form-view)                                                 |
+| `to`                 | 'back', 'custom', string, object | `'back'`              | Custom router link                                                                                         |
+| `replace`            | boolean                          | `false`               | The navigation will not leave a history record                                                             |
+| `getModelConfigFn`   | function                         | `(vm) => {}`          | Loading model config                                                                                       |
+| `getModelDataFn`     | function                         | `(vm) => {}`          | Loading model data                                                                                         |
+| `setModelDataFn`     | function                         | `(vm) => {}`          | Saving model data                                                                                          |
+| `useValidator`       | boolean                          | `true`                | Enables auto validator (Just for `submit` type)                                                            |
+| `redirectOnSave`     | boolean                          | `true`                | The page will auto redirect after saving model data                                                        |
 
 ### Slots
 

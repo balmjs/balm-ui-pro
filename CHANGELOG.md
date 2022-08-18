@@ -2,6 +2,17 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.28.6 / 2022-08-18
+
+### Chore
+
+- `<ui-table-view>`, `<ui-detail-view>`: update default props and css
+
+### Bug Fixes
+
+- `$constant`: fix `use` init undefined bug
+- `<ui-form-view>`: fix `modelOptions` watch bug
+
 ## v0.28.3 / 2022-08-16
 
 ### Feature

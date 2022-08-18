@@ -1,23 +1,25 @@
-.mdc-table-view__conditions {
-  margin-bottom: 12px;
-}
-
-.mdc-table-view__top-actions {
-  margin-bottom: 6px;
-
-  .top-action {
-    margin: 0 6px 6px 0;
+.mdc-table-view {
+  &__conditions {
+    margin-bottom: 12px;
   }
-}
 
-.mdc-table-view__row-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  &__top-actions {
+    margin-bottom: 6px;
 
-  .row-action {
-    margin: 4px;
-    cursor: pointer;
+    .top-action {
+      margin: 0 6px 6px 0;
+    }
+  }
+
+  &__row-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    .row-action {
+      margin: 4px;
+      cursor: pointer;
+    }
   }
 }
 
