@@ -171,13 +171,13 @@ export default {
     event: UI_FORM_VIEW.EVENTS.update
   },
   props: {
-    modelValue: {
-      type: Object,
-      default: () => ({})
-    },
     modelConfig: {
       type: [Array, Function, Boolean],
       required: true
+    },
+    modelValue: {
+      type: Object,
+      default: () => ({})
     },
     modelOptions: {
       type: Object,
@@ -218,7 +218,7 @@ export default {
       formConfig: [],
       formData: {},
       formDataSource: this.modelValue,
-      defaultModelOptions: {}
+      formOptions: {}
     };
   },
   computed: {
@@ -269,11 +269,16 @@ export default {
         }
       }
     },
-    async modelOptions() {
-      this.isFunctionConfig && (await this.setFormConfig());
+    async modelOptions(val, oldVal) {
+      if (
+        this.isFunctionConfig &&
+        Object.keys(val).length !== Object.keys(oldVal).length
+      ) {
+        await this.setFormConfig();
 
-      if (this.hasFormDataSource) {
-        this.updateFormData();
+        if (this.hasFormDataSource) {
+          this.updateFormData();
+        }
       }
     }
   },
@@ -300,12 +305,12 @@ export default {
         .filter(({ model }) => model)
         .map(({ model }) => model);
 
-      this.defaultModelOptions = modelList.length
+      this.formOptions = modelList.length
         ? await this.setModelOptionsFn(modelList)
         : {};
 
-      if (getType(this.defaultModelOptions) !== 'object') {
-        this.defaultModelOptions = {};
+      if (getType(this.formOptions) !== 'object') {
+        this.formOptions = {};
         console.warn(`[${UI_FORM_VIEW.name}]: Invalid form model options`);
       }
     },
@@ -314,14 +319,14 @@ export default {
         await this.setModelOptions();
       }
 
-      const currentModelOptions = Object.assign(
+      const currentFormOptions = Object.assign(
         {},
-        this.defaultModelOptions,
+        this.formOptions,
         this.modelOptions
       );
 
       const originalConfig = this.isFunctionConfig
-        ? await modelConfig(this.currentFormData, currentModelOptions)
+        ? await modelConfig(this.currentFormData, currentFormOptions)
         : modelConfig;
 
       if (Array.isArray(originalConfig)) {

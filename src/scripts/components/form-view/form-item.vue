@@ -6,12 +6,10 @@
   >
     <label
       v-if="config.label"
-      :class="[
-        'mdc-form-item__label',
-        {
-          required: config.required
-        }
-      ]"
+      :class="{
+        'mdc-form-item__label': true,
+        required: config.required
+      }"
     >
       <slot :name="customSlots.beforeLabel"></slot>
       <span>{{ getFormLabel(config) }}</span>

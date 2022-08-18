@@ -4,10 +4,10 @@
       <ui-button
         v-if="tableView.topActionRendering(action, tableView.tableDataSource)"
         :key="`button-${index}`"
+        :class="[cssClasses.topAction, action.type || '']"
         v-bind="
           Object.assign(
             {
-              class: 'action',
               raised: true,
               icon: actionIcon(action)
             },
@@ -23,13 +23,14 @@
 </template>
 
 <script>
-import { TYPES, getRouteLocationRaw } from './constants';
+import { cssClasses, TYPES, getRouteLocationRaw } from './constants';
 import { isFunction } from '../../utils/typeof';
 
 export default {
   name: 'UiTableViewTopActions',
   data() {
     return {
+      cssClasses,
       tableView: this.$parent
     };
   },

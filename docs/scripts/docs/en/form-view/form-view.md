@@ -10,8 +10,8 @@ type ModelConfig = FormItemConfig[] | (formData: object, formOptions: object) =>
 
 | Name                 | Type              | Default    | Description                                                                                                |
 | -------------------- | ----------------- | ---------- | ---------------------------------------------------------------------------------------------------------- |
-| `modelValue`         | object            | `{}`       | Form model data                                                                                            |
 | `modelConfig`        | ModelConfig       | `required` | Form model config                                                                                          |
+| `modelValue`         | object            | `{}`       | Form model data                                                                                            |
 | `modelOptions`       | object            | `{}`       | The extra options of the form model config                                                                 |
 | `useGrid`            | boolean           | `false`    | Enables layout grid for form items                                                                         |
 | `formAttrOrProp`     | object            | `{}`       | See BalmUI `<ui-form>` props [docs](https://v8.material.balmjs.com/#/layout/form)                          |

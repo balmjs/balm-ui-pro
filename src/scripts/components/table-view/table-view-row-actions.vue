@@ -8,7 +8,7 @@
               :is="action.component"
               v-show="configAction('show', action)"
               :key="`button-without-slot-${index}`"
-              class="action button-without-slot"
+              :class="[cssClasses.rowAction, 'button-without-slot']"
               v-bind="action.attrOrProp || {}"
               @click.native="handleAction(action)"
             ></component>
@@ -18,7 +18,7 @@
               :is="action.component"
               v-show="configAction('show', action)"
               :key="`button-with-slot-${index}`"
-              class="action button-with-slot"
+              :class="[cssClasses.rowAction, 'button-with-slot']"
               v-bind="action.attrOrProp || {}"
               @click.native="handleAction(action)"
             >
@@ -31,7 +31,7 @@
             v-if="action.type === TYPES.routerLink"
             v-show="configAction('show', action)"
             :key="`internal-link-${index}`"
-            class="action internal-link"
+            :class="[cssClasses.rowAction, 'internal-link']"
             :to="configAction(TYPES.routerLink, action)"
             v-bind="action.attrOrProp || {}"
           >
@@ -44,7 +44,7 @@
             v-else-if="action.href"
             v-show="configAction('show', action)"
             :key="`external-link-${index}`"
-            class="action external-link"
+            :class="[cssClasses.rowAction, 'external-link']"
             :href="configAction('href', action)"
             v-bind="
               Object.assign(
@@ -65,7 +65,7 @@
             v-else
             v-show="configAction('show', action)"
             :key="`link-${index}`"
-            class="action link"
+            :class="[cssClasses.rowAction, 'link']"
             href="javascript:void(0)"
             @click="handleAction(action)"
           >
@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import { TYPES, getRouteLocationRaw } from './constants';
+import { cssClasses, TYPES, getRouteLocationRaw } from './constants';
 import { isFunction } from '../../utils/typeof';
 
 export default {
@@ -122,6 +122,7 @@ export default {
   },
   data() {
     return {
+      cssClasses,
       TYPES
     };
   },

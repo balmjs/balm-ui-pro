@@ -20,7 +20,11 @@ class Constant {
   }
 
   use(key) {
-    this.currentConstant = this.map.has(key) ? this.map.get(key) : key;
+    this.currentConstant = this.map.has(key)
+      ? this.map.get(key)
+      : Array.isArray(key)
+      ? key
+      : [];
 
     return this;
   }

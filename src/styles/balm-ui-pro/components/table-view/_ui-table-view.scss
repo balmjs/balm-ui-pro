@@ -3,9 +3,9 @@
 }
 
 .mdc-table-view__top-actions {
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 
-  .action {
+  .top-action {
     margin: 0 6px 6px 0;
   }
 }
@@ -15,7 +15,7 @@
   flex-wrap: wrap;
   align-items: center;
 
-  .action {
+  .row-action {
     margin: 4px;
     cursor: pointer;
   }
