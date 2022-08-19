@@ -9,6 +9,7 @@
 @use 'balm-ui/components/icon-button/icon-button'; // Required only for data table with column sorting
 @use 'balm-ui/components/pagination/pagination';
 @use 'balm-ui/components/alert/alert';
+@use 'balm-ui/components/spinner/spinner';
 @use 'balm-ui-pro/components/form-view/form-view';
 @use 'balm-ui-pro/components/table-view/table-view';
 // NOTE: use awesome form item components css
@@ -21,6 +22,7 @@ import UiButton from 'balm-ui/components/button';
 import UiTable from 'balm-ui/components/table';
 import UiPagination from 'balm-ui/components/pagination';
 import UiAlert from 'balm-ui/components/alert';
+import UiSpinner from 'balm-ui/components/spinner';
 import UiTableView from 'balm-ui-pro/components/table-view';
 
 Vue.use(UiForm);
@@ -29,6 +31,7 @@ Vue.use(UiButton);
 Vue.use(UiTable);
 Vue.use(UiPagination);
 Vue.use(UiAlert);
+Vue.use(UiSpinner);
 // Optional. Overwrite `<ui-table-view>` props with default value.
 Vue.use(UiTableView, {
   // some props

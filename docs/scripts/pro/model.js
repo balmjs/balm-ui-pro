@@ -1,4 +1,4 @@
-import { useApiModel, useRouterModel } from 'balm-ui-pro';
+import { useApiModel, useRouterModel, useConstantList } from 'balm-ui-pro';
 import { useHttp } from '@/plugins/http';
 import { isDev, API_ENDPOINT } from '@/config';
 import indexView from '@/views/layouts/blank';
@@ -7,6 +7,12 @@ import demoOptions from '@/views/components/options';
 const http = useHttp();
 const $apiModel = useApiModel();
 const $routerModel = useRouterModel();
+
+function getApiUrl(model, operation, apiAction) {
+  return apiAction
+    ? $apiModel.getApi(model, operation, apiAction)
+    : $apiModel.getApi(model, operation);
+}
 
 export default {
   methods: {
@@ -22,30 +28,6 @@ export default {
 
       return config;
     },
-    async setModelOptions(modelList) {
-      const modelOptions = {};
-
-      for (const model of modelList) {
-        const modelType = model.split(':');
-        const [modelName, apiAction] = modelType;
-
-        switch (modelName) {
-          case 'demo':
-            if (apiAction === 'multiSelect') {
-              modelOptions[`${apiAction}Options1`] = await this.$store.getModel(
-                modelName,
-                {},
-                { apiAction: `${apiAction}Options1` }
-              );
-            } else {
-              modelOptions[`${apiAction}Options`] = demoOptions[apiAction];
-            }
-            break;
-        }
-      }
-
-      return modelOptions;
-    },
     requestConfig(config = {}) {
       const { mock, ...options } = config;
       return mock || this.$mock
@@ -53,48 +35,79 @@ export default {
         : options;
     },
     createModel(model, data = {}, config = {}) {
-      return http.post(
-        $apiModel.getApi(model, 'create'),
-        data,
-        this.requestConfig(config)
-      );
+      const { apiAction, ...options } = config;
+      const apiUrl = getApiUrl(model, 'create', apiAction);
+      return http.post(apiUrl, data, this.requestConfig(options));
     },
     deleteModel(model, data = {}, config = {}) {
-      return http.post(
-        $apiModel.getApi(model, 'delete'),
-        data,
-        this.requestConfig(config)
-      );
+      const { apiAction, ...options } = config;
+      const apiUrl = getApiUrl(model, 'delete', apiAction);
+      return http.post(apiUrl, data, this.requestConfig(options));
     },
     updateModel(model, data = {}, config = {}) {
-      return http.post(
-        $apiModel.getApi(model, 'update'),
-        data,
-        this.requestConfig(config)
-      );
+      const { apiAction, ...options } = config;
+      const apiUrl = getApiUrl(model, 'update', apiAction);
+      return http.post(apiUrl, data, this.requestConfig(options));
     },
     getModel(model, params = {}, config = {}) {
-      const { apiAction, options } = config;
-      const api = apiAction
-        ? $apiModel.getApi(model, 'read', apiAction)
-        : $apiModel.getApi(model, 'read');
-
-      return http.get(api, {
+      const { apiAction, ...options } = config;
+      const apiUrl = getApiUrl(model, 'read', apiAction);
+      return http.get(apiUrl, {
         params,
         ...this.requestConfig(options)
       });
     },
     getModelList(model, params = {}, config = {}) {
-      return http.get($apiModel.getApi(model, 'read', 'list'), {
+      const apiUrl = getApiUrl(model, 'read', 'list');
+      return http.get(apiUrl, {
         params,
         ...this.requestConfig(config)
       });
     },
     getModelDetail(model, params = {}, config = {}) {
-      return http.get($apiModel.getApi(model, 'read', 'detail'), {
+      const apiUrl = getApiUrl(model, 'read', 'detail');
+      return http.get(apiUrl, {
         params,
         ...this.requestConfig(config)
       });
+    },
+    async getModelOptions(model, params = {}, config = {}) {
+      let result = [];
+
+      const models = model.split(':');
+      const [modelType, modelName] = models;
+      if (modelName) {
+        switch (modelType) {
+          case 'list':
+            result = await this.getModelList(modelName, params, config);
+            break;
+          case 'local':
+            result = useConstantList(modelName);
+            break;
+          case 'demo':
+            result =
+              modelName === 'multiSelect'
+                ? await this.getModel(
+                    modelType,
+                    {},
+                    {
+                      apiAction: `${modelName}Options1`
+                    }
+                  )
+                : demoOptions[modelName];
+            break;
+        }
+      } else {
+        result = await this.getModel(
+          model,
+          params,
+          Object.assign({}, config, {
+            apiAction: 'options'
+          })
+        );
+      }
+
+      return result;
     }
   }
 };

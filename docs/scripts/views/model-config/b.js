@@ -10,7 +10,7 @@ export default (
     radioOptions,
     chipsOptions,
     switchOptions,
-    multiSelectOptions1
+    multiSelectOptions
   }
 ) => {
   console.log('static data', data);
@@ -131,7 +131,7 @@ export default (
         {
           key: 'l',
           value: '',
-          options: multiSelectOptions1, // () => http.post('/mock/multi-select/options1'),
+          options: multiSelectOptions, // () => http.post('/mock/multi-select/options1'),
           attrOrProp: {
             defaultLabel: 'Select1'
           }
