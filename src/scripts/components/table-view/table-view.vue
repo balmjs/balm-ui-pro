@@ -5,7 +5,9 @@
     </h2>
 
     <section v-if="modelPath" class="mdc-table-view__conditions">
+      <ui-spinner v-if="searchForm.loading" active></ui-spinner>
       <ui-form-view
+        v-show="!searchForm.loading"
         v-model="searchForm.data"
         v-bind="
           Object.assign(
@@ -42,51 +44,53 @@
     </section>
 
     <ui-table-view-top-actions
-      v-if="topActionConfig.length"
+      v-if="table.data.length && topActionConfig.length"
     ></ui-table-view-top-actions>
     <slot v-else name="top-actions" v-bind="this"></slot>
 
     <section class="mdc-table-view__content">
       <slot name="before-table-view"></slot>
 
+      <ui-table
+        v-model="table.selectedRows"
+        v-bind="
+          Object.assign(
+            {},
+            {
+              data: table.data,
+              thead,
+              tbody,
+              fullwidth: true,
+              showProgress: table.loading
+            },
+            tableAttrOrProp
+          )
+        "
+      >
+        <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
+        <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
+          <slot :name="name" v-bind="slotData"></slot>
+        </template>
+        <!-- Default actions -->
+        <template #actions="{ data }">
+          <ui-table-view-row-actions
+            v-if="rowActionConfig.length"
+            v-bind="{
+              data,
+              model,
+              modelOptions,
+              keyName,
+              actionConfig: rowActionConfig,
+              actionHandler: rowActionHandler,
+              actionRendering: rowActionRendering,
+              refreshData: getModelData
+            }"
+          ></ui-table-view-row-actions>
+          <slot v-else name="actions" v-bind="data"></slot>
+        </template>
+      </ui-table>
+
       <template v-if="table.data.length">
-        <ui-table
-          v-model="table.selectedRows"
-          v-bind="
-            Object.assign(
-              {},
-              {
-                data: table.data,
-                thead,
-                tbody,
-                fullwidth: true
-              },
-              tableAttrOrProp
-            )
-          "
-        >
-          <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
-          <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-            <slot :name="name" v-bind="slotData"></slot>
-          </template>
-          <!-- Default actions -->
-          <template #actions="{ data }">
-            <ui-table-view-row-actions
-              v-if="rowActionConfig.length"
-              v-bind="{
-                data,
-                model,
-                modelOptions,
-                keyName,
-                actionConfig: rowActionConfig,
-                actionHandler: rowActionHandler,
-                actionRendering: rowActionRendering,
-                refreshData: getModelData
-              }"
-            ></ui-table-view-row-actions>
-            <slot v-else name="actions" v-bind="data"></slot>
-          </template>
-        </ui-table>
         <ui-pagination
           v-if="!withoutPagination"
           v-model="table.page"
@@ -255,7 +259,8 @@ export default {
       searchForm: {
         config: [],
         data: {},
-        message: ''
+        message: '',
+        loading: false
       },
       lastSearchFormData: {}, // cached for last search result
       // Table data
@@ -263,21 +268,15 @@ export default {
         selectedRows: [],
         data: [],
         total: 0,
-        page: 1
+        page: 1,
+        loading: false
       },
       tableDataSource: {}
     };
   },
-  computed: {
-    hasSearchForm() {
-      return !!(Array.isArray(this.searchForm.config)
-        ? this.searchForm.config.length
-        : this.searchForm.config);
-    }
-  },
   async beforeMount() {
-    if (this.modelPath) {
-      this.getModelConfig();
+    if (this.modelConfig || this.modelPath) {
+      this.setModelConfig();
     } else {
       this.initModelData();
     }
@@ -295,27 +294,33 @@ export default {
     }
   },
   methods: {
-    async getModelConfig() {
+    async setModelConfig() {
       try {
-        const modelConfig = await this.getModelConfigFn(this);
+        const modelConfig =
+          this.modelConfig || (await this.getModelConfigFn(this));
         modelConfig && this.$set(this.searchForm, 'config', modelConfig);
       } catch (err) {
         console.warn(`[${UiTableView.name}]: ${err.toString()}`);
       }
     },
-    initModelData(formData = {}) {
+    async initModelData(formData = {}) {
+      this.$set(this.searchForm, 'loading', true);
       this.searchForm.data = Object.assign(formData, this.defaultModelValue);
-      !this.useValidator && this.getModelData();
+      !this.useValidator && (await this.getModelData());
+      this.$set(this.searchForm, 'loading', false);
     },
     resetTableData() {
       this.$set(this.table, 'selectedRows', []);
       this.$set(this.table, 'data', []);
       this.$set(this.table, 'total', 0);
       this.$set(this.table, 'page', 1);
+      this.$set(this.table, 'loading', false);
     },
     async getModelData() {
       try {
+        this.$set(this.table, 'loading', true);
         this.tableDataSource = await this.getModelDataFn(this);
+        this.$set(this.table, 'loading', false);
 
         if (getType(this.tableDataSource) === 'object') {
           for (const [key, value] of Object.entries(this.tableDataFormat)) {
@@ -329,6 +334,7 @@ export default {
           this.lastSearchFormData = Object.assign({}, this.searchForm.data);
         }
       } catch (err) {
+        this.$set(this.table, 'loading', false);
         console.warn(`[${UiTableView.name}]: ${err.toString()}`);
       }
     },

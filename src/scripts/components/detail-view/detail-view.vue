@@ -7,12 +7,14 @@
     <section class="mdc-detail-view__content">
       <slot name="before-detail-view"></slot>
 
+      <ui-spinner v-if="loading" active></ui-spinner>
       <ui-form-view
+        v-show="!loading"
         v-model="formData"
         v-bind="
           Object.assign(
             {
-              modelConfig,
+              modelConfig: currentModelConfig,
               modelOptions,
               actionConfig,
               formAttrOrProp: {
@@ -117,28 +119,32 @@ export default {
   },
   data() {
     return {
-      modelConfig: [],
+      currentModelConfig: [],
       formData: {},
       formDataSource: {},
-      message: ''
+      message: '',
+      loading: false
     };
   },
   async beforeMount() {
-    if (this.modelPath) {
-      await this.getModelConfig();
+    if (this.modelConfig || this.modelPath) {
+      await this.setModelConfig();
     }
   },
   methods: {
-    async getModelConfig() {
+    async setModelConfig() {
       try {
-        this.modelConfig = await this.getModelConfigFn(this);
+        this.currentModelConfig =
+          this.modelConfig || (await this.getModelConfigFn(this));
       } catch (err) {
         console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
       }
     },
-    initModelData(formData = {}) {
+    async initModelData(formData = {}) {
+      this.loading = true;
       this.formData = Object.assign(formData, this.defaultModelValue);
-      this.getModelData();
+      await this.getModelData();
+      this.loading = false;
     },
     async getModelData() {
       try {

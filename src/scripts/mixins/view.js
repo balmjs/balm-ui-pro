@@ -15,6 +15,10 @@ export default {
       type: String,
       required: true
     },
+    modelConfig: {
+      type: [Array, Function, Boolean],
+      default: false
+    },
     modelPath: {
       type: String,
       default: ''
