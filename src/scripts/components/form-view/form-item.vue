@@ -6,12 +6,10 @@
   >
     <label
       v-if="config.label"
-      :class="[
-        'mdc-form-item__label',
-        {
-          required: config.required
-        }
-      ]"
+      :class="{
+        'mdc-form-item__label': true,
+        required: config.required
+      }"
     >
       <slot :name="customSlots.beforeLabel"></slot>
       <span>{{ getFormLabel(config) }}</span>
@@ -41,21 +39,31 @@
             ></component>
           </template>
           <template v-else>
-            <component
-              :is="config.component"
-              v-model="formData[config.key]"
-              v-bind="
-                Object.assign(
-                  {
-                    componentKey,
-                    formData,
-                    formDataSource
-                  },
-                  config.attrOrProp || {}
-                )
-              "
-              @[eventName]="handleChange(config, $event)"
-            ></component>
+            <ui-readonly-item
+              v-if="config.component === 'ui-readonly-item'"
+              v-bind="{
+                config,
+                formData,
+                formDataSource
+              }"
+            ></ui-readonly-item>
+            <template v-else>
+              <component
+                :is="config.component"
+                v-model="formData[config.key]"
+                v-bind="
+                  Object.assign(
+                    {
+                      componentKey,
+                      formData,
+                      formDataSource
+                    },
+                    config.attrOrProp || {}
+                  )
+                "
+                @[eventName]="handleChange(config, $event)"
+              ></component>
+            </template>
           </template>
         </slot>
       </template>
@@ -65,21 +73,22 @@
 </template>
 
 <script>
-const name = 'UiFormItem';
 const UI_FORM_ITEM = {
+  name: 'UiFormItem',
   EVENTS: {
     update: 'update:modelValue'
   }
 };
 
 export default {
-  name,
+  name: UI_FORM_ITEM.name,
   customOptions: {}
 };
 </script>
 
 <script setup>
 import { reactive, toRefs, computed, watch, onBeforeMount } from 'vue';
+import UiReadonlyItem from '../readonly-item/readonly-item.vue';
 import getType, { isFunction } from '../../utils/typeof';
 
 const props = defineProps({
@@ -132,7 +141,7 @@ const customSlots = computed(() => ({
 onBeforeMount(() => {
   if (props.config.debug) {
     const customSlotsNames = Object.values(customSlots.value);
-    console.info(`[${name}] slots:`, customSlotsNames);
+    console.info(`[${UI_FORM_ITEM.name}] slots:`, customSlotsNames);
   }
 });
 
@@ -155,7 +164,9 @@ function getFormLabel({ label }) {
 
 function handleChange({ component, key }, value) {
   props.config.debug &&
-    console.info[(`[${name}] ${component}@${eventName.value}`, key, value)];
+    console.info[
+      (`[${UI_FORM_ITEM.name}] ${component}@${eventName.value}`, key, value)
+    ];
 
   hasSubComponents.value
     ? emit(UI_FORM_ITEM.EVENTS.update, Object.keys(value), Object.values(value))

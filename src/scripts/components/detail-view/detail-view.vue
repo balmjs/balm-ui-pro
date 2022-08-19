@@ -7,18 +7,25 @@
     <section class="mdc-detail-view__content">
       <slot name="before-detail-view"></slot>
 
+      <ui-spinner v-if="loading" active></ui-spinner>
       <ui-form-view
+        v-show="!loading"
         v-model="formData"
         v-bind="
           Object.assign(
             {
-              modelConfig,
+              modelConfig: currentModelConfig,
               modelOptions,
-              actionConfig
+              actionConfig,
+              formAttrOrProp: {
+                actionAlign: 'center'
+              }
             },
             formViewAttrOrProp
           )
         "
+        @loaded="initModelData"
+        @change:x="handleChange"
         @action="handleAction"
       >
         <template v-for="(_, slotName) in $slots" #[slotName]="slotData">
@@ -39,12 +46,14 @@
 </template>
 
 <script>
-const name = 'UiDetailView';
-
 const UiDetailView = {
+  name: 'UiDetailView',
   EVENTS: {
-    cancel: 'cancel',
-    submit: 'submit'
+    updateFormItem: 'change:x',
+    action: 'action',
+    submit: 'submit',
+    reset: 'reset',
+    cancel: 'cancel'
   }
 };
 
@@ -66,7 +75,7 @@ const defaultActionConfig = [
 ];
 
 export default {
-  name,
+  name: UiDetailView.name,
   customOptions: {}
 };
 </script>
@@ -92,11 +101,7 @@ const props = defineProps({
   },
   formViewAttrOrProp: {
     type: Object,
-    default: () => ({
-      formAttrOrProp: {
-        actionAlign: 'center'
-      }
-    })
+    default: () => ({})
   },
   to: {
     type: [Boolean, Object, String],
@@ -127,90 +132,103 @@ const props = defineProps({
     default: true
   }
 });
-let emit = defineEmits([]);
+const emit = defineEmits([
+  UiDetailView.EVENTS.updateFormItem,
+  UiDetailView.EVENTS.action
+]);
 const slots = useSlots();
 
 const instance = getCurrentInstance();
 const state = reactive({
-  modelConfig: [],
+  currentModelConfig: [],
   formData: {},
-  message: ''
+  formDataSource: {},
+  message: '',
+  loading: false
 });
-const { modelConfig, formData, message } = toRefs(state);
+const { currentModelConfig, formData, message, loading } = toRefs(state);
 
-const { hasTitle } = useView(props, slots);
+const { hasTitle, handleChange, exposeAction } = useView(props, {
+  slots,
+  emit,
+  state
+});
 
-onBeforeMount(async () => {
-  if (props.model) {
-    emit = defineEmits(props.actionConfig.map(({ type }) => type));
-
-    await getModelConfig();
-    await getModelData();
-  } else {
-    console.warn(`[${name}]: 'model' is missing`);
+onBeforeMount(() => {
+  if (props.modelConfig || props.modelPath) {
+    setModelConfig();
   }
 });
 
-async function getModelConfig() {
+async function setModelConfig() {
   try {
-    state.modelConfig = await props.getModelConfigFn(instance);
-  } catch (e) {
-    console.log(e);
+    state.currentModelConfig =
+      props.modelConfig || (await props.getModelConfigFn(instance));
+  } catch (err) {
+    console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
   }
+}
+
+async function initModelData(formData = {}) {
+  state.loading = true;
+  state.formData = Object.assign(formData, props.defaultModelValue);
+  await getModelData();
+  state.loading = false;
 }
 
 async function getModelData() {
   try {
-    state.formData = await props.getModelDataFn(instance);
-  } catch (e) {
-    console.log(e);
+    const formDataSource = await props.getModelDataFn(instance);
+
+    if (
+      getType(formDataSource) === 'object' &&
+      Object.keys(formDataSource).length
+    ) {
+      state.formDataSource = formDataSource;
+      state.formData = Object.assign({}, formDataSource);
+    }
+  } catch (err) {
+    console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
   }
 }
 
 function redirect() {
   if (props.to !== 'custom') {
-    const to = props.to || {
-      name: `${props.model}.list`
-    };
-    props.replace ? router.replace(to) : router.push(to);
+    if (props.to === 'back') {
+      router.back();
+    } else {
+      const to = props.to || {
+        name: `${props.model}.list`
+      };
+      props.replace ? router.replace(to) : router.push(to);
+    }
   }
 }
 
-async function handleAction(result) {
-  const { type } = result;
+async function handleAction(action, result) {
+  let canSubmit = true;
 
-  switch (type) {
+  switch (action.type) {
     case UiDetailView.EVENTS.submit:
-      let canSubmit = true;
-
       if (props.useValidator) {
         canSubmit = result.valid;
         state.message = result.message;
       }
 
-      if (canSubmit) {
+      if (canSubmit && action.submit !== false) {
         await props.setModelDataFn(instance);
         props.redirectOnSave && redirect();
       }
       break;
-    case UiDetailView.EVENTS.cancel:
-      switch (props.to) {
-        case 'custom':
-          emit(UiDetailView.EVENTS.cancel);
-          break;
-        case false:
-          router.back();
-          break;
-        default:
-          redirect();
-      }
-      break;
-    default:
+    case UiDetailView.EVENTS.reset:
       state.message = '';
+      // NOTE: automatic processing in `<ui-form-view>`
+      break;
+    case UiDetailView.EVENTS.cancel:
+      redirect();
+      break;
   }
 
-  if (type !== UiDetailView.EVENTS.cancel) {
-    emit(type, result, instance);
-  }
+  canSubmit && exposeAction(action, result);
 }
 </script>

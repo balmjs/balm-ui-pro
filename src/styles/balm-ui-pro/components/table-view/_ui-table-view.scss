@@ -1,26 +1,35 @@
+@use '@material/elevation/mixins' as elevation-mixins;
+
 .mdc-table-view {
-}
-
-.mdc-table-view__conditions {
-  margin-bottom: 12px;
-}
-
-.mdc-table-view__topbar {
-  margin-bottom: 12px;
-
-  .action {
-    margin: 0 6px 6px 0;
+  &__conditions {
+    margin-bottom: 12px;
   }
-}
 
-.mdc-table-view__actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  &__top-actions {
+    margin-bottom: 6px;
 
-  .action {
-    margin: 4px;
-    cursor: pointer;
+    .top-action {
+      margin: 0 6px 6px 0;
+    }
+  }
+
+  &__row-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    .row-action {
+      margin: 4px;
+      cursor: pointer;
+    }
+  }
+
+  &__empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 128px;
+    @include elevation-mixins.elevation(1);
   }
 }
 

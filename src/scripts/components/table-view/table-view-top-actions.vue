@@ -1,15 +1,15 @@
 <template>
-  <section class="mdc-table-view__topbar">
+  <section class="mdc-table-view__top-actions">
     <template
-      v-for="(action, index) in tableView.topbarConfig"
-      :key="`topbar-action-${index}`"
+      v-for="(action, index) in tableView.topActionConfig"
+      :key="`top-action-${index}`"
     >
       <ui-button
-        v-if="tableView.topbarRendering(action, tableView.tableDataSource)"
+        v-if="tableView.topActionRendering(action, tableView.tableDataSource)"
+        :class="[cssClasses.topAction, action.type || '']"
         v-bind="
           Object.assign(
             {
-              class: 'action',
               raised: true,
               icon: actionIcon(action)
             },
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { TYPES } from './constants';
+import { cssClasses, TYPES } from './constants';
 
 export default {
   name: 'UiTableViewTopbar',
@@ -34,7 +34,7 @@ export default {
 </script>
 
 <script setup>
-import { getCurrentInstance } from 'vue';
+import { toRefs, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
 import { getRouteLocationRaw } from './constants';
 
@@ -68,25 +68,24 @@ function actionIcon({ icon, type }) {
 }
 
 function handleClick(action) {
-  const { defaultParams, table, lastSearchFormData } = tableView;
+  const { model, modelOptions, keyName, state, getModelData } = tableView;
 
   const data = {
-    defaultParams,
-    selectedRows: table.selectedRows,
-    tableData: table.data,
-    searchFormData: lastSearchFormData
+    model,
+    modelOptions,
+    keyName,
+    ...toRefs(state)
   };
+  const refreshData = getModelData;
+
   if (action.type === TYPES.routerLink) {
-    const to = getRouteLocationRaw(action, {
-      model: tableView.model,
-      data
-    });
+    const to = getRouteLocationRaw(action, data);
     router.push(to);
   } else {
     if (isFunction(action.handler)) {
-      action.handler(data, tableView.getModelData);
+      action.handler(data, refreshData);
     } else {
-      tableView.topbarHandler(action, data, tableView.refreshData);
+      tableView.topActionHandler(action, data, refreshData);
     }
   }
 }

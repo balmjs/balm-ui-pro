@@ -1,5 +1,10 @@
 import { isFunction } from '../../utils/typeof';
 
+export const cssClasses = {
+  topAction: 'top-action',
+  rowAction: 'row-action'
+};
+
 export const TYPES = {
   noSlot: 'no-slot',
   routerLink: 'router-link'

@@ -1,76 +1,40 @@
 <template>
-  <div
-    :class="[
-      'mdc-form-view',
-      {
-        'mdc-form-view--use-grid': useGrid
-      }
-    ]"
+  <ui-form
+    :class="{
+      'mdc-form-view': true,
+      'mdc-form-view--use-grid': useGrid
+    }"
+    v-bind="
+      Object.assign(
+        {
+          type: useGrid ? 'horizontal' : 'vertical'
+        },
+        formAttrOrProp
+      )
+    "
   >
-    <ui-form
-      class="mdc-form-view__form"
-      v-bind="
-        Object.assign(
-          {
-            type: useGrid ? 'horizontal' : 'vertical'
-          },
-          formAttrOrProp
-        )
-      "
-    >
-      <template #default="{ itemClass, subitemClass, actionClass }">
-        <div class="mdc-form-view__items">
-          <!-- Before from view -->
-          <slot
-            name="before-form-view"
-            v-bind="{
-              itemClass,
-              subitemClass,
-              data: currentFormData
-            }"
-          ></slot>
-          <!-- List view -->
-          <ui-grid
-            v-if="useGrid"
-            class="mdc-form-view__grid"
-            v-bind="gridAttrOrProp"
+    <template #default="{ itemClass, subitemClass, actionClass }">
+      <div class="mdc-form-view__items">
+        <!-- Before from view -->
+        <slot
+          name="before-form-view"
+          v-bind="{
+            itemClass,
+            subitemClass,
+            data: currentFormData
+          }"
+        ></slot>
+        <!-- List view -->
+        <ui-grid
+          v-if="useGrid"
+          class="mdc-form-view__grid"
+          v-bind="gridAttrOrProp"
+        >
+          <template
+            v-for="(configData, configIndex) in formConfig"
+            :key="`form-item-${configData.key || configIndex}`"
           >
-            <template
-              v-for="(configData, configIndex) in formConfig"
-              :key="`form-item-${configData.key || configIndex}`"
-            >
-              <ui-grid-cell v-bind="gridCellAttrOrProp">
-                <ui-form-item
-                  :config="configData"
-                  :model-value="formData"
-                  :form-data-source="formDataSource"
-                  :attr-or-prop="formItemAttrOrProp"
-                  @update:model-value="handleChange"
-                >
-                  <template
-                    v-for="(_, slotName) in $slots"
-                    #[slotName]="slotData"
-                  >
-                    <slot
-                      :name="slotName"
-                      v-bind="
-                        Object.assign(slotData, {
-                          config: configData,
-                          data: currentFormData
-                        })
-                      "
-                    ></slot>
-                  </template>
-                </ui-form-item>
-              </ui-grid-cell>
-            </template>
-          </ui-grid>
-          <!-- Detail view -->
-          <template v-else>
-            <template
-              v-for="(configData, configIndex) in formConfig"
-              :key="`form-item-${configData.key || configIndex}`"
-            >
+            <ui-grid-cell v-bind="gridCellAttrOrProp">
               <ui-form-item
                 :config="configData"
                 :model-value="formData"
@@ -85,7 +49,7 @@
                   <slot
                     :name="slotName"
                     v-bind="
-                      Object.assign(slotData, {
+                      Object.assign({}, slotData, {
                         config: configData,
                         data: currentFormData
                       })
@@ -93,63 +57,90 @@
                   ></slot>
                 </template>
               </ui-form-item>
-            </template>
+            </ui-grid-cell>
           </template>
-          <!-- After from view -->
-          <slot
-            name="after-form-view"
-            v-bind="{
-              itemClass,
-              subitemClass,
-              data: currentFormData
-            }"
-          ></slot>
-          <!-- Action view -->
-
-          <slot
-            name="form-view-actions"
-            v-bind="{
-              className: [itemClass, actionClass],
-              config: formConfig,
-              data: currentFormData
-            }"
+        </ui-grid>
+        <!-- Detail view -->
+        <template v-else>
+          <template
+            v-for="(configData, configIndex) in formConfig"
+            :key="`form-item-${configData.key || configIndex}`"
           >
-            <ui-form-field
-              v-if="actionConfig.length"
-              :class="[itemClass, actionClass]"
+            <ui-form-item
+              :config="configData"
+              :model-value="formData"
+              :form-data-source="formDataSource"
+              :attr-or-prop="formItemAttrOrProp"
+              @update:model-value="handleChange"
             >
-              <template
-                v-for="(buttonData, buttonIndex) in actionConfig"
-                :key="`form-action-${buttonIndex}`"
-              >
-                <ui-button
-                  v-if="buttonData.type === NATIVE_BUTTON_TYPES.submit"
-                  v-debounce="handleAction(buttonData)"
-                  v-bind="buttonData.attrOrProp || {}"
-                >
-                  {{ buttonData.text }}
-                </ui-button>
-                <ui-button
-                  v-else
-                  v-bind="buttonData.attrOrProp || {}"
-                  @click="handleAction(buttonData)"
-                >
-                  {{ buttonData.text }}
-                </ui-button>
+              <template v-for="(_, slotName) in $slots" #[slotName]="slotData">
+                <slot
+                  :name="slotName"
+                  v-bind="
+                    Object.assign({}, slotData, {
+                      config: configData,
+                      data: currentFormData
+                    })
+                  "
+                ></slot>
               </template>
-            </ui-form-field>
-          </slot>
-        </div>
-      </template>
-    </ui-form>
-  </div>
+            </ui-form-item>
+          </template>
+        </template>
+        <!-- After from view -->
+        <slot
+          name="after-form-view"
+          v-bind="{
+            itemClass,
+            subitemClass,
+            data: currentFormData
+          }"
+        ></slot>
+        <!-- Action view -->
+
+        <slot
+          name="form-view-actions"
+          v-bind="{
+            className: [itemClass, actionClass],
+            config: formConfig,
+            data: currentFormData
+          }"
+        >
+          <ui-form-field
+            v-if="actionConfig.length"
+            :class="[itemClass, actionClass]"
+          >
+            <template
+              v-for="(buttonData, buttonIndex) in actionConfig"
+              :key="`form-action-${buttonIndex}`"
+            >
+              <ui-button
+                v-if="buttonData.type === NATIVE_BUTTON_TYPES.submit"
+                v-debounce="handleAction(buttonData)"
+                v-bind="buttonData.attrOrProp || {}"
+              >
+                {{ buttonData.text }}
+              </ui-button>
+              <ui-button
+                v-else
+                v-bind="buttonData.attrOrProp || {}"
+                @click="handleAction(buttonData)"
+              >
+                {{ buttonData.text }}
+              </ui-button>
+            </template>
+          </ui-form-field>
+        </slot>
+      </div>
+    </template>
+  </ui-form>
 </template>
 
 <script>
-const name = 'UiFormView';
-
 const UI_FORM_VIEW = {
+  name: 'UiFormView',
   EVENTS: {
+    loaded: 'loaded',
     update: 'update:modelValue',
     updateFormItem: 'update:x',
     action: 'action'
@@ -163,7 +154,7 @@ const NATIVE_BUTTON_TYPES = {
 };
 
 export default {
-  name,
+  name: UI_FORM_VIEW.name,
   customOptions: {
     NATIVE_BUTTON_TYPES
   }
@@ -184,17 +175,13 @@ import UiFormItem from './form-item.vue';
 import getType, { isFunction } from '../../utils/typeof';
 
 const props = defineProps({
-  modelValue: {
-    type: Object,
-    default: () => ({})
-  },
-  useSource: {
-    type: Boolean,
-    default: false
-  },
   modelConfig: {
     type: [Array, Function, Boolean],
     required: true
+  },
+  modelValue: {
+    type: Object,
+    default: () => ({})
   },
   modelOptions: {
     type: Object,
@@ -231,6 +218,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits([
+  UI_FORM_VIEW.EVENTS.loaded,
   UI_FORM_VIEW.EVENTS.update,
   UI_FORM_VIEW.EVENTS.updateFormItem,
   UI_FORM_VIEW.EVENTS.action
@@ -241,9 +229,9 @@ const state = reactive({
   formConfig: [],
   formData: {},
   formDataSource: props.modelValue,
-  defaultModelOptions: {}
+  formOptions: {}
 });
-const { formData, formConfig, formDataSource } = toRefs(state);
+const { formConfig, formData, formDataSource } = toRefs(state);
 
 const isFunctionConfig = computed(() => isFunction(props.modelConfig));
 const formDataConfig = computed(() =>
@@ -256,9 +244,7 @@ const hasFormDataSource = computed(
   () => !!Object.keys(state.formDataSource).length
 );
 const currentFormData = computed(() =>
-  props.useSource
-    ? Object.assign({}, state.formDataSource, state.formData)
-    : state.formData
+  Object.assign({}, state.formDataSource, state.formData)
 );
 
 onBeforeMount(() => {
@@ -303,12 +289,7 @@ watch(
       if (hasFormDataSource.value) {
         updateFormData();
       } else {
-        const currentFormData = Object.assign(
-          {},
-          state.formDataSource,
-          state.formData
-        );
-        const synchronized = Object.keys(currentFormData).length;
+        const synchronized = Object.keys(currentFormData.value).length;
         !synchronized && syncFormData();
       }
     }
@@ -317,11 +298,16 @@ watch(
 
 watch(
   () => props.modelOptions,
-  async (val) => {
-    isFunctionConfig.value && (await setFormConfig());
+  async (val, oldVal) => {
+    if (
+      isFunctionConfig.value &&
+      Object.keys(val).length !== Object.keys(oldVal).length
+    ) {
+      await setFormConfig();
 
-    if (hasFormDataSource.value) {
-      updateFormData();
+      if (hasFormDataSource.value) {
+        updateFormData();
+      }
     }
   }
 );
@@ -333,23 +319,20 @@ function resetFormView() {
 
 async function setModelOptions() {
   const originalConfig = isFunctionConfig.value
-    ? await props.modelConfig({
-        data: Object.assign({}, state.formDataSource),
-        ...props.modelOptions
-      })
+    ? await props.modelConfig(currentFormData.value, props.modelOptions)
     : props.modelConfig;
 
   const modelList = originalConfig
     .filter(({ model }) => model)
     .map(({ model }) => model);
 
-  state.defaultModelOptions = modelList.length
+  state.formOptions = modelList.length
     ? await props.setModelOptionsFn(modelList)
     : {};
 
-  if (getType(state.defaultModelOptions) !== 'object') {
-    state.defaultModelOptions = {};
-    console.warn(`[${name}]: Invalid form model options`);
+  if (getType(state.formOptions) !== 'object') {
+    state.formOptions = {};
+    console.warn(`[${UI_FORM_VIEW.name}]: Invalid form model options`);
   }
 }
 
@@ -363,15 +346,12 @@ async function setFormConfig(
 
   const currentModelOptions = Object.assign(
     {},
-    state.defaultModelOptions,
+    state.formOptions,
     props.modelOptions
   );
 
   const originalConfig = isFunctionConfig.value
-    ? await modelConfig({
-        data: Object.assign({}, state.formDataSource),
-        ...currentModelOptions
-      })
+    ? await modelConfig(currentFormData.value, currentModelOptions)
     : modelConfig;
 
   if (Array.isArray(originalConfig)) {
@@ -379,14 +359,20 @@ async function setFormConfig(
       (configData) => !configData.hasOwnProperty('if') || configData.if
     );
 
-    needInit && initFormData();
+    if (needInit) {
+      initFormData();
+
+      if (Object.keys(state.formData).length) {
+        emit(UI_FORM_VIEW.EVENTS.loaded, state.formData);
+      }
+    }
   } else {
-    console.warn(`[${name}]: Invalid form model config`);
+    console.warn(`[${UI_FORM_VIEW.name}]: Invalid form model config`);
   }
 }
 
 function syncFormData() {
-  emit(UI_FORM_VIEW.EVENTS.update, currentFormData.value);
+  emit(UI_FORM_VIEW.EVENTS.update, state.formData);
 }
 
 function initFormData(needSync = false) {
@@ -457,38 +443,45 @@ function handleChange(key, value) {
   syncFormData();
 }
 
-function handleAction({ type, delay }) {
+function exposeAction(action, result = {}) {
+  const { handler, ...actionConfig } = action;
+  const customHandler = isFunction(handler) ? handler : false;
+
+  customHandler
+    ? customHandler(actionConfig, result)
+    : emit(UI_FORM_VIEW.EVENTS.action, actionConfig, result);
+}
+
+function handleAction(action) {
   let debounceConfig = {};
 
-  switch (type) {
+  switch (action.type) {
     case NATIVE_BUTTON_TYPES.submit:
       debounceConfig = {
         callback: () => {
           const validations = state.formConfig.filter(
             ({ validator }) => validator
           );
+
           if (validations.length) {
             if (validator.validate) {
               validator.set(validations);
 
               const result = validator.validate(state.formData);
 
-              emit(UI_FORM_VIEW.EVENTS.action, {
-                type: NATIVE_BUTTON_TYPES.submit,
-                ...result
-              });
+              exposeAction(action, result);
 
               validator.clear();
             } else {
-              console.warn(`[${name}]: BalmUI $validator plugin is missing`);
+              console.warn(
+                `[${UI_FORM_VIEW.name}]: BalmUI $validator plugin is missing`
+              );
             }
           } else {
-            emit(UI_FORM_VIEW.EVENTS.action, {
-              type: NATIVE_BUTTON_TYPES.submit
-            });
+            exposeAction(action, { valid: true });
           }
         },
-        delay: delay || 250
+        delay: action.delay || 250
       };
       break;
     case NATIVE_BUTTON_TYPES.reset:
@@ -498,8 +491,6 @@ function handleAction({ type, delay }) {
 
   return type === NATIVE_BUTTON_TYPES.submit
     ? debounceConfig
-    : emit(UI_FORM_VIEW.EVENTS.action, {
-        type: type || NATIVE_BUTTON_TYPES.button
-      });
+    : exposeAction(action);
 }
 </script>

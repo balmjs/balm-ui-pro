@@ -1,8 +1,8 @@
 <template>
-  <div class="mdc-table-view__actions">
+  <div class="mdc-table-view__row-actions">
     <template
       v-for="(action, index) in actionConfig"
-      :key="`table-action-${index}`"
+      :key="`row-action-${index}`"
     >
       <template v-if="configAction('if', action)">
         <template v-if="action.component">
@@ -10,7 +10,7 @@
             <component
               :is="action.component"
               v-show="configAction('show', action)"
-              :class="['action', 'button-without-slot']"
+              :class="[cssClasses.rowAction, 'button-without-slot']"
               v-bind="action.attrOrProp || {}"
               @click="handleClick(action)"
             ></component>
@@ -19,7 +19,7 @@
             <component
               :is="action.component"
               v-show="configAction('show', action)"
-              :class="['action', 'button-with-slot']"
+              :class="[cssClasses.rowAction, 'button-with-slot']"
               v-bind="action.attrOrProp || {}"
               @click="handleClick(action)"
             >
@@ -31,7 +31,7 @@
           <router-link
             v-if="action.type === TYPES.routerLink"
             v-show="configAction('show', action)"
-            class="action internal-link"
+            :class="[cssClasses.rowAction, 'internal-link']"
             :to="configAction(TYPES.routerLink, action)"
             v-bind="action.attrOrProp || {}"
           >
@@ -43,7 +43,7 @@
           <a
             v-else-if="action.href"
             v-show="configAction('show', action)"
-            class="action external-link"
+            :class="[cssClasses.rowAction, 'external-link']"
             :href="configAction('href', action)"
             v-bind="
               Object.assign(
@@ -63,7 +63,7 @@
           <a
             v-else
             v-show="configAction('show', action)"
-            class="action link"
+            :class="[cssClasses.rowAction, 'link']"
             href="javascript:void(0)"
             @click="handleClick(action)"
           >
@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { TYPES } from './constants';
+import { cssClasses, TYPES } from './constants';
 
 export default {
   name: 'UiTableViewActions',
@@ -92,21 +92,25 @@ import { getRouteLocationRaw } from './constants';
 import { isFunction } from '../../utils/typeof';
 
 const props = defineProps({
-  actionConfig: {
-    type: Array,
-    default: () => []
+  data: {
+    type: Object,
+    default: () => ({})
   },
   model: {
     type: String,
     default: ''
   },
-  keyName: {
-    type: String,
-    default: 'id'
-  },
-  data: {
+  modelOptions: {
     type: Object,
     default: () => ({})
+  },
+  keyName: {
+    type: [String, Array],
+    default: 'id'
+  },
+  actionConfig: {
+    type: Array,
+    default: () => []
   },
   actionHandler: {
     type: Function,
@@ -139,10 +143,16 @@ function configAction(type, action) {
         result = true;
         break;
       case TYPES.routerLink:
+        const keyName = action.keyName || props.keyName;
+        const paramsKeys = Array.isArray(keyName) ? keyName : [keyName];
+
         const params = {};
-        if (props.data[props.keyName]) {
-          params[props.keyName] = props.data[props.keyName];
-        }
+        paramsKeys.forEach((key) => {
+          if (props.data[key]) {
+            params[key] = props.data[key];
+          }
+        });
+
         result = getRouteLocationRaw(action, {
           model: props.model,
           data: props.data,
@@ -156,16 +166,18 @@ function configAction(type, action) {
 }
 
 function handleClick(action) {
-  if (isFunction(action.handler)) {
-    action.handler(props.data, props.refreshData);
-  } else {
-    const data = {
-      model: props.model,
-      keyName: props.keyName,
-      data: props.data
-    };
+  const { model, modelOptions, keyName, refreshData } = props;
+  const data = {
+    model,
+    modelOptions,
+    keyName,
+    data: props.data
+  };
 
-    props.actionHandler(action, data, props.refreshData);
+  if (isFunction(action.handler)) {
+    action.handler(data, refreshData);
+  } else {
+    props.actionHandler(action, data, refreshData);
   }
 }
 </script>

@@ -1,4 +1,5 @@
 const NAME = '$constant';
+
 const DEFAULTS = {
   listFormat: { label: 'label', value: 'value' },
   mapFormat: { key: 'key', value: 'value' }
@@ -7,7 +8,7 @@ const DEFAULTS = {
 function checkFormat(formatField1, formatField2, keyField) {
   if (!(formatField1 && formatField2)) {
     throw new Error(
-      `[${NAME}]: constant format must assign '${keyField}' and 'value'`
+      `[${NAME}]: Constant format must assign '${keyField}' and 'value'`
     );
   }
 }
@@ -15,10 +16,21 @@ function checkFormat(formatField1, formatField2, keyField) {
 class Constant {
   constructor() {
     this.map = new Map();
+    this.currentConstant = [];
   }
 
   use(key) {
-    return this.map.get(key);
+    this.currentConstant = this.map.has(key)
+      ? this.map.get(key)
+      : Array.isArray(key)
+      ? key
+      : [];
+
+    return this;
+  }
+
+  valueOf() {
+    return this.currentConstant;
   }
 
   /**
@@ -37,16 +49,20 @@ class Constant {
    *   value: value2
    * }]
    */
-  useList(key, format = DEFAULTS.listFormat) {
+  toList(format = DEFAULTS.listFormat) {
     const formatLabel = format.label;
     const formatValue = format.value;
 
     checkFormat(formatLabel, formatValue, 'label');
 
-    return this.use(key).map((data) => ({
+    return this.currentConstant.map((data) => ({
       [formatLabel]: data[formatLabel],
       [formatValue]: data[formatValue]
     }));
+  }
+
+  useList(key, format = DEFAULTS.listFormat) {
+    return this.use(key).toList(format);
   }
 
   /**
@@ -62,18 +78,22 @@ class Constant {
    *   key2: value2
    * }
    */
-  useMap(key, format = DEFAULTS.mapFormat) {
+  toMap(format = DEFAULTS.mapFormat) {
     const formatKey = format.key;
     const formatValue = format.value;
 
     checkFormat(formatKey, formatValue, 'key');
 
-    return this.use(key).reduce((previousValue, currentValue) => {
+    return this.currentConstant.reduce((previousValue, currentValue) => {
       const k = currentValue[formatKey];
       const v = currentValue[formatValue];
       previousValue[k] = v;
       return previousValue;
     }, {});
+  }
+
+  useMap(key, format = DEFAULTS.mapFormat) {
+    return this.use(key).toMap(format);
   }
 }
 

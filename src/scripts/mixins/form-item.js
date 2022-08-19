@@ -14,7 +14,29 @@ const formItemProps = {
   formDataSource: {
     type: Object,
     default: () => ({})
+  },
+  optionFormat: {
+    type: Object,
+    default: () => ({
+      label: 'label',
+      value: 'value'
+    })
   }
 };
 
-export { cssClasses, formItemProps };
+function useFormItem(props) {
+  function checkOptionFormat(componentName) {
+    const { label, value } = props.optionFormat;
+    if (!(label && value)) {
+      console.error(
+        `[${componentName}]: Invalid option format ({ label: string; value: string })`
+      );
+    }
+  }
+
+  return {
+    checkOptionFormat
+  };
+}
+
+export { cssClasses, formItemProps, useFormItem };

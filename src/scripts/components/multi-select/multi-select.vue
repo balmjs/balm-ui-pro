@@ -17,13 +17,14 @@
 <script>
 // Define multi select constants
 const UI_MULTI_SELECT = {
+  name: 'UiMultiSelect',
   EVENTS: {
     CHANGE: 'update:modelValue'
   }
 };
 
 export default {
-  name: 'UiMultiSelect',
+  name: UI_MULTI_SELECT.name,
   customOptions: {}
 };
 </script>
@@ -65,7 +66,9 @@ onBeforeMount(() => {
   if (props.components.length) {
     initOptions();
   } else {
-    console.warn('[UiMultiSelect]: form config `components` are empty');
+    console.warn(
+      `[${UI_MULTI_SELECT.name}]: form config 'components' are empty`
+    );
   }
 });
 
@@ -116,14 +119,14 @@ async function setSelectedOptions(parentValue, { key, options }) {
 
     const selectedOptions = isFunction(options)
       ? await options(currentFormData)
-      : options;
+      : options || [];
 
     if (Array.isArray(selectedOptions)) {
       if (selectedOptions.length) {
         optionsMap.set(parentValue, selectedOptions);
       }
     } else {
-      console.warn('[UiMultiSelect]: `options` must return an array');
+      console.warn(`[${UI_MULTI_SELECT.name}]: 'options' must return an array`);
     }
   }
 
@@ -163,7 +166,7 @@ async function updateOptions(formData) {
   }
 }
 
-async function getNextSelected(parentKey, parentValue) {
+function getNextSelected(parentKey, parentValue) {
   const selectedIndex = selectedKeys.value.findIndex(
     (key) => key === parentKey
   );

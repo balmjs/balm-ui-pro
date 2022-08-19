@@ -1,8 +1,7 @@
 import getType from '../utils/typeof';
 import { toCamelCase } from '../utils/helpers';
 
-const API_NAME = '$apiModel';
-const ROUTER_NAME = '$routerModel';
+const NAME = '$apiModel';
 
 const REST_API = {
   responseStatus: {
@@ -41,7 +40,7 @@ function getCRUD(crud, defaultCRUD = {}) {
     ) {
       result = Object.assign({}, crud);
     } else {
-      throw new Error(`[${API_NAME}]: 'crud' config is invalid`);
+      throw new Error(`[${NAME}]: 'crud' config is invalid`);
     }
   }
 
@@ -69,20 +68,8 @@ function createCustomApis(operation, { frontEndApiName, backEndApi }, config) {
   return apis;
 }
 
-function getOperationDefinition(operationDefinition, defaults, extras) {
-  let result = operationDefinition;
-
-  if (extras) {
-    result =
-      getType(operationDefinition) === 'object'
-        ? Object.assign({}, operationDefinition, extras)
-        : Object.assign({}, defaults, extras);
-  }
-
-  return result;
-}
-
 let globalApis = {};
+
 class ApiModel {
   constructor() {
     this.map = new Map();
@@ -104,9 +91,7 @@ class ApiModel {
 
     if (Array.isArray(operations)) {
       if (!operations.length) {
-        console.warn(
-          `[${API_NAME}]: ${frontEndApiName} model has no 'operations'`
-        );
+        console.warn(`[${NAME}]: ${frontEndApiName} model has no 'operations'`);
       }
 
       const includeOperations = operations.filter((operation) =>
@@ -115,11 +100,10 @@ class ApiModel {
 
       for (const [key, value] of Object.entries(currentCRUD)) {
         const operation = key;
-        const operationDefinition = getOperationDefinition(
-          value,
-          { [operation]: value },
-          config[operation]
-        );
+        const operationDefinition =
+          getType(value) === 'object'
+            ? Object.assign({}, value, config[operation])
+            : Object.assign({}, { '': value }, config[operation]);
 
         if (includeOperations.includes(operation)) {
           if (getType(operationDefinition) === 'string') {
@@ -154,20 +138,20 @@ class ApiModel {
             apis = Object.assign(apis, customApis);
           } else {
             console.warn(
-              `[${API_NAME}]: ${operation} operation definition must be a string or object`
+              `[${NAME}]: ${operation} operation definition must be a string or object`
             );
           }
         }
       }
     } else {
       throw new Error(
-        `[${API_NAME}]: 'operations' config must be an array (${REST_API.operations})`
+        `[${NAME}]: 'operations' config must be an array (${REST_API.operations})`
       );
     }
 
     this.map.has(frontEndApiName)
       ? console.warn(
-          `[${API_NAME}]: Conflicting api definition - ${frontEndApiName}`
+          `[${NAME}]: Conflicting api definition - ${frontEndApiName}`
         )
       : this.map.set(frontEndApiName, apis);
 
@@ -187,117 +171,28 @@ class ApiModel {
       name = toCamelCase(apiName);
     } else {
       throw new Error(
-        `[${API_NAME}]: '${operation}' is an invalid CRUD (${REST_API.operations}) operation`
+        `[${NAME}]: '${operation}' is an invalid CRUD (${REST_API.operations}) operation`
       );
     }
 
     if (getType(globalApis[name]) === 'undefined') {
       throw new Error(
-        `[${API_NAME}]: '${name}' (modelName: '${frontEndApiName}', operation: '${operation}', actionSuffix: '${actionSuffix}') is an invalid API name`
+        `[${NAME}]: '${name}' (modelName: '${frontEndApiName}', operation: '${operation}', actionSuffix: '${actionSuffix}') is an invalid API name`
       );
     }
 
     return globalApis[name];
   }
-}
 
-function getRouteName(name, namespace) {
-  return namespace ? `${namespace}.${name}` : name;
-}
-
-let globalRoutes = [];
-
-class RouterModel {
-  constructor() {
-    this.map = new Map();
-  }
-
-  get routes() {
-    return globalRoutes;
-  }
-
-  createRoute(path, name, component, options = {}) {
-    const { namespace, ...routeOptions } = options;
-
-    const route = {
-      path,
-      name: getRouteName(name, namespace),
-      component,
-      ...routeOptions
-    };
-
-    this.map.has(name)
-      ? console.warn(`[${ROUTER_NAME}]: Conflicting route definition - ${name}`)
-      : this.map.set(name, route);
-
-    globalRoutes.push(route);
-
-    return route;
-  }
-
-  createRoutes(name, components = {}, options = {}) {
-    const { indexView, listView, detailView } = components;
-    const {
-      namespace,
-      indexPath,
-      indexRedirect,
-      indexOptions,
-      listPath,
-      listOptions,
-      detailPath,
-      detailOptions
-    } = options;
-
-    const children = [
-      ...(listView
-        ? [
-            this.createRoute(
-              listPath || 'list',
-              getRouteName(`${name}.list`, namespace),
-              listView,
-              listOptions || {}
-            )
-          ]
-        : []),
-      ...(Array.isArray(detailView)
-        ? detailView
-        : detailView
-        ? [
-            this.createRoute(
-              detailPath || ':id?',
-              getRouteName(`${name}.detail`, namespace),
-              detailView,
-              detailOptions || {}
-            )
-          ]
-        : [])
-    ];
-
-    const routes = indexView
-      ? {
-          path: indexPath || name,
-          name: getRouteName(`${name}.index`, namespace),
-          component: indexView,
-          redirect: indexRedirect || {
-            name: getRouteName(`${name}.list`, namespace)
-          },
-          children,
-          ...(indexOptions || {})
-        }
-      : children;
-
-    this.map.has(name)
-      ? console.warn(`[${ROUTER_NAME}]: Conflicting route definition - ${name}`)
-      : this.map.set(name, routes);
-
-    globalRoutes.push(routes);
-
-    return routes;
+  debug(name = true) {
+    console.info(
+      `[${NAME}]: Model APIs`,
+      name === true ? this.apis : this.map.get(name)
+    );
   }
 }
 
 const apiModel = new ApiModel();
-const routerModel = new RouterModel();
 
 function install(app, options = {}) {
   const { debug, crud, apis, ...apiConfig } = options;
@@ -312,34 +207,19 @@ function install(app, options = {}) {
     apis.forEach((api) => {
       apiModel.createApis(...api);
     });
-
-    if (debug) {
-      console.info(
-        `[${API_NAME}]: Model APIs`,
-        apiModel.map.has(debug) ? apiModel.map.get(debug) : apiModel.apis
-      );
-
-      console.info(
-        `[${ROUTER_NAME}]: Model Routes`,
-        routerModel.map.has(debug)
-          ? routerModel.map.get(debug)
-          : routerModel.routes
-      );
-    }
   }
 
+  debug && apiModel.debug(debug);
+
   app.config.globalProperties.$apiModel = apiModel;
-  app.config.globalProperties.$routerModel = routerModel;
   app.provide('apiModel', apiModel);
-  app.provide('routerModel', routerModel);
 }
 
-const $model = {
+const $apiModel = {
   install
 };
 
 const useApiModel = () => apiModel;
-const useRouterModel = () => routerModel;
 
-export default $model;
-export { install, useApiModel, useRouterModel };
+export default $apiModel;
+export { install, useApiModel };

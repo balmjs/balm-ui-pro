@@ -1,16 +1,20 @@
 import merge from 'deepmerge';
-import getType from '../utils/typeof';
+import getType, { isFunction } from '../utils/typeof';
 
 const setPropsDefaultValue = ({ componentProps, propName, props }) => {
   let newValue = props[propName];
 
-  if (getType(newValue) === 'object') {
-    const defaultValue = componentProps[propName].default;
-    componentProps[propName].default = () => merge(defaultValue, newValue);
-  } else if (Array.isArray(newValue)) {
-    componentProps[propName].default = () => newValue;
-  } else {
-    componentProps[propName].default = newValue;
+  switch (getType(newValue)) {
+    case 'array':
+      componentProps[propName].default = () => newValue;
+      break;
+    case 'object':
+      const defaultValue = componentProps[propName].default;
+      componentProps[propName].default = () => merge(defaultValue, newValue);
+      break;
+    default:
+      console.log(propName, getType(newValue), isFunction(newValue));
+      componentProps[propName].default = newValue;
   }
 };
 

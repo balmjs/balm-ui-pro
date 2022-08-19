@@ -5,7 +5,9 @@
     </h2>
 
     <section v-if="hasSearchForm" class="mdc-table-view__conditions">
+      <ui-spinner v-if="searchForm.loading" active></ui-spinner>
       <ui-form-view
+        v-show="!searchForm.loading"
         v-model="searchForm.data"
         v-bind="
           Object.assign(
@@ -13,11 +15,16 @@
               useGrid: true,
               modelConfig: searchForm.config,
               modelOptions,
-              actionConfig: searchActionConfig
+              actionConfig: searchActionConfig,
+              formAttrOrProp: {
+                actionAlign: 'center'
+              }
             },
             formViewAttrOrProp
           )
         "
+        @loaded="initModelData"
+        @change:x="handleChange"
         @action="handleAction"
       >
         <template v-for="(_, slotName) in $slots" #[slotName]="slotData">
@@ -35,46 +42,53 @@
       </ui-form-view>
     </section>
 
-    <ui-table-view-topbar v-if="topbarConfig.length"></ui-table-view-topbar>
-    <slot v-else name="topbar" v-bind="instance"></slot>
+    <ui-table-view-top-actions
+      v-if="table.data.length && topActionConfig.length"
+    ></ui-table-view-top-actions>
+    <slot v-else name="top-actions" v-bind="instance"></slot>
 
     <section class="mdc-table-view__content">
       <slot name="before-table-view"></slot>
 
+      <ui-table
+        v-model="table.selectedRows"
+        v-bind="
+          Object.assign(
+            {},
+            {
+              data: table.data,
+              thead,
+              tbody,
+              fullwidth: true,
+              showProgress: table.loading
+            },
+            tableAttrOrProp
+          )
+        "
+      >
+        <template v-for="(_, slotName) in $slots" #[slotName]="slotData">
+          <slot :name="slotName" v-bind="slotData"></slot>
+        </template>
+        <!-- Default actions -->
+        <template #actions="{ data }">
+          <ui-table-view-row-actions
+            v-if="actionConfig.length"
+            v-bind="{
+              data,
+              model,
+              modelOptions,
+              keyName,
+              actionConfig: rowActionConfig,
+              actionHandler: rowActionHandler,
+              actionRendering: rowActionRendering,
+              refreshData: getModelData
+            }"
+          ></ui-table-view-row-actions>
+          <slot v-else name="actions" v-bind="data"></slot>
+        </template>
+      </ui-table>
+
       <template v-if="table.data.length">
-        <ui-table
-          v-model="table.selectedRows"
-          v-bind="
-            Object.assign(
-              {},
-              {
-                data: table.data,
-                thead,
-                tbody
-              },
-              tableAttrOrProp
-            )
-          "
-        >
-          <template v-for="(_, slotName) in $slots" #[slotName]="slotData">
-            <slot :name="slotName" v-bind="slotData"></slot>
-          </template>
-          <!-- Default actions -->
-          <template #actions="{ data }">
-            <ui-table-view-actions
-              v-if="actionConfig.length"
-              v-bind="{
-                actionConfig,
-                model,
-                data,
-                keyName,
-                actionHandler,
-                refreshData: getModelData
-              }"
-            ></ui-table-view-actions>
-            <slot v-else name="actions" v-bind="data"></slot>
-          </template>
-        </ui-table>
         <ui-pagination
           v-if="!withoutPagination"
           v-model="table.page"
@@ -112,10 +126,11 @@
 </template>
 
 <script>
-const name = 'UiTableView';
-
 const UiTableView = {
+  name: 'UiTableView',
   EVENTS: {
+    updateFormItem: 'change:x',
+    action: 'action',
     reset: 'reset',
     submit: 'submit'
   }
@@ -139,7 +154,7 @@ const defaultSearchActionConfig = [
 ];
 
 export default {
-  name,
+  name: UiTableView.name,
   customOptions: {}
 };
 </script>
@@ -155,9 +170,10 @@ import {
   getCurrentInstance
 } from 'vue';
 import { useRoute } from 'vue-router';
-import UiTableViewTopbar from './table-view-topbar';
-import UiTableViewActions from './table-view-actions';
+import UiTableViewTopActions from './table-view-top-actions';
+import UiTableViewRowActions from './table-view-row-actions';
 import { viewProps, useView } from '../../mixins/view';
+import getType, { isFunction } from '../../utils/typeof';
 
 const route = useRoute();
 
@@ -169,11 +185,7 @@ const props = defineProps({
   },
   formViewAttrOrProp: {
     type: Object,
-    default: () => ({
-      formAttrOrProp: {
-        actionAlign: 'center'
-      }
-    })
+    default: () => ({})
   },
   noData: {
     type: String,
@@ -187,35 +199,33 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
-  actionConfig: {
+  rowActionConfig: {
     type: Array,
     default: () => []
   },
-  actionHandler: {
+  rowActionHandler: {
     type: Function,
     default: () => {}
   },
-  actionRendering: {
+  rowActionRendering: {
     type: Function,
     default: () => true
   },
-  topbarConfig: {
+  topActionConfig: {
     type: Array,
     default: () => []
   },
-  topbarHandler: {
+  topActionHandler: {
     type: Function,
     default: () => {}
   },
-  topbarRendering: {
+  topActionRendering: {
     type: Function,
     default: () => true
   },
   tableAttrOrProp: {
     type: Object,
-    default: () => ({
-      fullwidth: true
-    })
+    default: () => ({})
   },
   tableDataFormat: {
     type: Object,
@@ -250,9 +260,16 @@ const props = defineProps({
   useValidator: {
     type: Boolean,
     default: false
+  },
+  searchOnReset: {
+    type: Boolean,
+    default: false
   }
 });
-let emit = defineEmits([]);
+const emit = defineEmits([
+  UiTableView.EVENTS.updateFormItem,
+  UiTableView.EVENTS.action
+]);
 const slots = useSlots();
 
 const instance = getCurrentInstance();
@@ -261,94 +278,120 @@ const state = reactive({
   searchForm: {
     config: [],
     data: {},
-    message: ''
+    message: '',
+    loading: false
   },
   lastSearchFormData: {}, // cache for last search result
   // Table data
-  tableDataSource: {},
   table: {
     selectedRows: [],
     data: [],
     total: 0,
-    page: 1
-  }
+    page: 1,
+    loading: false
+  },
+  tableDataSource: {}
 });
 const { searchForm, lastSearchFormData, table } = toRefs(state);
 
-const { hasTitle } = useView(props, slots);
-const hasSearchForm = computed(
-  () =>
-    !!(Array.isArray(state.searchForm.config)
-      ? state.searchForm.config.length
-      : state.searchForm.config)
-);
+const { hasTitle, handleChange, exposeAction } = useView(props, {
+  slots,
+  emit,
+  state
+});
+const hasSearchForm = computed(() => !!(props.modelConfig || props.modelPath));
 
 onActivated(() => {
+  const { matched } = route;
+  const noKeepAlive = matched.some((route) => route.meta?.keepAlive === false);
+
   // NOTE: refresh data for `<keep-alive>`
-  const { keepAlive } = route.meta;
-  if (keepAlive === false) {
-    state.table.page = 1;
+  if (noKeepAlive) {
+    resetTableData();
     getModelData();
   }
 });
 
-onBeforeMount(async () => {
-  if (props.model) {
-    await getModelConfig();
-  }
-  if (!props.useValidator) {
-    await getModelData();
+onBeforeMount(() => {
+  if (hasSearchForm.value) {
+    setModelConfig();
+  } else {
+    initModelData();
   }
 });
 
-async function getModelConfig() {
+async function setModelConfig() {
   try {
-    const modelConfig = await props.getModelConfigFn(instance);
-    state.searchForm.config = modelConfig;
-  } catch (e) {
-    console.log(e);
+    const modelConfig =
+      props.modelConfig || (await props.getModelConfigFn(instance));
+    modelConfig && (state.searchForm.config = modelConfig);
+  } catch (err) {
+    console.warn(`[${UiTableView.name}]: ${err.toString()}`);
   }
+}
+
+async function initModelData(formData = {}) {
+  this.searchForm.loading = true;
+  this.searchForm.data = Object.assign(formData, props.defaultModelValue);
+  !props.useValidator && (await getModelData());
+  this.searchForm.loading = false;
+}
+
+function resetTableData() {
+  this.table.selectedRows = [];
+  this.table.data = [];
+  this.table.total = 0;
+  this.table.page = 1;
+  this.table.loading = false;
 }
 
 async function getModelData() {
   try {
+    this.searchForm.loading = true;
     state.tableDataSource = await props.getModelDataFn(instance);
+    this.searchForm.loading = false;
 
-    for (const [key, value] of Object.entries(props.tableDataFormat)) {
-      if (state.tableDataSource[value]) {
-        state.table[key] = state.tableDataSource[value];
+    if (getType(this.tableDataSource) === 'object') {
+      for (const [key, value] of Object.entries(props.tableDataFormat)) {
+        const tableDataValue = isFunction(value)
+          ? value(state.tableDataSource)
+          : state.tableDataSource[value];
+
+        state.table[key] = tableDataValue;
       }
-    }
 
-    state.lastSearchFormData = Object.assign({}, state.searchForm.data);
-  } catch (e) {
-    console.log(e);
+      state.lastSearchFormData = Object.assign({}, state.searchForm.data);
+    }
+  } catch (err) {
+    this.searchForm.loading = false;
+    console.warn(`[${UiTableView.name}]: ${err.toString()}`);
   }
 }
 
-async function handleAction(result) {
-  const { type } = result;
+async function handleAction(action, result) {
+  let canSubmit = true;
 
-  switch (type) {
+  switch (action.type) {
     case UiTableView.EVENTS.submit:
-      let canSubmit = true;
-
       if (props.useValidator) {
         canSubmit = result.valid;
         state.searchForm.message = result.message;
       }
 
-      canSubmit && (await getModelData());
+      if (canSubmit && action.submit !== false) {
+        await getModelData();
+      }
       break;
     case UiTableView.EVENTS.reset:
       state.searchForm.message = '';
       // NOTE: automatic processing in `<ui-form-view>`
+      if (props.searchOnReset) {
+        getModelData();
+      }
       break;
   }
 
-  type === UiTableView.EVENTS.reset
-    ? emit(type, instance)
-    : emit(type, result, instance);
+  canSubmit && exposeAction(action, result);
 }
 
 function resetSelectedRows() {

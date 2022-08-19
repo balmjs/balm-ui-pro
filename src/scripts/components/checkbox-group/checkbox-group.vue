@@ -7,11 +7,13 @@
       <ui-checkbox
         v-model="selectedValue"
         :input-id="`${componentKey}-${index}`"
-        :value="option.value"
+        :value="option[optionFormat.value]"
         :disabled="option.disabled || false"
         @update:model-value="handleChange"
       ></ui-checkbox>
-      <label :for="`${componentKey}-${index}`">{{ option.label }}</label>
+      <label :for="`${componentKey}-${index}`">{{
+        option[optionFormat.label]
+      }}</label>
     </ui-form-field>
   </div>
 </template>
@@ -19,20 +21,21 @@
 <script>
 // Define checkbox group constants
 const UI_CHECKBOX_GROUP = {
+  name: 'UiCheckboxGroup',
   EVENTS: {
     CHANGE: 'update:modelValue'
   }
 };
 
 export default {
-  name: 'UiCheckboxGroup',
+  name: UI_CHECKBOX_GROUP.name,
   customOptions: {}
 };
 </script>
 
 <script setup>
-import { reactive, toRefs, watch } from 'vue';
-import { cssClasses, formItemProps } from '../../mixins/form-item';
+import { reactive, toRefs, watch, onBeforeMount } from 'vue';
+import { cssClasses, formItemProps, useFormItem } from '../../mixins/form-item';
 
 const props = defineProps({
   ...formItemProps,
@@ -54,6 +57,11 @@ const state = reactive({
   selectedValue: props.modelValue
 });
 const { selectedValue } = toRefs(state);
+
+const { checkOptionFormat } = useFormItem(props);
+onBeforeMount(() => {
+  checkOptionFormat(UI_CHECKBOX_GROUP.name);
+});
 
 watch(
   () => props.modelValue,
