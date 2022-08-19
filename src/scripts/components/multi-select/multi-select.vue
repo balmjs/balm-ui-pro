@@ -54,12 +54,6 @@ export default {
     }
   },
   watch: {
-    components: {
-      handler() {
-        this.initRootOptions(); // NOTE: for static options
-      },
-      immediate: true // NOTE: for dynamic form config
-    },
     formData: {
       handler(val) {
         this.updateOptions(val);
@@ -71,6 +65,7 @@ export default {
   beforeMount() {
     if (this.components.length) {
       this.initOptions();
+      this.initSelectedData();
     } else {
       console.warn('[UiMultiSelect]: Form config `components` are empty');
     }
@@ -79,9 +74,20 @@ export default {
     initOptions() {
       if (!this.hasSelectedOptions) {
         for (const { key, value } of this.components) {
-          this.$set(this.selectedData, key, value);
+          this.$set(this.selectedData, key, this.formDataSource[key] || value);
           this.$set(this.selectedOptions, key, []);
           this.$set(this.optionsMap, key, new Map());
+        }
+      }
+    },
+    initSelectedData() {
+      for (let i = 0, len = this.selectedKeys.length; i < len; i++) {
+        const key = this.selectedKeys[i];
+        if (this.selectedData[key]) {
+          this.setSelectedOptions(
+            i ? this.selectedData[i - 1] : 0,
+            this.components[i]
+          );
         }
       }
     },
@@ -114,12 +120,6 @@ export default {
 
       const selectedOptions = optionsMap.get(parentValue) || [];
       this.$set(this.selectedOptions, key, selectedOptions);
-    },
-    initRootOptions() {
-      if (!this.hasSelectedOptions) {
-        this.initOptions();
-        this.setSelectedOptions(0, this.components[0]);
-      }
     },
     async updateOptions(formData) {
       let updateSelectedKeys = [];
