@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.29.0 / 2022-08-19
+
+### Feature
+
+- `<ui-table-view>`, `<ui-detail-view>`: add `modelConfig` prop, optimize interaction
+
 ## v0.28.6 / 2022-08-18
 
 ### Chore
