@@ -1,18 +1,4 @@
 export default [
-  ['user', '/user', ['create', 'read', 'update', 'delete']],
-  [
-    'post',
-    '/post',
-    ['read'],
-    {
-      crud: {
-        read: {
-          '': 'get',
-          index: 'index'
-        }
-      }
-    }
-  ],
   [
     'demo',
     '/demo',

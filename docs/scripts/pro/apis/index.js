@@ -1,6 +1,6 @@
-import apis from './apis';
-export * from './config';
-import { isDev } from '@/config';
+import userApis from './user';
+import postApis from './post';
+import demoApis from './demo';
 
 export default {
   crud: {
@@ -15,6 +15,6 @@ export default {
   },
   // formatApiAction: (modelName, actionName) => `${modelName}-${actionName}`,
   // urlToCamelCase: true,
-  apis,
-  debug: isDev
+  apis: [...userApis, ...postApis, ...demoApis],
+  debug: true
 };

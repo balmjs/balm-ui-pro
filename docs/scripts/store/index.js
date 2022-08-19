@@ -1,4 +1,4 @@
-import useModelStore from '@/model/store';
+import useModelStore from '@/pro/model';
 
 export default {
   ...useModelStore()

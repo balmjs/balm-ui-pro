@@ -2,16 +2,9 @@
 import myStore from '@/store';
 import validatorRules from '@/config/validator-rules';
 // BalmUI Pro
-import myModel, {
-  setModelOptionsFn,
-  getModelConfigFn,
-  getModelListDataFn,
-  listActionHandler,
-  listTopbarHandler,
-  getModelDetailDataFn,
-  setModelDataFn
-} from '@/model';
-import ConstantSource from '@/model/constant-source';
+import apiModelConfig from '@/pro/apis';
+import constantSource from '@/pro/constants';
+import proViewsConfig from '@/pro/views';
 // Custom
 import UiMarkdown from '@/components/markdown';
 import UiSnippet from '@/components/snippet';
@@ -23,27 +16,12 @@ export const BalmUIConfig = {
 };
 
 export const BalmUIProConfig = {
-  $model: myModel,
-  $constant: ConstantSource,
-  UiFormView: {
-    setModelOptionsFn
+  $apiModel: apiModelConfig,
+  $routerModel: {
+    debug: true
   },
-  UiTableView: {
-    getModelConfigFn,
-    getModelDataFn: getModelListDataFn,
-    tableDataFormat: {
-      data: 'data',
-      total: 'total'
-      // page: 'page'
-    },
-    actionHandler: listActionHandler,
-    topbarHandler: listTopbarHandler
-  },
-  UiDetailView: {
-    getModelConfigFn,
-    getModelDataFn: getModelDetailDataFn,
-    setModelDataFn
-  }
+  $constant: constantSource,
+  ...proViewsConfig
 };
 
 export const customComponents = [UiMarkdown, UiSnippet, XFormItem];

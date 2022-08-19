@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import router from '@/routes';
-import i18n from '@/lang';
+import i18n from '@/locales';
 import $http from '@/plugins/http';
 import $prism from '@/plugins/prism';
 import App from '@/views/layouts/app';
