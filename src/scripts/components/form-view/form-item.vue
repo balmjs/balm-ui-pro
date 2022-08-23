@@ -76,8 +76,8 @@
 import UiReadonlyItem from '../readonly-item/readonly-item';
 import getType, { isFunction } from '../../utils/typeof';
 
-const name = 'UiFormItem';
 const UI_FORM_ITEM = {
+  name: 'UiFormItem',
   EVENTS: {
     update: 'change'
   },
@@ -85,7 +85,7 @@ const UI_FORM_ITEM = {
 };
 
 export default {
-  name,
+  name: UI_FORM_ITEM.name,
   components: {
     UiReadonlyItem
   },
@@ -169,7 +169,7 @@ export default {
   beforeMount() {
     if (this.config.debug) {
       const customSlotsNames = Object.values(this.customSlots);
-      console.info(`[${name}] slots:`, customSlotsNames);
+      console.info(`[${UI_FORM_ITEM.name}] slots:`, customSlotsNames);
     }
   },
   methods: {
@@ -185,7 +185,11 @@ export default {
     },
     handleChange({ component, key }, value) {
       this.config.debug &&
-        console.info(`[${name}] ${component}@${this.eventName}`, key, value);
+        console.info(
+          `[${UI_FORM_ITEM.name}] ${component}@${this.eventName}`,
+          key,
+          value
+        );
 
       this.hasSubComponents
         ? this.$emit(

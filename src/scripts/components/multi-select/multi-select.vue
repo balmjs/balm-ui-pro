@@ -17,13 +17,14 @@ import getType, { isFunction } from '../../utils/typeof';
 
 // Define multi select constants
 const UI_MULTI_SELECT = {
+  name: 'UiMultiSelect',
   EVENTS: {
     CHANGE: 'change'
   }
 };
 
 export default {
-  name: 'UiMultiSelect',
+  name: UI_MULTI_SELECT.name,
   mixins: [formItemMixin],
   props: {
     components: {
@@ -67,7 +68,9 @@ export default {
       this.initOptions();
       this.initSelectedData();
     } else {
-      console.warn('[UiMultiSelect]: Form config `components` are empty');
+      console.warn(
+        `[${UI_MULTI_SELECT.name}]: Form config 'components' are empty`
+      );
     }
   },
   methods: {
@@ -114,7 +117,9 @@ export default {
             optionsMap.set(parentValue, selectedOptions);
           }
         } else {
-          console.warn('[UiMultiSelect]: `options` must return an array');
+          console.warn(
+            `[${UI_MULTI_SELECT.name}]: 'options' must return an array`
+          );
         }
       }
 

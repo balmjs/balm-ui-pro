@@ -4,7 +4,7 @@
       <slot name="title">{{ title }}</slot>
     </h2>
 
-    <section v-if="modelPath" class="mdc-table-view__conditions">
+    <section v-if="hasSearchForm" class="mdc-table-view__conditions">
       <ui-spinner v-if="searchForm.loading" active></ui-spinner>
       <ui-form-view
         v-show="!searchForm.loading"
@@ -274,8 +274,13 @@ export default {
       tableDataSource: {}
     };
   },
+  computed: {
+    hasSearchForm() {
+      return !!(this.modelConfig || this.modelPath);
+    }
+  },
   async beforeMount() {
-    if (this.modelConfig || this.modelPath) {
+    if (this.hasSearchForm) {
       this.setModelConfig();
     } else {
       this.initModelData();
