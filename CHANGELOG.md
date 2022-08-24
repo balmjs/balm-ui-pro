@@ -2,7 +2,7 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
-## v0.30.0 / 2020-08-24
+## v0.30.2 / 2020-08-24
 
 ### Feature
 

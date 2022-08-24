@@ -50,7 +50,7 @@ const DefaultActionConfig: ActionButton[] = [
 | `keyName`            | string, array                    | `'id'`                | The primary key of model data                                                                              |
 | `actionConfig`       | array                            | `DefaultActionConfig` | Form button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button) |
 | `formViewAttrOrProp` | object                           | `{}`                  | See `<ui-form-view>` props [docs](/#/components/form-view)                                                 |
-| `to`                 | 'back', 'custom', string, object | `'back'`              | Custom router link                                                                                         |
+| `to`                 | object, string, 'back', 'custom' | `''`                  | The custom router link after saving model data                                                             |
 | `replace`            | boolean                          | `false`               | The navigation will not leave a history record                                                             |
 | `getModelConfigFn`   | function                         | `(vm) => {}`          | Loading model config                                                                                       |
 | `getModelDataFn`     | function                         | `(vm) => {}`          | Loading model data                                                                                         |

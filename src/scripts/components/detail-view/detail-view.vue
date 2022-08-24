@@ -90,7 +90,7 @@ export default {
     },
     to: {
       type: [Object, String],
-      default: 'back'
+      default: ''
     },
     replace: {
       type: Boolean,
@@ -161,23 +161,25 @@ export default {
         console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
       }
     },
-    redirect(keepAlive = true) {
-      if (this.to !== 'custom') {
-        if (this.to === 'back') {
+    redirect(to, keepAlive = true) {
+      if (to !== 'custom') {
+        if (to === 'back') {
           this.$router.back();
         } else {
-          const to = this.to || {
+          const toNext = to || {
             name: `${this.model}.list`
           };
 
           // NOTE: for `<keep-alive>`
-          if (getType(to) === 'object') {
-            to.params = to.params
-              ? Object.assign({ keepAlive }, to.params)
+          if (getType(toNext) === 'object') {
+            toNext.params = toNext.params
+              ? Object.assign({ keepAlive }, toNext.params)
               : { keepAlive };
           }
 
-          this.replace ? this.$router.replace(to) : this.$router.push(to);
+          this.replace
+            ? this.$router.replace(toNext)
+            : this.$router.push(toNext);
         }
       }
     },
@@ -193,7 +195,7 @@ export default {
 
           if (canSubmit && action.submit !== false) {
             await this.setModelDataFn(this);
-            this.redirectOnSave && this.redirect(false);
+            this.redirectOnSave && this.redirect(this.to, false);
           }
           break;
         case UiDetailView.EVENTS.reset:
@@ -201,7 +203,7 @@ export default {
           // NOTE: automatic processing in `<ui-form-view>`
           break;
         case UiDetailView.EVENTS.cancel:
-          this.redirect();
+          this.redirect('back');
           break;
       }
 
