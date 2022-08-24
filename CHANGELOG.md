@@ -2,6 +2,16 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.30.0 / 2020-08-24
+
+### Feature
+
+- `<ui-table-view>`, `<ui-detail-view>`: support keep alive
+
+### Refactor
+
+- `<ui-multi-select>`: optimize component and some bugfix
+
 ## v0.29.0 / 2022-08-19
 
 ### Feature
