@@ -194,13 +194,11 @@ Vue.use(BalmUIPro, {
             key: 'm',
             value: '',
             options: ({ l }) =>
-              l
-                ? store.getModel(
-                    'demo',
-                    { id: l },
-                    { apiAction: 'multiSelectOptions2' }
-                  )
-                : [],
+              store.getModel(
+                'demo',
+                { id: l },
+                { apiAction: 'multiSelectOptions2' }
+              ),
             attrOrProp: {
               defaultLabel: 'Select2'
             }
@@ -209,13 +207,11 @@ Vue.use(BalmUIPro, {
             key: 'n',
             value: '',
             options: async ({ m }) =>
-              m
-                ? await store.getModel(
-                    'demo',
-                    { id: m },
-                    { apiAction: 'multiSelectOptions3' }
-                  )
-                : [],
+              await store.getModel(
+                'demo',
+                { id: m },
+                { apiAction: 'multiSelectOptions3' }
+              ),
             attrOrProp: {
               defaultLabel: 'Select3'
             }

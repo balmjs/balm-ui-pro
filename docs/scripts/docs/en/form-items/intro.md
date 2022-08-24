@@ -30,10 +30,12 @@
 
 ### Common Props
 
-| Name             | Type   | Default | Description            |
-| ---------------- | ------ | ------- | ---------------------- |
-| `formData`       | object | `{}`    | Form model data        |
-| `formDataSource` | object | `{}`    | Form model data source |
+| Name             | Type   | Default                              | Description                    |
+| ---------------- | ------ | ------------------------------------ | ------------------------------ |
+| `config`         | object | `{}`                                 | Form model config              |
+| `formData`       | object | `{}`                                 | Form model data                |
+| `formDataSource` | object | `{}`                                 | Form model data source         |
+| `optionFormat`   | object | `{ label: 'label', value: 'value' }` | Defines the option data format |
 
 ### Required Events
 
