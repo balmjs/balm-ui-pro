@@ -13,7 +13,7 @@
 
 <script>
 import formItemMixin from '../../mixins/form-item';
-import getType, { isFunction } from '../../utils/typeof';
+import { isFunction } from '../../utils/typeof';
 
 // Define multi select constants
 const UI_MULTI_SELECT = {
@@ -36,7 +36,8 @@ export default {
     return {
       selectedData: {},
       selectedOptions: {},
-      optionsMap: {}
+      selectedOptionsMap: {},
+      loading: false
     };
   },
   computed: {
@@ -55,17 +56,20 @@ export default {
     }
   },
   watch: {
+    components() {
+      this.initRootSelectedOptions();
+    },
     formData: {
       handler(val) {
-        this.updateOptions(val);
+        if (JSON.stringify(val) !== JSON.stringify(this.selectedData)) {
+          this.updateSelected();
+        }
       },
-      deep: true,
-      immediate: true // NOTE: for dynamic form config
+      deep: true
     }
   },
   beforeMount() {
     if (this.components.length) {
-      this.initOptions();
       this.initSelectedData();
     } else {
       console.warn(
@@ -74,47 +78,59 @@ export default {
     }
   },
   methods: {
-    initOptions() {
+    initSelectedData() {
       if (!this.hasSelectedOptions) {
         for (const { key, value } of this.components) {
           this.$set(this.selectedData, key, this.formDataSource[key] || value);
           this.$set(this.selectedOptions, key, []);
-          this.$set(this.optionsMap, key, new Map());
+          this.$set(this.selectedOptionsMap, key, new Map());
+        }
+
+        this.initSelectedOptions();
+      }
+    },
+    async initSelectedOptions() {
+      const selectedData = Object.assign({}, this.selectedData);
+
+      for await (const key of this.selectedKeys) {
+        const index = this.selectedKeys.findIndex(
+          (selectedKey) => selectedKey === key
+        );
+        const parentKey = this.selectedKeys[index - 1];
+        const parentValue =
+          key === this.rootSelectedKey ? 0 : selectedData[parentKey];
+
+        if (key === this.rootSelectedKey || parentValue) {
+          await this.setSelectedOptions(parentValue, this.components[index]);
         }
       }
     },
-    initSelectedData() {
-      for (let i = 0, len = this.selectedKeys.length; i < len; i++) {
-        const key = this.selectedKeys[i];
-        if (this.selectedData[key]) {
-          this.setSelectedOptions(
-            i ? this.selectedData[i - 1] : 0,
-            this.components[i]
-          );
-        }
+    initRootSelectedOptions() {
+      if (!this.hasSelectedOptions) {
+        this.setSelectedOptions(0, this.components[0]);
       }
     },
     async setSelectedOptions(parentValue, { key, options }) {
-      let optionsMap = this.optionsMap[key];
+      const selectedOptionsMap = this.selectedOptionsMap[key];
+      let selectedOptions = selectedOptionsMap.get(parentValue) || [];
 
-      if (getType(optionsMap) !== 'map') {
-        optionsMap = new Map();
-      }
+      if (!selectedOptionsMap.has(parentValue)) {
+        let newSelectedOptions = [];
+        if (isFunction(options)) {
+          const canLoad = key !== this.rootSelectedKey && parentValue;
+          if (canLoad && !this.loading) {
+            this.loading = true;
+            newSelectedOptions = await options(this.selectedData);
+            this.loading = false;
+          }
+        } else {
+          newSelectedOptions = options || [];
+        }
 
-      if (!optionsMap.has(parentValue)) {
-        const currentFormData = Object.assign(
-          {},
-          this.formData,
-          this.selectedData
-        );
-
-        const selectedOptions = isFunction(options)
-          ? await options(currentFormData)
-          : options || [];
-
-        if (Array.isArray(selectedOptions)) {
-          if (selectedOptions.length) {
-            optionsMap.set(parentValue, selectedOptions);
+        if (Array.isArray(newSelectedOptions)) {
+          if (newSelectedOptions.length) {
+            selectedOptionsMap.set(parentValue, newSelectedOptions);
+            selectedOptions = selectedOptionsMap.get(parentValue);
           }
         } else {
           console.warn(
@@ -123,13 +139,12 @@ export default {
         }
       }
 
-      const selectedOptions = optionsMap.get(parentValue) || [];
       this.$set(this.selectedOptions, key, selectedOptions);
     },
-    async updateOptions(formData) {
+    async updateSelected() {
       let updateSelectedKeys = [];
       this.selectedKeys.forEach((key) => {
-        const newValue = formData[key];
+        const newValue = this.formData[key];
         if (this.selectedData[key] !== newValue) {
           this.$set(this.selectedData, key, newValue);
 
@@ -161,13 +176,13 @@ export default {
           : this.clearSelectedData(selectedIndex);
       }
     },
-    getNextOptions(key, parentValue) {
+    async getNextOptions(key, parentValue) {
       const currentComponent = this.components.find(
         (component) => component.key === key
       );
       const { options } = currentComponent;
 
-      this.setSelectedOptions(parentValue, { key, options });
+      await this.setSelectedOptions(parentValue, { key, options });
     },
     clearSelectedData(parentIndex) {
       const nextSelectedDataKeys = this.selectedKeys.filter(
@@ -181,7 +196,7 @@ export default {
     async handleChange(key, value) {
       this.$set(this.selectedData, key, value);
       if (key !== this.lastSelectedKey) {
-        this.getNextSelected(key, value);
+        await this.getNextSelected(key, value);
       }
 
       this.$emit(UI_MULTI_SELECT.EVENTS.CHANGE, this.selectedData);

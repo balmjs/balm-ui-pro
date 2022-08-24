@@ -131,7 +131,10 @@ export default (
         {
           key: 'l',
           value: '',
-          options: multiSelectOptions, // () => http.post('/mock/multi-select/options1'),
+          options: multiSelectOptions,
+          // () => http.post('/mock/multi-select/options1'),
+          // () =>
+          //   store.getModel('demo', {}, { apiAction: 'multiSelectOptions1' }),
           attrOrProp: {
             defaultLabel: 'Select1'
           }
@@ -140,16 +143,14 @@ export default (
           key: 'm',
           value: '',
           options: ({ l }) =>
-            l
-              ? // http.post('/mock/multi-select/options2', {
-                //     id: l
-                //   })
-                store.getModel(
-                  'demo',
-                  { id: l },
-                  { apiAction: 'multiSelectOptions2' }
-                )
-              : [],
+            // http.post('/mock/multi-select/options2', {
+            //     id: l
+            //   })
+            store.getModel(
+              'demo',
+              { id: l },
+              { apiAction: 'multiSelectOptions2' }
+            ),
           attrOrProp: {
             defaultLabel: 'Select2'
           }
@@ -158,16 +159,14 @@ export default (
           key: 'n',
           value: '',
           options: async ({ m }) =>
-            m
-              ? // await http.post('/mock/multi-select/options3', {
-                //     id: m
-                //   })
-                await store.getModel(
-                  'demo',
-                  { id: m },
-                  { apiAction: 'multiSelectOptions3' }
-                )
-              : [],
+            // await http.post('/mock/multi-select/options3', {
+            //     id: m
+            //   })
+            await store.getModel(
+              'demo',
+              { id: m },
+              { apiAction: 'multiSelectOptions3' }
+            ),
           attrOrProp: {
             defaultLabel: 'Select3'
           }

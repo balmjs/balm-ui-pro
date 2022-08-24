@@ -191,8 +191,10 @@ export default {
       this.config.debug &&
         console.info(
           `[${UI_FORM_ITEM.name}] ${component}@${this.eventName}`,
-          key,
-          value
+          this.hasSubComponents
+            ? this.config.components.map(({ key }) => key)
+            : key,
+          this.hasSubComponents ? Object.assign({}, value) : value
         );
 
       this.hasSubComponents
