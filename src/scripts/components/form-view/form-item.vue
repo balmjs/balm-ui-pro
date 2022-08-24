@@ -28,7 +28,9 @@
               :components="config.components"
               v-bind="
                 Object.assign(
+                  {},
                   {
+                    config,
                     formData,
                     formDataSource
                   },
@@ -53,10 +55,12 @@
                 v-model="formData[config.key]"
                 v-bind="
                   Object.assign(
+                    {},
                     {
-                      componentKey,
+                      config,
                       formData,
-                      formDataSource
+                      formDataSource,
+                      componentKey
                     },
                     config.attrOrProp || {}
                   )

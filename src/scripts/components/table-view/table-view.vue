@@ -130,7 +130,8 @@
 <script>
 import UiTableViewTopActions from './table-view-top-actions';
 import UiTableViewRowActions from './table-view-row-actions';
-import viewMixins from '../../mixins/view';
+import viewMixin from '../../mixins/view';
+import keepAliveMixin from '../../mixins/keep-alive';
 import getType, { isFunction } from '../../utils/typeof';
 
 const UiTableView = {
@@ -164,7 +165,7 @@ export default {
     UiTableViewTopActions,
     UiTableViewRowActions
   },
-  mixins: [viewMixins],
+  mixins: [viewMixin, keepAliveMixin],
   props: {
     searchActionConfig: {
       type: Array,
@@ -286,18 +287,6 @@ export default {
       this.initModelData();
     }
   },
-  activated() {
-    const { matched } = this.$route;
-    const noKeepAlive = matched.some(
-      (route) => route.meta?.keepAlive === false
-    );
-
-    // NOTE: refresh data for `<keep-alive>`
-    if (noKeepAlive) {
-      this.resetTableData();
-      this.getModelData();
-    }
-  },
   methods: {
     async setModelConfig() {
       try {
@@ -370,6 +359,11 @@ export default {
     },
     resetSelectedRows() {
       this.$set(this.table, 'selectedRows', []);
+    },
+    // NOTE: for `<keep-alive>`
+    refreshComponent() {
+      this.resetTableData();
+      this.getModelData();
     }
   }
 };

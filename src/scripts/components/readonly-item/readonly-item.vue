@@ -11,12 +11,6 @@ import getType, { isFunction } from '../../utils/typeof';
 export default {
   name: 'UiReadonlyItem',
   mixins: [formItemMixin],
-  props: {
-    config: {
-      type: Object,
-      default: () => ({})
-    }
-  },
   computed: {
     currentFormData() {
       return Object.assign({}, this.formDataSource, this.formData);

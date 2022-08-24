@@ -149,7 +149,10 @@
           $theme.getTextClass('primary', 'light')
         ]"
       >
-        <router-view></router-view>
+        <router-view v-if="!keepAlive"></router-view>
+        <keep-alive>
+          <router-view v-if="keepAlive"></router-view>
+        </keep-alive>
       </div>
     </div>
   </div>
@@ -175,6 +178,15 @@ export default {
       showBanner: false,
       hasNewVersion: false
     };
+  },
+  computed: {
+    keepAlive() {
+      const { name, matched } = this.$route;
+      const noKeepAlive =
+        matched.some((route) => route.meta?.keepAlive === false) ||
+        /\.detail-view$/.test(name);
+      return !noKeepAlive;
+    }
   },
   mounted() {
     this.$bus.on('page-loaded', () => {

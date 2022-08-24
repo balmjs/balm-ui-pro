@@ -6,9 +6,8 @@
     }"
     v-bind="
       Object.assign(
-        {
-          type: useGrid ? 'horizontal' : 'vertical'
-        },
+        {},
+        { type: useGrid ? 'horizontal' : 'vertical' },
         formAttrOrProp
       )
     "
@@ -36,10 +35,12 @@
             v-bind="gridCellAttrOrProp"
           >
             <ui-form-item
-              :config="configData"
-              :model-value="formData"
-              :form-data-source="formDataSource"
-              :attr-or-prop="formItemAttrOrProp"
+              v-bind="{
+                config: configData,
+                modelValue: formData,
+                formDataSource,
+                attrOrProp: formItemAttrOrProp
+              }"
               @change="handleChange"
             >
               <slot
@@ -66,10 +67,12 @@
           <ui-form-item
             v-for="(configData, configIndex) in formConfig"
             :key="`form-item-${configData.key || configIndex}`"
-            :config="configData"
-            :model-value="formData"
-            :form-data-source="formDataSource"
-            :attr-or-prop="formItemAttrOrProp"
+            v-bind="{
+              config: configData,
+              modelValue: formData,
+              formDataSource,
+              attrOrProp: formItemAttrOrProp
+            }"
             @change="handleChange"
           >
             <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>

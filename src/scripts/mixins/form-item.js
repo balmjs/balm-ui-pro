@@ -4,9 +4,9 @@ const cssClasses = {
 
 export default {
   props: {
-    componentKey: {
-      type: String,
-      default: 'unknown'
+    config: {
+      type: Object,
+      default: () => ({})
     },
     formData: {
       type: Object,
@@ -15,6 +15,10 @@ export default {
     formDataSource: {
       type: Object,
       default: () => ({})
+    },
+    componentKey: {
+      type: String,
+      default: 'unknown'
     },
     optionFormat: {
       type: Object,

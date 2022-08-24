@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import viewMixins from '../../mixins/view';
+import viewMixin from '../../mixins/view';
 import getType from '../../utils/typeof';
 
 const UiDetailView = {
@@ -78,7 +78,7 @@ const defaultActionConfig = [
 
 export default {
   name: UiDetailView.name,
-  mixins: [viewMixins],
+  mixins: [viewMixin],
   props: {
     actionConfig: {
       type: Array,
@@ -161,7 +161,7 @@ export default {
         console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
       }
     },
-    redirect() {
+    redirect(keepAlive = true) {
       if (this.to !== 'custom') {
         if (this.to === 'back') {
           this.$router.back();
@@ -169,6 +169,14 @@ export default {
           const to = this.to || {
             name: `${this.model}.list`
           };
+
+          // NOTE: for `<keep-alive>`
+          if (getType(to) === 'object') {
+            to.params = to.params
+              ? Object.assign({ keepAlive }, to.params)
+              : { keepAlive };
+          }
+
           this.replace ? this.$router.replace(to) : this.$router.push(to);
         }
       }
@@ -185,7 +193,7 @@ export default {
 
           if (canSubmit && action.submit !== false) {
             await this.setModelDataFn(this);
-            this.redirectOnSave && this.redirect();
+            this.redirectOnSave && this.redirect(false);
           }
           break;
         case UiDetailView.EVENTS.reset:
