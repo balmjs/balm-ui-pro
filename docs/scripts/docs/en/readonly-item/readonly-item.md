@@ -6,9 +6,9 @@
 
 | Name             | Type   | Default | Description            |
 | ---------------- | ------ | ------- | ---------------------- |
+| `config`         | object | `{}`    | Form item config       |
 | `formData`       | object | `{}`    | Form model data        |
 | `formDataSource` | object | `{}`    | Form model data source |
-| `config`         | object | `{}`    | Form item config       |
 
 ```ts
 type ReadonlyItemData = {

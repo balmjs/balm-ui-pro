@@ -23,18 +23,18 @@ const MATERIAL_COMPONENTS_PRO = [
       {
         name: 'readonly-item'
       },
-      // {
-      //   name: 'checkbox-group'
-      // },
-      // {
-      //   name: 'radio-group'
-      // },
-      // {
-      //   name: 'switch-box'
-      // },
-      // {
-      //   name: 'multi-select'
-      // },
+      {
+        name: 'checkbox-group'
+      },
+      {
+        name: 'radio-group'
+      },
+      {
+        name: 'switch-box'
+      },
+      {
+        name: 'multi-select'
+      },
       {
         name: 'detail-view'
       },

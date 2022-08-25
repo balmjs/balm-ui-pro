@@ -1,0 +1,24 @@
+[
+  {
+    "label": "Switch",
+    "component": "ui-switch-box",
+    "key": "j",
+    "value": "off",
+    "attrOrProp": {
+      "options": [
+        {
+          "label": "ON",
+          "value": "on"
+        },
+        {
+          "label": "OFF",
+          "value": "off"
+        }
+      ],
+      "switchAttrOrProp": {
+        "trueValue": "on",
+        "falseValue": "off"
+      }
+    }
+  }
+]

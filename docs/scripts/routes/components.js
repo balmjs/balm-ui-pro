@@ -5,6 +5,10 @@ const FormItems = () => import('@/views/components/form-items');
 const DetailView = () => import('@/views/components/detail-view');
 const TableView = () => import('@/views/components/table-view');
 const ReadonlyItem = () => import('@/views/components/readonly-item');
+const CheckboxGroup = () => import('@/views/components/checkbox-group');
+const RadioGroup = () => import('@/views/components/radio-group');
+const SwitchBox = () => import('@/views/components/switch-box');
+const MultiSelect = () => import('@/views/components/multi-select');
 
 const modelName = 'components';
 
@@ -36,6 +40,26 @@ export default $routerModel.createRoutes(modelName, {
       'readonly-item',
       `${modelName}.readonly-item`,
       ReadonlyItem
+    ),
+    $routerModel.createRoute(
+      'checkbox-group',
+      `${modelName}.checkbox-group`,
+      CheckboxGroup
+    ),
+    $routerModel.createRoute(
+      'radio-group',
+      `${modelName}.radio-group`,
+      RadioGroup
+    ),
+    $routerModel.createRoute(
+      'switch-box',
+      `${modelName}.switch-box`,
+      SwitchBox
+    ),
+    $routerModel.createRoute(
+      'multi-select',
+      `${modelName}.multi-select`,
+      MultiSelect
     )
   ]
 });

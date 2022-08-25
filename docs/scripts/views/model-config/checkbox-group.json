@@ -1,0 +1,20 @@
+[
+  {
+    "label": "Checkbox",
+    "component": "ui-checkbox-group",
+    "key": "e",
+    "value": [],
+    "attrOrProp": {
+      "options": [
+        {
+          "label": "C",
+          "value": 3
+        },
+        {
+          "label": "D",
+          "value": 4
+        }
+      ]
+    }
+  }
+]
