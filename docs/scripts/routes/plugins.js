@@ -4,6 +4,7 @@ const ApiModel = () => import('@/views/plugins/api-model');
 const RouterModel = () => import('@/views/plugins/router-model');
 const Transform = () => import('@/views/plugins/transform');
 const Constant = () => import('@/views/plugins/constant');
+const Dialog = () => import('@/views/plugins/dialog');
 
 const modelName = 'plugins';
 
@@ -18,6 +19,7 @@ export default $routerModel.createRoutes(modelName, {
       RouterModel
     ),
     $routerModel.createRoute('transform', `${modelName}.transform`, Transform),
-    $routerModel.createRoute('constant', `${modelName}.constant`, Constant)
+    $routerModel.createRoute('constant', `${modelName}.constant`, Constant),
+    $routerModel.createRoute('dialog', `${modelName}.dialog`, Dialog)
   ]
 });

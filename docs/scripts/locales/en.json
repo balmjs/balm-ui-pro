@@ -21,7 +21,8 @@
     "transform": "Transform",
     "api-model": "API Model",
     "router-model": "Router Model",
-    "constant": "Constant"
+    "constant": "Constant",
+    "dialog": "Dialog"
   },
   "page": {
     "usage": "Usage",
