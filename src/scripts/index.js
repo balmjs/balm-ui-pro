@@ -18,6 +18,7 @@ import $constant, {
   useConstantList,
   useConstantMap
 } from './plugins/constant';
+import $dialog, { useDialog } from './plugins/dialog';
 
 const Components = {
   UiFormView,
@@ -34,7 +35,8 @@ const Plugins = {
   $apiModel,
   $routerModel,
   $transform,
-  $constant
+  $constant,
+  $dialog
 };
 
 const install = (app, options = {}) =>
@@ -71,5 +73,7 @@ export {
   $constant,
   useConstant,
   useConstantList,
-  useConstantMap
+  useConstantMap,
+  $dialog,
+  useDialog
 };
