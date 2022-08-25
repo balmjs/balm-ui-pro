@@ -26,7 +26,16 @@ const UI_MULTI_SELECT = {
 export default {
   name: UI_MULTI_SELECT.name,
   mixins: [formItemMixin],
+  model: {
+    prop: 'modelValue',
+    event: UI_MULTI_SELECT.EVENTS.CHANGE
+  },
   props: {
+    // States
+    modelValue: {
+      type: Object,
+      default: () => ({})
+    },
     components: {
       type: Array,
       default: () => []
@@ -34,7 +43,7 @@ export default {
   },
   data() {
     return {
-      selectedData: {},
+      selectedData: this.modelValue,
       selectedOptions: {},
       selectedOptionsMap: {},
       loading: false
@@ -56,6 +65,9 @@ export default {
     }
   },
   watch: {
+    modelValue(val) {
+      this.selectedData = val;
+    },
     components() {
       this.initRootSelectedOptions();
     },
@@ -81,7 +93,9 @@ export default {
     initSelectedData() {
       if (!this.hasSelectedOptions) {
         for (const { key, value } of this.components) {
-          this.$set(this.selectedData, key, this.formDataSource[key] || value);
+          const initialValue =
+            this.selectedData[key] || this.formDataSource[key] || value;
+          this.$set(this.selectedData, key, initialValue);
           this.$set(this.selectedOptions, key, []);
           this.$set(this.selectedOptionsMap, key, new Map());
         }
@@ -117,7 +131,9 @@ export default {
       if (!selectedOptionsMap.has(parentValue)) {
         let newSelectedOptions = [];
         if (isFunction(options)) {
-          const canLoad = key !== this.rootSelectedKey && parentValue;
+          const canLoad =
+            key === this.rootSelectedKey ||
+            (key !== this.rootSelectedKey && parentValue);
           if (canLoad && !this.loading) {
             this.loading = true;
             newSelectedOptions = await options(this.selectedData);

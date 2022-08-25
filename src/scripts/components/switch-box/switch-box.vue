@@ -3,11 +3,10 @@
     <ui-switch
       v-model="switchValue"
       :input-id="componentKey"
-      :disabled="disabled"
       v-bind="switchAttrOrProp"
       @selected="handleSelected"
     ></ui-switch>
-    <label :for="componentKey">{{ switchItem.label }}</label>
+    <label :for="componentKey">{{ switchItem[optionFormat.label] }}</label>
   </ui-form-field>
 </template>
 
@@ -39,10 +38,6 @@ export default {
       type: Array,
       default: () => []
     },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
     switchAttrOrProp: {
       type: Object,
       default: () => ({})
@@ -57,8 +52,10 @@ export default {
     switchItem() {
       const index = this.options.findIndex((option) =>
         this.switchValue
-          ? this.isTrueValue(option.value)
-          : option.value === this.switchAttrOrProp.falseValue || !option.value
+          ? this.isTrueValue(option[this.optionFormat.value])
+          : option[this.optionFormat.value] ===
+              this.switchAttrOrProp.falseValue ||
+            !option[this.optionFormat.value]
       );
       return ~index ? this.options[index] : {};
     }
