@@ -2,6 +2,17 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.32.0 / 2022-08-26
+
+### Feature
+
+- `<ui-table-view>`, `<ui-detail-view>`: add `modelAction` prop
+- `$dialog`: add `refreshOnSave` and `refresh` option
+
+### BREAKING CHANGES
+
+- `<ui-table-view>`, `<ui-detail-view>`: rename prop `defaultModelValue` to `modelValueDefaults`
+
 ## v0.31.1 / 2020-08-26
 
 ### Bug Fixes
