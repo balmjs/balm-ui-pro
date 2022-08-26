@@ -43,10 +43,11 @@ const DefaultActionConfig: ActionButton[] = [
 | -------------------- | -------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------- |
 | `title`              | string                           | `''`                  | Detail view title                                                                                          |
 | `model`              | string                           | _required_            | Model name                                                                                                 |
+| `modelAction`        | string                           | `''`                  | Api model action suffix                                                                                    |
 | `modelConfig`        | ModelConfig                      | `false`               | Form model config, see `<ui-form-view>` props [docs](/#/components/form-view)                              |
 | `modelPath`          | string                           | `''`                  | The file path of model config                                                                              |
-| `defaultModelValue`  | object                           | `{}`                  | Sets default value of model data                                                                           |
 | `modelOptions`       | object                           | `{}`                  | The options of model config                                                                                |
+| `modelValueDefaults` | object                           | `{}`                  | Sets default value of model data                                                                           |
 | `keyName`            | string, array                    | `'id'`                | The primary key of model data                                                                              |
 | `actionConfig`       | array                            | `DefaultActionConfig` | Form button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button) |
 | `formViewAttrOrProp` | object                           | `{}`                  | See `<ui-form-view>` props [docs](/#/components/form-view)                                                 |
