@@ -15,6 +15,10 @@ export default {
       type: String,
       required: true
     },
+    modelAction: {
+      type: String,
+      default: ''
+    },
     modelConfig: {
       type: [Array, Function, Boolean],
       default: false
@@ -23,11 +27,11 @@ export default {
       type: String,
       default: ''
     },
-    defaultModelValue: {
+    modelOptions: {
       type: Object,
       default: () => ({})
     },
-    modelOptions: {
+    modelValueDefaults: {
       type: Object,
       default: () => ({})
     },

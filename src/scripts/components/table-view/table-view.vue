@@ -167,6 +167,7 @@ export default {
   },
   mixins: [viewMixin, keepAliveMixin],
   props: {
+    // Search form
     searchActionConfig: {
       type: Array,
       default: () => defaultSearchActionConfig
@@ -175,6 +176,7 @@ export default {
       type: Object,
       default: () => ({})
     },
+    // Data table
     noData: {
       type: String,
       default: 'No Data'
@@ -222,6 +224,7 @@ export default {
         total: 'total'
       })
     },
+    // Pagination
     pageSize: {
       type: Number,
       default: 10
@@ -237,6 +240,7 @@ export default {
       type: Boolean,
       default: false
     },
+    // Model function
     getModelConfigFn: {
       type: Function,
       default: () => {}
@@ -245,6 +249,7 @@ export default {
       type: Function,
       default: () => {}
     },
+    // Others
     useValidator: {
       type: Boolean,
       default: false
@@ -299,7 +304,7 @@ export default {
     },
     async initModelData(formData = {}) {
       this.$set(this.searchForm, 'loading', true);
-      this.searchForm.data = Object.assign(formData, this.defaultModelValue);
+      this.searchForm.data = Object.assign(formData, this.modelValueDefaults);
       !this.useValidator && (await this.getModelData());
       this.$set(this.searchForm, 'loading', false);
     },

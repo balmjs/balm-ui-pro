@@ -88,6 +88,7 @@ export default {
       type: Object,
       default: () => ({})
     },
+    // Redirect
     to: {
       type: [Object, String],
       default: ''
@@ -96,6 +97,7 @@ export default {
       type: Boolean,
       default: false
     },
+    // Model function
     getModelConfigFn: {
       type: Function,
       default: () => {}
@@ -108,6 +110,7 @@ export default {
       type: Function,
       default: () => {}
     },
+    // Others
     useValidator: {
       type: Boolean,
       default: true
@@ -142,7 +145,7 @@ export default {
     },
     async initModelData(formData = {}) {
       this.loading = true;
-      this.formData = Object.assign(formData, this.defaultModelValue);
+      this.formData = Object.assign(formData, this.modelValueDefaults);
       await this.getModelData();
       this.loading = false;
     },
@@ -177,9 +180,11 @@ export default {
               : { keepAlive };
           }
 
-          this.replace
-            ? this.$router.replace(toNext)
-            : this.$router.push(toNext);
+          try {
+            this.replace
+              ? this.$router.replace(toNext)
+              : this.$router.push(toNext);
+          } catch (e) {}
         }
       }
     },
@@ -203,7 +208,7 @@ export default {
           // NOTE: automatic processing in `<ui-form-view>`
           break;
         case UiDetailView.EVENTS.cancel:
-          this.redirect('back');
+          this.redirect(this.to || 'back');
           break;
       }
 
