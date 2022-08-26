@@ -16,7 +16,10 @@ const DEFAULT_OPTIONS = {
   attrOrProp: {},
   event: 'action',
   // Action handler
-  handler: () => {}
+  handler: () => {},
+  // Others
+  refreshOnSave: false,
+  refresh: location.reload
 };
 
 let globalOptions = DEFAULT_OPTIONS;
@@ -85,12 +88,16 @@ function createDialog(options) {
       }
     },
     methods: {
-      handleClose() {
+      handleClose(onSave = false) {
         if (dialogApp) {
           this.open = false;
 
           document.body.removeChild(this.$el);
           dialogApp = null;
+
+          if (onSave && this.refreshOnSave) {
+            this.refresh();
+          }
         }
       },
       handleComponentAction(action, result) {
@@ -100,9 +107,21 @@ function createDialog(options) {
             ...result
           };
 
-          this.handleAction(action, actionResult);
+          switch (action.type) {
+            case 'submit':
+              this.handler(action, actionResult, () => {
+                this.handleClose(true);
+              });
+              break;
+            case 'cancel':
+            case 'close':
+              this.handleClose();
+              break;
+          }
 
-          this.handler(action, actionResult, this.handleClose);
+          if (action.type !== 'submit') {
+            this.handler(action, actionResult, this.handleClose);
+          }
         }
       },
       handleDialogAction(action) {
@@ -111,32 +130,29 @@ function createDialog(options) {
             data: this.modelValue
           };
 
-          const debounceConfig = this.handleAction(action, actionResult);
+          let debounceConfig = {};
+
+          switch (action.type) {
+            case 'submit':
+              debounceConfig = {
+                callback: () => {
+                  this.handler(action, actionResult, () => {
+                    this.handleClose(true);
+                  });
+                },
+                delay: action.delay || 250
+              };
+              break;
+            case 'cancel':
+            case 'close':
+              this.handleClose();
+              break;
+          }
 
           return action.type === 'submit'
             ? debounceConfig
             : this.handler(action, actionResult, this.handleClose);
         }
-      },
-      handleAction(action, actionResult) {
-        let debounceConfig = {};
-
-        switch (action.type) {
-          case 'submit':
-            debounceConfig = {
-              callback: () => {
-                this.handler(action, actionResult, this.handleClose);
-              },
-              delay: action.delay || 250
-            };
-            break;
-          case 'cancel':
-          case 'close':
-            this.handleClose();
-            break;
-        }
-
-        return debounceConfig;
       }
     },
     template
