@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.31.1 / 2020-08-26
+
+### Bug Fixes
+
+- `<ui-table-view>`: fix top actions rendering bug
+
 ## v0.31.0 / 2020-08-25
 
 ### Feature

@@ -44,7 +44,7 @@
     </section>
 
     <ui-table-view-top-actions
-      v-if="table.data.length && topActionConfig.length"
+      v-if="topActionConfig.length"
     ></ui-table-view-top-actions>
     <slot v-else name="top-actions" v-bind="this"></slot>
 
