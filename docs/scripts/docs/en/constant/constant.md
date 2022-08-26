@@ -1,7 +1,7 @@
 ```ts
 interface VueInstance {
   $constant: {
-    use: (key: string) => ConstantInstance;
+    use: (key: string | Constant[]) => ConstantInstance;
     valueOf: () => Constants;
 
     toList: (format: ConstantListFormat) => ConstantList;

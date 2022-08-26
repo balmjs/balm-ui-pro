@@ -1,10 +1,4 @@
 ```ts
-interface VueInstance {
-  $routerModel: RouterModel;
-}
-```
-
-```ts
 type VueRoute = object;
 type VueRouteOptions = object;
 
@@ -43,6 +37,10 @@ interface RouterModel {
   createRoutes: (name: ModelName, options: RoutesOptions) => VueRoute[];
 
   debug: (name?: ModelName, namespace?: boolean) => VueRoute | VueRoute[];
+}
+
+interface VueInstance {
+  $routerModel: RouterModel;
 }
 ```
 

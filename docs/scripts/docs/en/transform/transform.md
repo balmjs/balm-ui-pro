@@ -2,11 +2,11 @@
 type FormData = { [key: string]: unknown };
 
 interface Transform {
-  in: (data: FormData) => Transform;
+  in: (data: FormData) => TransformInstance;
   format: (
     keys: string | string[],
     formatFn: (data: FormData) => FormData
-  ) => Transform;
+  ) => TransformInstance;
   out: () => FormData;
 }
 

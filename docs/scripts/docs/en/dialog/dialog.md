@@ -21,6 +21,10 @@ interface ProDialogOptions {
   // Action handler
   handler?: ProDialogHandler;
 }
+
+interface VueInstance {
+  $dialog: ProDialogOptions;
+}
 ```
 
 ### Options

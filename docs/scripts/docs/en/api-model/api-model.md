@@ -1,10 +1,4 @@
 ```ts
-interface VueInstance {
-  $apiModel: ApiModel;
-}
-```
-
-```ts
 type ApiUrl = string;
 
 interface ApiModel {
@@ -24,6 +18,10 @@ interface ApiModel {
   ) => ApiUrl;
 
   debug: (name?: ModelName) => { [apiName: string]: ApiUrl };
+}
+
+interface VueInstance {
+  $apiModel: ApiModel;
 }
 ```
 
