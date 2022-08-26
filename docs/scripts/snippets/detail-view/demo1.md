@@ -36,7 +36,7 @@
   export async function getModelDetailDataFn({ model, keyName, $route }) {
     let result = {};
 
-    const id = $route.params[keyName];
+    const id = $route?.params[keyName];
     if (id) {
       const store = useStore();
       const params = {};
@@ -49,10 +49,15 @@
     return result;
   }
 
-  export async function setModelDataFn({ model, keyName, formData }) {
+  export async function setModelDataFn({
+    model,
+    keyName,
+    formData,
+    formDataSource
+  }) {
     const store = useStore();
 
-    const id = formData[keyName];
+    const id = formDataSource[keyName] || formData[keyName];
     const fn = id ? 'updateModel' : 'createModel';
 
     return await store[fn](model, formData);

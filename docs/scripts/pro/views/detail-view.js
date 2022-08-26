@@ -4,7 +4,7 @@ import { isDev } from '@/config';
 export async function getModelDetailDataFn({ model, keyName, $route }) {
   let result = {};
 
-  const id = $route.params[keyName];
+  const id = $route?.params[keyName];
 
   isDev && console.info('getModelDetailDataFn', model, id);
 
@@ -20,10 +20,15 @@ export async function getModelDetailDataFn({ model, keyName, $route }) {
   return result;
 }
 
-export async function setModelDataFn({ model, keyName, formData }) {
+export async function setModelDataFn({
+  model,
+  keyName,
+  formData,
+  formDataSource
+}) {
   const store = useStore();
 
-  const id = formData[keyName];
+  const id = formDataSource[keyName] || formData[keyName];
   const fn = id ? 'updateModel' : 'createModel';
 
   isDev && console.info('setModelDataFn', model, id, formData);
