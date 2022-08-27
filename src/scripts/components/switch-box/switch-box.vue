@@ -2,11 +2,11 @@
   <ui-form-field class="mdc-switch-box">
     <ui-switch
       v-model="switchValue"
-      :input-id="componentKey"
+      :input-id="uuid"
       v-bind="switchAttrOrProp"
       @selected="handleSelected"
     ></ui-switch>
-    <label :for="componentKey">{{ switchItem[optionFormat.label] }}</label>
+    <label :for="uuid">{{ switchItem[optionFormat.label] }}</label>
   </ui-form-field>
 </template>
 
@@ -49,6 +49,9 @@ export default {
     };
   },
   computed: {
+    uuid() {
+      return this.generateRandomString(this.componentKey);
+    },
     switchItem() {
       const index = this.options.findIndex((option) =>
         this.switchValue

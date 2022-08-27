@@ -4,9 +4,9 @@ export function toCamelCase(str) {
   return str.substr(0, 1).toLowerCase() + str.substr(1);
 }
 
-export function generateRandomString(number = 8) {
+export function generateRandomString(prefix = '', number = 8) {
   if (number % 2 == 1) {
-    throw new Deno.errors.InvalidData('Only even sizes are supported');
+    throw new Error('Only even sizes are supported');
   }
 
   const crypto = window.crypto || window.msCrypto; // for IE 11
@@ -18,5 +18,5 @@ export function generateRandomString(number = 8) {
     ret += ('0' + buf[i].toString(16)).slice(-2);
   }
 
-  return ret;
+  return prefix ? `${prefix}-${ret}` : ret;
 }

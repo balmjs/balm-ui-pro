@@ -1,3 +1,5 @@
+import { generateRandomString } from '../utils/helpers';
+
 const cssClasses = {
   subitemClass: 'mdc-form__subitem'
 };
@@ -33,7 +35,18 @@ export default {
       cssClasses
     };
   },
+  computed: {
+    currentOptions() {
+      return Array.isArray(this.options)
+        ? this.options.map((option) => {
+            option.uuid = generateRandomString(this.componentKey);
+            return option;
+          })
+        : [];
+    }
+  },
   methods: {
+    generateRandomString,
     checkOptionFormat(componentName) {
       const { label, value } = this.optionFormat;
       if (!(label && value)) {
