@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.32.1 / 2022-08-27
+
+### Chore
+
+- `<ui-checkbox-group>`, `<ui-radio-group>`, `<ui-switch-box>`: update _id_ and _for_ naming rule
+
 ## v0.32.0 / 2022-08-26
 
 ### Feature
