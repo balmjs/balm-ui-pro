@@ -16,6 +16,7 @@ interface ProDialogOptions {
   component: string;
   modelValueType?: string;
   modelValueDefaults?: any;
+  modelValueKeys?: array;
   attrOrProp?: object;
   event?: string;
   // Action handler
@@ -42,6 +43,7 @@ interface VueInstance {
 | `component`          | string           | required          | The custom component for the pro dialog.                                                                     |
 | `modelValueType`     | string           | `'object'`        | The model value type of the custom component.                                                                |
 | `modelValueDefaults` | any              | `{}`              | The model value of the custom component.                                                                     |
+| `modelValueKeys`     | array            | `[]`              | The model value filter.                                                                                      |
 | `attrOrProp`         | object           | `{}`              | The attrs or props of the custom component.                                                                  |
 | `event`              | string           | `'action'`        | The event name of the custom component.                                                                      |
 | `handler`            | ProDialogHandler | `() => {}`        | The custom handler of the custom component or pro dialog.                                                    |

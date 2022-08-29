@@ -2,11 +2,11 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
-## v0.33.0 / 2022-08-29
+## v0.33.1 / 2022-08-29
 
 ### Feature
 
-- `$dialog`: add `closeOnSave` option
+- `$dialog`: add `closeOnSave` and `modelValueKeys` option
 
 ### Chore
 

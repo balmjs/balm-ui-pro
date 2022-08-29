@@ -13,6 +13,7 @@ const DEFAULT_OPTIONS = {
   component: '',
   modelValueType: 'object',
   modelValueDefaults: {},
+  modelValueKeys: [],
   attrOrProp: {},
   event: 'action',
   // Action handler
@@ -59,11 +60,21 @@ function createDialog(options) {
       ...components
     },
     data() {
-      const { modelValueType, modelValueDefaults, ...otherConfig } = config;
+      const {
+        modelValueType,
+        modelValueDefaults,
+        modelValueKeys,
+        ...otherConfig
+      } = config;
 
       const currentModelValue =
         modelValueType === 'object'
-          ? Object.assign({}, modelValueDefaults)
+          ? modelValueKeys.length
+            ? modelValueKeys.reduce((formData, key) => {
+                formData[key] = modelValueDefaults[key];
+                return formData;
+              }, {})
+            : Object.assign({}, modelValueDefaults)
           : getType(modelValueDefaults) === 'object'
           ? ''
           : modelValueDefaults;
