@@ -28,6 +28,7 @@
               :components="config.components"
               v-bind="
                 Object.assign(
+                  {},
                   {
                     formData,
                     formDataSource
@@ -53,6 +54,7 @@
                 v-model="formData[config.key]"
                 v-bind="
                   Object.assign(
+                    {},
                     {
                       componentKey,
                       formData,
@@ -140,8 +142,12 @@ const customSlots = computed(() => ({
 
 onBeforeMount(() => {
   if (props.config.debug) {
-    const customSlotsNames = Object.values(customSlots.value);
-    console.info(`[${UI_FORM_ITEM.name}] slots:`, customSlotsNames);
+    const customSlotsNames = Object.values(customSlots.value).map((slot) => ({
+      slot
+    }));
+
+    console.info(`[${UI_FORM_ITEM.name}] slots`);
+    console.table(customSlotsNames, ['slot']);
   }
 });
 
@@ -165,7 +171,15 @@ function getFormLabel({ label }) {
 function handleChange({ component, key }, value) {
   props.config.debug &&
     console.info[
-      (`[${UI_FORM_ITEM.name}] ${component}@${eventName.value}`, key, value)
+      (`[${UI_FORM_ITEM.name}] ${component}@${eventName.value}`,
+      hasSubComponents.value
+        ? props.config.components.map(({ key }) => key)
+        : key,
+      getType(value) === 'object'
+        ? Object.assign({}, value)
+        : Array.isArray(value)
+        ? [...value]
+        : value)
     ];
 
   hasSubComponents.value

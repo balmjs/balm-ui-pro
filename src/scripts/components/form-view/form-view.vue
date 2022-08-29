@@ -6,6 +6,7 @@
     }"
     v-bind="
       Object.assign(
+        {},
         {
           type: useGrid ? 'horizontal' : 'vertical'
         },
@@ -489,7 +490,7 @@ function handleAction(action) {
       break;
   }
 
-  return type === NATIVE_BUTTON_TYPES.submit
+  return action.type === NATIVE_BUTTON_TYPES.submit
     ? debounceConfig
     : exposeAction(action);
 }

@@ -173,6 +173,7 @@ import { useRoute } from 'vue-router';
 import UiTableViewTopActions from './table-view-top-actions';
 import UiTableViewRowActions from './table-view-row-actions';
 import { viewProps, useView } from '../../mixins/view';
+import { useKeepAlive } from '../../mixins/keep-alive';
 import getType, { isFunction } from '../../utils/typeof';
 
 const route = useRoute();
@@ -397,4 +398,12 @@ async function handleAction(action, result) {
 function resetSelectedRows() {
   state.table.selectedRows = [];
 }
+
+// NOTE: for `<keep-alive>`
+function refreshComponent() {
+  resetTableData();
+  getModelData();
+}
+
+useKeepAlive(refreshComponent);
 </script>

@@ -1,0 +1,25 @@
+@use '@material/feature-targeting/feature-targeting';
+@use '@material/dialog/variables' as dialog-variables;
+
+$query: feature-targeting.all();
+$feat-structure: feature-targeting.create-target($query, structure);
+
+.mdc-dialog__content.mdc-dialog__content--without-actions {
+  padding-bottom: 0;
+
+  .mdc-form__actions {
+    @include feature-targeting.targets($feat-structure) {
+      display: flex;
+      position: relative;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      min-height: 52px;
+      margin: 0;
+      padding: dialog-variables.$actions-padding 0;
+      border-top: 1px solid transparent;
+    }
+  }
+}

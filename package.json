@@ -53,8 +53,8 @@
     "axios": "^0.27.2",
     "babel-plugin-prismjs": "^2.1.0",
     "balm": "^4.10.0",
-    "balm-ui": "^10.10.0",
-    "core-js": "^3.24.0",
+    "balm-ui": "^10.11.0",
+    "core-js": "^3.25.0",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^8.0.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -64,7 +64,7 @@
     "miragejs": "^0.1.45",
     "miragejs-axios-adapter": "^0.1.1",
     "prettier": "^2.7.0",
-    "prismjs": "^1.28.0",
+    "prismjs": "^1.29.0",
     "rollup-plugin-vue": "^6.0.0",
     "sanitize.css": "^13.0.0",
     "vue": "^3.2.30",
@@ -74,7 +74,7 @@
     "webpack": "^5.74.0"
   },
   "peerDependencies": {
-    "balm-ui": "^10.10.0",
+    "balm-ui": "^10.11.0",
     "vue": ">=3",
     "vue-router": ">=4"
   }

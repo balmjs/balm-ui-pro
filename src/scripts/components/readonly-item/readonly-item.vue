@@ -16,11 +16,7 @@ import { cssClasses, formItemProps } from '../../mixins/form-item';
 import getType, { isFunction } from '../../utils/typeof';
 
 const props = defineProps({
-  ...formItemProps,
-  config: {
-    type: Object,
-    default: () => ({})
-  }
+  ...formItemProps
 });
 
 const currentFormData = computed(() =>

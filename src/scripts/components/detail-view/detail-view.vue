@@ -192,15 +192,25 @@ async function getModelData() {
   }
 }
 
-function redirect() {
-  if (props.to !== 'custom') {
-    if (props.to === 'back') {
+function redirect(to, keepAlive = true) {
+  if (to !== 'custom') {
+    if (to === 'back') {
       router.back();
     } else {
-      const to = props.to || {
+      const toNext = to || {
         name: `${props.model}.list`
       };
-      props.replace ? router.replace(to) : router.push(to);
+
+      // NOTE: for `<keep-alive>`
+      if (getType(toNext) === 'object') {
+        toNext.params = toNext.params
+          ? Object.assign({ keepAlive }, toNext.params)
+          : { keepAlive };
+      }
+
+      try {
+        props.replace ? router.replace(toNext) : router.push(toNext);
+      } catch (e) {}
     }
   }
 }
@@ -217,7 +227,7 @@ async function handleAction(action, result) {
 
       if (canSubmit && action.submit !== false) {
         await props.setModelDataFn(instance);
-        props.redirectOnSave && redirect();
+        props.redirectOnSave && redirect(props.to, false);
       }
       break;
     case UiDetailView.EVENTS.reset:
@@ -225,7 +235,7 @@ async function handleAction(action, result) {
       // NOTE: automatic processing in `<ui-form-view>`
       break;
     case UiDetailView.EVENTS.cancel:
-      redirect();
+      redirect(props.to || 'back');
       break;
   }
 

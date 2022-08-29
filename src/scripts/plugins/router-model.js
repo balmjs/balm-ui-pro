@@ -14,6 +14,33 @@ function saveRoutesByNamespace(map, namespace, route) {
   map.set(namespace, namespaceRoutes);
 }
 
+function parseRoute(data, route, parent = false) {
+  const { path, name, redirect, children, meta } = route;
+
+  const currentRoute = data.find((item) => item.path === path);
+
+  if (currentRoute) {
+    currentRoute['parent name or children count'] = Array.isArray(children)
+      ? children.length
+      : parent;
+    currentRoute.meta = meta ? JSON.stringify(meta) : false;
+  } else {
+    data.push({
+      path,
+      name,
+      redirect: getType(redirect) === 'object' ? redirect.name : redirect,
+      'parent name or children count': Array.isArray(children)
+        ? children.length
+        : parent,
+      meta: meta ? JSON.stringify(meta) : false
+    });
+  }
+
+  if (Array.isArray(children)) {
+    children.forEach((subRoute) => parseRoute(data, subRoute, name));
+  }
+}
+
 let globalRouterConfig = {};
 let globalRoutes = [];
 
@@ -125,10 +152,12 @@ class RouterModel {
           this.namespaceMap.get(name)
         );
     } else {
-      console.info(
-        `[${NAME}]: Model Routes`,
-        name === true ? this.routes : this.map.get(name)
-      );
+      let data = [];
+      const routes = name === true ? this.routes : this.map.get(name);
+      routes.forEach((route) => parseRoute(data, route));
+
+      console.info(`[${NAME}]: Model Routes`);
+      console.table(data);
     }
   }
 }

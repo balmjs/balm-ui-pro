@@ -14,6 +14,10 @@ const viewProps = {
     type: String,
     default: ''
   },
+  modelAction: {
+    type: String,
+    default: ''
+  },
   modelConfig: {
     type: [Array, Function, Boolean],
     default: false
@@ -22,11 +26,11 @@ const viewProps = {
     type: String,
     default: ''
   },
-  defaultModelValue: {
+  modelOptions: {
     type: Object,
     default: () => ({})
   },
-  modelOptions: {
+  modelValueDefaults: {
     type: Object,
     default: () => ({})
   },

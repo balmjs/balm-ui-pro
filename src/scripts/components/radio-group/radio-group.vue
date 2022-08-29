@@ -1,19 +1,14 @@
 <template>
   <div :class="['mdc-radio-group', cssClasses.subitemClass]">
-    <ui-form-field
-      v-for="(option, index) in options"
-      :key="`${componentKey}-${index}`"
-    >
+    <ui-form-field v-for="option in options" :key="option.uuid">
       <ui-radio
         v-model="selectedValue"
-        :input-id="`${componentKey}-${index}`"
+        :input-id="option.uuid"
         :value="option[optionFormat.value]"
         :disabled="option.disabled || false"
         @update:model-value="handleChange"
       ></ui-radio>
-      <label :for="`${componentKey}-${index}`">{{
-        option[optionFormat.label]
-      }}</label>
+      <label :for="option.uuid">{{ option[optionFormat.label] }}</label>
     </ui-form-field>
   </div>
 </template>
