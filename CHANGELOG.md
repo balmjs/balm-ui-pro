@@ -2,6 +2,16 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.33.0 / 2022-08-29
+
+### Feature
+
+- `$dialog`: add `closeOnSave` option
+
+### Chore
+
+- optimize debug message
+
 ## v0.32.1 / 2022-08-27
 
 ### Chore
