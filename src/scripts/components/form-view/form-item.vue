@@ -172,8 +172,12 @@ export default {
   },
   beforeMount() {
     if (this.config.debug) {
-      const customSlotsNames = Object.values(this.customSlots);
-      console.info(`[${UI_FORM_ITEM.name}] slots:`, customSlotsNames);
+      const customSlotsNames = Object.values(this.customSlots).map((slot) => ({
+        slot
+      }));
+
+      console.info(`[${UI_FORM_ITEM.name}] slots`);
+      console.table(customSlotsNames, ['slot']);
     }
   },
   methods: {
@@ -194,7 +198,11 @@ export default {
           this.hasSubComponents
             ? this.config.components.map(({ key }) => key)
             : key,
-          this.hasSubComponents ? Object.assign({}, value) : value
+          getType(value) === 'object'
+            ? Object.assign({}, value)
+            : Array.isArray(value)
+            ? [...value]
+            : value
         );
 
       this.hasSubComponents

@@ -5,7 +5,12 @@
         <h2 v-if="title" class="mdc-dialog__title">
           {{ title }}
         </h2>
-        <div class="mdc-dialog__content">
+        <div
+          :class="{
+            'mdc-dialog__content': true,
+            'mdc-dialog__content--without-actions': !hasActions
+          }"
+        >
           <slot></slot>
         </div>
         <footer v-if="hasActions" class="mdc-dialog__actions">
