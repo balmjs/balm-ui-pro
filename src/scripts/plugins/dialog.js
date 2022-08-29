@@ -18,6 +18,7 @@ const DEFAULT_OPTIONS = {
   // Action handler
   handler: () => {},
   // Others
+  closeOnSave: true,
   refreshOnSave: false,
   refresh: location.reload
 };
@@ -109,6 +110,10 @@ function createDialog(options) {
 
           switch (action.type) {
             case 'submit':
+              if (this.closeOnSave) {
+                this.handleClose(true);
+              }
+
               this.handler(action, actionResult, () => {
                 this.handleClose(true);
               });
@@ -136,6 +141,10 @@ function createDialog(options) {
             case 'submit':
               debounceConfig = {
                 callback: () => {
+                  if (this.closeOnSave) {
+                    this.handleClose(true);
+                  }
+
                   this.handler(action, actionResult, () => {
                     this.handleClose(true);
                   });
