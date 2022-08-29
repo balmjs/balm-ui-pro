@@ -1,3 +1,4 @@
+import { isDev } from '@/config';
 // BalmUI
 import myStore from '@/store';
 import validatorRules from '@/config/validator-rules';
@@ -22,7 +23,7 @@ export const BalmUIConfig = {
 export const BalmUIProConfig = {
   $apiModel: apiModelConfig,
   $routerModel: {
-    debug: true
+    debug: isDev
   },
   $constant: constantSource,
   ...proViewsConfig

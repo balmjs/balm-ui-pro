@@ -15,6 +15,9 @@ const modelName = 'components';
 export default $routerModel.createRoutes(modelName, {
   indexLeadingSlash: true,
   indexView,
+  indexRedirect: {
+    name: `${modelName}.form-view`
+  },
   detailView: [
     $routerModel.createRoute(
       'form-view/:id?',

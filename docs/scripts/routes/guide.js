@@ -8,6 +8,9 @@ const modelName = 'guide';
 export default $routerModel.createRoutes(modelName, {
   indexLeadingSlash: true,
   indexView,
+  indexRedirect: {
+    name: `${modelName}.intro`
+  },
   detailView: [
     $routerModel.createRoute('intro', `${modelName}.intro`, Intro),
     $routerModel.createRoute(

@@ -3,6 +3,7 @@ import Home from '@/views/home';
 import guideRoutes from './guide';
 import componentRoutes from './components';
 import pluginRoutes from './plugins';
+import testRoutes from './test';
 // Pages
 const NotFound = () => import('@/views/not-found');
 
@@ -15,6 +16,7 @@ const routes = [
   guideRoutes,
   componentRoutes,
   pluginRoutes,
+  testRoutes,
   {
     path: '/:catchAll(.*)',
     component: NotFound

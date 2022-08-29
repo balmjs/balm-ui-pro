@@ -43,9 +43,10 @@ export default {
         },
         // event: 'input',
         handler: (action, data, close) => {
-          console.log(action, data, close);
-          close();
+          console.log(action, data);
+          // close();
         }
+        // closeOnSave: false
       });
     }
   }

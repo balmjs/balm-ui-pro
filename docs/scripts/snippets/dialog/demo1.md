@@ -33,9 +33,8 @@ export default {
             }
           ]
         },
-        handler: (action, data, close) => {
-          console.log(action, data, close);
-          close();
+        handler: (action, data) => {
+          console.log(action, data);
         }
       });
     }

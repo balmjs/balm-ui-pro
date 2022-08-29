@@ -20,6 +20,7 @@ interface ProDialogOptions {
   event?: string;
   // Action handler
   handler?: ProDialogHandler;
+  closeOnSave?: boolean;
   refreshOnSave?: boolean;
   refresh?: Function;
 }
@@ -44,6 +45,7 @@ interface VueInstance {
 | `attrOrProp`         | object           | `{}`              | The attrs or props of the custom component.                                                                  |
 | `event`              | string           | `'action'`        | The event name of the custom component.                                                                      |
 | `handler`            | ProDialogHandler | `() => {}`        | The custom handler of the custom component or pro dialog.                                                    |
+| `closeOnSave`        | boolean          | `true`            | The pro dialog will auto close after saving model data                                                       |
 | `refreshOnSave`      | boolean          | `false`           | The page will auto refresh after saving model data                                                           |
 | `refresh`            | function         | `location.reload` | Refreshing current page data                                                                                 |
 

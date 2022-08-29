@@ -11,6 +11,9 @@ const modelName = 'plugins';
 export default $routerModel.createRoutes(modelName, {
   indexLeadingSlash: true,
   indexView,
+  indexRedirect: {
+    name: `${modelName}.api-model`
+  },
   detailView: [
     $routerModel.createRoute('api-model', `${modelName}.api-model`, ApiModel),
     $routerModel.createRoute(
