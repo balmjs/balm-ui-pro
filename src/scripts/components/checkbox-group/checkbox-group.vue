@@ -1,6 +1,6 @@
 <template>
   <div :class="['mdc-checkbox-group', cssClasses.subitemClass]">
-    <ui-form-field v-for="option in options" :key="option.uuid">
+    <ui-form-field v-for="option in currentOptions" :key="option.uuid">
       <ui-checkbox
         v-model="selectedValue"
         :input-id="option.uuid"
@@ -53,7 +53,7 @@ const state = reactive({
 });
 const { selectedValue } = toRefs(state);
 
-const { checkOptionFormat } = useFormItem(props);
+const { currentOptions, checkOptionFormat } = useFormItem(props);
 onBeforeMount(() => {
   checkOptionFormat(UI_CHECKBOX_GROUP.name);
 });

@@ -81,13 +81,7 @@ export default {
 </script>
 
 <script setup>
-import {
-  reactive,
-  toRefs,
-  onBeforeMount,
-  useSlots,
-  getCurrentInstance
-} from 'vue';
+import { reactive, toRefs, computed, onBeforeMount, useSlots } from 'vue';
 import { useRouter } from 'vue-router';
 import { viewProps, useView } from '../../mixins/view';
 
@@ -112,15 +106,15 @@ const props = defineProps({
     default: false
   },
   getModelConfigFn: {
-    type: [Promise, Function],
+    type: Function,
     default: () => {}
   },
   getModelDataFn: {
-    type: [Promise, Function],
+    type: Function,
     default: () => {}
   },
   setModelDataFn: {
-    type: [Promise, Function],
+    type: Function,
     default: () => {}
   },
   useValidator: {
@@ -138,7 +132,6 @@ const emit = defineEmits([
 ]);
 const slots = useSlots();
 
-const instance = getCurrentInstance();
 const state = reactive({
   currentModelConfig: [],
   formData: {},
@@ -153,6 +146,7 @@ const { hasTitle, handleChange, exposeAction } = useView(props, {
   emit,
   state
 });
+const instanceData = computed(() => Object.assign({}, props, toRefs(state)));
 
 onBeforeMount(() => {
   if (props.modelConfig || props.modelPath) {
@@ -163,7 +157,7 @@ onBeforeMount(() => {
 async function setModelConfig() {
   try {
     state.currentModelConfig =
-      props.modelConfig || (await props.getModelConfigFn(instance));
+      props.modelConfig || (await props.getModelConfigFn(instanceData.value));
   } catch (err) {
     console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
   }
@@ -178,7 +172,7 @@ async function initModelData(formData = {}) {
 
 async function getModelData() {
   try {
-    const formDataSource = await props.getModelDataFn(instance);
+    const formDataSource = await props.getModelDataFn(instanceData.value);
 
     if (
       getType(formDataSource) === 'object' &&
@@ -226,7 +220,7 @@ async function handleAction(action, result) {
       }
 
       if (canSubmit && action.submit !== false) {
-        await props.setModelDataFn(instance);
+        await props.setModelDataFn(instanceData.value);
         props.redirectOnSave && redirect(props.to, false);
       }
       break;

@@ -5,6 +5,7 @@ import BlankLayout from '@/views/layouts/blank';
 import guideRoutes from './guide';
 import componentRoutes from './components';
 import pluginRoutes from './plugins';
+import testRoutes from './test';
 // Pages
 const NotFound = () => import('@/views/not-found');
 
@@ -14,24 +15,10 @@ const routes = [
     name: 'home',
     component: Home
   },
-  {
-    path: '/guide',
-    name: 'guide',
-    component: BlankLayout,
-    children: guideRoutes
-  },
-  {
-    path: '/components',
-    name: 'components',
-    component: BlankLayout,
-    children: componentRoutes
-  },
-  {
-    path: '/plugins',
-    name: 'plugins',
-    component: BlankLayout,
-    children: pluginRoutes
-  },
+  guideRoutes,
+  componentRoutes,
+  pluginRoutes,
+  testRoutes,
   {
     path: '/:catchAll(.*)',
     component: NotFound

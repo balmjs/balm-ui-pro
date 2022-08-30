@@ -1,12 +1,28 @@
-export default [
-  {
-    path: 'model',
-    name: 'plugins.model',
-    component: () => import('@/views/plugins/model')
+import { $routerModel, indexView } from '@/pro/model';
+
+const ApiModel = () => import('@/views/plugins/api-model');
+const RouterModel = () => import('@/views/plugins/router-model');
+const Transform = () => import('@/views/plugins/transform');
+const Constant = () => import('@/views/plugins/constant');
+const Dialog = () => import('@/views/plugins/dialog');
+
+const modelName = 'plugins';
+
+export default $routerModel.createRoutes(modelName, {
+  indexLeadingSlash: true,
+  indexView,
+  indexRedirect: {
+    name: `${modelName}.api-model`
   },
-  {
-    path: 'transform',
-    name: 'plugins.transform',
-    component: () => import('@/views/plugins/transform')
-  }
-];
+  detailView: [
+    $routerModel.createRoute('api-model', `${modelName}.api-model`, ApiModel),
+    $routerModel.createRoute(
+      'router-model',
+      `${modelName}.router-model`,
+      RouterModel
+    ),
+    $routerModel.createRoute('transform', `${modelName}.transform`, Transform),
+    $routerModel.createRoute('constant', `${modelName}.constant`, Constant),
+    $routerModel.createRoute('dialog', `${modelName}.dialog`, Dialog)
+  ]
+});

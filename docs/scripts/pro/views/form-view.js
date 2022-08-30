@@ -20,8 +20,13 @@ export async function setModelOptionsFn(modelList) {
   return modelOptions;
 }
 
-export async function getModelConfigFn({ modelPath }) {
+export async function getModelConfigFn(data) {
   const store = useStore();
+
+  const { modelPath } = data;
+
+  // TODO: has bug
+  console.log(data, 'gg');
 
   isDev && console.info('getModelConfigFn', modelPath);
 

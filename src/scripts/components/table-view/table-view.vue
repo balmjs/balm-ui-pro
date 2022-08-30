@@ -45,7 +45,7 @@
     <ui-table-view-top-actions
       v-if="table.data.length && topActionConfig.length"
     ></ui-table-view-top-actions>
-    <slot v-else name="top-actions" v-bind="instance"></slot>
+    <slot v-else name="top-actions" v-bind="instanceData"></slot>
 
     <section class="mdc-table-view__content">
       <slot name="before-table-view"></slot>
@@ -166,8 +166,7 @@ import {
   computed,
   onActivated,
   onBeforeMount,
-  useSlots,
-  getCurrentInstance
+  useSlots
 } from 'vue';
 import { useRoute } from 'vue-router';
 import UiTableViewTopActions from './table-view-top-actions';
@@ -251,11 +250,11 @@ const props = defineProps({
     default: false
   },
   getModelConfigFn: {
-    type: [Promise, Function],
+    type: Function,
     default: () => {}
   },
   getModelDataFn: {
-    type: [Promise, Function],
+    type: Function,
     default: () => {}
   },
   useValidator: {
@@ -273,7 +272,6 @@ const emit = defineEmits([
 ]);
 const slots = useSlots();
 
-const instance = getCurrentInstance();
 const state = reactive({
   // Search data
   searchForm: {
@@ -301,6 +299,7 @@ const { hasTitle, handleChange, exposeAction } = useView(props, {
   state
 });
 const hasSearchForm = computed(() => !!(props.modelConfig || props.modelPath));
+const instanceData = computed(() => Object.assign({}, props, toRefs(state)));
 
 onActivated(() => {
   const { matched } = route;
@@ -324,7 +323,7 @@ onBeforeMount(() => {
 async function setModelConfig() {
   try {
     const modelConfig =
-      props.modelConfig || (await props.getModelConfigFn(instance));
+      props.modelConfig || (await props.getModelConfigFn(instanceData));
     modelConfig && (state.searchForm.config = modelConfig);
   } catch (err) {
     console.warn(`[${UiTableView.name}]: ${err.toString()}`);
@@ -349,7 +348,7 @@ function resetTableData() {
 async function getModelData() {
   try {
     this.searchForm.loading = true;
-    state.tableDataSource = await props.getModelDataFn(instance);
+    state.tableDataSource = await props.getModelDataFn(instanceData);
     this.searchForm.loading = false;
 
     if (getType(this.tableDataSource) === 'object') {

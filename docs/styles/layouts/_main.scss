@@ -23,6 +23,21 @@ a {
 
 .top-app-toolbar {
   display: flex;
+  align-items: center;
+}
+
+.global-message-banner {
+  position: fixed;
+  z-index: 3;
+  top: global.$topAppBar-row-height;
+
+  .mdc-banner__graphic {
+    padding: 8px 0;
+  }
+
+  a {
+    font-weight: bold;
+  }
 }
 
 .balmui-body {

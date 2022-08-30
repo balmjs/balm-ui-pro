@@ -1,6 +1,10 @@
+@use '@material/top-app-bar/variables' as top-app-bar-variables;
+
 $MIN_WIDTH: 1240px + 1px;
 
 $primary: #6200ee;
 $secondary: #018786;
-
+$mobile-breakpoint: top-app-bar-variables.$mobile-breakpoint;
+$topAppBar-row-height: top-app-bar-variables.$row-height;
+$topAppBar-mobile-row-height: top-app-bar-variables.$mobile-row-height;
 $nav-width: 256px;

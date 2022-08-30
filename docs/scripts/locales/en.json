@@ -1,10 +1,15 @@
 {
+  "home": {
+    "slogan": "More configuration definition, less code implementation for Vue.js",
+    "get-started": "Get started"
+  },
   "menu": {
     "guide": "Guide",
     "intro": "Introduction",
     "quickstart": "Get Started",
     "components": "Components",
     "form-view": "Form View",
+    "form-items": "Form Items",
     "detail-view": "Detail View",
     "table-view": "Table View",
     "readonly-item": "Readonly Item",
@@ -14,6 +19,17 @@
     "multi-select": "Multi Select",
     "plugins": "Plugins",
     "transform": "Transform",
-    "model": "Model"
+    "api-model": "API Model",
+    "router-model": "Router Model",
+    "constant": "Constant",
+    "dialog": "Dialog"
+  },
+  "page": {
+    "usage": "Usage",
+    "default-usage": "Default Usage",
+    "individual-usage": "Individual Usage",
+    "demo": "Demo",
+    "apis": "APIs",
+    "sass": "Sass Variables"
   }
 }

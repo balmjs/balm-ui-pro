@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <docs-page name="table-view" without-css demo-count="1">
     <ui-table-view
       title="Table View"
       model="user"
@@ -9,7 +9,7 @@
       :row-action-config="rowActionConfig"
       :top-action-config="topActionConfig"
       :row-action-rendering="rowActionRendering"
-      @change:x="onChange"
+      @update:x="onChange"
       @action="onAction"
     >
       <!-- <template #before-form-view>xxx</template>
@@ -18,7 +18,8 @@
         {{ currentMinRow }} - {{ currentMaxRow }} / {{ total }}
       </template> -->
     </ui-table-view>
-  </div>
+    <ui-snippet :code="$store.demos[1]"></ui-snippet>
+  </docs-page>
 </template>
 
 
@@ -56,7 +57,7 @@ const rowActionConfig = [
   },
   {
     text: 'BalmUI',
-    href: 'https://v8.material.balmjs.com/'
+    href: 'https://material.balmjs.com/'
   },
   {
     type: 'router-link',

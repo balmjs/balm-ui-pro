@@ -1,0 +1,21 @@
+@use '@material/layout-grid' with (
+  $breakpoints: (
+    desktop: 840px,
+    tablet: 600px,
+    phone: 0px
+  ),
+  $default-margin: (
+    desktop: 12px,
+    tablet: 8px,
+    phone: 8px
+  ),
+  $default-gutter: (
+    desktop: 12px,
+    tablet: 8px,
+    phone: 8px
+  )
+);
+
+@use 'balm-ui/components/form' with (
+  $form-item-margin-bottom: 10px
+);

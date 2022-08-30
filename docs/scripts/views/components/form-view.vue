@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <docs-page name="form-view" without-css demo-count="1">
     <ui-form-view
       v-model="formData"
       :model-config="modelConfig"
       :action-config="actionConfig"
       :test="onTest"
       @action="onAction"
-      @change:x="onChange"
+      @update:x="onChange"
     >
       <template #before-form-view>
         <div>outer formData: {{ formDataSource }}</div>
@@ -29,7 +29,8 @@
     </ui-form-view>
     <!-- <ui-button @click="clearFormData">Clear formData</ui-button>
     <ui-button @click="setFormData">Set formData</ui-button> -->
-  </div>
+    <ui-snippet :code="$store.demos[1]"></ui-snippet>
+  </docs-page>
 </template>
 
 
@@ -37,7 +38,6 @@
 import { reactive, toRefs, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'balm-ui';
-import { loadAsset } from '@/utils';
 import defaultModelConfig from '@/views/model-config/a.json';
 
 const route = useRoute();

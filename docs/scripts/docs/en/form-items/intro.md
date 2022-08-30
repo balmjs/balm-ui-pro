@@ -1,0 +1,42 @@
+# Form Items
+
+## BalmUI form item components:
+
+> Visit [material.balmjs.com](https://material.balmjs.com/) for documentation
+
+- `<ui-textfield>`
+- `<ui-autocomplete>`
+- `<ui-editor>`
+- `<ui-select>`
+- `<ui-checkbox>`
+- `<ui-radio>`
+- `<ui-chips>`
+- `<ui-datepicker>`
+- `<ui-rangepicker>`
+- `<ui-switch>`
+- `<ui-slider>`
+
+## BalmUI Pro form item components:
+
+- `<ui-readonly-item>`
+- `<ui-checkbox-group>`
+- `<ui-radio-group>`
+- `<ui-switch-box>`
+- `<ui-multi-select>`
+
+## Develop custom form item components:
+
+### Common Props
+
+| Name             | Type   | Default                              | Description                    |
+| ---------------- | ------ | ------------------------------------ | ------------------------------ |
+| `config`         | object | `{}`                                 | Form model config              |
+| `formData`       | object | `{}`                                 | Form model data                |
+| `formDataSource` | object | `{}`                                 | Form model data source         |
+| `optionFormat`   | object | `{ label: 'label', value: 'value' }` | Defines the option data format |
+
+### Required Events
+
+| Name                | Type                       | Description                                       |
+| ------------------- | -------------------------- | ------------------------------------------------- |
+| `update:modelValue` | `function(value: unknown)` | Emits when the custom component value is changed. |

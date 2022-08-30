@@ -36,7 +36,7 @@ const className = computed(() =>
 );
 
 const text = watch(
-  () => state.html,
+  () => props.text,
   (val) => {
     state.html = val;
     init();

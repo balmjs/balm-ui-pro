@@ -1,8 +1,8 @@
 <template>
   <ui-form-field class="mdc-switch-box">
     <ui-switch
+      :id="uuid"
       v-model="switchValue"
-      :input-id="uuid"
       :disabled="disabled"
       v-bind="switchAttrOrProp"
       @selected="handleSelected"

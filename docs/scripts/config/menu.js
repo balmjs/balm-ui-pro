@@ -18,26 +18,29 @@ const MATERIAL_COMPONENTS_PRO = [
         name: 'form-view'
       },
       {
+        name: 'form-items'
+      },
+      {
+        name: 'readonly-item'
+      },
+      {
+        name: 'checkbox-group'
+      },
+      {
+        name: 'radio-group'
+      },
+      {
+        name: 'switch-box'
+      },
+      {
+        name: 'multi-select'
+      },
+      {
         name: 'detail-view'
       },
       {
         name: 'table-view'
       }
-      // {
-      //   name: 'readonly-item'
-      // },
-      // {
-      //   name: 'checkbox-group'
-      // },
-      // {
-      //   name: 'radio-group'
-      // },
-      // {
-      //   name: 'switch-box'
-      // },
-      // {
-      //   name: 'multi-select'
-      // }
     ]
   },
   '-',
@@ -45,10 +48,19 @@ const MATERIAL_COMPONENTS_PRO = [
     name: 'plugins',
     children: [
       {
+        name: 'api-model'
+      },
+      {
+        name: 'router-model'
+      },
+      {
         name: 'transform'
       },
       {
-        name: 'model'
+        name: 'constant'
+      },
+      {
+        name: 'dialog'
       }
     ]
   },
