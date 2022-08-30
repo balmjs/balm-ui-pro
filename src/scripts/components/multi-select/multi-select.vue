@@ -32,7 +32,7 @@ export default {
 <script setup>
 import { reactive, toRefs, computed, watch, onBeforeMount } from 'vue';
 import { cssClasses, formItemProps } from '../../mixins/form-item';
-import getType, { isFunction } from '../../utils/typeof';
+import { isFunction } from '../../utils/typeof';
 
 const props = defineProps({
   ...formItemProps,
@@ -73,7 +73,7 @@ onBeforeMount(() => {
     initSelectedData();
   } else {
     console.warn(
-      `[${UI_MULTI_SELECT.name}]: form config 'components' are empty`
+      `[${UI_MULTI_SELECT.name}]: Form config 'components' are empty`
     );
   }
 });
@@ -145,7 +145,7 @@ async function setSelectedOptions(parentValue, { key, options }) {
   const selectedOptionsMap = state.selectedOptionsMap[key];
   let selectedOptions = selectedOptionsMap.get(parentValue) || [];
 
-  if (!selectedOptions.has(parentValue)) {
+  if (!selectedOptionsMap.has(parentValue)) {
     let newSelectedOptions = [];
     if (isFunction(options)) {
       const canLoad =
@@ -173,10 +173,10 @@ async function setSelectedOptions(parentValue, { key, options }) {
   state.selectedOptions[key] = selectedOptions;
 }
 
-async function updateSelected(formData) {
+async function updateSelected() {
   let updateSelectedKeys = [];
   selectedKeys.value.forEach((key) => {
-    const newValue = formData[key];
+    const newValue = props.formData[key];
     if (state.selectedData[key] !== newValue) {
       state.selectedData[key] = newValue;
 

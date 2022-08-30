@@ -251,11 +251,11 @@ const props = defineProps({
     default: false
   },
   getModelConfigFn: {
-    type: Function,
+    type: [Promise, Function],
     default: () => {}
   },
   getModelDataFn: {
-    type: Function,
+    type: [Promise, Function],
     default: () => {}
   },
   useValidator: {

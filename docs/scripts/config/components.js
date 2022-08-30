@@ -18,7 +18,7 @@ export const BalmUIConfig = {
 export const BalmUIProConfig = {
   $apiModel: apiModelConfig,
   $routerModel: {
-    debug: true
+    debug: false
   },
   $constant: constantSource,
   ...proViewsConfig

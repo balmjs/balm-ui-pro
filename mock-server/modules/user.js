@@ -1,11 +1,22 @@
 import { responseHandler } from '@mock-server/handler';
 
 export function createUserApis(server) {
+  server.post('/user/add', (schema, request) => {
+    return responseHandler({});
+  });
+
+  server.post('/user/edit', (schema, request) => {
+    return responseHandler({});
+  });
+
   server.get('/user/list', (schema, request) => {
+    const { page } = request.queryParams;
+    const id = 8 * (page - 1) + 1;
+
     return responseHandler({
       data: [
         {
-          id: 1,
+          id,
           dessert: 'Frozen yogurt',
           calories: 159,
           fat: 6,
@@ -13,7 +24,7 @@ export function createUserApis(server) {
           protein: 4
         },
         {
-          id: 2,
+          id: id + 1,
           dessert: 'Ice cream sandwich',
           calories: 237,
           fat: 9,
@@ -21,7 +32,7 @@ export function createUserApis(server) {
           protein: 4.3
         },
         {
-          id: 3,
+          id: id + 2,
           dessert: 'Eclair',
           calories: 262,
           fat: 16,
@@ -29,7 +40,7 @@ export function createUserApis(server) {
           protein: 6
         },
         {
-          id: 4,
+          id: id + 3,
           dessert: 'Cupcake',
           calories: 305,
           fat: 3.7,
@@ -37,7 +48,7 @@ export function createUserApis(server) {
           protein: 3.9
         },
         {
-          id: 5,
+          id: id + 4,
           dessert: 'Gingerbread',
           calories: 356,
           fat: 16,
@@ -45,7 +56,7 @@ export function createUserApis(server) {
           protein: 0
         },
         {
-          id: 6,
+          id: id + 5,
           dessert: 'Jelly bean',
           calories: 375,
           fat: 0,
@@ -53,7 +64,7 @@ export function createUserApis(server) {
           protein: 0
         },
         {
-          id: 7,
+          id: id + 6,
           dessert: 'Lollipop',
           calories: 392,
           fat: 0.2,
@@ -61,7 +72,7 @@ export function createUserApis(server) {
           protein: 6.5
         },
         {
-          id: 8,
+          id: id + 7,
           dessert: 'Honeycomb',
           calories: 408,
           fat: 3.2,
@@ -69,12 +80,14 @@ export function createUserApis(server) {
           protein: 4.9
         }
       ],
-      total: 8
+      page: {
+        total: 88
+      }
     });
   });
 
-  server.get('/user/:id', (schema, request) => {
-    const id = request.params.id;
+  server.get('/user/info', (schema, request) => {
+    const { id } = request.queryParams;
 
     return responseHandler({
       id,
@@ -101,9 +114,17 @@ export function createUserApis(server) {
       u: '',
       v: '',
       w: '',
-      x: '',
-      y: '',
+      x: 'x',
+      y: 'yy',
       z: 'zzz'
     });
+  });
+
+  server.post('/user/edit', (schema, request) => {
+    const data = JSON.parse(request.requestBody);
+
+    console.log(data);
+
+    return responseHandler({});
   });
 }

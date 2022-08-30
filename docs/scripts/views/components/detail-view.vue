@@ -3,30 +3,24 @@
     <ui-detail-view
       title="Detail View"
       model="user"
-      :get-model-config-fn="getModelConfig"
-      :set-model-data-fn="setModelData"
-      @submit="onSubmit"
+      model-path="model-config/b.js"
+      :to="{
+        name: 'components.table-view'
+      }"
+      @change:x="onChange"
+      @action="onAction"
     >
       <template #custom-slot>gg</template>
     </ui-detail-view>
   </div>
 </template>
 
-<script>
-import { loadAsset } from '@/utils';
+<script setup>
+function onChange(key, value, _) {
+  console.log('onChange', key, value, _);
+}
 
-export default {
-  methods: {
-    async getModelConfig({ model }) {
-      console.log('model', model);
-      return await loadAsset('model-config/b.js');
-    },
-    async setModelData() {
-      console.log('save');
-    },
-    onSubmit() {
-      console.log('gg');
-    }
-  }
-};
+function onAction(action, data) {
+  console.log('onAction', action, data);
+}
 </script>

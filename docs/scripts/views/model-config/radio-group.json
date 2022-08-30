@@ -1,0 +1,20 @@
+[
+  {
+    "label": "Radio",
+    "component": "ui-radio-group",
+    "key": "f",
+    "value": "",
+    "attrOrProp": {
+      "options": [
+        {
+          "label": "E",
+          "value": 5
+        },
+        {
+          "label": "F",
+          "value": 6
+        }
+      ]
+    }
+  }
+]

@@ -3,13 +3,13 @@
     <ui-form-view
       v-model="formData"
       :model-config="modelConfig"
-      :model-options="modelOptions"
       :action-config="actionConfig"
+      :test="onTest"
       @action="onAction"
-      @update:x="onTest"
+      @change:x="onChange"
     >
-      <template #before>
-        <div>outer formData: {{ formData }}</div>
+      <template #before-form-view>
+        <div>outer formData: {{ formDataSource }}</div>
         <hr />
       </template>
       <template #form-item__ui-textfield--l>
@@ -21,94 +21,27 @@
           <ui-button raised @click="onSubmit(data)">Custom Submit</ui-button>
         </ui-form-field>
       </template> -->
-      <template #after="{ data }">
+      <template #after-form-view="{ data }">
+        <hr />
         <div>inner formData: {{ data }}</div>
         <ui-alert v-if="message" state="warning">{{ message }}</ui-alert>
       </template>
     </ui-form-view>
-
-    <ui-button @click="clearFormData">Clear formData</ui-button>
-    <ui-button @click="setFormData">Set formData</ui-button>
+    <!-- <ui-button @click="clearFormData">Clear formData</ui-button>
+    <ui-button @click="setFormData">Set formData</ui-button> -->
   </div>
 </template>
 
-<script>
-import defaultModelConfig from '@/model-config/a.json';
-
-const defaultSelectOptions = [
-  {
-    label: 'A',
-    value: 1
-  },
-  {
-    label: 'B',
-    value: 2
-  }
-];
-
-const defaultCheckboxOptions = [
-  {
-    label: 'C',
-    value: 3
-  },
-  {
-    label: 'D',
-    value: 4
-  }
-];
-
-const defaultRadioOptions = [
-  {
-    label: 'E',
-    value: 5
-  },
-  {
-    label: 'F',
-    value: 6
-  }
-];
-
-const defaultChipsOptions = [
-  {
-    label: 'G',
-    value: 7
-  },
-  {
-    label: 'H',
-    value: 8
-  },
-  {
-    label: 'I',
-    value: 9
-  }
-];
-</script>
 
 <script setup>
 import { reactive, toRefs, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { useHttp } from '@/plugins/http';
+import { useStore } from 'balm-ui';
 import { loadAsset } from '@/utils';
+import defaultModelConfig from '@/views/model-config/a.json';
 
 const route = useRoute();
-const http = useHttp();
-
-const state = reactive({
-  formData: {
-    a: 'hello',
-    b: 'world'
-  },
-  modelConfig: defaultModelConfig,
-  modelOptions: {
-    selectOptions: defaultSelectOptions,
-    checkboxOptions: defaultCheckboxOptions,
-    radioOptions: defaultRadioOptions,
-    chipsOptions: defaultChipsOptions,
-    multiSelectOptions1: []
-  },
-  message: ''
-});
-const { formData, modelConfig, modelOptions, message } = toRefs(state);
+const store = useStore();
 
 const actionConfig = [
   {
@@ -127,30 +60,35 @@ const actionConfig = [
   }
 ];
 
+async function onTest() {
+  const modelConfig = await store.getModelConfig('model-config/b.js');
+  console.log('hello test');
+  return modelConfig;
+}
+
+const state = reactive({
+  formDataSource: {},
+  formData: {
+    a: 'hello',
+    b: 'world'
+  },
+  modelConfig: defaultModelConfig,
+  message: ''
+});
+const { formDataSource, formData, modelConfig, message } = toRefs(state);
+
 const id = computed(() => route.params.id || 0);
 
 onMounted(async () => {
-  state.modelConfig = await loadAsset('model-config/b.js');
-
-  // const selectOptions = await http.post('/mock/select/options');
-  // const checkboxOptions = await http.post('/mock/checkbox/options');
-  // const radioOptions = await http.post('/mock/radio/options');
-  // const chipsOptions = await http.post('/mock/chips/options');
-  const multiSelectOptions1 = await http.post('/mock/multi-select/options1');
-
-  // state.modelOptions.selectOptions = selectOptions;
-  // state.modelOptions.checkboxOptions = checkboxOptions;
-  // state.modelOptions.radioOptions = radioOptions;
-  // state.modelOptions.chipsOptions = chipsOptions;
-  state.modelOptions.multiSelectOptions1 = multiSelectOptions1;
+  state.modelConfig = await store.getModelConfig('model-config/b.js');
 
   if (id.value) {
-    state.formData = await http.get(`/user/${id.value}`, {
-      baseURL: '/api/mock'
+    state.formData = await store.getModelDetail('user', {
+      id: id.value
     });
   } else {
     setTimeout(() => {
-      state.formData = {
+      state.formDataSource = {
         a: 'a1',
         b: 'b1',
         c: '<p>c1</p>',
@@ -168,19 +106,24 @@ onMounted(async () => {
         p: 'p1',
         x: 'xyz'
       };
+      state.formData = Object.assign({}, state.formDataSource);
     }, 1e3);
   }
 });
 
-function onAction({ type, valid, message }) {
-  console.log('onAction', type);
+function onAction(action, result) {
+  console.log('onAction', action, result);
 
-  if (type === 'submit') {
+  if (action.type === 'submit') {
+    const { valid, message } = result;
+
     state.message = message;
 
     if (valid) {
       console.log('gg');
     }
+  } else {
+    state.message = '';
   }
 }
 
@@ -199,7 +142,8 @@ function setFormData() {
   };
 }
 
-function onTest(key, value) {
-  console.log('change:x', key, value);
+function onChange(key, value) {
+  console.log('onChange', key, value);
+  state.formDataSource[key] = value;
 }
 </script>

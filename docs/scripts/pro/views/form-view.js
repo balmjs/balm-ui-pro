@@ -2,9 +2,9 @@ import { useStore, helpers } from 'balm-ui';
 import { isDev } from '@/config';
 
 export async function setModelOptionsFn(modelList) {
-  const store = useStore();
-
   const modelOptions = {};
+
+  const store = useStore();
 
   for await (const model of modelList) {
     const models = model.split(':');

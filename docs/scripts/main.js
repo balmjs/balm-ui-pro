@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import router from '@/routes';
 import i18n from '@/locales';
 import $http from '@/plugins/http';
+import $mock from '@/plugins/mock';
 import $prism from '@/plugins/prism';
 import App from '@/views/layouts/app';
 import setGlobalProperties from '@/config/properties';
@@ -23,6 +24,7 @@ function createBalmUIProApp() {
   app.use(router);
   app.use(i18n);
   app.use($http);
+  app.use($mock);
   app.use($prism);
   app.use(BalmUI, BalmUIConfig);
   app.use(BalmUIPlus);

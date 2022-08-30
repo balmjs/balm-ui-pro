@@ -1,10 +1,12 @@
 import { useApiModel, useRouterModel, useConstantList } from 'balm-ui-pro';
 import { useHttp } from '@/plugins/http';
+import { useMock } from '@/plugins/mock';
 import { isDev, API_ENDPOINT } from '@/config';
 import indexView from '@/views/layouts/blank';
 import demoOptions from '@/views/components/options';
 
 const http = useHttp();
+const $mock = useMock();
 const $apiModel = useApiModel();
 const $routerModel = useRouterModel();
 
@@ -29,7 +31,7 @@ function getApiUrl(model, operation, apiAction) {
 
 function requestConfig(config = {}) {
   const { mock, ...options } = config;
-  return mock || this.$mock
+  return mock || $mock
     ? Object.assign({ baseURL: `/mock${API_ENDPOINT}` }, options)
     : options;
 }

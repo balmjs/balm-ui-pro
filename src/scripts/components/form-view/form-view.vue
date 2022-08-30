@@ -248,8 +248,8 @@ const currentFormData = computed(() =>
   Object.assign({}, state.formDataSource, state.formData)
 );
 
-onBeforeMount(() => {
-  setFormConfig(props.modelConfig, true);
+onBeforeMount(async () => {
+  await setFormConfig(props.modelConfig, true);
 
   const synchronized = updateFormData();
   !synchronized && syncFormData();

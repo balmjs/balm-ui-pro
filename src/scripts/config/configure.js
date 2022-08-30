@@ -2,7 +2,7 @@ import merge from 'deepmerge';
 import getType, { isFunction } from '../utils/typeof';
 
 const setPropsDefaultValue = ({ componentProps, propName, props }) => {
-  let newValue = props[propName];
+  const newValue = props[propName];
 
   switch (getType(newValue)) {
     case 'array':
@@ -13,8 +13,7 @@ const setPropsDefaultValue = ({ componentProps, propName, props }) => {
       componentProps[propName].default = () => merge(defaultValue, newValue);
       break;
     default:
-      console.log(propName, getType(newValue), isFunction(newValue));
-      componentProps[propName].default = newValue;
+      componentProps[propName].default = isFunction ? () => newValue : newValue;
   }
 };
 

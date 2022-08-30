@@ -3,15 +3,17 @@
     <ui-table-view
       title="Table View"
       model="user"
+      model-path="model-config/a.json"
       :thead="thead"
       :tbody="tbody"
-      :action-config="actionConfig"
-      :topbar-config="topbarConfig"
-      :get-model-config-fn="getModelConfig"
-      :get-model-data-fn="getModelData"
-      :action-handler="actionHandler"
-      :topbar-handler="topbarHandler"
+      :row-action-config="rowActionConfig"
+      :top-action-config="topActionConfig"
+      :row-action-rendering="rowActionRendering"
+      @change:x="onChange"
+      @action="onAction"
     >
+      <!-- <template #before-form-view>xxx</template>
+      <template #after-form-view>yyy</template> -->
       <!-- <template #pagination="{ currentMinRow, currentMaxRow, total }">
         {{ currentMinRow }} - {{ currentMaxRow }} / {{ total }}
       </template> -->
@@ -19,9 +21,8 @@
   </div>
 </template>
 
-<script>
-import { loadAsset } from '@/utils';
 
+<script setup>
 const thead = ['ID', 'Dessert', 'Calories', 'Fat', 'Actions'];
 const tbody = [
   'id',
@@ -32,8 +33,10 @@ const tbody = [
     slot: 'actions'
   }
 ];
-const actionConfig = [
+
+const rowActionConfig = [
   {
+    if: (data) => true,
     component: 'ui-icon',
     text: 'add'
   },
@@ -52,30 +55,35 @@ const actionConfig = [
     }
   },
   {
-    text: 'BalmJS',
-    href: 'https://balm.js.org'
+    text: 'BalmUI',
+    href: 'https://v8.material.balmjs.com/'
   },
   {
     type: 'router-link',
     text: 'RouterLink',
-    routeName: 'components.form-view'
+    routeName: 'components.detail-view'
   },
   {
     text: 'Link',
-    onClick: () => {
-      console.log('link button');
+    handler: (data, refresh) => {
+      console.log('link button', data);
     }
   }
 ];
-const topbarConfig = [
+
+const topActionConfig = [
   {
     type: 'router-link',
     icon: 'add',
-    text: 'Create'
+    text: 'Create',
+    routeName: 'components.detail-view'
   },
   {
     type: 'multi-update',
-    text: 'Update'
+    text: 'Update',
+    handler: (data, refresh) => {
+      console.log('update', data);
+    }
   },
   {
     type: 'multi-delete',
@@ -83,29 +91,17 @@ const topbarConfig = [
   }
 ];
 
-export default {
-  data() {
-    return {
-      thead,
-      tbody,
-      actionConfig,
-      topbarConfig
-    };
-  },
-  methods: {
-    async getModelConfig({ model }) {
-      return await loadAsset('model-config/a.json');
-    },
-    async getModelData({ model }) {
-      console.log('getModelData', model);
-      return await this.$http.get('/mock/user/list');
-    },
-    actionHandler(type, data, refresh) {
-      console.log('actionHandler', type, data);
-    },
-    topbarHandler(type, data, refresh) {
-      console.log('topbarHandler', type, data);
-    }
-  }
-};
+function rowActionRendering(action, data) {
+  // console.log(action, data);
+  return true;
+}
+
+function onChange(key, value, refresh) {
+  console.log('onChange', key, value, refresh);
+  // refresh();
+}
+
+function onAction(action, data) {
+  console.log('onAction', action, data);
+}
 </script>

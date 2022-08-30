@@ -16,5 +16,5 @@ export default {
   // formatApiAction: (modelName, actionName) => `${modelName}-${actionName}`,
   // urlToCamelCase: true,
   apis: [...userApis, ...postApis, ...demoApis],
-  debug: true
+  debug: false
 };

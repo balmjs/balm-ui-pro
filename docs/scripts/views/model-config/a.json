@@ -1,9 +1,9 @@
 [
   {
-    "label": "Input",
+    "label": "Textfield",
     "component": "ui-textfield",
     "key": "a",
-    "value": "1",
+    "value": "",
     "attrOrProp": {
       "placeholder": "aaa"
     }

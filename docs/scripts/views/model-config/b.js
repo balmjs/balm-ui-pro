@@ -1,18 +1,19 @@
-import { useHttp } from '@/plugins/http';
+import { useStore } from 'balm-ui';
 
-const http = useHttp();
+const store = useStore();
 
-export default ({
+export default (
   data,
-  selectOptions,
-  checkboxOptions,
-  radioOptions,
-  chipsOptions,
-  multiSelectOptions1,
-  test
-}) => {
+  {
+    selectOptions,
+    checkboxOptions,
+    radioOptions,
+    chipsOptions,
+    switchOptions,
+    multiSelectOptions
+  }
+) => {
   console.log('static data', data);
-  console.log('test', test);
 
   const { id } = data;
 
@@ -30,10 +31,10 @@ export default ({
       }
     },
     {
-      label: 'Input',
+      label: 'Textfield',
       component: 'ui-textfield',
       key: 'a',
-      value: '2'
+      value: ''
     },
     {
       label: 'Autocomplete',
@@ -52,6 +53,7 @@ export default ({
       component: 'ui-select',
       key: 'd',
       value: '',
+      model: 'demo:select',
       attrOrProp: {
         defaultLabel: 'default',
         options: selectOptions
@@ -63,6 +65,7 @@ export default ({
       component: 'ui-checkbox-group',
       key: 'e',
       value: data.e || [],
+      model: 'demo:checkbox',
       attrOrProp: {
         options: checkboxOptions
       }
@@ -72,6 +75,7 @@ export default ({
       component: 'ui-radio-group',
       key: 'f',
       value: '',
+      model: 'demo:radio',
       attrOrProp: {
         options: radioOptions
       }
@@ -81,6 +85,7 @@ export default ({
       component: 'ui-chips',
       key: 'g',
       value: [8],
+      model: 'demo:chips',
       attrOrProp: {
         type: 'filter',
         options: chipsOptions
@@ -90,10 +95,7 @@ export default ({
       label: 'Datepicker',
       component: 'ui-datepicker',
       key: 'h',
-      value: '',
-      attrOrProp: {
-        clear: true
-      }
+      value: ''
     },
     {
       label: 'Rangepicker',
@@ -106,17 +108,9 @@ export default ({
       component: 'ui-switch-box',
       key: 'j',
       value: 'off',
+      model: 'demo:switch',
       attrOrProp: {
-        options: [
-          {
-            label: 'ON',
-            value: 'on'
-          },
-          {
-            label: 'OFF',
-            value: 'off'
-          }
-        ],
+        options: switchOptions,
         switchAttrOrProp: {
           trueValue: 'on',
           falseValue: 'off'
@@ -132,11 +126,15 @@ export default ({
     {
       label: 'Multi-select',
       component: 'ui-multi-select',
+      model: 'demo:multiSelect',
       components: [
         {
           key: 'l',
           value: '',
-          options: multiSelectOptions1,
+          options: multiSelectOptions,
+          // () => http.post('/mock/multi-select/options1'),
+          // () =>
+          //   store.getModel('demo', {}, { apiAction: 'multiSelectOptions1' }),
           attrOrProp: {
             defaultLabel: 'Select1'
           }
@@ -145,11 +143,14 @@ export default ({
           key: 'm',
           value: '',
           options: ({ l }) =>
-            l
-              ? http.post('/mock/multi-select/options2', {
-                  id: l
-                })
-              : [],
+            // http.post('/mock/multi-select/options2', {
+            //     id: l
+            //   })
+            store.getModel(
+              'demo',
+              { id: l },
+              { apiAction: 'multiSelectOptions2' }
+            ),
           attrOrProp: {
             defaultLabel: 'Select2'
           }
@@ -158,11 +159,14 @@ export default ({
           key: 'n',
           value: '',
           options: async ({ m }) =>
-            m
-              ? await http.post('/mock/multi-select/options3', {
-                  id: m
-                })
-              : [],
+            // await http.post('/mock/multi-select/options3', {
+            //     id: m
+            //   })
+            await store.getModel(
+              'demo',
+              { id: m },
+              { apiAction: 'multiSelectOptions3' }
+            ),
           attrOrProp: {
             defaultLabel: 'Select3'
           }
@@ -177,14 +181,14 @@ export default ({
       }
     },
     {
-      debug: true,
+      // debug: true,
       label: 'Component slot',
       component: 'ui-textfield',
       key: 'o',
       value: ''
     },
     {
-      debug: true,
+      // debug: true,
       label: 'Custom component',
       component: 'x-form-item',
       key: 'p',
@@ -194,6 +198,19 @@ export default ({
     {
       label: 'Custom slot',
       slot: 'custom-slot'
-    }
+    },
+    ...(id
+      ? [
+          {
+            label: 'Readonly Item',
+            component: 'ui-readonly-item',
+            key: 'x',
+            value: (data) => data.value,
+            attrOrProp: {
+              text: 'ox'
+            }
+          }
+        ]
+      : [])
   ];
 };

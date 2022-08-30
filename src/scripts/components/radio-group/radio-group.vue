@@ -29,7 +29,7 @@ export default {
 </script>
 
 <script setup>
-import { reactive, toRefs, watch } from 'vue';
+import { reactive, toRefs, watch, onBeforeMount } from 'vue';
 import { cssClasses, formItemProps, useFormItem } from '../../mixins/form-item';
 
 const props = defineProps({
