@@ -13,5 +13,14 @@
 </template>
 
 <script>
-export default {};
+export default {
+  mounted() {
+    this.$nextTick(() => {
+      this.$bus.emit('global-message', true);
+    });
+  },
+  beforeDestroy() {
+    this.$bus.emit('global-message', false);
+  }
+};
 </script>

@@ -195,6 +195,10 @@ export default {
       }, 1);
     });
 
+    this.$bus.on('global-message', (show) => {
+      this.showBanner = show;
+    });
+
     this.$bus.on('refresh', () => {
       this.hasNewVersion = true;
       this.showBanner = true;
