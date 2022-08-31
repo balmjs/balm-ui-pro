@@ -1,7 +1,7 @@
 {
   "name": "balm-ui-pro",
-  "version": "0.34.0-legacy",
-  "description": "BalmUI Pro",
+  "version": "0.34.1-legacy",
+  "description": "More configuration definition, less code implementation for Vue.js",
   "keywords": [
     "balm",
     "material",
