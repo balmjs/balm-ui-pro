@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BalmUI Pro</title>
+    <meta name="theme-color" content="#6200ee" />
+    <meta
+      name="description"
+      content="BalmUI: A modular and customizable UI library based on Material Design and Vue 3"
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="googlebot" content="index,follow" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="%PUBLIC_URL%/images/icons/apple-touch-icon.png"
+    />
+    <link rel="stylesheet" href="%PUBLIC_URL%/styles/app.css" />
+    <script>
+      (function (l) {
+        if (l.search[1] === '/') {
+          var decoded = l.search
+            .slice(1)
+            .split('&')
+            .map(function (s) {
+              return s.replace(/~and~/g, '&');
+            })
+            .join('?');
+          window.history.replaceState(
+            null,
+            null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      })(window.location);
+    </script>
+  </head>
+  <body>
+    <div id="app" class="balmui-placeholder">
+      <div class="container">
+        <h1>Hello <b>BalmUI</b><strong>Pro</strong></h1>
+        <p>More configuration definition, less code implementation for Vue.js</p>
+        <p>
+          <a href="https://github.com/balmjs/balm-ui-pro">https://github.com/balmjs/balm-ui-pro</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

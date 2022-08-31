@@ -16,7 +16,7 @@ import {
   customComponents
 } from '@/config/components';
 // PWA
-// import './my-sw';
+import './my-sw';
 
 function createBalmUIProApp() {
   const app = createApp(App);

@@ -12,21 +12,16 @@ export async function setModelOptionsFn(modelList) {
     const key = helpers.toCamelCase(modelName || modelType);
     const options = await store.getModelOptions(model);
 
-    // isDev && console.info('getModelOptions', `${key}Options`, options);
-
     modelOptions[`${key}Options`] = options;
   }
+
+  isDev && console.info('getModelOptions', modelOptions);
 
   return modelOptions;
 }
 
-export async function getModelConfigFn(data) {
+export async function getModelConfigFn({ modelPath }) {
   const store = useStore();
-
-  const { modelPath } = data;
-
-  // TODO: has bug
-  console.log(data, 'gg');
 
   isDev && console.info('getModelConfigFn', modelPath);
 
