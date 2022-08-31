@@ -1,8 +1,10 @@
+const pkg = require('../../package.json');
 const env = require('../env');
 const path = require('path');
 const webpack = require('webpack');
 const { VueLoaderPlugin } = require('vue-loader');
 const { ModuleFederationPlugin } = webpack.container;
+const exposes = require('../build/exposes');
 
 const workspace = path.join(__dirname, '..', '..');
 
@@ -52,6 +54,10 @@ function getConfig(balm) {
           loader: 'vue-loader'
         }
       ],
+      includeJsResource: [
+        resolve('node_modules/balm-ui/src/scripts'),
+        ...(useDocsDev ? [resolve('src/scripts')] : [])
+      ],
       alias: {
         vue$: 'vue/dist/vue.esm-bundler.js',
         'vue-i18n$': 'vue-i18n/dist/vue-i18n.esm-bundler.js',
@@ -62,10 +68,6 @@ function getConfig(balm) {
         '@mock-server': resolve('mock-server'),
         '@': resolve('docs/scripts')
       },
-      includeJsResource: [
-        resolve('node_modules/balm-ui/src/scripts'),
-        ...(useDocsDev ? [resolve('src/scripts')] : [])
-      ],
       plugins: [
         new VueLoaderPlugin(),
         new webpack.DefinePlugin({
@@ -112,10 +114,19 @@ function getConfig(balm) {
         : {}
     },
     extras: {
+      excludes: ['index.js', 'service-worker.js'],
       includes: ['CNAME']
     },
     assets: {
       cache: env.buildDocs
+    },
+    pwa: {
+      enabled: env.buildDocs,
+      mode: 'injectManifest',
+      options: {
+        globIgnores: ['404.html']
+      },
+      version: `v${pkg.version.replace(/\./g, '')}`
     },
     logs: {
       level: 2
