@@ -177,7 +177,7 @@ function handleClick(action) {
   if (isFunction(action.handler)) {
     action.handler(data, refreshData);
   } else {
-    props.actionHandler()(action, data, refreshData);
+    props.actionHandler()(Object.assign({}, action), data, refreshData);
   }
 }
 </script>

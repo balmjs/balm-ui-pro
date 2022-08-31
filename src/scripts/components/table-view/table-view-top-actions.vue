@@ -117,7 +117,7 @@ function handleClick(action) {
     if (isFunction(action.handler)) {
       action.handler(tableData, refreshData);
     } else {
-      props.actionHandler()(action, tableData, refreshData);
+      props.actionHandler()(Object.assign({}, action), tableData, refreshData);
     }
   }
 }
