@@ -86,6 +86,12 @@ function getConfig(balm) {
             ]
           : [])
       ],
+      injectHtml: !useBuild,
+      htmlPluginOptions: {
+        template: env.buildDocs
+          ? './docs/templates/prod.html'
+          : './docs/templates/dev.html'
+      },
       externals: useBuild
         ? {
             vue: {
