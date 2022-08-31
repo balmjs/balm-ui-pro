@@ -74,7 +74,7 @@ function buildIndividual(mix) {
               }
       });
 
-      const sassFolder = `${config.input.sass}/balm-ui/${buildName}`;
+      const sassFolder = `${config.input.sass}/balm-ui-pro/${buildName}`;
       if (fs.existsSync(sassFolder)) {
         mix.copy(`${sassFolder}/**/*`, `${uiOutput}/${buildName}`);
       }
