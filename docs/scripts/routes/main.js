@@ -18,7 +18,7 @@ const routes = [
   pluginRoutes,
   testRoutes,
   {
-    path: '/:catchAll(.*)',
+    path: '*',
     component: NotFound
   }
 ];

@@ -18,8 +18,6 @@
 
 ## BalmUI Pro form item components:
 
-> Documentation is coming up...
-
 - `<ui-readonly-item>`
 - `<ui-checkbox-group>`
 - `<ui-radio-group>`

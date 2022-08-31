@@ -4,6 +4,12 @@
 
 BalmUI Pro is a front-end scaffolding. By default, readers have already understood some basic front-end knowledge, and understand awesome CLI and BalmUI. If you are a pure novice, it is recommended to read [Beginner's Need to know](https://v8.material.balmjs.com/#/guide/quickstart).
 
+## Requirements
+
+- vue 2.6.0+
+- vue-router 3.x
+- balm-ui 8.54.0+
+
 ## Installing
 
 ```bash

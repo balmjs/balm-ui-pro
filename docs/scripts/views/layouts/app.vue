@@ -31,13 +31,13 @@
         <ui-icon>{{ hasNewVersion ? 'refresh' : 'celebration' }}</ui-icon>
       </template>
       <template v-if="hasNewVersion">New content is available.</template>
-      <!-- <template v-else>
+      <template v-else>
         You’re browsing the documentation for vue@2.x.
         <a href="https://pro.balmjs.com/" target="_blank" rel="noopener">
           Click here
         </a>
         for vue@3.x documentation.
-      </template> -->
+      </template>
       <template #actions>
         <ui-button outlined @click="$balmUI.onHide('showBanner', refresh)">{{
           hasNewVersion ? 'Refresh' : 'GOT IT'

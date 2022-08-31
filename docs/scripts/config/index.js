@@ -3,7 +3,7 @@ import { version } from '../../../package.json';
 export const VERSION = version;
 export const isDev = process.env.NODE_ENV === 'development';
 export const isProd = process.env.NODE_ENV === 'production';
-export const domain = isProd ? '//pro.material.balmjs.com' : '';
+export const domain = isProd ? '//legacy.pro.balmjs.com' : '';
 
 // 同步 Sass variables
 export const $MIN_WIDTH = 1240 + 1;

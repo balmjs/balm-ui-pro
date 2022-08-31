@@ -1,10 +1,11 @@
 import { useBus } from 'balm-ui';
 import { statistics } from '@/config/analytics';
 
+const CLASS_NAMESPACE = 'balmui';
+
 function initRouter(router) {
   const bus = useBus();
 
-  const CLASS_NAMESPACE = 'balmui';
   router.afterEach((to, from) => {
     const pageClassList = document.querySelector('html').classList;
     const routeName = to.name;
