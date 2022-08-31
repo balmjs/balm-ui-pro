@@ -111,7 +111,6 @@ const props = defineProps({
     default: () => ({})
   }
 });
-
 const emit = defineEmits([UI_FORM_ITEM.EVENTS.update]);
 
 const state = reactive({

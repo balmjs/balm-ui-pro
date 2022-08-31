@@ -45,7 +45,6 @@ const props = defineProps({
     default: () => []
   }
 });
-
 const emit = defineEmits([UI_RADIO_GROUP.EVENTS.CHANGE]);
 
 const state = reactive({

@@ -175,6 +175,8 @@ import {
 import UiFormItem from './form-item.vue';
 import getType, { isFunction } from '../../utils/typeof';
 
+const validator = inject('validator');
+
 const props = defineProps({
   modelConfig: {
     type: [Array, Function, Boolean],
@@ -217,7 +219,6 @@ const props = defineProps({
     default: false
   }
 });
-
 const emit = defineEmits([
   UI_FORM_VIEW.EVENTS.loaded,
   UI_FORM_VIEW.EVENTS.update,
@@ -225,7 +226,6 @@ const emit = defineEmits([
   UI_FORM_VIEW.EVENTS.action
 ]);
 
-const validator = inject('validator');
 const state = reactive({
   formConfig: [],
   formData: {},

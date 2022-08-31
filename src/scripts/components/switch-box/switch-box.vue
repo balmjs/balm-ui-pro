@@ -50,7 +50,6 @@ const props = defineProps({
     default: () => ({})
   }
 });
-
 const emit = defineEmits([UI_SWITCH_BOX.EVENTS.CHANGE]);
 
 const state = reactive({

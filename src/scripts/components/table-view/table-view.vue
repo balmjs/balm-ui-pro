@@ -43,7 +43,17 @@
     </section>
 
     <ui-table-view-top-actions
-      v-if="table.data.length && topActionConfig.length"
+      v-if="topActionConfig.length"
+      v-bind="{
+        data: instanceData,
+        model,
+        modelOptions,
+        keyName,
+        actionConfig: topActionConfig,
+        actionHandler: topActionHandler,
+        actionRendering: topActionRendering,
+        refreshData: getModelData
+      }"
     ></ui-table-view-top-actions>
     <slot v-else name="top-actions" v-bind="instanceData"></slot>
 
@@ -72,7 +82,7 @@
         <!-- Default actions -->
         <template #actions="{ data }">
           <ui-table-view-row-actions
-            v-if="actionConfig.length"
+            v-if="rowActionConfig.length"
             v-bind="{
               data,
               model,
@@ -160,14 +170,7 @@ export default {
 </script>
 
 <script setup>
-import {
-  reactive,
-  toRefs,
-  computed,
-  onActivated,
-  onBeforeMount,
-  useSlots
-} from 'vue';
+import { reactive, toRefs, computed, onBeforeMount, useSlots } from 'vue';
 import { useRoute } from 'vue-router';
 import UiTableViewTopActions from './table-view-top-actions';
 import UiTableViewRowActions from './table-view-row-actions';
@@ -179,6 +182,7 @@ const route = useRoute();
 
 const props = defineProps({
   ...viewProps,
+  // Search form
   searchActionConfig: {
     type: Array,
     default: () => defaultSearchActionConfig
@@ -187,6 +191,7 @@ const props = defineProps({
     type: Object,
     default: () => ({})
   },
+  // Data table
   noData: {
     type: String,
     default: 'No Data'
@@ -234,6 +239,7 @@ const props = defineProps({
       total: 'total'
     })
   },
+  // Pagination
   pageSize: {
     type: Number,
     default: 10
@@ -249,6 +255,7 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  // Model function
   getModelConfigFn: {
     type: Function,
     default: () => {}
@@ -257,6 +264,7 @@ const props = defineProps({
     type: Function,
     default: () => {}
   },
+  // Others
   useValidator: {
     type: Boolean,
     default: false
@@ -293,24 +301,20 @@ const state = reactive({
 });
 const { searchForm, lastSearchFormData, table } = toRefs(state);
 
-const { hasTitle, handleChange, exposeAction } = useView(props, {
+const { viewPropsData, hasTitle, handleChange, exposeAction } = useView(props, {
   slots,
   emit,
   state
 });
 const hasSearchForm = computed(() => !!(props.modelConfig || props.modelPath));
-const instanceData = computed(() => Object.assign({}, props, toRefs(state)));
-
-onActivated(() => {
-  const { matched } = route;
-  const noKeepAlive = matched.some((route) => route.meta?.keepAlive === false);
-
-  // NOTE: refresh data for `<keep-alive>`
-  if (noKeepAlive) {
-    resetTableData();
-    getModelData();
-  }
-});
+const instanceData = computed(() =>
+  Object.assign({}, viewPropsData, {
+    route,
+    searchForm: state.searchForm,
+    table: state.table,
+    tableDataSource: state.tableDataSource
+  })
+);
 
 onBeforeMount(() => {
   if (hasSearchForm.value) {
@@ -323,7 +327,7 @@ onBeforeMount(() => {
 async function setModelConfig() {
   try {
     const modelConfig =
-      props.modelConfig || (await props.getModelConfigFn(instanceData));
+      props.modelConfig || (await props.getModelConfigFn()(instanceData.value));
     modelConfig && (state.searchForm.config = modelConfig);
   } catch (err) {
     console.warn(`[${UiTableView.name}]: ${err.toString()}`);
@@ -331,27 +335,27 @@ async function setModelConfig() {
 }
 
 async function initModelData(formData = {}) {
-  this.searchForm.loading = true;
-  this.searchForm.data = Object.assign(formData, props.defaultModelValue);
+  state.searchForm.loading = true;
+  state.searchForm.data = Object.assign(formData, props.defaultModelValue);
   !props.useValidator && (await getModelData());
-  this.searchForm.loading = false;
+  state.searchForm.loading = false;
 }
 
 function resetTableData() {
-  this.table.selectedRows = [];
-  this.table.data = [];
-  this.table.total = 0;
-  this.table.page = 1;
-  this.table.loading = false;
+  state.table.selectedRows = [];
+  state.table.data = [];
+  state.table.total = 0;
+  state.table.page = 1;
+  state.table.loading = false;
 }
 
 async function getModelData() {
   try {
-    this.searchForm.loading = true;
-    state.tableDataSource = await props.getModelDataFn(instanceData);
-    this.searchForm.loading = false;
+    state.table.loading = true;
+    state.tableDataSource = await props.getModelDataFn()(instanceData.value);
+    state.table.loading = false;
 
-    if (getType(this.tableDataSource) === 'object') {
+    if (getType(state.tableDataSource) === 'object') {
       for (const [key, value] of Object.entries(props.tableDataFormat)) {
         const tableDataValue = isFunction(value)
           ? value(state.tableDataSource)
@@ -363,7 +367,7 @@ async function getModelData() {
       state.lastSearchFormData = Object.assign({}, state.searchForm.data);
     }
   } catch (err) {
-    this.searchForm.loading = false;
+    state.table.loading = false;
     console.warn(`[${UiTableView.name}]: ${err.toString()}`);
   }
 }

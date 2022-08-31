@@ -47,7 +47,6 @@ const props = defineProps({
     default: () => []
   }
 });
-
 const emit = defineEmits([UI_MULTI_SELECT.EVENTS.CHANGE]);
 
 const state = reactive({

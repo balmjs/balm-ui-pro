@@ -22,7 +22,6 @@ const props = defineProps({
 const currentFormData = computed(() =>
   Object.assign({}, props.formDataSource, props.formData)
 );
-
 const currentValue = computed(() => {
   const value = currentFormData.value[props.config.key];
   const type = getType(value);

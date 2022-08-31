@@ -1,11 +1,11 @@
 <template>
   <section class="mdc-table-view__top-actions">
     <template
-      v-for="(action, index) in tableView.topActionConfig"
+      v-for="(action, index) in actionConfig"
       :key="`top-action-${index}`"
     >
       <ui-button
-        v-if="tableView.topActionRendering(action, tableView.tableDataSource)"
+        v-if="actionRendering(action, data.tableDataSource)"
         :class="[cssClasses.topAction, action.type || '']"
         v-bind="
           Object.assign(
@@ -28,19 +28,52 @@
 import { cssClasses, TYPES } from './constants';
 
 export default {
-  name: 'UiTableViewTopbar',
+  name: 'UiTableViewTopActions',
   customOptions: {}
 };
 </script>
 
 <script setup>
-import { toRefs, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
 import { getRouteLocationRaw } from './constants';
+import { isFunction } from '../../utils/typeof';
 
 const router = useRouter();
-const instance = getCurrentInstance();
-const tableView = instance.parent;
+
+const props = defineProps({
+  data: {
+    type: Object,
+    default: () => ({})
+  },
+  model: {
+    type: String,
+    default: ''
+  },
+  modelOptions: {
+    type: Object,
+    default: () => ({})
+  },
+  keyName: {
+    type: [String, Array],
+    default: 'id'
+  },
+  actionConfig: {
+    type: Array,
+    default: () => []
+  },
+  actionHandler: {
+    type: Function,
+    default: () => {}
+  },
+  actionRendering: {
+    type: Function,
+    default: () => true
+  },
+  refreshData: {
+    type: Function,
+    default: () => {}
+  }
+});
 
 function actionIcon({ icon, type }) {
   let result = icon || '';
@@ -68,24 +101,23 @@ function actionIcon({ icon, type }) {
 }
 
 function handleClick(action) {
-  const { model, modelOptions, keyName, state, getModelData } = tableView;
+  const { data, model, modelOptions, keyName, refreshData } = props;
 
-  const data = {
+  const tableData = {
     model,
     modelOptions,
     keyName,
-    ...toRefs(state)
+    ...data
   };
-  const refreshData = getModelData;
 
   if (action.type === TYPES.routerLink) {
-    const to = getRouteLocationRaw(action, data);
+    const to = getRouteLocationRaw(action, tableData);
     router.push(to);
   } else {
     if (isFunction(action.handler)) {
-      action.handler(data, refreshData);
+      action.handler(tableData, refreshData);
     } else {
-      tableView.topActionHandler(action, data, refreshData);
+      props.actionHandler()(action, tableData, refreshData);
     }
   }
 }

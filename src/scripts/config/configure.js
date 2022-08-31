@@ -13,7 +13,9 @@ const setPropsDefaultValue = ({ componentProps, propName, props }) => {
       componentProps[propName].default = () => merge(defaultValue, newValue);
       break;
     default:
-      componentProps[propName].default = isFunction ? () => newValue : newValue;
+      componentProps[propName].default = isFunction(newValue)
+        ? () => newValue
+        : newValue;
   }
 };
 

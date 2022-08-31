@@ -1,4 +1,5 @@
 import { toRefs, computed } from 'vue';
+import { isFunction } from '../utils/typeof';
 
 const FORM_VIEW_EVENTS = {
   updateFormItem: 'change:x',
@@ -41,6 +42,28 @@ const viewProps = {
 };
 
 function useView(props, { slots, emit, state, refreshData }) {
+  const {
+    title,
+    model,
+    modelAction,
+    modelConfig,
+    modelPath,
+    modelOptions,
+    modelValueDefaults,
+    keyName
+  } = props;
+
+  const viewPropsData = {
+    title,
+    model,
+    modelAction,
+    modelConfig,
+    modelPath,
+    modelOptions,
+    modelValueDefaults,
+    keyName
+  };
+
   const hasTitle = computed(() => props.title || slots.title);
 
   function handleChange(key, value) {
@@ -66,6 +89,7 @@ function useView(props, { slots, emit, state, refreshData }) {
   }
 
   return {
+    viewPropsData,
     hasTitle,
     handleChange,
     exposeAction

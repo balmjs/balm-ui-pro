@@ -171,13 +171,13 @@ function handleClick(action) {
     model,
     modelOptions,
     keyName,
-    data: props.data
+    data: Object.assign({}, props.data)
   };
 
   if (isFunction(action.handler)) {
     action.handler(data, refreshData);
   } else {
-    props.actionHandler(action, data, refreshData);
+    props.actionHandler()(action, data, refreshData);
   }
 }
 </script>

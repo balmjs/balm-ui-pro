@@ -82,9 +82,11 @@ export default {
 
 <script setup>
 import { reactive, toRefs, computed, onBeforeMount, useSlots } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { viewProps, useView } from '../../mixins/view';
+import getType from '../../utils/typeof';
 
+const route = useRoute();
 const router = useRouter();
 
 const props = defineProps({
@@ -141,23 +143,29 @@ const state = reactive({
 });
 const { currentModelConfig, formData, message, loading } = toRefs(state);
 
-const { hasTitle, handleChange, exposeAction } = useView(props, {
+const { viewPropsData, hasTitle, handleChange, exposeAction } = useView(props, {
   slots,
   emit,
   state
 });
-const instanceData = computed(() => Object.assign({}, props, toRefs(state)));
+const instanceData = computed(() =>
+  Object.assign({}, viewPropsData, {
+    route,
+    formData: state.formData,
+    formDataSource: state.formDataSource
+  })
+);
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   if (props.modelConfig || props.modelPath) {
     setModelConfig();
   }
 });
 
-async function setModelConfig() {
+async function setModelConfig(data) {
   try {
     state.currentModelConfig =
-      props.modelConfig || (await props.getModelConfigFn(instanceData.value));
+      props.modelConfig || (await props.getModelConfigFn()(instanceData.value));
   } catch (err) {
     console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
   }
@@ -172,7 +180,7 @@ async function initModelData(formData = {}) {
 
 async function getModelData() {
   try {
-    const formDataSource = await props.getModelDataFn(instanceData.value);
+    const formDataSource = await props.getModelDataFn()(instanceData.value);
 
     if (
       getType(formDataSource) === 'object' &&
@@ -220,7 +228,7 @@ async function handleAction(action, result) {
       }
 
       if (canSubmit && action.submit !== false) {
-        await props.setModelDataFn(instanceData.value);
+        await props.setModelDataFn()(instanceData.value);
         props.redirectOnSave && redirect(props.to, false);
       }
       break;
