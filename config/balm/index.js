@@ -118,7 +118,8 @@ function getConfig(balm) {
       includes: ['CNAME']
     },
     assets: {
-      cache: env.buildDocs
+      cache: env.buildDocs,
+      excludes: ['dist/img/icons/icon-*.png']
     },
     pwa: {
       enabled: env.buildDocs,
