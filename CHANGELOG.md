@@ -2,7 +2,7 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
-## v0.14.0 / 2022-08-31
+## v0.15.0 / 2022-08-31
 
 - Preview components
 
