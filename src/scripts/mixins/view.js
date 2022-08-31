@@ -41,6 +41,29 @@ export default {
     }
   },
   computed: {
+    viewPropsData() {
+      const {
+        title,
+        model,
+        modelAction,
+        modelConfig,
+        modelPath,
+        modelOptions,
+        modelValueDefaults,
+        keyName
+      } = this.$props;
+
+      return {
+        title,
+        model,
+        modelAction,
+        modelConfig,
+        modelPath,
+        modelOptions,
+        modelValueDefaults,
+        keyName
+      };
+    },
     hasTitle() {
       return this.title || this.$slots.title;
     },

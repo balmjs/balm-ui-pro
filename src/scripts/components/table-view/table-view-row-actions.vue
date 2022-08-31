@@ -171,13 +171,13 @@ export default {
         model,
         modelOptions,
         keyName,
-        data: this.data
+        data: Object.assign({}, this.data)
       };
 
       if (isFunction(action.handler)) {
         action.handler(data, refreshData);
       } else {
-        this.actionHandler(action, data, refreshData);
+        this.actionHandler(Object.assign({}, action), data, refreshData);
       }
     }
   }

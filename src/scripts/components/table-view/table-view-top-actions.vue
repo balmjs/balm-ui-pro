@@ -1,8 +1,8 @@
 <template>
   <section class="mdc-table-view__top-actions">
-    <template v-for="(action, index) in tableView.topActionConfig">
+    <template v-for="(action, index) in actionConfig">
       <ui-button
-        v-if="tableView.topActionRendering(action, tableView.tableDataSource)"
+        v-if="actionRendering(action, data.tableDataSource)"
         :key="`button-${index}`"
         :class="[cssClasses.topAction, action.type || '']"
         v-bind="
@@ -28,10 +28,43 @@ import { isFunction } from '../../utils/typeof';
 
 export default {
   name: 'UiTableViewTopActions',
+  props: {
+    data: {
+      type: Object,
+      default: () => ({})
+    },
+    model: {
+      type: String,
+      default: ''
+    },
+    modelOptions: {
+      type: Object,
+      default: () => ({})
+    },
+    keyName: {
+      type: [String, Array],
+      default: 'id'
+    },
+    actionConfig: {
+      type: Array,
+      default: () => []
+    },
+    actionHandler: {
+      type: Function,
+      default: () => {}
+    },
+    actionRendering: {
+      type: Function,
+      default: () => true
+    },
+    refreshData: {
+      type: Function,
+      default: () => {}
+    }
+  },
   data() {
     return {
-      cssClasses,
-      tableView: this.$parent
+      cssClasses
     };
   },
   methods: {
@@ -60,24 +93,23 @@ export default {
       return result;
     },
     handleAction(action) {
-      const { model, modelOptions, keyName, $data, getModelData } =
-        this.tableView;
-      const data = {
+      const { data, model, modelOptions, keyName, refreshData } = this.$props;
+
+      const tableData = {
         model,
         modelOptions,
         keyName,
-        ...$data
+        ...data
       };
-      const refreshData = getModelData;
 
       if (action.type === TYPES.routerLink) {
-        const to = getRouteLocationRaw(action, data);
+        const to = getRouteLocationRaw(action, tableData);
         this.$router.push(to);
       } else {
         if (isFunction(action.handler)) {
-          action.handler(data, refreshData);
+          action.handler(tableData, refreshData);
         } else {
-          this.tableView.topActionHandler(action, data, refreshData);
+          this.actionHandler(Object.assign({}, action), tableData, refreshData);
         }
       }
     }

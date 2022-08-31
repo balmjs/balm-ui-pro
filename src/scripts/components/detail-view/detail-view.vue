@@ -129,6 +129,15 @@ export default {
       loading: false
     };
   },
+  computed: {
+    instanceData() {
+      return Object.assign({}, this.viewPropsData, {
+        $route: this.$route,
+        formData: this.formData,
+        formDataSource: this.formDataSource
+      });
+    }
+  },
   async beforeMount() {
     if (this.modelConfig || this.modelPath) {
       await this.setModelConfig();
@@ -138,7 +147,7 @@ export default {
     async setModelConfig() {
       try {
         this.currentModelConfig =
-          this.modelConfig || (await this.getModelConfigFn(this));
+          this.modelConfig || (await this.getModelConfigFn(this.instanceData));
       } catch (err) {
         console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
       }
@@ -151,7 +160,7 @@ export default {
     },
     async getModelData() {
       try {
-        const formDataSource = await this.getModelDataFn(this);
+        const formDataSource = await this.getModelDataFn(this.instanceData);
 
         if (
           getType(formDataSource) === 'object' &&
@@ -199,7 +208,7 @@ export default {
           }
 
           if (canSubmit && action.submit !== false) {
-            await this.setModelDataFn(this);
+            await this.setModelDataFn(this.instanceData);
             this.redirectOnSave && this.redirect(this.to, false);
           }
           break;

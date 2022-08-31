@@ -45,8 +45,18 @@
 
     <ui-table-view-top-actions
       v-if="topActionConfig.length"
+      v-bind="{
+        data: instanceData,
+        model,
+        modelOptions,
+        keyName,
+        actionConfig: topActionConfig,
+        actionHandler: topActionHandler,
+        actionRendering: topActionRendering,
+        refreshData: getModelData
+      }"
     ></ui-table-view-top-actions>
-    <slot v-else name="top-actions" v-bind="this"></slot>
+    <slot v-else name="top-actions" v-bind="instanceData"></slot>
 
     <section class="mdc-table-view__content">
       <slot name="before-table-view"></slot>
@@ -283,6 +293,14 @@ export default {
   computed: {
     hasSearchForm() {
       return !!(this.modelConfig || this.modelPath);
+    },
+    instanceData() {
+      return Object.assign({}, this.viewPropsData, {
+        $route: this.$route,
+        searchForm: this.searchForm,
+        table: this.table,
+        tableDataSource: this.tableDataSource
+      });
     }
   },
   async beforeMount() {
@@ -296,7 +314,7 @@ export default {
     async setModelConfig() {
       try {
         const modelConfig =
-          this.modelConfig || (await this.getModelConfigFn(this));
+          this.modelConfig || (await this.getModelConfigFn(this.instanceData));
         modelConfig && this.$set(this.searchForm, 'config', modelConfig);
       } catch (err) {
         console.warn(`[${UiTableView.name}]: ${err.toString()}`);
@@ -318,7 +336,7 @@ export default {
     async getModelData() {
       try {
         this.$set(this.table, 'loading', true);
-        this.tableDataSource = await this.getModelDataFn(this);
+        this.tableDataSource = await this.getModelDataFn(this.instanceData);
         this.$set(this.table, 'loading', false);
 
         if (getType(this.tableDataSource) === 'object') {
