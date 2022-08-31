@@ -13,9 +13,9 @@
 
 ### Requirements
 
-- vue@3.x
-- vue-router@4.x
-- balm-ui@10.11.0+
+- vue 3.x
+- vue-router 4.x
+- balm-ui 10.11.0+
 
 ### Installing
 
