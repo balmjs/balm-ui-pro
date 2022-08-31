@@ -1,18 +1,19 @@
-# [BalmUI pro](https://legacy.pro.balmjs.com/)
+# [BalmUI Pro](https://legacy.pro.balmjs.com/)
 
 > More configuration definition, less code implementation for Vue.js
 
 ## Documentation & Demos
 
 - Visit [legacy.pro.balmjs.com](https://legacy.pro.balmjs.com/) (for Vue 2)
+- Visit [pro.balmjs.com](https://pro.balmjs.com/) (for Vue 3)
 
 ## Quick Start
 
 ### Requirements
 
-- vue@2.6.0+
-- vue-router@3.x
-- balm-ui@8.54.0+
+- vue 2.6.0+
+- vue-router 3.x
+- balm-ui 8.54.0+
 
 ### Installing
 
