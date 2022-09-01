@@ -1,17 +1,16 @@
 import { ref } from 'vue';
-import { loadAsset } from '@/utils';
 
 const demos = ref([]);
 
 async function initSnippet(name, count) {
   demos.value = []; // reset
 
-  if (name !== 'utils' && count) {
+  if (count) {
     demos.value = [''];
 
     for (let i = 1; i <= count; i++) {
-      const filename = `snippets/${name}/demo${i}.md`;
-      const code = await loadAsset(filename);
+      const filename = `${name}/demo${i}.md`;
+      const code = (await import(`@/snippets/${filename}`)).default;
 
       demos.value.push(code);
     }
