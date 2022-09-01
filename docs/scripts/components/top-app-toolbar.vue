@@ -7,15 +7,13 @@
       aria-describedby="donate"
       @click="openInNewTab('https://v8.material.balmjs.com/#/donate')"
     ></ui-icon-button>
-    <a
-      href="https://github.com/balmjs/balm-ui-pro/tree/legacy"
-      target="_blank"
-      rel="noopener"
+    <ui-icon-button
+      :class="[itemClass, 'github']"
+      aria-describedby="github"
+      @click="openInNewTab('https://github.com/balmjs/balm-ui-pro/tree/legacy')"
     >
-      <ui-icon-button :class="[itemClass, 'github']" aria-describedby="github">
-        <svg-github></svg-github>
-      </ui-icon-button>
-    </a>
+      <svg-github></svg-github>
+    </ui-icon-button>
   </div>
 </template>
 
