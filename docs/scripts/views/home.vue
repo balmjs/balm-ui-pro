@@ -1,7 +1,7 @@
 <template>
   <div :class="$tt('body1')">
     <header v-ripple.unbounded class="hero">
-      <h1 :class="$tt('headline1')">BalmUI Pro for Vue3</h1>
+      <h1 :class="$tt('headline1')">BalmUI Pro</h1>
     </header>
 
     <div :class="[$tt('body2'), 'pure-docs']">

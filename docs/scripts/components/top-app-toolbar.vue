@@ -1,13 +1,17 @@
 <template>
   <div class="top-app-toolbar">
     <ui-icon-button
-      v-tooltip="'Support BalmUI'"
+      v-tooltip="'Support BalmUI Pro'"
       :class="[itemClass, 'donate']"
       icon="support"
       aria-describedby="donate"
       @click="openInNewTab('https://material.balmjs.com/donate')"
     ></ui-icon-button>
-    <a href="https://github.com/balmjs/balm-ui" target="_blank" rel="noopener">
+    <a
+      href="https://github.com/balmjs/balm-ui-pro"
+      target="_blank"
+      rel="noopener"
+    >
       <ui-icon-button :class="[itemClass, 'github']" aria-describedby="github">
         <svg-github></svg-github>
       </ui-icon-button>
