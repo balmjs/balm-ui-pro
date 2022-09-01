@@ -14,10 +14,13 @@
 
 <script>
 export default {
-  mounted() {
+  activated() {
     this.$nextTick(() => {
       this.$bus.emit('global-message', true);
     });
+  },
+  deactivated() {
+    this.$bus.emit('global-message', false);
   },
   beforeDestroy() {
     this.$bus.emit('global-message', false);
