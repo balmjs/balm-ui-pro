@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.35.0 / 2022-09-04
+
+### Feature
+
+- `<ui-checkbox-group>`: add `allSelected`, `allSelectedLabel`, `selectedAllValue` prop
+
 ## v0.34.0 / 2022-08-31
 
 ### Chore
