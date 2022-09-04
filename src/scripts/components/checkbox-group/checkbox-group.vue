@@ -84,7 +84,9 @@ export default {
     modelValue(val) {
       this.selectedValue = val;
 
-      this.selectedAll = this.selectedCount === this.currentOptions.length;
+      this.selectedAll =
+        this.currentOptions.length &&
+        this.selectedCount === this.currentOptions.length;
     }
   },
   beforeMount() {
