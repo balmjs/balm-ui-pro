@@ -49,9 +49,6 @@ export default {
     };
   },
   computed: {
-    uuid() {
-      return this.generateRandomString(this.componentKey);
-    },
     switchItem() {
       const index = this.options.findIndex((option) =>
         this.switchValue

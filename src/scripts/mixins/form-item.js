@@ -43,10 +43,12 @@ export default {
             return option;
           })
         : [];
+    },
+    uuid() {
+      return generateRandomString(this.componentKey);
     }
   },
   methods: {
-    generateRandomString,
     checkOptionFormat(componentName) {
       const { label, value } = this.optionFormat;
       if (!(label && value)) {
