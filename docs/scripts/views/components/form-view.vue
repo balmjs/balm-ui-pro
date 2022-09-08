@@ -5,6 +5,7 @@
       :model-config="modelConfig"
       :action-config="actionConfig"
       :test="onTest"
+      @loaded="onLoaded"
       @action="onAction"
       @update:x="onChange"
     >
@@ -110,6 +111,10 @@ onMounted(async () => {
     }, 1e3);
   }
 });
+
+function onLoaded(formData) {
+  console.info('onLoaded', formData);
+}
 
 function onAction(action, result) {
   console.log('onAction', action, result);

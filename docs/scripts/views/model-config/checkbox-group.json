@@ -14,7 +14,9 @@
           "label": "D",
           "value": 4
         }
-      ]
+      ],
+      "allSelected": true,
+      "selectedAllValue": false
     }
   }
 ]
