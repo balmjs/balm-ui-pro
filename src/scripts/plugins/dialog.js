@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import MdcDialog from '../components/dialog/mdc-dialog';
+import MdcDialog from '../components/dialog/mdc-dialog.vue';
 import getType from '../utils/typeof';
 
 const DEFAULT_OPTIONS = {

@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import UiReadonlyItem from '../readonly-item/readonly-item';
+import UiReadonlyItem from '../readonly-item/readonly-item.vue';
 import getType, { isFunction } from '../../utils/typeof';
 
 const UI_FORM_ITEM = {
