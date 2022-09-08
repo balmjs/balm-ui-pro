@@ -24,7 +24,7 @@
           )
         "
         @loaded="initModelData"
-        @change:x="handleChange"
+        @update:x="handleChange"
         @action="handleAction"
       >
         <template v-for="(_, slotName) in $slots" #[slotName]="slotData">
@@ -112,7 +112,7 @@
               paginationAttrOrProp
             )
           "
-          @change="getModelData"
+          @update:model-value="getModelData"
         >
           <template v-for="(_, slotName) in $slots" #[slotName]="slotData">
             <slot :name="slotName" v-bind="slotData"></slot>

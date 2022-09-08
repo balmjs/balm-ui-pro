@@ -2,6 +2,13 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.16.0 / 2022-09-08
+
+### Feature
+
+- `<ui-form-view>`: optimize model value and config watching, add `dataSource` slot prop
+- `<ui-checkbox-group>`: add `allSelected`, `allSelectedLabel`, `selectedAllValue` prop
+
 ## v0.15.0 / 2022-08-31
 
 - Preview components
@@ -20,4 +27,3 @@
   - `$routerModel`
   - `$transform`
   - `$constant`
-  - `$dialog`

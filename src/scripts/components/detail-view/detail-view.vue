@@ -25,7 +25,7 @@
           )
         "
         @loaded="initModelData"
-        @change:x="handleChange"
+        @update:x="handleChange"
         @action="handleAction"
       >
         <template v-for="(_, slotName) in $slots" #[slotName]="slotData">

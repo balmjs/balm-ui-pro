@@ -1,6 +1,21 @@
+import {
+  reactive,
+  toRefs,
+  computed,
+  onBeforeMount,
+  onMounted,
+  onBeforeUnmount,
+  nextTick
+} from 'vue';
 import createVueApp from '../config/ssr';
 import MdcDialog from '../components/dialog/mdc-dialog.vue';
 import getType from '../utils/typeof';
+import { createDiv, removeDiv } from '../utils/div';
+
+// Define confirm dialog constants
+const UI_PRO_DIALOG = {
+  id: 'balmui-pro-dialog'
+};
 
 const DEFAULT_OPTIONS = {
   // Dialog
@@ -49,17 +64,27 @@ const template = `<mdc-dialog :class="className" :open="open" :title="title" :ma
   </template>
 </mdc-dialog>`;
 
+function createElement(id) {
+  return document.getElementById(id) || createDiv(id);
+}
+
+function removeElement(el) {
+  removeDiv(el);
+}
+
 function createDialog(options) {
+  const el = createElement(UI_PRO_DIALOG.id);
+
   const { components, ...config } = options;
 
   dialogApp = createVueApp({
-    el: document.createElement('div'),
+    el,
     name: 'ProDialog',
     components: {
       MdcDialog,
       ...components
     },
-    data() {
+    setup() {
       const {
         modelValueType,
         modelValueDefaults,
@@ -79,71 +104,71 @@ function createDialog(options) {
           ? ''
           : modelValueDefaults;
 
-      return {
+      const state = reactive({
         open: false,
         modelValue: currentModelValue,
         ...otherConfig
-      };
-    },
-    computed: {
-      useDialogAction() {
-        return !!this.actionConfig.length;
-      }
-    },
-    mounted() {
-      if (this.component) {
-        document.body.appendChild(this.$el);
+      });
 
-        this.open = true;
-      } else {
-        throw new Error('[$dialog]: Missing component');
-      }
-    },
-    methods: {
-      handleClose(onSave = false) {
+      const useDialogAction = computed(() => !!state.actionConfig.length);
+
+      onMounted(() =>
+        nextTick(() => {
+          if (state.component) {
+            state.open = true;
+          } else {
+            throw new Error('[$dialog]: Missing component');
+          }
+        })
+      );
+
+      onBeforeUnmount(() => removeElement(el));
+
+      function handleClose(onSave = false) {
         if (dialogApp) {
-          this.open = false;
+          state.open = false;
 
-          document.body.removeChild(this.$el);
-          dialogApp = null;
+          dialogApp.unmount(`#${UI_PRO_DIALOG.id}`);
 
-          if (onSave && this.refreshOnSave) {
-            this.refresh();
+          if (onSave && state.refreshOnSave) {
+            state.refresh();
           }
         }
-      },
-      handleComponentAction(action, result) {
-        if (!this.useDialogAction) {
+      }
+
+      function handleComponentAction(action, result) {
+        if (!useDialogAction.value) {
           const actionResult = {
-            data: this.modelValue,
+            data: state.modelValue,
             ...result
           };
 
           switch (action.type) {
             case 'submit':
-              if (this.closeOnSave) {
-                this.handleClose(true);
+              if (state.closeOnSave) {
+                handleClose(true);
               }
 
-              this.handler(action, actionResult, () => {
-                this.handleClose(true);
+              state.handler(action, actionResult, () => {
+                handleClose(true);
               });
               break;
             case 'cancel':
             case 'close':
-              this.handleClose();
+              handleClose();
               break;
           }
 
           if (action.type !== 'submit') {
-            this.handler(action, actionResult, this.handleClose);
+            state.handler(action, actionResult, handleClose);
           }
         }
-      },
-      handleDialogAction(action) {
-        if (this.useDialogAction) {
+      }
+
+      function handleDialogAction(action) {
+        if (useDialogAction.value) {
           const actionResult = {
-            data: this.modelValue
+            data: state.modelValue
           };
 
           let debounceConfig = {};
@@ -152,12 +177,12 @@ function createDialog(options) {
             case 'submit':
               debounceConfig = {
                 callback: () => {
-                  if (this.closeOnSave) {
-                    this.handleClose(true);
+                  if (state.closeOnSave) {
+                    handleClose(true);
                   }
 
-                  this.handler(action, actionResult, () => {
-                    this.handleClose(true);
+                  state.handler(action, actionResult, () => {
+                    handleClose(true);
                   });
                 },
                 delay: action.delay || 250
@@ -165,15 +190,22 @@ function createDialog(options) {
               break;
             case 'cancel':
             case 'close':
-              this.handleClose();
+              handleClose();
               break;
           }
 
           return action.type === 'submit'
             ? debounceConfig
-            : this.handler(action, actionResult, this.handleClose);
+            : state.handler(action, actionResult, handleClose);
         }
       }
+
+      return {
+        ...toRefs(state),
+        handleClose,
+        handleComponentAction,
+        handleDialogAction
+      };
     },
     template
   });
@@ -184,7 +216,7 @@ function createDialog(options) {
 function dialog(customOptions = {}) {
   const options = Object.assign({}, globalOptions, customOptions);
 
-  createDialog(options);
+  createDialog(options).mount(`#${UI_PRO_DIALOG.id}`);
 }
 
 function install(app, options = {}) {

@@ -84,9 +84,10 @@ onMounted(async () => {
   state.modelConfig = await store.getModelConfig('model-config/b.js');
 
   if (id.value) {
-    state.formData = await store.getModelDetail('user', {
+    state.formDataSource = await store.getModelDetail('user', {
       id: id.value
     });
+    state.formData = Object.assign({}, state.formDataSource);
   } else {
     setTimeout(() => {
       state.formDataSource = {

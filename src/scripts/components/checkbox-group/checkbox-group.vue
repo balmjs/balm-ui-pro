@@ -5,7 +5,7 @@
         v-model="selectedAll"
         :input-id="uuid"
         :indeterminate="indeterminate"
-        @change="handleSelectAll"
+        @update:model-value="handleSelectAll"
       ></ui-checkbox>
       <label :for="uuid">{{ allSelectedLabel }}</label>
     </ui-form-field>
@@ -72,7 +72,7 @@ const state = reactive({
   selectedValue: props.modelValue,
   selectedAll: props.selectedAllValue
 });
-const { selectedValue } = toRefs(state);
+const { selectedValue, selectedAll } = toRefs(state);
 
 const { uuid, currentOptions, checkOptionFormat } = useFormItem(props);
 const selectedCount = computed(() => state.selectedValue.length);
@@ -106,6 +106,7 @@ function handleSelectAll(checked) {
   state.selectedValue = checked
     ? currentOptions.value.map((option) => option[props.optionFormat.value])
     : [];
+
   handleChange(state.selectedValue);
 }
 </script>
