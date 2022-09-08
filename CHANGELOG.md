@@ -2,6 +2,16 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.36.0 / 2022-09-08
+
+### Feature
+
+- `<ui-form-view>`: optimize model value and config watching, add `dataSource` slot prop
+
+### Bug Fixes
+
+- `<ui-form-view>`: fix model value sync bug
+
 ## v0.35.2 / 2022-09-04
 
 ### Feature
