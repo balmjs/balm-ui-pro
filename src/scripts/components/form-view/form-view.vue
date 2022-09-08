@@ -22,7 +22,8 @@
           v-bind="{
             itemClass,
             subitemClass,
-            data: currentFormData
+            data: formData,
+            dataSource: formDataSource
           }"
         ></slot>
         <!-- List view -->
@@ -52,7 +53,8 @@
                     v-bind="
                       Object.assign({}, slotData, {
                         config: configData,
-                        data: currentFormData
+                        data: formData,
+                        dataSource: formDataSource
                       })
                     "
                   ></slot>
@@ -80,7 +82,8 @@
                   v-bind="
                     Object.assign({}, slotData, {
                       config: configData,
-                      data: currentFormData
+                      data: formData,
+                      dataSource: formDataSource
                     })
                   "
                 ></slot>
@@ -94,7 +97,8 @@
           v-bind="{
             itemClass,
             subitemClass,
-            data: currentFormData
+            data: formData,
+            dataSource: formDataSource
           }"
         ></slot>
         <!-- Action view -->
@@ -104,7 +108,8 @@
           v-bind="{
             className: [itemClass, actionClass],
             config: formConfig,
-            data: currentFormData
+            data: formData,
+            dataSource: formDataSource
           }"
         >
           <ui-form-field
@@ -230,7 +235,8 @@ const state = reactive({
   formConfig: [],
   formData: {},
   formDataSource: props.modelValue,
-  formOptions: {}
+  formOptions: {},
+  formUpdating: false
 });
 const { formConfig, formData, formDataSource } = toRefs(state);
 
@@ -264,17 +270,23 @@ watch(
   async (val, oldVal) => {
     state.formDataSource = Object.assign({}, oldVal, val);
 
-    if (
-      isFunctionConfig.value &&
-      JSON.stringify(val) !== JSON.stringify(oldVal)
-    ) {
-      await setFormConfig();
-    }
+    if (!state.formUpdating) {
+      state.formUpdating = true;
 
-    if (hasFormDataSource.value) {
-      updateFormData();
-    } else {
-      initFormData(Object.keys(oldVal).length);
+      if (
+        isFunctionConfig.value &&
+        JSON.stringify(val) !== JSON.stringify(oldVal)
+      ) {
+        await setFormConfig();
+      }
+
+      if (hasFormDataSource.value) {
+        updateFormData();
+      } else {
+        initFormData(Object.keys(oldVal).length);
+      }
+
+      state.formUpdating = false;
     }
   }
 );
@@ -285,13 +297,19 @@ watch(
     if (val === false) {
       resetFormView();
     } else {
-      await setFormConfig(val, true);
+      if (!state.formUpdating) {
+        state.formUpdating = true;
 
-      if (hasFormDataSource.value) {
-        updateFormData();
-      } else {
-        const synchronized = Object.keys(currentFormData.value).length;
-        !synchronized && syncFormData();
+        await setFormConfig(val, true);
+
+        if (hasFormDataSource.value) {
+          updateFormData();
+        } else {
+          const synchronized = Object.keys(state.formData).length;
+          !synchronized && syncFormData();
+        }
+
+        state.formUpdating = false;
       }
     }
   }
@@ -301,14 +319,19 @@ watch(
   () => props.modelOptions,
   async (val, oldVal) => {
     if (
+      !state.formUpdating &&
       isFunctionConfig.value &&
       Object.keys(val).length !== Object.keys(oldVal).length
     ) {
+      state.formUpdating = true;
+
       await setFormConfig();
 
       if (hasFormDataSource.value) {
         updateFormData();
       }
+
+      state.formUpdating = false;
     }
   }
 );
@@ -320,7 +343,10 @@ function resetFormView() {
 
 async function setModelOptions() {
   const originalConfig = isFunctionConfig.value
-    ? await props.modelConfig(currentFormData.value, props.modelOptions)
+    ? await props.modelConfig(
+        Object.assign({}, state.formDataSource),
+        Object.assign({}, props.modelOptions)
+      )
     : props.modelConfig;
 
   const modelList = originalConfig
@@ -345,14 +371,11 @@ async function setFormConfig(
     await setModelOptions();
   }
 
-  const currentModelOptions = Object.assign(
-    {},
-    state.formOptions,
-    props.modelOptions
-  );
-
   const originalConfig = isFunctionConfig.value
-    ? await modelConfig(currentFormData.value, currentModelOptions)
+    ? await modelConfig(
+        Object.assign({}, state.formDataSource),
+        Object.assign({}, state.formOptions, props.modelOptions)
+      )
     : modelConfig;
 
   if (Array.isArray(originalConfig)) {
@@ -364,7 +387,7 @@ async function setFormConfig(
       initFormData();
 
       if (Object.keys(state.formData).length) {
-        emit(UI_FORM_VIEW.EVENTS.loaded, state.formData);
+        emit(UI_FORM_VIEW.EVENTS.loaded, Object.assign({}, state.formData));
       }
     }
   } else {
@@ -373,7 +396,9 @@ async function setFormConfig(
 }
 
 function syncFormData() {
-  emit(UI_FORM_VIEW.EVENTS.update, state.formData);
+  if (!state.formUpdating) {
+    emit(UI_FORM_VIEW.EVENTS.update, state.formData);
+  }
 }
 
 function initFormData(needSync = false) {
@@ -382,19 +407,22 @@ function initFormData(needSync = false) {
   formDataConfig.value.forEach(({ key, value, components }) => {
     if (Array.isArray(components)) {
       components.forEach(({ key, value }) => {
-        key && (state.formData[key] = value);
+        const initialValue = state.formDataSource[key] || value;
+        key && (state.formData[key] = initialValue);
       });
     } else {
-      key && (state.formData[key] = value);
+      const initialValue = state.formDataSource[key] || value;
+      key && (state.formData[key] = initialValue);
     }
   });
 
   needSync && syncFormData();
 }
 
-function updateFormData(newFormData = state.formDataSource) {
+function updateFormData() {
   let needSync = false;
 
+  const newFormData = state.formDataSource;
   const newFormDataKeys = Object.keys(newFormData);
   const newFormConfig = formDataConfig.value.filter(
     ({ key, components }) =>

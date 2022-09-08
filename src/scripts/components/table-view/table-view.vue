@@ -172,8 +172,8 @@ export default {
 <script setup>
 import { reactive, toRefs, computed, onBeforeMount, useSlots } from 'vue';
 import { useRoute } from 'vue-router';
-import UiTableViewTopActions from './table-view-top-actions';
-import UiTableViewRowActions from './table-view-row-actions';
+import UiTableViewTopActions from './table-view-top-actions.vue';
+import UiTableViewRowActions from './table-view-row-actions.vue';
 import { viewProps, useView } from '../../mixins/view';
 import { useKeepAlive } from '../../mixins/keep-alive';
 import getType, { isFunction } from '../../utils/typeof';

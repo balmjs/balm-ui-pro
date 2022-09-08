@@ -27,7 +27,7 @@ export default {
 
 <script setup>
 import { reactive, toRefs, computed, watch } from 'vue';
-import { formItemProps, generateRandomString } from '../../mixins/form-item';
+import { formItemProps, useFormItem } from '../../mixins/form-item';
 
 const props = defineProps({
   ...formItemProps,
@@ -57,7 +57,7 @@ const state = reactive({
 });
 const { switchValue } = toRefs(state);
 
-const uuid = computed(() => generateRandomString(props.componentKey));
+const { uuid } = useFormItem(props);
 const switchItem = computed(() => {
   const index = props.options.findIndex((option) =>
     state.switchValue

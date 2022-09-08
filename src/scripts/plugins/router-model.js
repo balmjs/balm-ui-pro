@@ -145,19 +145,30 @@ class RouterModel {
   }
 
   debug(name = true, namespace = false) {
-    if (namespace) {
-      this.namespaceMap.has(name) &&
-        console.info(
-          `[${NAME}]: Namespace Routes`,
-          this.namespaceMap.get(name)
-        );
-    } else {
-      let data = [];
-      const routes = name === true ? this.routes : this.map.get(name);
-      routes.forEach((route) => parseRoute(data, route));
+    let data = [];
+    let routes = [];
 
+    if (namespace) {
+      if (this.namespaceMap.has(name)) {
+        routes = this.namespaceMap.get(name);
+        console.info(`[${NAME}]: Namespace Routes`);
+      }
+    } else {
+      routes = name === true ? this.routes : this.map.get(name);
       console.info(`[${NAME}]: Model Routes`);
-      console.table(data);
+    }
+
+    if (routes) {
+      if (!Array.isArray(routes)) {
+        routes = [routes];
+      }
+
+      if (routes.length) {
+        routes.forEach((route) => {
+          parseRoute(data, route);
+        });
+        console.table(data);
+      }
     }
   }
 }

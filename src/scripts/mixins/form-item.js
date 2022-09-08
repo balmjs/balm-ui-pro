@@ -32,6 +32,8 @@ const formItemProps = {
 };
 
 function useFormItem(props) {
+  const uuid = generateRandomString(props.componentKey);
+
   const currentOptions = computed(() =>
     Array.isArray(props.options)
       ? props.options.map((option) => {
@@ -51,9 +53,10 @@ function useFormItem(props) {
   }
 
   return {
+    uuid,
     currentOptions,
     checkOptionFormat
   };
 }
 
-export { cssClasses, formItemProps, useFormItem, generateRandomString };
+export { cssClasses, formItemProps, useFormItem };

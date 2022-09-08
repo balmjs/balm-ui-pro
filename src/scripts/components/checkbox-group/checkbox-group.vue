@@ -1,5 +1,14 @@
 <template>
   <div :class="['mdc-checkbox-group', cssClasses.subitemClass]">
+    <ui-form-field v-if="allSelected">
+      <ui-checkbox
+        v-model="selectedAll"
+        :input-id="uuid"
+        :indeterminate="indeterminate"
+        @change="handleSelectAll"
+      ></ui-checkbox>
+      <label :for="uuid">{{ allSelectedLabel }}</label>
+    </ui-form-field>
     <ui-form-field v-for="option in currentOptions" :key="option.uuid">
       <ui-checkbox
         v-model="selectedValue"
@@ -29,7 +38,7 @@ export default {
 </script>
 
 <script setup>
-import { reactive, toRefs, watch, onBeforeMount } from 'vue';
+import { reactive, toRefs, computed, watch, onBeforeMount } from 'vue';
 import { cssClasses, formItemProps, useFormItem } from '../../mixins/form-item';
 
 const props = defineProps({
@@ -43,26 +52,60 @@ const props = defineProps({
   options: {
     type: Array,
     default: () => []
+  },
+  allSelected: {
+    type: Boolean,
+    default: false
+  },
+  allSelectedLabel: {
+    type: String,
+    default: 'All'
+  },
+  selectedAllValue: {
+    type: Boolean,
+    default: false
   }
 });
 const emit = defineEmits([UI_CHECKBOX_GROUP.EVENTS.CHANGE]);
 
 const state = reactive({
-  selectedValue: props.modelValue
+  selectedValue: props.modelValue,
+  selectedAll: props.selectedAllValue
 });
 const { selectedValue } = toRefs(state);
 
-const { currentOptions, checkOptionFormat } = useFormItem(props);
+const { uuid, currentOptions, checkOptionFormat } = useFormItem(props);
+const selectedCount = computed(() => state.selectedValue.length);
+const indeterminate = computed(() =>
+  selectedCount.value
+    ? selectedCount.value !== currentOptions.value.length
+    : false
+);
+
 onBeforeMount(() => {
   checkOptionFormat(UI_CHECKBOX_GROUP.name);
+
+  handleSelectAll(state.selectedAll);
 });
 
 watch(
   () => props.modelValue,
-  (val) => (state.selectedValue = val)
+  (val) => {
+    state.selectedValue = val;
+    state.selectedAll =
+      currentOptions.value.length &&
+      selectedCount.value === currentOptions.value.length;
+  }
 );
 
 function handleChange(selectedValue) {
   emit(UI_CHECKBOX_GROUP.EVENTS.CHANGE, selectedValue);
+}
+
+function handleSelectAll(checked) {
+  state.selectedValue = checked
+    ? currentOptions.value.map((option) => option[props.optionFormat.value])
+    : [];
+  handleChange(state.selectedValue);
 }
 </script>
