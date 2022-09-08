@@ -78,17 +78,18 @@ type ModelConfig = FormItemConfig[] | (formData: object, formOptions: object) =>
 
 ### Slots
 
-| Name                                          | Props                               | Description                                                    |
-| --------------------------------------------- | ----------------------------------- | -------------------------------------------------------------- |
-| `before-form-view`                            | `itemClass`, `subitemClass`, `data` | Before form items                                              |
-| custom form item slots (by form model config) | `config`, `data`                    | Custom form item slots (See all slots names by `config.debug`) |
-| `after-form-view`                             | `itemClass`, `subitemClass`, `data` | After form items                                               |
-| `form-view-actions`                           | `className`, `config`, `data`       | Custom form buttons                                            |
+| Name                                          | Props                                             | Description                                                    |
+| --------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------- |
+| `before-form-view`                            | `itemClass`, `subitemClass`, `data`, `dataSource` | Before form items                                              |
+| custom form item slots (by form model config) | `config`, `data`, `dataSource`                    | Custom form item slots (See all slots names by `config.debug`) |
+| `after-form-view`                             | `itemClass`, `subitemClass`, `data`, `dataSource` | After form items                                               |
+| `form-view-actions`                           | `className`, `config`, `data`, `dataSource`       | Custom form buttons                                            |
 
 ### Events
 
 | Name       | Type                                                                              | Description                                  |
 | ---------- | --------------------------------------------------------------------------------- | -------------------------------------------- |
-| `change`   | `function(modelValue: object)`                                                    | Emits when the form view is changed.         |
-| `change:x` | `function(key: string, value: string)`                                            | Emits when the form item is changed.         |
+| `loaded`   | `function(modelValue: object)`                                                    | Emits when the form view config is loaded.   |
+| `change`   | `function(modelValue: object)`                                                    | Emits when the form view data is changed.    |
+| `change:x` | `function(key: string, value: string)`                                            | Emits when the form item data is changed.    |
 | `action`   | `function(actionConfig: ActionButton, validationResult?: BalmUIValidationResult)` | Emits when the form view actions is clicked. |

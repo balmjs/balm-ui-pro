@@ -4,6 +4,7 @@
       v-model="formData"
       :model-config="modelConfig"
       :action-config="actionConfig"
+      @loaded="onLoaded"
       @action="onAction"
       @change:x="onChange"
     >
@@ -154,6 +155,9 @@ export default {
     }
   },
   methods: {
+    onLoaded(formData) {
+      console.info('onLoaded', formData);
+    },
     onAction(action, result) {
       console.log('onAction', action, result);
 

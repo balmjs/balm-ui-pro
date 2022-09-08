@@ -20,7 +20,8 @@
           v-bind="{
             itemClass,
             subitemClass,
-            data: currentFormData
+            data: formData,
+            dataSource: formDataSource
           }"
         ></slot>
         <!-- List view -->
@@ -54,7 +55,8 @@
                   v-bind="
                     Object.assign({}, slotData, {
                       config: configData,
-                      data: currentFormData
+                      data: formData,
+                      dataSource: formDataSource
                     })
                   "
                 ></slot>
@@ -82,7 +84,8 @@
                 v-bind="
                   Object.assign({}, slotData, {
                     config: configData,
-                    data: currentFormData
+                    data: formData,
+                    dataSource: formDataSource
                   })
                 "
               ></slot>
@@ -95,7 +98,8 @@
           v-bind="{
             itemClass,
             subitemClass,
-            data: currentFormData
+            data: formData,
+            dataSource: formDataSource
           }"
         ></slot>
         <!-- Action view -->
@@ -104,7 +108,8 @@
           v-bind="{
             className: [itemClass, actionClass],
             config: formConfig,
-            data: currentFormData
+            data: formData,
+            dataSource: formDataSource
           }"
         >
           <ui-form-field
@@ -137,7 +142,7 @@
 </template>
 
 <script>
-import UiFormItem from './form-item';
+import UiFormItem from './form-item.vue';
 import getType, { isFunction } from '../../utils/typeof';
 
 const UI_FORM_VIEW = {
@@ -213,7 +218,8 @@ export default {
       formConfig: [],
       formData: {},
       formDataSource: this.modelValue,
-      formOptions: {}
+      formOptions: {},
+      formUpdating: false
     };
   },
   computed: {
@@ -228,52 +234,66 @@ export default {
     },
     hasFormDataSource() {
       return !!Object.keys(this.formDataSource).length;
-    },
-    currentFormData() {
-      return Object.assign({}, this.formDataSource, this.formData);
     }
   },
   watch: {
     async modelValue(val, oldVal) {
       this.formDataSource = Object.assign({}, oldVal, val);
 
-      if (
-        this.isFunctionConfig &&
-        JSON.stringify(val) !== JSON.stringify(oldVal)
-      ) {
-        await this.setFormConfig();
-      }
+      if (!this.formUpdating) {
+        this.formUpdating = true;
 
-      if (this.hasFormDataSource) {
-        this.updateFormData();
-      } else {
-        this.initFormData(Object.keys(oldVal).length);
+        if (
+          this.isFunctionConfig &&
+          JSON.stringify(val) !== JSON.stringify(oldVal)
+        ) {
+          await this.setFormConfig();
+        }
+
+        if (this.hasFormDataSource) {
+          this.updateFormData();
+        } else {
+          this.initFormData(Object.keys(oldVal).length);
+        }
+
+        this.formUpdating = false;
       }
     },
     async modelConfig(val) {
       if (val === false) {
         this.resetFormView();
       } else {
-        await this.setFormConfig(val, true);
+        if (!this.formUpdating) {
+          this.formUpdating = true;
 
-        if (this.hasFormDataSource) {
-          this.updateFormData();
-        } else {
-          const synchronized = Object.keys(this.currentFormData).length;
-          !synchronized && this.syncFormData();
+          await this.setFormConfig(val, true);
+
+          if (this.hasFormDataSource) {
+            this.updateFormData();
+          } else {
+            const synchronized = Object.keys(this.formData).length;
+            !synchronized && this.syncFormData();
+          }
+
+          this.formUpdating = false;
         }
       }
     },
     async modelOptions(val, oldVal) {
       if (
+        !this.formUpdating &&
         this.isFunctionConfig &&
         Object.keys(val).length !== Object.keys(oldVal).length
       ) {
+        this.formUpdating = true;
+
         await this.setFormConfig();
 
         if (this.hasFormDataSource) {
           this.updateFormData();
         }
+
+        this.formUpdating = false;
       }
     }
   },
@@ -293,7 +313,10 @@ export default {
     },
     async setModelOptions() {
       const originalConfig = this.isFunctionConfig
-        ? await this.modelConfig(this.currentFormData, this.modelOptions)
+        ? await this.modelConfig(
+            Object.assign({}, this.formDataSource),
+            Object.assign({}, this.modelOptions)
+          )
         : this.modelConfig;
 
       const modelList = originalConfig
@@ -314,14 +337,11 @@ export default {
         await this.setModelOptions();
       }
 
-      const currentFormOptions = Object.assign(
-        {},
-        this.formOptions,
-        this.modelOptions
-      );
-
       const originalConfig = this.isFunctionConfig
-        ? await modelConfig(this.currentFormData, currentFormOptions)
+        ? await modelConfig(
+            Object.assign({}, this.formDataSource),
+            Object.assign({}, this.formOptions, this.modelOptions)
+          )
         : modelConfig;
 
       if (Array.isArray(originalConfig)) {
@@ -333,7 +353,10 @@ export default {
           this.initFormData();
 
           if (Object.keys(this.formData).length) {
-            this.$emit(UI_FORM_VIEW.EVENTS.loaded, this.formData);
+            this.$emit(
+              UI_FORM_VIEW.EVENTS.loaded,
+              Object.assign({}, this.formData)
+            );
           }
         }
       } else {
@@ -341,7 +364,9 @@ export default {
       }
     },
     syncFormData() {
-      this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
+      if (!this.formUpdating) {
+        this.$emit(UI_FORM_VIEW.EVENTS.update, this.formData);
+      }
     },
     initFormData(needSync = false) {
       this.formData = {};
@@ -349,18 +374,21 @@ export default {
       this.formDataConfig.forEach(({ key, value, components }) => {
         if (Array.isArray(components)) {
           components.forEach(({ key, value }) => {
-            key && this.$set(this.formData, key, value);
+            const initialValue = this.formDataSource[key] || value;
+            key && this.$set(this.formData, key, initialValue);
           });
         } else {
-          key && this.$set(this.formData, key, value);
+          const initialValue = this.formDataSource[key] || value;
+          key && this.$set(this.formData, key, initialValue);
         }
       });
 
       needSync && this.syncFormData();
     },
-    updateFormData(newFormData = this.formDataSource) {
+    updateFormData() {
       let needSync = false;
 
+      const newFormData = this.formDataSource;
       const newFormDataKeys = Object.keys(newFormData);
       const newFormConfig = this.formDataConfig.filter(
         ({ key, components }) =>
