@@ -2,6 +2,12 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.18.0 / 2022-09-09
+
+### Feature
+
+- `<ui-table-view>`: add `placeholder` prop
+
 ## v0.17.0 / 2022-09-09
 
 ### Feature

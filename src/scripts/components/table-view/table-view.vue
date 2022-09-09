@@ -60,75 +60,80 @@
     <section class="mdc-table-view__content">
       <slot name="before-table-view"></slot>
 
-      <ui-table
-        v-model="table.selectedRows"
-        v-bind="
-          Object.assign(
-            {},
-            {
-              data: table.data,
-              thead,
-              tbody,
-              fullwidth: true,
-              showProgress: table.loading
-            },
-            tableAttrOrProp
-          )
-        "
-      >
-        <template v-for="(_, slotName) in $slots" #[slotName]="slotData">
-          <slot :name="slotName" v-bind="slotData"></slot>
-        </template>
-        <!-- Default actions -->
-        <template #actions="{ data }">
-          <ui-table-view-row-actions
-            v-if="rowActionConfig.length"
-            v-bind="{
-              data,
-              model,
-              modelOptions,
-              keyName,
-              actionConfig: rowActionConfig,
-              actionHandler: rowActionHandler,
-              actionRendering: rowActionRendering,
-              refreshData: getModelData
-            }"
-          ></ui-table-view-row-actions>
-          <slot v-else name="actions" v-bind="data"></slot>
-        </template>
-      </ui-table>
-
-      <template v-if="table.data.length">
-        <ui-pagination
-          v-if="!withoutPagination"
-          v-model="table.page"
+      <div v-if="table.usePlaceholder" class="mdc-table-view__placeholder">
+        <slot name="placeholder">{{ placeholder }}</slot>
+      </div>
+      <template v-else>
+        <ui-table
+          v-model="table.selectedRows"
           v-bind="
             Object.assign(
               {},
               {
-                total: table.total,
-                pageSize
+                data: table.data,
+                thead,
+                tbody,
+                fullwidth: true,
+                showProgress: table.loading
               },
-              paginationAttrOrProp
+              tableAttrOrProp
             )
           "
-          @update:model-value="getModelData"
         >
           <template v-for="(_, slotName) in $slots" #[slotName]="slotData">
             <slot :name="slotName" v-bind="slotData"></slot>
           </template>
-          <!-- Default pagination info -->
-          <template #default="slotData">
-            <slot
-              name="pagination"
-              v-bind="Object.assign({}, slotData, table)"
-            ></slot>
+          <!-- Default actions -->
+          <template #actions="{ data }">
+            <ui-table-view-row-actions
+              v-if="rowActionConfig.length"
+              v-bind="{
+                data,
+                model,
+                modelOptions,
+                keyName,
+                actionConfig: rowActionConfig,
+                actionHandler: rowActionHandler,
+                actionRendering: rowActionRendering,
+                refreshData: getModelData
+              }"
+            ></ui-table-view-row-actions>
+            <slot v-else name="actions" v-bind="data"></slot>
           </template>
-        </ui-pagination>
+        </ui-table>
+
+        <template v-if="table.data.length">
+          <ui-pagination
+            v-if="!withoutPagination"
+            v-model="table.page"
+            v-bind="
+              Object.assign(
+                {},
+                {
+                  total: table.total,
+                  pageSize
+                },
+                paginationAttrOrProp
+              )
+            "
+            @update:model-value="getModelData"
+          >
+            <template v-for="(_, slotName) in $slots" #[slotName]="slotData">
+              <slot :name="slotName" v-bind="slotData"></slot>
+            </template>
+            <!-- Default pagination info -->
+            <template #default="slotData">
+              <slot
+                name="pagination"
+                v-bind="Object.assign({}, slotData, table)"
+              ></slot>
+            </template>
+          </ui-pagination>
+        </template>
+        <div v-else class="mdc-table-view__empty">
+          <slot name="empty">{{ noData }}</slot>
+        </div>
       </template>
-      <div v-else class="mdc-table-view__empty">
-        <slot name="empty">{{ noData }}</slot>
-      </div>
 
       <slot name="after-table-view"></slot>
     </section>
@@ -269,6 +274,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  placeholder: {
+    type: String,
+    default: ''
+  },
   searchOnReset: {
     type: Boolean,
     default: false
@@ -295,7 +304,8 @@ const state = reactive({
     data: [],
     total: 0,
     page: 1,
-    loading: false
+    loading: false,
+    usePlaceholder: props.useValidator && props.placeholder
   },
   tableDataSource: {}
 });
@@ -354,6 +364,7 @@ async function getModelData() {
     state.table.loading = true;
     state.tableDataSource = await props.getModelDataFn()(instanceData.value);
     state.table.loading = false;
+    state.table.usePlaceholder = false;
 
     if (getType(state.tableDataSource) === 'object') {
       for (const [key, value] of Object.entries(props.tableDataFormat)) {
