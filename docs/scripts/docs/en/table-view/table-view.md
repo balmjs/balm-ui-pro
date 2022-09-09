@@ -56,6 +56,7 @@ interface ActionData {
   }
 
   interface TopActionButton {
+    if?: boolean | (dataSource: object) => boolean;
     type: 'router-link' | string;
     icon?: string;
     text: string;

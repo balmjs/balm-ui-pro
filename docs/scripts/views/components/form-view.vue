@@ -3,6 +3,9 @@
     <ui-form-view
       v-model="formData"
       :model-config="modelConfig"
+      :model-options="{
+        extra
+      }"
       :action-config="actionConfig"
       @loaded="onLoaded"
       @action="onAction"
@@ -22,7 +25,15 @@
         </ui-form-field>
       </template> -->
       <template #after-form-view="{ data }">
+        <ui-form-field>
+          <label for="extra-option">
+            Extra options: select disabled ({{ extra }})
+          </label>
+          <ui-checkbox v-model="extra" input-id="extra-option"></ui-checkbox>
+        </ui-form-field>
+
         <hr />
+
         <div>inner formData: {{ data }}</div>
         <ui-alert v-if="message" state="warning">{{ message }}</ui-alert>
       </template>
@@ -73,14 +84,7 @@ export default {
         b: 'world'
       },
       modelConfig,
-      // modelOptions: {
-      //   selectOptions: defaultSelectOptions,
-      //   checkboxOptions: defaultCheckboxOptions,
-      //   radioOptions: defaultRadioOptions,
-      //   chipsOptions: defaultChipsOptions,
-      //   switchOptions,
-      //   multiSelectOptions1: []
-      // },
+      extra: false,
       actionConfig,
       message: ''
     };
@@ -92,38 +96,6 @@ export default {
   },
   async mounted() {
     this.modelConfig = await this.$store.getModelConfig('model-config/b.js');
-
-    // const selectOptions = await this.$store.getModel(
-    //   'demo',
-    //   {},
-    //   { apiAction: 'selectOptions' }
-    // );
-    // const checkboxOptions = await this.$store.getModel(
-    //   'demo',
-    //   {},
-    //   { apiAction: 'checkboxOptions' }
-    // );
-    // const radioOptions = await this.$store.getModel(
-    //   'demo',
-    //   {},
-    //   { apiAction: 'radioOptions' }
-    // );
-    // const chipsOptions = await this.$store.getModel(
-    //   'demo',
-    //   {},
-    //   { apiAction: 'chipsOptions' }
-    // );
-    // const multiSelectOptions1 = await this.$store.getModel(
-    //   'demo',
-    //   {},
-    //   { apiAction: 'multiSelectOptions1' }
-    // );
-
-    // this.$set(this.modelOptions, 'selectOptions', selectOptions);
-    // this.$set(this.modelOptions, 'checkboxOptions', checkboxOptions);
-    // this.$set(this.modelOptions, 'radioOptions', radioOptions);
-    // this.$set(this.modelOptions, 'chipsOptions', chipsOptions);
-    // this.$set(this.modelOptions, 'multiSelectOptions1', multiSelectOptions1);
 
     if (this.id) {
       this.formDataSource = await this.$store.getModelDetail('user', {

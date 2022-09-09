@@ -106,7 +106,7 @@ export default {
   },
   methods: {
     onChange(key, value, refresh) {
-      console.log('onChange', key, value, refresh);
+      console.log('onChange', key, value);
       // refresh();
     },
     onAction(action, data) {
