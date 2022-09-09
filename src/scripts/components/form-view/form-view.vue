@@ -266,32 +266,6 @@ onBeforeUnmount(() => {
 });
 
 watch(
-  () => props.modelValue,
-  async (val, oldVal) => {
-    state.formDataSource = Object.assign({}, oldVal, val);
-
-    if (!state.formUpdating) {
-      state.formUpdating = true;
-
-      if (
-        isFunctionConfig.value &&
-        JSON.stringify(val) !== JSON.stringify(oldVal)
-      ) {
-        await setFormConfig();
-      }
-
-      if (hasFormDataSource.value) {
-        updateFormData();
-      } else {
-        initFormData(Object.keys(oldVal).length);
-      }
-
-      state.formUpdating = false;
-    }
-  }
-);
-
-watch(
   () => props.modelConfig,
   async (val) => {
     if (val === false) {
@@ -316,12 +290,40 @@ watch(
 );
 
 watch(
+  () => props.modelValue,
+  async (val) => {
+    if (JSON.stringify(val) !== JSON.stringify(state.formDataSource)) {
+      state.formDataSource = Object.assign({}, state.formDataSource, val);
+
+      if (!state.formUpdating) {
+        state.formUpdating = true;
+
+        if (isFunctionConfig.value) {
+          await setFormConfig();
+        }
+
+        if (hasFormDataSource.value) {
+          updateFormData();
+        } else {
+          initFormData();
+        }
+
+        state.formUpdating = false;
+      }
+    }
+  },
+  {
+    deep: true
+  }
+);
+
+watch(
   () => props.modelOptions,
   async (val, oldVal) => {
     if (
       !state.formUpdating &&
       isFunctionConfig.value &&
-      Object.keys(val).length !== Object.keys(oldVal).length
+      JSON.stringify(val) !== JSON.stringify(oldVal)
     ) {
       state.formUpdating = true;
 
@@ -333,6 +335,9 @@ watch(
 
       state.formUpdating = false;
     }
+  },
+  {
+    deep: true
   }
 );
 
@@ -407,12 +412,10 @@ function initFormData(needSync = false) {
   formDataConfig.value.forEach(({ key, value, components }) => {
     if (Array.isArray(components)) {
       components.forEach(({ key, value }) => {
-        const initialValue = state.formDataSource[key] || value;
-        key && (state.formData[key] = initialValue);
+        key && (state.formData[key] = value);
       });
     } else {
-      const initialValue = state.formDataSource[key] || value;
-      key && (state.formData[key] = initialValue);
+      key && (state.formData[key] = value);
     }
   });
 

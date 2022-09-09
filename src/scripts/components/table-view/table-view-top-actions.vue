@@ -5,7 +5,7 @@
       :key="`top-action-${index}`"
     >
       <ui-button
-        v-if="actionRendering(action, data.tableDataSource)"
+        v-if="ifAction(action)"
         :class="[cssClasses.topAction, action.type || '']"
         v-bind="
           Object.assign(
@@ -74,6 +74,16 @@ const props = defineProps({
     default: () => {}
   }
 });
+
+function ifAction(action) {
+  const currentAction = action.if;
+
+  const { tableDataSource } = props.data;
+
+  return isFunction(currentAction)
+    ? currentAction(tableDataSource)
+    : props.actionRendering(action, tableDataSource);
+}
 
 function actionIcon({ icon, type }) {
   let result = icon || '';
