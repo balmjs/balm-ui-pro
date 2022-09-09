@@ -2,6 +2,13 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.17.0 / 2022-09-09
+
+### Feature
+
+- `<ui-form-view>`: optimize model value and options watching
+- `<ui-table-view>`: `topActionConfig` support `if` config for rendering
+
 ## v0.16.0 / 2022-09-08
 
 ### Feature
