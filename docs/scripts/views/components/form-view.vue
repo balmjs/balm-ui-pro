@@ -3,6 +3,9 @@
     <ui-form-view
       v-model="formData"
       :model-config="modelConfig"
+      :model-options="{
+        extra
+      }"
       :action-config="actionConfig"
       :test="onTest"
       @loaded="onLoaded"
@@ -23,7 +26,15 @@
         </ui-form-field>
       </template> -->
       <template #after-form-view="{ data }">
+        <ui-form-field>
+          <label for="extra-option">
+            Extra options: select disabled ({{ extra }})
+          </label>
+          <ui-checkbox v-model="extra" input-id="extra-option"></ui-checkbox>
+        </ui-form-field>
+
         <hr />
+
         <div>inner formData: {{ data }}</div>
         <ui-alert v-if="message" state="warning">{{ message }}</ui-alert>
       </template>
@@ -74,9 +85,10 @@ const state = reactive({
     b: 'world'
   },
   modelConfig: defaultModelConfig,
-  message: ''
+  message: '',
+  extra: false
 });
-const { formDataSource, formData, modelConfig, message } = toRefs(state);
+const { formDataSource, formData, modelConfig, message, extra } = toRefs(state);
 
 const id = computed(() => route.params.id || 0);
 

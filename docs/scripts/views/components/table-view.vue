@@ -98,7 +98,7 @@ function rowActionRendering(action, data) {
 }
 
 function onChange(key, value, refresh) {
-  console.log('onChange', key, value, refresh);
+  console.log('onChange', key, value);
   // refresh();
 }
 

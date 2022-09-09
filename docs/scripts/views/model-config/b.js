@@ -10,10 +10,11 @@ export default (
     radioOptions,
     chipsOptions,
     switchOptions,
-    multiSelectOptions
+    multiSelectOptions,
+    extra
   }
 ) => {
-  console.log('static data', data);
+  console.log('static data', data, extra);
 
   const { id } = data;
 
@@ -56,7 +57,8 @@ export default (
       model: 'demo:select',
       attrOrProp: {
         defaultLabel: 'default',
-        options: selectOptions
+        options: selectOptions,
+        disabled: extra
       }
     },
     {
@@ -64,7 +66,7 @@ export default (
       label: 'Checkbox',
       component: 'ui-checkbox-group',
       key: 'e',
-      value: data.e || [],
+      value: [],
       model: 'demo:checkbox',
       attrOrProp: {
         options: checkboxOptions
@@ -84,7 +86,7 @@ export default (
       label: 'Chips',
       component: 'ui-chips',
       key: 'g',
-      value: [8],
+      value: [],
       model: 'demo:chips',
       attrOrProp: {
         type: 'filter',
@@ -136,7 +138,8 @@ export default (
           // () =>
           //   store.getModel('demo', {}, { apiAction: 'multiSelectOptions1' }),
           attrOrProp: {
-            defaultLabel: 'Select1'
+            defaultLabel: 'Select1',
+            disabled: extra
           }
         },
         {
@@ -152,7 +155,8 @@ export default (
               { apiAction: 'multiSelectOptions2' }
             ),
           attrOrProp: {
-            defaultLabel: 'Select2'
+            defaultLabel: 'Select2',
+            disabled: extra
           }
         },
         {
@@ -168,7 +172,8 @@ export default (
               { apiAction: 'multiSelectOptions3' }
             ),
           attrOrProp: {
-            defaultLabel: 'Select3'
+            defaultLabel: 'Select3',
+            disabled: extra
           }
         }
       ],
