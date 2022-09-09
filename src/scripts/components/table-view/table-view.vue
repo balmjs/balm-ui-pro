@@ -62,7 +62,8 @@
       <slot name="before-table-view"></slot>
 
       <div v-if="table.usePlaceholder" class="mdc-table-view__placeholder">
-        <slot name="placeholder">{{ placeholder }}</slot>
+        <ui-spinner v-if="table.loading" active></ui-spinner>
+        <slot v-else name="placeholder">{{ placeholder }}</slot>
       </div>
       <template v-else>
         <ui-table
