@@ -2,7 +2,7 @@
   <section class="mdc-table-view__top-actions">
     <template v-for="(action, index) in actionConfig">
       <ui-button
-        v-if="actionRendering(action, data.tableDataSource)"
+        v-if="ifAction(action)"
         :key="`button-${index}`"
         :class="[cssClasses.topAction, action.type || '']"
         v-bind="
@@ -68,6 +68,15 @@ export default {
     };
   },
   methods: {
+    ifAction(action) {
+      const currentAction = action.if;
+
+      const { tableDataSource } = this.data;
+
+      return isFunction(currentAction)
+        ? currentAction(tableDataSource)
+        : this.actionRendering(action, tableDataSource);
+    },
     actionIcon({ icon, type }) {
       let result = icon || '';
 
