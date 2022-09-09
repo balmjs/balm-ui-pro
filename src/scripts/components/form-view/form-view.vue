@@ -237,28 +237,6 @@ export default {
     }
   },
   watch: {
-    async modelValue(val, oldVal) {
-      this.formDataSource = Object.assign({}, oldVal, val);
-
-      if (!this.formUpdating) {
-        this.formUpdating = true;
-
-        if (
-          this.isFunctionConfig &&
-          JSON.stringify(val) !== JSON.stringify(oldVal)
-        ) {
-          await this.setFormConfig();
-        }
-
-        if (this.hasFormDataSource) {
-          this.updateFormData();
-        } else {
-          this.initFormData(Object.keys(oldVal).length);
-        }
-
-        this.formUpdating = false;
-      }
-    },
     async modelConfig(val) {
       if (val === false) {
         this.resetFormView();
@@ -279,22 +257,49 @@ export default {
         }
       }
     },
-    async modelOptions(val, oldVal) {
-      if (
-        !this.formUpdating &&
-        this.isFunctionConfig &&
-        Object.keys(val).length !== Object.keys(oldVal).length
-      ) {
-        this.formUpdating = true;
+    modelValue: {
+      async handler(val) {
+        if (JSON.stringify(val) !== JSON.stringify(this.formDataSource)) {
+          this.formDataSource = Object.assign({}, this.formDataSource, val);
 
-        await this.setFormConfig();
+          if (!this.formUpdating) {
+            this.formUpdating = true;
 
-        if (this.hasFormDataSource) {
-          this.updateFormData();
+            if (this.isFunctionConfig) {
+              await this.setFormConfig();
+            }
+
+            if (this.hasFormDataSource) {
+              this.updateFormData();
+            } else {
+              this.initFormData();
+            }
+
+            this.formUpdating = false;
+          }
         }
+      },
+      deep: true
+    },
+    modelOptions: {
+      async handler(val, oldVal) {
+        if (
+          !this.formUpdating &&
+          this.isFunctionConfig &&
+          JSON.stringify(val) !== JSON.stringify(oldVal)
+        ) {
+          this.formUpdating = true;
 
-        this.formUpdating = false;
-      }
+          await this.setFormConfig();
+
+          if (this.hasFormDataSource) {
+            this.updateFormData();
+          }
+
+          this.formUpdating = false;
+        }
+      },
+      deep: true
     }
   },
   async beforeMount() {
@@ -374,12 +379,10 @@ export default {
       this.formDataConfig.forEach(({ key, value, components }) => {
         if (Array.isArray(components)) {
           components.forEach(({ key, value }) => {
-            const initialValue = this.formDataSource[key] || value;
-            key && this.$set(this.formData, key, initialValue);
+            key && this.$set(this.formData, key, value);
           });
         } else {
-          const initialValue = this.formDataSource[key] || value;
-          key && this.$set(this.formData, key, initialValue);
+          key && this.$set(this.formData, key, value);
         }
       });
 
