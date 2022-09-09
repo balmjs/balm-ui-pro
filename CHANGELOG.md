@@ -2,6 +2,13 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.37.0 / 2022-09-09
+
+### Feature
+
+- `<ui-form-view>`: optimize model value and options watching
+- `<ui-table-view>`: `topActionConfig` support `if` config for rendering
+
 ## v0.36.0 / 2022-09-08
 
 ### Feature
