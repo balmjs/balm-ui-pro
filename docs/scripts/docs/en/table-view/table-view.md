@@ -139,6 +139,7 @@ interface ActionData {
 | `getModelConfigFn`     | function      | `(vm) => {}`                       | Loading model config                                                                                                |
 | `getModelDataFn`       | function      | `(vm) => {}`                       | Loading model data                                                                                                  |
 | `useValidator`         | boolean       | `false`                            | Enables auto validator (Just for `submit` type)                                                                     |
+| `placeholder`          | string        | `''`                               | The placeholder before searching model data                                                                         |
 | `searchOnReset`        | boolean       | `false`                            | The page will auto search data after resetting model data                                                           |
 
 ### Slots
