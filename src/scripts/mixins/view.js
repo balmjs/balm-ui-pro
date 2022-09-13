@@ -71,6 +71,14 @@ export default {
       return /UiTableView$/.test(this.$vnode.tag) ? this.getModelData : null;
     }
   },
+  watch: {
+    modelConfig() {
+      this.init();
+    },
+    modelPath() {
+      this.init();
+    }
+  },
   methods: {
     handleChange(key, value) {
       this.$emit(FORM_VIEW_EVENTS.updateFormItem, key, value, this.refreshData);

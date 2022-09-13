@@ -5,7 +5,7 @@
     </h2>
 
     <section class="mdc-detail-view__content">
-      <slot name="before-detail-view"></slot>
+      <slot name="before-detail-view" v-bind="instanceData"></slot>
 
       <ui-spinner v-if="loading" active></ui-spinner>
       <ui-form-view
@@ -41,7 +41,7 @@
         </template>
       </ui-form-view>
 
-      <slot name="after-detail-view"></slot>
+      <slot name="after-detail-view" v-bind="instanceData"></slot>
     </section>
   </div>
 </template>
@@ -138,13 +138,20 @@ export default {
       });
     }
   },
-  async beforeMount() {
-    if (this.modelConfig || this.modelPath) {
-      await this.setModelConfig();
-    }
+  beforeMount() {
+    this.init();
   },
   methods: {
+    async init() {
+      this.resetDetailData();
+
+      if (this.modelConfig || this.modelPath) {
+        await this.setModelConfig();
+      }
+    },
     async setModelConfig() {
+      this.currentModelConfig = [];
+
       try {
         this.currentModelConfig =
           this.modelConfig || (await this.getModelConfigFn(this.instanceData));
@@ -156,6 +163,12 @@ export default {
       this.loading = true;
       this.formData = Object.assign(formData, this.modelValueDefaults);
       await this.getModelData();
+      this.loading = false;
+    },
+    resetDetailData() {
+      this.formData = {};
+      this.formDataSource = {};
+      this.message = '';
       this.loading = false;
     },
     async getModelData() {

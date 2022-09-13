@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.39.0 / 2022-09-13
+
+### Chore
+
+- `<ui-table-view>`, `<ui-detail-view>`: optimize initialization and slot data
+
 ## v0.38.0 / 2022-09-09
 
 ### Feature

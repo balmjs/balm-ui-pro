@@ -59,7 +59,7 @@
     <slot v-else name="top-actions" v-bind="instanceData"></slot>
 
     <section class="mdc-table-view__content">
-      <slot name="before-table-view"></slot>
+      <slot name="before-table-view" v-bind="instanceData"></slot>
 
       <div v-if="table.usePlaceholder" class="mdc-table-view__placeholder">
         <ui-spinner v-if="table.loading" active></ui-spinner>
@@ -101,7 +101,7 @@
                 refreshData: getModelData
               }"
             ></ui-table-view-row-actions>
-            <slot v-else name="actions" v-bind="data"></slot>
+            <slot v-else name="row-actions" v-bind="data"></slot>
           </template>
         </ui-table>
 
@@ -138,7 +138,7 @@
         </div>
       </template>
 
-      <slot name="after-table-view"></slot>
+      <slot name="after-table-view" v-bind="instanceData"></slot>
     </section>
   </div>
 </template>
@@ -315,14 +315,26 @@ export default {
     }
   },
   async beforeMount() {
-    if (this.hasSearchForm) {
-      this.setModelConfig();
-    } else {
-      this.initModelData();
-    }
+    this.init();
   },
   methods: {
+    init() {
+      this.resetTableData();
+
+      if (this.hasSearchForm) {
+        this.setModelConfig();
+      } else {
+        this.initModelData();
+      }
+    },
     async setModelConfig() {
+      this.searchForm = {
+        config: [],
+        data: {},
+        message: '',
+        loading: false
+      };
+
       try {
         const modelConfig =
           this.modelConfig || (await this.getModelConfigFn(this.instanceData));
