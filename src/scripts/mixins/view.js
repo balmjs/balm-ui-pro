@@ -40,6 +40,13 @@ export default {
       default: 'id'
     }
   },
+  data() {
+    return {
+      globalModelOptions: {
+        $route: this.$route
+      }
+    };
+  },
   computed: {
     viewPropsData() {
       const {
@@ -53,16 +60,28 @@ export default {
         keyName
       } = this.$props;
 
+      const validModelOptions = {};
+      Object.keys(modelOptions).forEach((key) => {
+        if (/^\$/.test(key)) {
+          this.$set(this.globalModelOptions, key, modelOptions[key]);
+        } else {
+          validModelOptions[key] = modelOptions[key];
+        }
+      });
+
       return {
         title,
         model,
         modelAction,
         modelConfig,
         modelPath,
-        modelOptions,
+        modelOptions: validModelOptions,
         modelValueDefaults,
         keyName
       };
+    },
+    fullInstanceData() {
+      return Object.assign({}, this.instanceData, this.globalModelOptions);
     },
     hasTitle() {
       return this.title || this.$slots.title;

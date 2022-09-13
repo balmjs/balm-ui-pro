@@ -307,7 +307,6 @@ export default {
     },
     instanceData() {
       return Object.assign({}, this.viewPropsData, {
-        $route: this.$route,
         searchForm: this.searchForm,
         table: this.table,
         tableDataSource: this.tableDataSource
@@ -337,7 +336,8 @@ export default {
 
       try {
         const modelConfig =
-          this.modelConfig || (await this.getModelConfigFn(this.instanceData));
+          this.modelConfig ||
+          (await this.getModelConfigFn(this.fullInstanceData));
         modelConfig && this.$set(this.searchForm, 'config', modelConfig);
       } catch (err) {
         console.warn(`[${UiTableView.name}]: ${err.toString()}`);
@@ -359,7 +359,7 @@ export default {
     async getModelData() {
       try {
         this.$set(this.table, 'loading', true);
-        this.tableDataSource = await this.getModelDataFn(this.instanceData);
+        this.tableDataSource = await this.getModelDataFn(this.fullInstanceData);
         this.$set(this.table, 'loading', false);
         this.$set(this.table, 'usePlaceholder', false);
 

@@ -132,7 +132,6 @@ export default {
   computed: {
     instanceData() {
       return Object.assign({}, this.viewPropsData, {
-        $route: this.$route,
         formData: this.formData,
         formDataSource: this.formDataSource
       });
@@ -154,7 +153,8 @@ export default {
 
       try {
         this.currentModelConfig =
-          this.modelConfig || (await this.getModelConfigFn(this.instanceData));
+          this.modelConfig ||
+          (await this.getModelConfigFn(this.fullInstanceData));
       } catch (err) {
         console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
       }
@@ -173,7 +173,7 @@ export default {
     },
     async getModelData() {
       try {
-        const formDataSource = await this.getModelDataFn(this.instanceData);
+        const formDataSource = await this.getModelDataFn(this.fullInstanceData);
 
         if (
           getType(formDataSource) === 'object' &&
@@ -221,7 +221,7 @@ export default {
           }
 
           if (canSubmit && action.submit !== false) {
-            await this.setModelDataFn(this.instanceData);
+            await this.setModelDataFn(this.fullInstanceData);
             this.redirectOnSave && this.redirect(this.to, false);
           }
           break;
