@@ -159,11 +159,15 @@ export default {
         console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
       }
     },
-    async initModelData(formData = {}) {
-      this.loading = true;
-      this.formData = Object.assign(formData, this.modelValueDefaults);
-      await this.getModelData();
-      this.loading = false;
+    initModelData(formData = {}) {
+      this.$nextTick(async () => {
+        this.loading = true;
+
+        this.formData = Object.assign(formData, this.modelValueDefaults);
+        await this.getModelData();
+
+        this.loading = false;
+      });
     },
     resetDetailData() {
       this.formData = {};

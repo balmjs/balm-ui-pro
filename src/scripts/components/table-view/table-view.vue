@@ -343,11 +343,15 @@ export default {
         console.warn(`[${UiTableView.name}]: ${err.toString()}`);
       }
     },
-    async initModelData(formData = {}) {
-      this.$set(this.searchForm, 'loading', true);
-      this.searchForm.data = Object.assign(formData, this.modelValueDefaults);
-      !this.useValidator && (await this.getModelData());
-      this.$set(this.searchForm, 'loading', false);
+    initModelData(formData = {}) {
+      this.$nextTick(async () => {
+        this.$set(this.searchForm, 'loading', true);
+
+        this.searchForm.data = Object.assign(formData, this.modelValueDefaults);
+        !this.useValidator && (await this.getModelData());
+
+        this.$set(this.searchForm, 'loading', false);
+      });
     },
     resetTableData() {
       this.$set(this.table, 'selectedRows', []);

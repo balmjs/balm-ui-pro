@@ -60,7 +60,7 @@ interface ActionData {
     type: 'router-link' | string;
     icon?: string;
     text: string;
-    routeName?: string;
+    routeName?: string | (data: object) => string;
     attrOrProp?: object;
     handler?: (
       data: TopActionData,
@@ -91,7 +91,7 @@ interface ActionData {
     component?: string;
     icon?: string;
     text: string;
-    routeName?: string;
+    routeName?: string | (data: object) => string;
     routeParams?: (data: object) => {};
     href?: string;
     attrOrProp?: object;

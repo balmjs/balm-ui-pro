@@ -2,6 +2,16 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.40.0 / 2022-09-14
+
+### Feature
+
+- `<ui-table-view>`: update `routeName` config of the RowActionButton
+
+### Bug Fixes
+
+- `<ui-table-view>`, `<ui-detail-view>`: fix `modelValueDefaults` bug for init
+
 ## v0.39.0 / 2022-09-13
 
 ### Chore
