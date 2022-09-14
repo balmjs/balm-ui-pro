@@ -60,3 +60,16 @@ import { useDialog } from 'balm-ui-pro';
 
 const $dialog = useDialog();
 ```
+
+### Develop custom component for `$dialog`
+
+### Required Options
+
+1. `component`
+2. `attrOrProp.actionConfig`
+
+### Required Events
+
+| Name            | Type                                                     | Description                                          |
+| --------------- | -------------------------------------------------------- | ---------------------------------------------------- |
+| customEventName | `function(actionConfig: ActionButton, data: ActionData)` | Emits when the custom component action is triggered. |
