@@ -53,7 +53,8 @@
         actionConfig: topActionConfig,
         actionHandler: topActionHandler,
         actionRendering: topActionRendering,
-        refreshData: getModelData
+        refreshData: getModelData,
+        resetSelectedRows
       }"
     ></ui-table-view-top-actions>
     <slot v-else name="top-actions" v-bind="instanceData"></slot>
@@ -408,6 +409,7 @@ export default {
 
       canSubmit && this.exposeAction(action, result);
     },
+    // NOTE: for multi actions
     resetSelectedRows() {
       this.$set(this.table, 'selectedRows', []);
     },

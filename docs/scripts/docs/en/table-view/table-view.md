@@ -71,7 +71,8 @@ interface ActionData {
   type GlobalTopActionHandler = (
     actionConfig: TopActionButton,
     data: TopActionData,
-    refresh: Function
+    refresh: Function,
+    resetSelectedRows: Function
   ) => void;
   ```
 

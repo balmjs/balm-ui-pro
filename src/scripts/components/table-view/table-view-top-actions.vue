@@ -60,6 +60,10 @@ export default {
     refreshData: {
       type: Function,
       default: () => {}
+    },
+    resetSelectedRows: {
+      type: Function,
+      default: () => {}
     }
   },
   data() {
@@ -102,7 +106,14 @@ export default {
       return result;
     },
     handleAction(action) {
-      const { data, model, modelOptions, keyName, refreshData } = this.$props;
+      const {
+        data,
+        model,
+        modelOptions,
+        keyName,
+        refreshData,
+        resetSelectedRows
+      } = this.$props;
 
       const tableData = {
         model,
@@ -116,9 +127,14 @@ export default {
         this.$router.push(to);
       } else {
         if (isFunction(action.handler)) {
-          action.handler(tableData, refreshData);
+          action.handler(tableData, refreshData, resetSelectedRows);
         } else {
-          this.actionHandler(Object.assign({}, action), tableData, refreshData);
+          this.actionHandler(
+            Object.assign({}, action),
+            tableData,
+            refreshData,
+            resetSelectedRows
+          );
         }
       }
     }
