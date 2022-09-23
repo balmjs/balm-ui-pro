@@ -358,11 +358,18 @@ export default {
       });
     },
     resetTableData() {
+      this.tableDataSource = {};
+
       this.$set(this.table, 'selectedRows', []);
       this.$set(this.table, 'data', []);
       this.$set(this.table, 'total', 0);
       this.$set(this.table, 'page', 1);
       this.$set(this.table, 'loading', false);
+      this.$set(
+        this.table,
+        'usePlaceholder',
+        this.useValidator && this.placeholder
+      );
     },
     async getModelData() {
       try {
