@@ -337,7 +337,7 @@ export default {
         config: [],
         data: {},
         message: '',
-        loading: false
+        loading: true
       };
 
       try {
@@ -350,13 +350,11 @@ export default {
       }
     },
     initModelData(formData = {}) {
-      this.$nextTick(async () => {
-        this.$set(this.searchForm, 'loading', true);
+      this.$set(this.searchForm, 'loading', false);
 
+      this.$nextTick(async () => {
         this.searchForm.data = Object.assign(formData, this.modelValueDefaults);
         !this.useValidator && (await this.getModelData());
-
-        this.$set(this.searchForm, 'loading', false);
       });
     },
     resetTableData() {
