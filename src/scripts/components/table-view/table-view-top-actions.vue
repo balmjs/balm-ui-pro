@@ -57,6 +57,10 @@ export default {
       type: Function,
       default: () => true
     },
+    actionIconFormat: {
+      type: Object,
+      default: () => ({})
+    },
     refreshData: {
       type: Function,
       default: () => {}
@@ -82,28 +86,9 @@ export default {
         : this.actionRendering(action, tableDataSource);
     },
     actionIcon({ icon, type }) {
-      let result = icon || '';
-
-      if (!icon) {
-        switch (type) {
-          case 'import':
-            result = 'upload';
-            break;
-          case 'export':
-            result = 'download';
-            break;
-          default:
-            if (/(add|create)$/.test(type)) {
-              result = 'add';
-            } else if (/(update|modify)$/.test(type)) {
-              result = 'update';
-            } else if (/(del|delete)$/.test(type)) {
-              result = 'delete';
-            }
-        }
-      }
-
-      return result;
+      return icon !== false && this.actionIconFormat[type]
+        ? this.actionIconFormat[type]
+        : icon || '';
     },
     handleAction(action) {
       const {

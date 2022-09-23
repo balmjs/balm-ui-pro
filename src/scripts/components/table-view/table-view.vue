@@ -53,6 +53,7 @@
         actionConfig: topActionConfig,
         actionHandler: topActionHandler,
         actionRendering: topActionRendering,
+        actionIconFormat: topActionIconFormat,
         refreshData: getModelData,
         resetSelectedRows
       }"
@@ -229,6 +230,10 @@ export default {
     topActionRendering: {
       type: Function,
       default: () => true
+    },
+    topActionIconFormat: {
+      type: Object,
+      default: () => ({})
     },
     tableAttrOrProp: {
       type: Object,
