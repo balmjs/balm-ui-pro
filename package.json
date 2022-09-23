@@ -1,6 +1,6 @@
 {
   "name": "balm-ui-pro",
-  "version": "0.40.1-legacy",
+  "version": "0.41.0-legacy",
   "description": "More configuration definition, less code implementation for Vue.js",
   "keywords": [
     "balm",
@@ -43,16 +43,16 @@
     "url": "https://github.com/balmjs/balm-ui-pro/issues"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.18.0",
-    "@babel/runtime-corejs3": "^7.18.0",
+    "@babel/eslint-parser": "^7.19.0",
+    "@babel/runtime-corejs3": "^7.19.0",
     "@csstools/normalize.css": "^12.0.0",
     "axios": "^0.27.2",
     "babel-plugin-prismjs": "^2.1.0",
-    "balm": "^3.26.0",
+    "balm": "^3.26.3",
     "balm-ui": "8",
     "core-js": "^3.25.0",
     "eslint": "^8.0.0",
-    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-prettier": "^8.0.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^9.0.0",
     "html-loader": "1",
@@ -70,7 +70,7 @@
     "webpack": "4"
   },
   "peerDependencies": {
-    "balm-ui": "^8.54.0",
+    "balm-ui": "^8.55.0",
     "vue": ">=2.6.0",
     "vue-router": ">=3 <4"
   }
