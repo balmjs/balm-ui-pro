@@ -20,6 +20,10 @@ export default {
     },
     rowActionHandler: handleRowAction,
     topActionHandler: handleTopAction,
+    topActionIconFormat: {
+      'multi-update': 'update',
+      'multi-delete': 'delete'
+    },
     searchOnReset: true
   },
   UiDetailView: {
