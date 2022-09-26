@@ -43,11 +43,17 @@
           <template v-else>
             <ui-readonly-item
               v-if="config.component === 'ui-readonly-item'"
-              v-bind="{
-                config,
-                formData,
-                formDataSource
-              }"
+              v-bind="
+                Object.assign(
+                  {},
+                  {
+                    config,
+                    formData,
+                    formDataSource
+                  },
+                  config.attrOrProp || {}
+                )
+              "
             ></ui-readonly-item>
             <template v-else>
               <component
