@@ -6,19 +6,19 @@ const cssClasses = {
 
 export default {
   props: {
-    config: {
+    proConfig: {
       type: Object,
       default: () => ({})
     },
-    formData: {
+    proFormData: {
       type: Object,
       default: () => ({})
     },
-    formDataSource: {
+    proFormDataSource: {
       type: Object,
       default: () => ({})
     },
-    componentKey: {
+    proComponentKey: {
       type: String,
       default: 'unknown'
     },
@@ -39,13 +39,13 @@ export default {
     currentOptions() {
       return Array.isArray(this.options)
         ? this.options.map((option) => {
-            option.uuid = generateRandomString(this.componentKey);
+            option.uuid = generateRandomString(this.proComponentKey);
             return option;
           })
         : [];
     },
     uuid() {
-      return generateRandomString(this.componentKey);
+      return generateRandomString(this.proComponentKey);
     }
   },
   methods: {

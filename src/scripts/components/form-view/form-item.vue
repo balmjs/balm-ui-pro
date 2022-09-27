@@ -26,51 +26,20 @@
             <component
               :is="config.component"
               :components="config.components"
-              v-bind="
-                Object.assign(
-                  {},
-                  {
-                    config,
-                    formData,
-                    formDataSource
-                  },
-                  config.attrOrProp || {}
-                )
-              "
+              v-bind="componentBind"
               @[eventName]="handleChange(config, $event)"
             ></component>
           </template>
           <template v-else>
             <ui-readonly-item
               v-if="config.component === 'ui-readonly-item'"
-              v-bind="
-                Object.assign(
-                  {},
-                  {
-                    config,
-                    formData,
-                    formDataSource
-                  },
-                  config.attrOrProp || {}
-                )
-              "
+              v-bind="componentBind"
             ></ui-readonly-item>
             <template v-else>
               <component
                 :is="config.component"
                 v-model="formData[config.key]"
-                v-bind="
-                  Object.assign(
-                    {},
-                    {
-                      config,
-                      formData,
-                      formDataSource,
-                      componentKey
-                    },
-                    config.attrOrProp || {}
-                  )
-                "
+                v-bind="componentBind"
                 @[eventName]="handleChange(config, $event)"
               ></component>
             </template>
@@ -160,6 +129,18 @@ export default {
         `mdc-form-item__${this.component}`,
         `mdc-form-item__${this.key}`
       ];
+    },
+    componentBind() {
+      return Object.assign(
+        {},
+        {
+          proConfig: this.config,
+          proFormData: this.formData,
+          proFormDataSource: this.formDataSource,
+          proComponentKey: this.componentKey
+        },
+        this.config.attrOrProp || {}
+      );
     },
     customSlots() {
       return {

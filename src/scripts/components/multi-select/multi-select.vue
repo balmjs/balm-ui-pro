@@ -71,7 +71,7 @@ export default {
     components() {
       this.initRootSelectedOptions();
     },
-    formData: {
+    proFormData: {
       handler(val) {
         if (JSON.stringify(val) !== JSON.stringify(this.selectedData)) {
           this.updateSelected();
@@ -94,7 +94,7 @@ export default {
       if (!this.hasSelectedOptions) {
         for (const { key, value } of this.components) {
           const initialValue =
-            this.selectedData[key] || this.formDataSource[key] || value;
+            this.selectedData[key] || this.proFormDataSource[key] || value;
           this.$set(this.selectedData, key, initialValue);
           this.$set(this.selectedOptions, key, []);
           this.$set(this.selectedOptionsMap, key, new Map());
@@ -160,7 +160,7 @@ export default {
     async updateSelected() {
       let updateSelectedKeys = [];
       this.selectedKeys.forEach((key) => {
-        const newValue = this.formData[key];
+        const newValue = this.proFormData[key];
         if (this.selectedData[key] !== newValue) {
           this.$set(this.selectedData, key, newValue);
 

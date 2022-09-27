@@ -13,17 +13,19 @@ export default {
   mixins: [formItemMixin],
   computed: {
     currentFormData() {
-      return Object.assign({}, this.formDataSource, this.formData);
+      return Object.assign({}, this.proFormDataSource, this.proFormData);
     },
     currentValue() {
-      const value = this.currentFormData[this.config.key];
+      const value = this.currentFormData[this.proConfig.key];
       const type = getType(value);
       const data = Object.assign({}, this.$props, {
         type,
         value
       });
 
-      return isFunction(this.config.value) ? this.config.value(data) : value;
+      return isFunction(this.proConfig.value)
+        ? this.proConfig.value(data)
+        : value;
     }
   }
 };
