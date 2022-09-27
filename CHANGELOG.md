@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.41.4 / 2022-09-27
+
+### Bug Fixes
+
+- `<ui-form-view>`: fix syncFormData bug in conditional rendering
+
 ## v0.41.0 / 2022-09-23
 
 ### Feature

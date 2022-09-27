@@ -216,8 +216,9 @@ export default {
     return {
       NATIVE_BUTTON_TYPES,
       formConfig: [],
-      formData: {},
+      formDataKeys: {},
       formDataSource: this.modelValue,
+      formData: {},
       formOptions: {},
       formUpdating: false
     };
@@ -356,16 +357,20 @@ export default {
 
         if (needInit) {
           this.initFormData();
-
-          if (Object.keys(this.formData).length) {
-            this.$emit(
-              UI_FORM_VIEW.EVENTS.loaded,
-              Object.assign({}, this.formData)
-            );
-          }
+          this.loadFormData();
+        } else {
+          this.changeFormData();
         }
       } else {
         console.warn(`[${UI_FORM_VIEW.name}]: Invalid form model config`);
+      }
+    },
+    loadFormData() {
+      if (this.formDataKeys.length) {
+        this.$emit(
+          UI_FORM_VIEW.EVENTS.loaded,
+          Object.assign({}, this.formData)
+        );
       }
     },
     syncFormData() {
@@ -386,7 +391,36 @@ export default {
         }
       });
 
+      this.formDataKeys = Object.keys(this.formData);
+
       needSync && this.syncFormData();
+    },
+    changeFormData() {
+      const newFormData = {};
+
+      this.formDataConfig.forEach(({ key, value, components }) => {
+        if (Array.isArray(components)) {
+          components.forEach(({ key, value }) => {
+            newFormData[key] = this.formData.hasOwnProperty(key)
+              ? this.formData[key]
+              : value;
+          });
+        } else {
+          newFormData[key] = this.formData.hasOwnProperty(key)
+            ? this.formData[key]
+            : value;
+        }
+      });
+
+      const newFormDataKeys = Object.keys(newFormData);
+      const needSync =
+        JSON.stringify(newFormDataKeys) !== JSON.stringify(this.formDataKeys);
+
+      if (needSync) {
+        this.formDataKeys = newFormDataKeys;
+        this.formData = Object.assign({}, newFormData);
+        this.loadFormData();
+      }
     },
     updateFormData() {
       let needSync = false;
