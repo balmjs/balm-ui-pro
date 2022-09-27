@@ -2,6 +2,16 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.42.0 / 2022-09-27
+
+### BREAKING CHANGES
+
+- rename custom form item components' props name
+  - `config` -> `proConfig`
+  - `formData` -> `proFormData`
+  - `formDataSource` -> `proFormDataSource`
+  - `componentKey` -> `proComponentKey`
+
 ## v0.41.4 / 2022-09-27
 
 ### Bug Fixes
