@@ -160,20 +160,18 @@ export default {
       }
     },
     initModelData(formData = {}) {
-      this.$nextTick(async () => {
-        this.loading = true;
+      this.loading = false;
 
+      this.$nextTick(async () => {
         this.formData = Object.assign(formData, this.modelValueDefaults);
         await this.getModelData();
-
-        this.loading = false;
       });
     },
     resetDetailData() {
       this.formData = {};
       this.formDataSource = {};
       this.message = '';
-      this.loading = false;
+      this.loading = true;
     },
     async getModelData() {
       try {

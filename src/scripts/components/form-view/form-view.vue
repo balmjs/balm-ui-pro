@@ -149,6 +149,7 @@ const UI_FORM_VIEW = {
   name: 'UiFormView',
   EVENTS: {
     loaded: 'loaded',
+    reload: 'reload',
     update: 'change',
     updateFormItem: 'change:x',
     action: 'action'
@@ -365,10 +366,10 @@ export default {
         console.warn(`[${UI_FORM_VIEW.name}]: Invalid form model config`);
       }
     },
-    loadFormData() {
+    loadFormData(reload = false) {
       if (this.formDataKeys.length) {
         this.$emit(
-          UI_FORM_VIEW.EVENTS.loaded,
+          reload ? UI_FORM_VIEW.EVENTS.reload : UI_FORM_VIEW.EVENTS.loaded,
           Object.assign({}, this.formData)
         );
       }
@@ -419,7 +420,7 @@ export default {
       if (needSync) {
         this.formDataKeys = newFormDataKeys;
         this.formData = Object.assign({}, newFormData);
-        this.loadFormData();
+        this.loadFormData(true);
       }
     },
     updateFormData() {

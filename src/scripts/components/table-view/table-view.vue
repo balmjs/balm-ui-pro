@@ -24,6 +24,7 @@
           )
         "
         @loaded="initModelData"
+        @reload="initModelData"
         @change:x="handleChange"
         @action="handleAction"
       >
