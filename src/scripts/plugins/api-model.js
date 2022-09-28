@@ -186,14 +186,17 @@ class ApiModel {
 
   debug(name = true) {
     const apis = name === true ? this.apis : this.map.get(name);
-    const data = Object.keys(apis).map((name) => ({
-      name,
-      url: apis[name]
-    }));
-    const columns = ['name', 'url'];
 
-    console.info(`[${NAME}]: Model APIs`);
-    console.table(data, columns);
+    if (getType(apis) === 'object') {
+      const data = Object.keys(apis).map((name) => ({
+        name,
+        url: apis[name]
+      }));
+      const columns = ['name', 'url'];
+
+      console.info(`[${NAME}]: Model APIs`);
+      console.table(data, columns);
+    }
   }
 }
 
