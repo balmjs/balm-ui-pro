@@ -63,7 +63,13 @@ export default {
       const validModelOptions = {};
       Object.keys(modelOptions).forEach((key) => {
         if (/^\$/.test(key)) {
-          this.$set(this.globalModelOptions, key, modelOptions[key]);
+          if (key === '$constant') {
+            console.warn(
+              `Please avoid using '$constant' in modelOptions, please use 'useConstant' instead`
+            );
+          } else {
+            this.$set(this.globalModelOptions, key, modelOptions[key]);
+          }
         } else {
           validModelOptions[key] = modelOptions[key];
         }
