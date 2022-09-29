@@ -28,12 +28,13 @@
 
 ### Common Props
 
-| Name             | Type   | Default                              | Description                    |
-| ---------------- | ------ | ------------------------------------ | ------------------------------ |
-| `config`         | object | `{}`                                 | Form model config              |
-| `formData`       | object | `{}`                                 | Form model data                |
-| `formDataSource` | object | `{}`                                 | Form model data source         |
-| `optionFormat`   | object | `{ label: 'label', value: 'value' }` | Defines the option data format |
+| Name                | Type   | Default                              | Description                    |
+| ------------------- | ------ | ------------------------------------ | ------------------------------ |
+| `proConfig`         | object | `{}`                                 | Form model config              |
+| `proFormData`       | object | `{}`                                 | Form model data                |
+| `proFormDataSource` | object | `{}`                                 | Form model data source         |
+| `proComponentKey`   | string | `unknown`                            | Form item component key        |
+| `optionFormat`      | object | `{ label: 'label', value: 'value' }` | Defines the option data format |
 
 ### Required Events
 

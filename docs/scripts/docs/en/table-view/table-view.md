@@ -60,18 +60,20 @@ interface ActionData {
     type: 'router-link' | string;
     icon?: string;
     text: string;
-    routeName?: string;
+    routeName?: string | (data: object) => string;
     attrOrProp?: object;
     handler?: (
       data: TopActionData,
-      refresh: Function
+      refresh: Function,
+      resetSelectedRows: Function
     ) => void;
   }
 
   type GlobalTopActionHandler = (
     actionConfig: TopActionButton,
     data: TopActionData,
-    refresh: Function
+    refresh: Function,
+    resetSelectedRows: Function
   ) => void;
   ```
 
@@ -91,7 +93,7 @@ interface ActionData {
     component?: string;
     icon?: string;
     text: string;
-    routeName?: string;
+    routeName?: string | (data: object) => string;
     routeParams?: (data: object) => {};
     href?: string;
     attrOrProp?: object;
@@ -110,37 +112,38 @@ interface ActionData {
 
 ### Props
 
-| Name                   | Type          | Default                            | Description                                                                                                    |
-| ---------------------- | ------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `title`                | string        | `''`                               | Detail view title                                                                                              |
-| `model`                | string        | _required_                         | Model name                                                                                                     |
-| `modelAction`          | string        | `''`                               | Api model action suffix                                                                                        |
-| `modelConfig`          | ModelConfig   | `false`                            | Form model config, see `<ui-form-view>` props [docs](/components/form-view)                                    |
-| `modelPath`            | string        | `''`                               | The file path of model config                                                                                  |
-| `modelOptions`         | object        | `{}`                               | The options of model config                                                                                    |
-| `modelValueDefaults`   | object        | `{}`                               | Sets default value of model data                                                                               |
-| `keyName`              | string, array | `'id'`                             | The primary key of model data                                                                                  |
-| `searchActionConfig`   | array         | `DefaultSearchActionConfig`        | Search form button config, see BalmUI `<ui-button>` props [docs](https://material.balmjs.com/general/button)   |
-| `formViewAttrOrProp`   | object        | `{}`                               | See `<ui-form-view>` props [docs](/components/form-view)                                                       |
-| `noData`               | string        | `No Data`                          | No data message                                                                                                |
-| `thead`                | array         | `[]`                               | Table header renderer, see BalmUI `<ui-table>` props [docs](https://material.balmjs.com/data-display/table)    |
-| `tbody`                | array         | `[]`                               | Table content renderer, see BalmUI `<ui-table>` props [docs](https://material.balmjs.com/data-display/table)   |
-| `rowActionConfig`      | array         | `RowActionButton[]`                | Table cell button config, see BalmUI `<ui-button>` props [docs](https://material.balmjs.com/general/button)    |
-| `rowActionHandler`     | function      | `GlobalRowActionHandler`           | Table cell button handler                                                                                      |
-| `rowActionRendering`   | function      | `() => true`                       | Table cell button rendering handler by server-side                                                             |
-| `topActionConfig`      | array         | `TopActionButton[]`                | Table top bar button config, see BalmUI `<ui-button>` props [docs](https://material.balmjs.com/general/button) |
-| `topActionHandler`     | function      | `GlobalTopActionHandler`           | Table top bar button handler                                                                                   |
-| `topActionRendering`   | function      | `() => true`                       | Table top bar button rendering handler by server-side                                                          |
-| `tableAttrOrProp`      | object        | `{}`                               | See BalmUI `<ui-table>` props [docs](https://material.balmjs.com/data-display/table)                           |
-| `tableDataFormat`      | object        | `{ data: 'data', total: 'total' }` | Defines the table data format for API                                                                          |
-| `pageSize`             | number        | `10`                               | Default page size                                                                                              |
-| `paginationAttrOrProp` | object        | `{}`                               | See BalmUI `<ui-pagination>` props [docs](https://material.balmjs.com/navigation/pagination)                   |
-| `withoutPagination`    | boolean       | `false`                            | No pagination                                                                                                  |
-| `getModelConfigFn`     | function      | `(vm) => {}`                       | Loading model config                                                                                           |
-| `getModelDataFn`       | function      | `(vm) => {}`                       | Loading model data                                                                                             |
-| `useValidator`         | boolean       | `false`                            | Enables auto validator (Just for `submit` type)                                                                |
-| `placeholder`          | string        | `''`                               | The placeholder before searching model data                                                                    |
-| `searchOnReset`        | boolean       | `false`                            | The page will auto search data after resetting model data                                                      |
+| Name                   | Type          | Default                            | Description                                                                                                                   |
+| ---------------------- | ------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `title`                | string        | `''`                               | Detail view title                                                                                                             |
+| `model`                | string        | _required_                         | Model name                                                                                                                    |
+| `modelAction`          | string        | `''`                               | Api model action suffix                                                                                                       |
+| `modelConfig`          | ModelConfig   | `false`                            | Form model config, see `<ui-form-view>` props [docs](/components/form-view)                                                   |
+| `modelPath`            | string        | `''`                               | The file path of model config                                                                                                 |
+| `modelOptions`         | object        | `{}`                               | The options of model config                                                                                                   |
+| `modelValueDefaults`   | object        | `{}`                               | Sets default value of model data                                                                                              |
+| `keyName`              | string, array | `'id'`                             | The primary key of model data                                                                                                 |
+| `searchActionConfig`   | array         | `DefaultSearchActionConfig`        | Search form button config, see BalmUI `<ui-button>` props [docs](https://material.balmjs.com/general/button)                  |
+| `formViewAttrOrProp`   | object        | `{}`                               | See `<ui-form-view>` props [docs](/components/form-view)                                                                      |
+| `noData`               | string        | `No Data`                          | No data message                                                                                                               |
+| `thead`                | array         | `[]`                               | Table header renderer, see BalmUI `<ui-table>` props [docs](https://material.balmjs.com/data-display/table)                   |
+| `tbody`                | array         | `[]`                               | Table content renderer, see BalmUI `<ui-table>` props [docs](https://material.balmjs.com/data-display/table)                  |
+| `rowActionConfig`      | array         | `RowActionButton[]`                | Table cell button config, see BalmUI `<ui-button>` props [docs](https://material.balmjs.com/general/button)                   |
+| `rowActionHandler`     | function      | `GlobalRowActionHandler`           | Table cell button handler                                                                                                     |
+| `rowActionRendering`   | function      | `() => true`                       | Table cell button rendering handler by server-side                                                                            |
+| `topActionConfig`      | array         | `TopActionButton[]`                | Table top bar button config, see BalmUI `<ui-button>` props [docs](https://material.balmjs.com/general/button)                |
+| `topActionHandler`     | function      | `GlobalTopActionHandler`           | Table top bar button handler                                                                                                  |
+| `topActionRendering`   | function      | `() => true`                       | Table top bar button rendering handler by server-side                                                                         |
+| `topActionIconFormat`  | object        | `{}`                               | Defines the table top bar button format for the button icons, see BalmUI icons [docs](https://v8.material.balmjs.com/#/icons) |
+| `tableAttrOrProp`      | object        | `{}`                               | See BalmUI `<ui-table>` props [docs](https://material.balmjs.com/data-display/table)                                          |
+| `tableDataFormat`      | object        | `{ data: 'data', total: 'total' }` | Defines the table data format for API                                                                                         |
+| `pageSize`             | number        | `10`                               | Default page size                                                                                                             |
+| `paginationAttrOrProp` | object        | `{}`                               | See BalmUI `<ui-pagination>` props [docs](https://material.balmjs.com/navigation/pagination)                                  |
+| `withoutPagination`    | boolean       | `false`                            | No pagination                                                                                                                 |
+| `getModelConfigFn`     | function      | `(vm) => {}`                       | Loading model config                                                                                                          |
+| `getModelDataFn`       | function      | `(vm) => {}`                       | Loading model data                                                                                                            |
+| `useValidator`         | boolean       | `false`                            | Enables auto validator (Just for `submit` type)                                                                               |
+| `placeholder`          | string        | `''`                               | The placeholder before searching model data                                                                                   |
+| `searchOnReset`        | boolean       | `false`                            | The page will auto search data after resetting model data                                                                     |
 
 ### Slots
 
@@ -148,13 +151,14 @@ interface ActionData {
 | ---------------------------------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
 | `title`                                              |                                  | Table view title                                                                             |
 | custom search form item slots (by form model config) | `config`, `data`                 | Custom search form item slots                                                                |
-| `topbar`                                             |                                  | Custom table topbar (When `topbarConfig = []`)                                               |
-| `before-table-view`                                  |                                  | Before table view                                                                            |
-| custom table slots                                   |                                  | See BalmUI `<ui-table>` slots [docs](https://material.balmjs.com/data-display/table)         |
-| `actions`                                            |                                  | Custom table cell actions (When `actionConfig = []`)                                         |
+| `top-actions`                                        | instanceData                     | Custom table topbar (When `topbarConfig = []`)                                               |
+| `before-table-view`                                  | instanceData                     | Before table view                                                                            |
+| `placeholder`                                        |                                  | The placeholder before searching model data                                                  |
+| custom table slots                                   | rowData                          | See BalmUI `<ui-table>` slots [docs](https://material.balmjs.com/data-display/table)         |
+| `row-actions`                                        | rowData                          | Custom table cell actions (When `actionConfig = []`)                                         |
 | custom pagination slots                              | `currentMinRow`, `currentMaxRow` | See BalmUI `<ui-pagination>` slots [docs](https://material.balmjs.com/navigation/pagination) |
 | `empty`                                              |                                  | Custom table no data                                                                         |
-| `after-table-view`                                   |                                  | After table view                                                                             |
+| `after-table-view`                                   | instanceData                     | After table view                                                                             |
 
 ### Events
 
