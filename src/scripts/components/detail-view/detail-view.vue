@@ -5,7 +5,7 @@
     </h2>
 
     <section class="mdc-detail-view__content">
-      <slot name="before-detail-view"></slot>
+      <slot name="before-detail-view" v-bind="instanceData"></slot>
 
       <ui-spinner v-if="loading" active></ui-spinner>
       <ui-form-view
@@ -40,7 +40,7 @@
         </template>
       </ui-form-view>
 
-      <slot name="after-detail-view"></slot>
+      <slot name="after-detail-view" v-bind="instanceData"></slot>
     </section>
   </div>
 </template>
@@ -81,7 +81,14 @@ export default {
 </script>
 
 <script setup>
-import { reactive, toRefs, computed, onBeforeMount, useSlots } from 'vue';
+import {
+  reactive,
+  toRefs,
+  computed,
+  onBeforeMount,
+  useSlots,
+  nextTick
+} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { viewProps, useView } from '../../mixins/view';
 import getType from '../../utils/typeof';
@@ -143,44 +150,72 @@ const state = reactive({
 });
 const { currentModelConfig, formData, message, loading } = toRefs(state);
 
-const { viewPropsData, hasTitle, handleChange, exposeAction } = useView(props, {
+const {
+  globalModelOptions,
+  viewPropsData,
+  hasTitle,
+  handleChange,
+  exposeAction
+} = useView(props, {
+  route,
   slots,
   emit,
-  state
+  state,
+  init
 });
 const instanceData = computed(() =>
   Object.assign({}, viewPropsData, {
-    route,
     formData: state.formData,
     formDataSource: state.formDataSource
   })
 );
+const fullInstanceData = computed(() =>
+  Object.assign({}, globalModelOptions, instanceData.value)
+);
 
-onBeforeMount(async () => {
+onBeforeMount(() => {
+  init();
+});
+
+function init() {
+  resetDetailData();
+
   if (props.modelConfig || props.modelPath) {
     setModelConfig();
   }
-});
+}
 
-async function setModelConfig(data) {
+async function setModelConfig() {
+  state.currentModelConfig = [];
+
   try {
     state.currentModelConfig =
-      props.modelConfig || (await props.getModelConfigFn()(instanceData.value));
+      props.modelConfig ||
+      (await props.getModelConfigFn()(fullInstanceData.value));
   } catch (err) {
     console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
   }
 }
 
-async function initModelData(formData = {}) {
-  state.loading = true;
-  state.formData = Object.assign(formData, props.defaultModelValue);
-  await getModelData();
+function initModelData(formData = {}) {
   state.loading = false;
+
+  nextTick(async () => {
+    state.formData = Object.assign(formData, props.modelValueDefaults);
+    await getModelData();
+  });
+}
+
+function resetDetailData() {
+  state.formData = {};
+  state.formDataSource = {};
+  state.message = '';
+  state.loading = true;
 }
 
 async function getModelData() {
   try {
-    const formDataSource = await props.getModelDataFn()(instanceData.value);
+    const formDataSource = await props.getModelDataFn()(fullInstanceData.value);
 
     if (
       getType(formDataSource) === 'object' &&
@@ -228,7 +263,7 @@ async function handleAction(action, result) {
       }
 
       if (canSubmit && action.submit !== false) {
-        await props.setModelDataFn()(instanceData.value);
+        await props.setModelDataFn()(fullInstanceData.value);
         props.redirectOnSave && redirect(props.to, false);
       }
       break;

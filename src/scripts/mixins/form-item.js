@@ -6,19 +6,19 @@ const cssClasses = {
 };
 
 const formItemProps = {
-  config: {
+  proConfig: {
     type: Object,
     default: () => ({})
   },
-  formData: {
+  proFormData: {
     type: Object,
     default: () => ({})
   },
-  formDataSource: {
+  proFormDataSource: {
     type: Object,
     default: () => ({})
   },
-  componentKey: {
+  proComponentKey: {
     type: String,
     default: 'unknown'
   },
@@ -32,12 +32,12 @@ const formItemProps = {
 };
 
 function useFormItem(props) {
-  const uuid = generateRandomString(props.componentKey);
+  const uuid = generateRandomString(props.proComponentKey);
 
   const currentOptions = computed(() =>
     Array.isArray(props.options)
       ? props.options.map((option) => {
-          option.uuid = generateRandomString(props.componentKey);
+          option.uuid = generateRandomString(props.proComponentKey);
           return option;
         })
       : []

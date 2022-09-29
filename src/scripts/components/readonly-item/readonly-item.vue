@@ -20,16 +20,18 @@ const props = defineProps({
 });
 
 const currentFormData = computed(() =>
-  Object.assign({}, props.formDataSource, props.formData)
+  Object.assign({}, props.proFormDataSource, props.proFormData)
 );
 const currentValue = computed(() => {
-  const value = currentFormData.value[props.config.key];
+  const value = currentFormData.value[props.proConfig.key];
   const type = getType(value);
   const data = Object.assign({}, props, {
     type,
     value
   });
 
-  return isFunction(props.config.value) ? props.config.value(data) : value;
+  return isFunction(props.proConfig.value)
+    ? props.proConfig.value(data)
+    : value;
 });
 </script>

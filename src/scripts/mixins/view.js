@@ -1,4 +1,4 @@
-import { toRefs, computed } from 'vue';
+import { toRefs, computed, watch } from 'vue';
 import { isFunction } from '../utils/typeof';
 
 const FORM_VIEW_EVENTS = {
@@ -41,7 +41,7 @@ const viewProps = {
   }
 };
 
-function useView(props, { slots, emit, state, refreshData }) {
+function useView(props, { route, slots, emit, state, init, refreshData }) {
   const {
     title,
     model,
@@ -53,18 +53,51 @@ function useView(props, { slots, emit, state, refreshData }) {
     keyName
   } = props;
 
+  let globalModelOptions = {
+    route
+  };
+
+  const validModelOptions = {};
+  Object.keys(modelOptions).forEach((key) => {
+    if (/^\$/.test(key)) {
+      if (key === '$constant') {
+        console.warn(
+          `Please avoid using '$constant' in modelOptions, please use 'useConstant' instead`
+        );
+      } else {
+        globalModelOptions[key] = modelOptions[key];
+      }
+    } else {
+      validModelOptions[key] = modelOptions[key];
+    }
+  });
+
   const viewPropsData = {
     title,
     model,
     modelAction,
     modelConfig,
     modelPath,
-    modelOptions,
+    modelOptions: validModelOptions,
     modelValueDefaults,
     keyName
   };
 
   const hasTitle = computed(() => props.title || slots.title);
+
+  watch(
+    () => props.modelConfig,
+    () => {
+      init();
+    }
+  );
+
+  watch(
+    () => props.modelPath,
+    () => {
+      init();
+    }
+  );
 
   function handleChange(key, value) {
     emit(FORM_VIEW_EVENTS.updateFormItem, key, value, refreshData);
@@ -89,6 +122,7 @@ function useView(props, { slots, emit, state, refreshData }) {
   }
 
   return {
+    globalModelOptions,
     viewPropsData,
     hasTitle,
     handleChange,

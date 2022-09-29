@@ -92,7 +92,7 @@ watch(
 );
 
 watch(
-  () => props.formData,
+  () => props.proFormData,
   (val) => {
     if (JSON.stringify(val) !== JSON.stringify(state.selectedData)) {
       updateSelected();
@@ -107,7 +107,7 @@ function initSelectedData() {
   if (!hasSelectedOptions.value) {
     for (const { key, value } of props.components) {
       const initialValue =
-        state.selectedData[key] || props.formDataSource[key] || value;
+        state.selectedData[key] || props.proFormDataSource[key] || value;
       state.selectedData[key] = initialValue;
       state.selectedOptions[key] = [];
       state.selectedOptionsMap[key] = new Map();
@@ -175,7 +175,7 @@ async function setSelectedOptions(parentValue, { key, options }) {
 async function updateSelected() {
   let updateSelectedKeys = [];
   selectedKeys.value.forEach((key) => {
-    const newValue = props.formData[key];
+    const newValue = props.proFormData[key];
     if (state.selectedData[key] !== newValue) {
       state.selectedData[key] = newValue;
 

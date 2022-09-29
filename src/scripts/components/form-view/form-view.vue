@@ -147,6 +147,7 @@ const UI_FORM_VIEW = {
   name: 'UiFormView',
   EVENTS: {
     loaded: 'loaded',
+    reload: 'reload',
     update: 'update:modelValue',
     updateFormItem: 'update:x',
     action: 'action'
@@ -233,8 +234,9 @@ const emit = defineEmits([
 
 const state = reactive({
   formConfig: [],
-  formData: {},
+  formDataKeys: {},
   formDataSource: props.modelValue,
+  formData: {},
   formOptions: {},
   formUpdating: false
 });
@@ -390,13 +392,21 @@ async function setFormConfig(
 
     if (needInit) {
       initFormData();
-
-      if (Object.keys(state.formData).length) {
-        emit(UI_FORM_VIEW.EVENTS.loaded, Object.assign({}, state.formData));
-      }
+      loadFormData();
+    } else {
+      changeFormData();
     }
   } else {
     console.warn(`[${UI_FORM_VIEW.name}]: Invalid form model config`);
+  }
+}
+
+function loadFormData(reload = false) {
+  if (state.formDataKeys.length) {
+    emit(
+      reload ? UI_FORM_VIEW.EVENTS.reload : UI_FORM_VIEW.EVENTS.loaded,
+      Object.assign({}, state.formData)
+    );
   }
 }
 
@@ -419,7 +429,37 @@ function initFormData(needSync = false) {
     }
   });
 
+  state.formDataKeys = Object.keys(state.formData);
+
   needSync && syncFormData();
+}
+
+function changeFormData() {
+  const newFormData = {};
+
+  formDataConfig.value.forEach(({ key, value, components }) => {
+    if (Array.isArray(components)) {
+      components.forEach(({ key, value }) => {
+        newFormData[key] = state.formData.hasOwnProperty(key)
+          ? state.formData[key]
+          : value;
+      });
+    } else {
+      newFormData[key] = state.formData.hasOwnProperty(key)
+        ? state.formData[key]
+        : value;
+    }
+  });
+
+  const newFormDataKeys = Object.keys(newFormData);
+  const needSync =
+    JSON.stringify(newFormDataKeys) !== JSON.stringify(state.formDataKeys);
+
+  if (needSync) {
+    state.formDataKeys = newFormDataKeys;
+    state.formData = Object.assign({}, newFormData);
+    loadFormData(true);
+  }
 }
 
 function updateFormData() {

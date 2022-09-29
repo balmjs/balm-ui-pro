@@ -24,6 +24,7 @@
           )
         "
         @loaded="initModelData"
+        @reload="initModelData"
         @update:x="handleChange"
         @action="handleAction"
       >
@@ -52,13 +53,15 @@
         actionConfig: topActionConfig,
         actionHandler: topActionHandler,
         actionRendering: topActionRendering,
-        refreshData: getModelData
+        actionIconFormat: topActionIconFormat,
+        refreshData: getModelData,
+        resetSelectedRows
       }"
     ></ui-table-view-top-actions>
     <slot v-else name="top-actions" v-bind="instanceData"></slot>
 
     <section class="mdc-table-view__content">
-      <slot name="before-table-view"></slot>
+      <slot name="before-table-view" v-bind="instanceData"></slot>
 
       <div v-if="table.usePlaceholder" class="mdc-table-view__placeholder">
         <ui-spinner v-if="table.loading" active></ui-spinner>
@@ -99,7 +102,7 @@
                 refreshData: getModelData
               }"
             ></ui-table-view-row-actions>
-            <slot v-else name="actions" v-bind="data"></slot>
+            <slot v-else name="row-actions" v-bind="data"></slot>
           </template>
         </ui-table>
 
@@ -136,7 +139,7 @@
         </div>
       </template>
 
-      <slot name="after-table-view"></slot>
+      <slot name="after-table-view" v-bind="instanceData"></slot>
     </section>
   </div>
 </template>
@@ -176,7 +179,14 @@ export default {
 </script>
 
 <script setup>
-import { reactive, toRefs, computed, onBeforeMount, useSlots } from 'vue';
+import {
+  reactive,
+  toRefs,
+  computed,
+  onBeforeMount,
+  useSlots,
+  nextTick
+} from 'vue';
 import { useRoute } from 'vue-router';
 import UiTableViewTopActions from './table-view-top-actions.vue';
 import UiTableViewRowActions from './table-view-row-actions.vue';
@@ -233,6 +243,10 @@ const props = defineProps({
   topActionRendering: {
     type: Function,
     default: () => true
+  },
+  topActionIconFormat: {
+    type: Object,
+    default: () => ({})
   },
   tableAttrOrProp: {
     type: Object,
@@ -312,58 +326,90 @@ const state = reactive({
 });
 const { searchForm, lastSearchFormData, table } = toRefs(state);
 
-const { viewPropsData, hasTitle, handleChange, exposeAction } = useView(props, {
+const {
+  globalModelOptions,
+  viewPropsData,
+  hasTitle,
+  handleChange,
+  exposeAction
+} = useView(props, {
+  route,
   slots,
   emit,
-  state
+  state,
+  init,
+  getModelData
 });
-const hasSearchForm = computed(() => !!(props.modelConfig || props.modelPath));
 const instanceData = computed(() =>
   Object.assign({}, viewPropsData, {
-    route,
     searchForm: state.searchForm,
     table: state.table,
     tableDataSource: state.tableDataSource
   })
 );
+const fullInstanceData = computed(() =>
+  Object.assign({}, globalModelOptions, instanceData.value)
+);
+const hasSearchForm = computed(() => !!(props.modelConfig || props.modelPath));
 
 onBeforeMount(() => {
+  init();
+});
+
+function init() {
+  resetTableData();
+
   if (hasSearchForm.value) {
     setModelConfig();
   } else {
     initModelData();
   }
-});
+}
 
 async function setModelConfig() {
+  state.searchForm = {
+    config: [],
+    data: {},
+    message: '',
+    loading: true
+  };
+
   try {
     const modelConfig =
-      props.modelConfig || (await props.getModelConfigFn()(instanceData.value));
+      props.modelConfig ||
+      (await props.getModelConfigFn()(fullInstanceData.value));
     modelConfig && (state.searchForm.config = modelConfig);
   } catch (err) {
     console.warn(`[${UiTableView.name}]: ${err.toString()}`);
   }
 }
 
-async function initModelData(formData = {}) {
-  state.searchForm.loading = true;
-  state.searchForm.data = Object.assign(formData, props.defaultModelValue);
-  !props.useValidator && (await getModelData());
+function initModelData(formData = {}) {
   state.searchForm.loading = false;
+
+  nextTick(async () => {
+    state.searchForm.data = Object.assign(formData, props.modelValueDefaults);
+    !props.useValidator && (await getModelData());
+  });
 }
 
 function resetTableData() {
+  state.tableDataSource = {};
+
   state.table.selectedRows = [];
   state.table.data = [];
   state.table.total = 0;
   state.table.page = 1;
   state.table.loading = false;
+  state.table.usePlaceholder = props.useValidator && props.placeholder;
 }
 
 async function getModelData() {
   try {
     state.table.loading = true;
-    state.tableDataSource = await props.getModelDataFn()(instanceData.value);
+    state.tableDataSource = await props.getModelDataFn()(
+      fullInstanceData.value
+    );
     state.table.loading = false;
     state.table.usePlaceholder = false;
 
@@ -410,6 +456,7 @@ async function handleAction(action, result) {
   canSubmit && exposeAction(action, result);
 }
 
+// NOTE: for multi actions
 function resetSelectedRows() {
   state.table.selectedRows = [];
 }

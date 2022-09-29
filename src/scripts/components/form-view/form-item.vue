@@ -26,43 +26,20 @@
             <component
               :is="config.component"
               :components="config.components"
-              v-bind="
-                Object.assign(
-                  {},
-                  {
-                    formData,
-                    formDataSource
-                  },
-                  config.attrOrProp || {}
-                )
-              "
+              v-bind="componentBind"
               @[eventName]="handleChange(config, $event)"
             ></component>
           </template>
           <template v-else>
             <ui-readonly-item
               v-if="config.component === 'ui-readonly-item'"
-              v-bind="{
-                config,
-                formData,
-                formDataSource
-              }"
+              v-bind="componentBind"
             ></ui-readonly-item>
             <template v-else>
               <component
                 :is="config.component"
                 v-model="formData[config.key]"
-                v-bind="
-                  Object.assign(
-                    {},
-                    {
-                      componentKey,
-                      formData,
-                      formDataSource
-                    },
-                    config.attrOrProp || {}
-                  )
-                "
+                v-bind="componentBind"
                 @[eventName]="handleChange(config, $event)"
               ></component>
             </template>
@@ -131,6 +108,18 @@ const className = computed(() => [
   `mdc-form-item__${component.value}`,
   `mdc-form-item__${key.value}`
 ]);
+const componentBind = computed(() => {
+  return Object.assign(
+    {},
+    {
+      proConfig: props.config,
+      proFormData: state.formData,
+      proFormDataSource: props.formDataSource,
+      proComponentKey: componentKey.value
+    },
+    props.config.attrOrProp || {}
+  );
+});
 const customSlots = computed(() => ({
   beforeLabel: `before-label__${componentKey.value}`,
   afterLabel: `after-label__${componentKey.value}`,

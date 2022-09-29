@@ -69,7 +69,15 @@ const props = defineProps({
     type: Function,
     default: () => true
   },
+  actionIconFormat: {
+    type: Object,
+    default: () => ({})
+  },
   refreshData: {
+    type: Function,
+    default: () => {}
+  },
+  resetSelectedRows: {
     type: Function,
     default: () => {}
   }
@@ -86,32 +94,14 @@ function ifAction(action) {
 }
 
 function actionIcon({ icon, type }) {
-  let result = icon || '';
-
-  if (!icon) {
-    switch (type) {
-      case 'import':
-        result = 'upload';
-        break;
-      case 'export':
-        result = 'download';
-        break;
-      default:
-        if (/(add|create)$/.test(type)) {
-          result = 'add';
-        } else if (/(update|modify)$/.test(type)) {
-          result = 'update';
-        } else if (/(del|delete)$/.test(type)) {
-          result = 'delete';
-        }
-    }
-  }
-
-  return result;
+  return icon !== false && props.actionIconFormat[type]
+    ? props.actionIconFormat[type]
+    : icon || '';
 }
 
 function handleClick(action) {
-  const { data, model, modelOptions, keyName, refreshData } = props;
+  const { data, model, modelOptions, keyName, refreshData, resetSelectedRows } =
+    props;
 
   const tableData = {
     model,
@@ -125,9 +115,14 @@ function handleClick(action) {
     router.push(to);
   } else {
     if (isFunction(action.handler)) {
-      action.handler(tableData, refreshData);
+      action.handler(tableData, refreshData, resetSelectedRows);
     } else {
-      props.actionHandler()(Object.assign({}, action), tableData, refreshData);
+      props.actionHandler()(
+        Object.assign({}, action),
+        tableData,
+        refreshData,
+        resetSelectedRows
+      );
     }
   }
 }
