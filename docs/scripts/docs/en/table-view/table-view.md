@@ -64,7 +64,8 @@ interface ActionData {
     attrOrProp?: object;
     handler?: (
       data: TopActionData,
-      refresh: Function
+      refresh: Function,
+      resetSelectedRows: Function
     ) => void;
   }
 
