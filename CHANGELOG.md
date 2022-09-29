@@ -2,6 +2,30 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.19.0 / 2022-09-29
+
+### Feature
+
+- `<ui-table-view>`:
+  - update `routeName` config of the RowActionButton
+  - add `topActionIconFormat` prop
+
+### Chore
+
+- `<ui-table-view>`, `<ui-detail-view>`: optimize initialization and slot data
+
+### Bug Fixes
+
+- `<ui-form-view>`: fix syncFormData bug in conditional rendering
+
+### BREAKING CHANGES
+
+- rename custom form item components' props name
+  - `config` -> `proConfig`
+  - `formData` -> `proFormData`
+  - `formDataSource` -> `proFormDataSource`
+  - `componentKey` -> `proComponentKey`
+
 ## v0.18.0 / 2022-09-09
 
 ### Feature

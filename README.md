@@ -15,7 +15,7 @@
 
 - vue 3.x
 - vue-router 4.x
-- balm-ui 10.11.0+
+- balm-ui 10.12.0+
 
 ### Installing
 
