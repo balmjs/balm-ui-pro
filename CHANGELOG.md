@@ -2,6 +2,16 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.42.2 / 2022-09-29
+
+### Bug Fixes
+
+- `$apiModel`: fix debug function for some bug
+
+### Chore
+
+- `<ui-table-view>`, `<ui-detail-view>`: optimize modelOptions
+
 ## v0.42.0 / 2022-09-27
 
 ### BREAKING CHANGES
