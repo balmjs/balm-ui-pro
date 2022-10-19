@@ -3,6 +3,9 @@ import { $routerModel, indexView } from '@/pro/model';
 const Test = () => import('@/views/test');
 
 const modelName = 'test';
+const meta = {
+  noLayout: true
+};
 
 export default $routerModel.createRoutes(modelName, {
   indexLeadingSlash: true,
@@ -11,7 +14,9 @@ export default $routerModel.createRoutes(modelName, {
     name: `${modelName}.main`
   },
   detailView: [
-    $routerModel.createRoute('test-main', `${modelName}.main`, Test),
+    $routerModel.createRoute('test-main', `${modelName}.main`, Test, {
+      meta
+    }),
     $routerModel.createRoutes('test-sub', {
       indexView,
       indexRedirect: {

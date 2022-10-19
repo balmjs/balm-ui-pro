@@ -2,6 +2,7 @@ import version from './version';
 import autoInstall from './config/auto-install';
 import autoInit from './config/auto-init';
 
+import UiLayoutView from './components/layout-view/layout-view.vue';
 import UiFormView from './components/form-view/form-view.vue';
 import UiDetailView from './components/detail-view/detail-view.vue';
 import UiTableView from './components/table-view/table-view.vue';
@@ -21,6 +22,7 @@ import $constant, {
 import $dialog, { useDialog } from './plugins/dialog';
 
 const Components = {
+  UiLayoutView,
   UiFormView,
   UiDetailView,
   UiTableView,
@@ -54,6 +56,7 @@ autoInit(BalmUIPro);
 export default BalmUIPro;
 export { version, install };
 export {
+  UiLayoutView,
   UiFormView,
   UiDetailView,
   UiTableView,

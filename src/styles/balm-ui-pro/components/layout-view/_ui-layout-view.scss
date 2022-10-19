@@ -1,0 +1,25 @@
+.mdc-layout-view--with-drawer-above-top-app-bar {
+  .mdc-layout-view__content {
+    width: 100%;
+  }
+}
+
+.mdc-layout-view--with-permanent-drawer,
+.mdc-layout-view--with-dismissible-drawer {
+  .mdc-layout-view__app-content {
+    height: 100%;
+    overflow: auto;
+  }
+
+  &.mdc-layout-view--with-drawer-below-top-app-bar {
+    .mdc-layout-view__app-content {
+      width: 100%;
+    }
+  }
+}
+
+.mdc-layout-view--with-dismissible-drawer {
+  .mdc-top-app-bar {
+    z-index: 7;
+  }
+}
