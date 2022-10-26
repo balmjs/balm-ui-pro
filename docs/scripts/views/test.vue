@@ -3,11 +3,14 @@
     <ui-tabs :active="active" :items="tabs" @change="onChange"></ui-tabs>
     <p>Test: {{ $route.name }}</p>
   </div> -->
-  <ui-layout-view drawer-type="modal" :top-app-bar-attr-or-prop="{}">
-    <template #drawer-title>
+  <ui-layout-view :drawer-below-top-app-bar="false">
+    <template #title>Title</template>
+    <template #toolbar>Toolbar</template>
+
+    <!-- <template #drawer-title>
       <ui-drawer-title>Title</ui-drawer-title>
       <ui-drawer-subtitle>Subtitle</ui-drawer-subtitle>
-    </template>
+    </template> -->
     <template #drawer-content>
       <ui-nav>
         <ui-nav-item href="javascript:void(0)" active>Item {{ 0 }}</ui-nav-item>

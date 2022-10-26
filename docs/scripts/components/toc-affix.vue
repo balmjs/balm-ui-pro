@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { $MIN_WIDTH } from '@/config';
+import { MIN_WIDTH } from '@/config';
 
 export default {
   name: 'UiTocAffix',
@@ -55,7 +55,7 @@ export default {
   },
   computed: {
     offset() {
-      return window.innerWidth >= $MIN_WIDTH ? 128 : 104;
+      return window.innerWidth >= MIN_WIDTH ? 128 : 104;
     }
   },
   mounted() {
