@@ -1,0 +1,26 @@
+@use '@material/theme' as color;
+
+.mdc-layout-view--mobile {
+  .catalog-list .balmui-version {
+    display: none;
+  }
+}
+
+.mdc-layout-view--desktop {
+  .mdc-drawer__header {
+    display: none;
+  }
+}
+
+.mdc-layout-view {
+  .mdc-drawer__header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  .balmui-version {
+    font-weight: normal;
+    .version {
+      color: color.$orange-900;
+    }
+  }
+}

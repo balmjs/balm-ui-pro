@@ -1,63 +1,8 @@
 <template>
   <div :class="className">
-    <template v-if="!isModalDrawer && drawerBelowTopAppBar">
-      <!-- Permanent Drawer Below Top App Bar -->
-      <mdc-top-app-bar
-        v-if="useTopAppBar"
-        :content-selector="contentSelector"
-        :is-permanent-drawer="isPermanentDrawer"
-        :attr-or-prop="topAppBarAttrOrProp"
-        @nav="handleDrawer"
-      >
-        <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
-        <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-          <slot :name="name" v-bind="slotData"></slot>
-        </template>
-      </mdc-top-app-bar>
-      <!-- Main Content -->
-      <template v-if="isDismissibleDrawer">
-        <!-- Drawer -->
-        <mdc-drawer
-          v-if="useDrawer"
-          v-model="drawerOpen"
-          :type="drawerType"
-          :attr-or-prop="drawerAttrOrProp"
-        >
-          <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
-          <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-            <slot :name="name" v-bind="slotData"></slot>
-          </template>
-        </mdc-drawer>
-        <!-- App Content -->
-        <ui-drawer-app-content
-          :id="contentSelector"
-          class="mdc-layout-view__app-content"
-        >
-          <slot></slot>
-        </ui-drawer-app-content>
-      </template>
-      <div v-else :id="contentSelector" class="mdc-layout-view__content">
-        <!-- Drawer -->
-        <mdc-drawer
-          v-if="useDrawer"
-          v-model="drawerOpen"
-          :type="drawerType"
-          :attr-or-prop="drawerAttrOrProp"
-        >
-          <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
-          <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-            <slot :name="name" v-bind="slotData"></slot>
-          </template>
-        </mdc-drawer>
-        <!-- App Content -->
-        <div class="mdc-layout-view__app-content">
-          <slot></slot>
-        </div>
-      </div>
-    </template>
-    <template v-else>
-      <!-- Permanent Drawer Above Top App Bar -->
-      <mdc-drawer
+    <template v-if="isPermanentDrawer && drawerAboveTopAppBar">
+      <!-- Drawer -->
+      <mdc-navigation-drawer
         v-if="useDrawer"
         v-model="drawerOpen"
         :type="drawerType"
@@ -67,63 +12,115 @@
         <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
           <slot :name="name" v-bind="slotData"></slot>
         </template>
-      </mdc-drawer>
+      </mdc-navigation-drawer>
       <!-- Main Content -->
-      <ui-drawer-app-content
-        v-if="isDismissibleDrawer"
-        class="mdc-layout-view__content"
-      >
+      <div key="permanent-drawer-content" class="mdc-layout-view__content">
         <!-- Top App Bar -->
         <mdc-top-app-bar
           v-if="useTopAppBar"
+          key="top-app-bar-with-permanent-drawer"
           :content-selector="contentSelector"
-          :is-permanent-drawer="isPermanentDrawer"
-          :attr-or-prop="topAppBarAttrOrProp"
-          @nav="handleDrawer"
+          :attr-or-prop="currentTopAppBarAttrOrProp"
         >
           <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
           <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
             <slot :name="name" v-bind="slotData"></slot>
           </template>
         </mdc-top-app-bar>
+        <!-- Before Slot -->
+        <slot name="before-layout-view"></slot>
         <!-- App Content -->
         <div :id="contentSelector" class="mdc-layout-view__app-content">
           <slot></slot>
         </div>
-      </ui-drawer-app-content>
-      <div v-else class="mdc-layout-view__content">
-        <!-- Top App Bar -->
-        <mdc-top-app-bar
-          v-if="useTopAppBar"
-          :content-selector="contentSelector"
-          :is-permanent-drawer="isPermanentDrawer"
-          :attr-or-prop="topAppBarAttrOrProp"
-          @nav="handleDrawer"
-        >
-          <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
-          <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-            <slot :name="name" v-bind="slotData"></slot>
-          </template>
-        </mdc-top-app-bar>
-        <!-- App Content -->
-        <div :id="contentSelector" class="mdc-layout-view__app-content">
-          <slot></slot>
-        </div>
+        <!-- After Slot -->
+        <slot name="after-layout-view"></slot>
       </div>
+    </template>
+    <template v-else>
+      <!-- Top App Bar -->
+      <mdc-top-app-bar
+        v-if="useTopAppBar"
+        :key="
+          isModalDrawer
+            ? 'top-app-bar-with-modal-drawer'
+            : 'top-app-bar-with-permanent-drawer'
+        "
+        :content-selector="contentSelector"
+        :attr-or-prop="currentTopAppBarAttrOrProp"
+        @nav="handleDrawer"
+      >
+        <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
+        <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
+          <slot :name="name" v-bind="slotData"></slot>
+        </template>
+      </mdc-top-app-bar>
+      <!-- Before Slot -->
+      <slot name="before-layout-view"></slot>
+      <!-- Drawer -->
+      <template v-if="isModalDrawer">
+        <div class="mdc-layout-view__drawer">
+          <mdc-navigation-drawer
+            v-if="useDrawer"
+            v-model="drawerOpen"
+            :type="drawerType"
+            :attr-or-prop="drawerAttrOrProp"
+          >
+            <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
+            <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
+              <slot :name="name" v-bind="slotData"></slot>
+            </template>
+          </mdc-navigation-drawer>
+        </div>
+        <!-- Main Content -->
+        <div key="modal-drawer-content" class="mdc-layout-view__content">
+          <!-- App Content -->
+          <div :id="contentSelector" class="mdc-layout-view__app-content">
+            <slot></slot>
+          </div>
+        </div>
+      </template>
+      <template v-else>
+        <!-- Main Content -->
+        <div
+          :id="contentSelector"
+          key="permanent-drawer-content"
+          class="mdc-layout-view__content"
+        >
+          <!-- Drawer -->
+          <mdc-navigation-drawer
+            v-if="useDrawer"
+            v-model="drawerOpen"
+            :type="drawerType"
+            :attr-or-prop="drawerAttrOrProp"
+          >
+            <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
+            <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
+              <slot :name="name" v-bind="slotData"></slot>
+            </template>
+          </mdc-navigation-drawer>
+          <!-- App Content -->
+          <div class="mdc-layout-view__app-content">
+            <slot></slot>
+          </div>
+        </div>
+      </template>
+      <!-- After Slot -->
+      <slot name="after-layout-view"></slot>
     </template>
   </div>
 </template>
 
 <script>
 import MdcTopAppBar from './top-app-bar.vue';
-import MdcDrawer from './drawer.vue';
+import MdcNavigationDrawer from './navigation-drawer.vue';
 import { generateRandomString } from '../../utils/helpers';
 
 export default {
   name: 'UiLayoutView',
   components: {
     MdcTopAppBar,
-    MdcDrawer
+    MdcNavigationDrawer
   },
   props: {
     useTopAppBar: {
@@ -138,51 +135,82 @@ export default {
       type: Boolean,
       default: true
     },
-    drawerType: {
-      type: String,
-      default: 'permanent'
+    drawerAttrOrProp: {
+      type: Object,
+      default: () => ({})
     },
     drawerBelowTopAppBar: {
       type: Boolean,
       default: false
     },
-    drawerAttrOrProp: {
-      type: Object,
-      default: () => ({})
+    breakpoint: {
+      type: Number,
+      default: 960
     }
   },
   data() {
     return {
       contentSelector: generateRandomString('mdc-layout-view'),
-      drawerOpen: false
+      drawerOpen: false,
+      isLargeScreen: true
     };
   },
   computed: {
-    isPermanentDrawer() {
-      return this.drawerType === 'permanent';
-    },
-    isDismissibleDrawer() {
-      return this.drawerType === 'dismissible';
+    drawerType() {
+      return this.isLargeScreen ? 'permanent' : 'modal';
     },
     isModalDrawer() {
       return this.drawerType === 'modal';
     },
+    isPermanentDrawer() {
+      return this.drawerType === 'permanent';
+    },
+    drawerAboveTopAppBar() {
+      return !this.drawerBelowTopAppBar;
+    },
     className() {
       return {
         'mdc-layout-view': true,
+        'mdc-layout-view--with-modal-drawer': this.isModalDrawer,
         'mdc-layout-view--with-permanent-drawer': this.isPermanentDrawer,
-        'mdc-layout-view--with-dismissible-drawer': this.isDismissibleDrawer,
         'mdc-layout-view--with-drawer-above-top-app-bar':
-          !this.isModalDrawer && !this.drawerBelowTopAppBar,
+          this.isPermanentDrawer && this.drawerAboveTopAppBar,
         'mdc-layout-view--with-drawer-below-top-app-bar':
-          !this.isModalDrawer && this.drawerBelowTopAppBar,
-        'mdc-layout-view--with-modal-drawer': this.isModalDrawer
+          this.isPermanentDrawer && this.drawerBelowTopAppBar,
+        'mdc-layout-view--mobile': !this.isLargeScreen,
+        'mdc-layout-view--desktop': this.isLargeScreen
       };
+    },
+    currentTopAppBarAttrOrProp() {
+      return Object.assign(
+        {
+          navIcon: this.isPermanentDrawer ? false : 'menu'
+        },
+        this.topAppBarAttrOrProp
+      );
     }
+  },
+  mounted() {
+    this.init();
+    window.addEventListener('balmResize', this.init);
+  },
+  beforeDestroy() {
+    window.removeEventListener('balmResize', this.init);
   },
   methods: {
     handleDrawer() {
-      this.drawerOpen = !this.drawerOpen;
+      if (!this.isPermanentDrawer) {
+        this.drawerOpen = !this.drawerOpen;
+      }
+    },
+    init() {
+      this.updateLayoutViewport();
+    },
+    updateLayoutViewport() {
+      this.isLargeScreen = window.innerWidth > this.breakpoint;
+      if (this.isLargeScreen && this.drawerOpen) {
+        this.drawerOpen = false;
+      }
     }
   }
 };

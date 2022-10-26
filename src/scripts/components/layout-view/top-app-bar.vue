@@ -4,13 +4,14 @@
     v-bind="attrOrProp"
     @nav="handleNav"
   >
+    <template #nav-icon="navIconData">
+      <slot name="nav-icon" v-bind="navIconData"></slot>
+    </template>
+
     <slot name="title"></slot>
 
-    <template v-for="(_, name) in $slots">
-      <slot v-if="name !== 'default'" :slot="name" :name="name"></slot>
-    </template>
-    <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-      <slot v-if="name !== 'default'" :name="name" v-bind="slotData"></slot>
+    <template #toolbar="toolbarData">
+      <slot name="toolbar" v-bind="toolbarData"></slot>
     </template>
   </ui-top-app-bar>
 </template>
@@ -23,10 +24,6 @@ export default {
       type: String,
       required: true
     },
-    isPermanentDrawer: {
-      type: Boolean,
-      default: false
-    },
     attrOrProp: {
       type: Object,
       default: () => ({})
@@ -34,7 +31,7 @@ export default {
   },
   methods: {
     handleNav() {
-      !this.isPermanentDrawer && this.$emit('nav');
+      this.$emit('nav');
     }
   }
 };

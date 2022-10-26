@@ -1,11 +1,5 @@
 <template>
-  <ui-drawer
-    v-model="open"
-    :type="type"
-    :viewport-height="type !== 'modal'"
-    v-bind="attrOrProp"
-    @nav="handleNav"
-  >
+  <ui-drawer v-model="open" :type="type" v-bind="attrOrProp" @nav="handleNav">
     <ui-drawer-header v-if="hasDrawerHeader">
       <slot name="drawer-title"></slot>
     </ui-drawer-header>
@@ -17,7 +11,7 @@
 
 <script>
 export default {
-  name: 'MdcDrawer',
+  name: 'MdcNavigationDrawer',
   model: {
     prop: 'modelValue',
     event: 'change'
