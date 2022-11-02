@@ -154,6 +154,7 @@ interface ActionData {
 | `top-actions`                                        | instanceData                     | Custom table top bar actions (When `topActionConfig = []`)                                        |
 | `before-table-view`                                  | instanceData                     | Before table view                                                                                 |
 | `placeholder`                                        |                                  | The placeholder before searching model data                                                       |
+| `content`                                            | instanceData                     | Custom table view content                                                                         |
 | custom table slots                                   | rowData                          | See BalmUI `<ui-table>` slots [docs](https://v8.material.balmjs.com/#/data-display/table)         |
 | `row-actions`                                        | rowData                          | Custom table cell actions (When `rowActionConfig = []`)                                           |
 | custom pagination slots                              | `currentMinRow`, `currentMaxRow` | See BalmUI `<ui-pagination>` slots [docs](https://v8.material.balmjs.com/#/navigation/pagination) |

@@ -1,5 +1,6 @@
 import { $routerModel, indexView } from '@/pro/model';
 
+const LayoutView = () => import('@/views/components/layout-view');
 const FormView = () => import('@/views/components/form-view');
 const FormItems = () => import('@/views/components/form-items');
 const DetailView = () => import('@/views/components/detail-view');
@@ -19,6 +20,11 @@ export default $routerModel.createRoutes(modelName, {
     name: `${modelName}.form-view`
   },
   detailView: [
+    $routerModel.createRoute(
+      'layout-view',
+      `${modelName}.layout-view`,
+      LayoutView
+    ),
     $routerModel.createRoute(
       'form-view/:id?',
       `${modelName}.form-view`,

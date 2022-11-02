@@ -40,6 +40,9 @@ const MATERIAL_COMPONENTS_PRO = [
       },
       {
         name: 'table-view'
+      },
+      {
+        name: 'layout-view'
       }
     ]
   },
