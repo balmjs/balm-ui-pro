@@ -1,26 +1,48 @@
 <template>
   <div :class="className">
-    <template v-if="isPermanentDrawer && drawerAboveTopAppBar">
+    <template v-if="drawerAboveTopAppBar">
       <!-- Drawer -->
-      <mdc-navigation-drawer
-        v-if="useDrawer"
-        v-model="drawerOpen"
-        :type="drawerType"
-        :attr-or-prop="drawerAttrOrProp"
-      >
-        <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
-        <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-          <slot :name="name" v-bind="slotData"></slot>
-        </template>
-      </mdc-navigation-drawer>
+      <template v-if="isModalDrawer">
+        <div class="mdc-layout-view__drawer">
+          <mdc-navigation-drawer
+            v-if="useDrawer"
+            v-model="drawerOpen"
+            :type="drawerType"
+            :attr-or-prop="drawerAttrOrProp"
+          >
+            <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
+            <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
+              <slot :name="name" v-bind="slotData"></slot>
+            </template>
+          </mdc-navigation-drawer>
+        </div>
+      </template>
+      <template v-else>
+        <mdc-navigation-drawer
+          v-if="useDrawer"
+          v-model="drawerOpen"
+          :type="drawerType"
+          :attr-or-prop="drawerAttrOrProp"
+        >
+          <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
+          <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
+            <slot :name="name" v-bind="slotData"></slot>
+          </template>
+        </mdc-navigation-drawer>
+      </template>
       <!-- Main Content -->
-      <div key="permanent-drawer-content" class="mdc-layout-view__content">
+      <div class="mdc-layout-view__content">
         <!-- Top App Bar -->
         <mdc-top-app-bar
           v-if="useTopAppBar"
-          key="top-app-bar-with-permanent-drawer"
+          :key="
+            isModalDrawer
+              ? 'top-app-bar-with-modal-drawer'
+              : 'top-app-bar-with-permanent-drawer'
+          "
           :content-selector="contentSelector"
           :attr-or-prop="currentTopAppBarAttrOrProp"
+          @nav="handleDrawer"
         >
           <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
           <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
@@ -57,9 +79,29 @@
       </mdc-top-app-bar>
       <!-- Before Slot -->
       <slot name="before-layout-view"></slot>
-      <!-- Drawer -->
-      <template v-if="isModalDrawer">
-        <div class="mdc-layout-view__drawer">
+      <!-- Main Content -->
+      <div class="mdc-layout-view__content">
+        <!-- Drawer -->
+        <template v-if="isModalDrawer">
+          <div class="mdc-layout-view__drawer">
+            <mdc-navigation-drawer
+              v-if="useDrawer"
+              v-model="drawerOpen"
+              :type="drawerType"
+              :attr-or-prop="drawerAttrOrProp"
+            >
+              <slot
+                v-for="(_, name) in $slots"
+                :slot="name"
+                :name="name"
+              ></slot>
+              <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
+                <slot :name="name" v-bind="slotData"></slot>
+              </template>
+            </mdc-navigation-drawer>
+          </div>
+        </template>
+        <template v-else>
           <mdc-navigation-drawer
             v-if="useDrawer"
             v-model="drawerOpen"
@@ -71,40 +113,12 @@
               <slot :name="name" v-bind="slotData"></slot>
             </template>
           </mdc-navigation-drawer>
+        </template>
+        <!-- App Content -->
+        <div :id="contentSelector" class="mdc-layout-view__app-content">
+          <slot></slot>
         </div>
-        <!-- Main Content -->
-        <div key="modal-drawer-content" class="mdc-layout-view__content">
-          <!-- App Content -->
-          <div :id="contentSelector" class="mdc-layout-view__app-content">
-            <slot></slot>
-          </div>
-        </div>
-      </template>
-      <template v-else>
-        <!-- Main Content -->
-        <div
-          :id="contentSelector"
-          key="permanent-drawer-content"
-          class="mdc-layout-view__content"
-        >
-          <!-- Drawer -->
-          <mdc-navigation-drawer
-            v-if="useDrawer"
-            v-model="drawerOpen"
-            :type="drawerType"
-            :attr-or-prop="drawerAttrOrProp"
-          >
-            <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
-            <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-              <slot :name="name" v-bind="slotData"></slot>
-            </template>
-          </mdc-navigation-drawer>
-          <!-- App Content -->
-          <div class="mdc-layout-view__app-content">
-            <slot></slot>
-          </div>
-        </div>
-      </template>
+      </div>
       <!-- After Slot -->
       <slot name="after-layout-view"></slot>
     </template>

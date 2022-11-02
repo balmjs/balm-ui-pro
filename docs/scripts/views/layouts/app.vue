@@ -45,11 +45,9 @@
             for vue@3.x documentation.
           </template>
           <template #actions>
-            <ui-button
-              outlined
-              @click="$balmUI.onHide('showBanner', refresh)"
-              >{{ hasNewVersion ? 'Refresh' : 'GOT IT' }}</ui-button
-            >
+            <ui-button outlined @click="$balmUI.onHide('showBanner', refresh)">
+              {{ hasNewVersion ? 'Refresh' : 'GOT IT' }}
+            </ui-button>
           </template>
         </ui-banner>
       </template>
@@ -188,7 +186,9 @@ export default {
     });
 
     this.$bus.on('global-message', (show) => {
-      this.showBanner = show;
+      if (this.showBanner !== show) {
+        this.showBanner = show;
+      }
     });
 
     this.$bus.on('refresh', () => {
