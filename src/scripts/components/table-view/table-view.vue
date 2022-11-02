@@ -69,44 +69,46 @@
         <slot v-else name="placeholder">{{ placeholder }}</slot>
       </div>
       <template v-else>
-        <ui-table
-          v-model="table.selectedRows"
-          v-bind="
-            Object.assign(
-              {},
-              {
-                data: table.data,
-                thead,
-                tbody,
-                fullwidth: true,
-                showProgress: table.loading
-              },
-              tableAttrOrProp
-            )
-          "
-        >
-          <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
-          <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-            <slot :name="name" v-bind="slotData"></slot>
-          </template>
-          <!-- Default actions -->
-          <template #actions="{ data }">
-            <ui-table-view-row-actions
-              v-if="rowActionConfig.length"
-              v-bind="{
-                data,
-                model,
-                modelOptions,
-                keyName,
-                actionConfig: rowActionConfig,
-                actionHandler: rowActionHandler,
-                actionRendering: rowActionRendering,
-                refreshData: getModelData
-              }"
-            ></ui-table-view-row-actions>
-            <slot v-else name="row-actions" v-bind="data"></slot>
-          </template>
-        </ui-table>
+        <slot name="content" v-bind="instanceData">
+          <ui-table
+            v-model="table.selectedRows"
+            v-bind="
+              Object.assign(
+                {},
+                {
+                  data: table.data,
+                  thead,
+                  tbody,
+                  fullwidth: true,
+                  showProgress: table.loading
+                },
+                tableAttrOrProp
+              )
+            "
+          >
+            <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
+            <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
+              <slot :name="name" v-bind="slotData"></slot>
+            </template>
+            <!-- Default actions -->
+            <template #actions="{ data }">
+              <ui-table-view-row-actions
+                v-if="rowActionConfig.length"
+                v-bind="{
+                  data,
+                  model,
+                  modelOptions,
+                  keyName,
+                  actionConfig: rowActionConfig,
+                  actionHandler: rowActionHandler,
+                  actionRendering: rowActionRendering,
+                  refreshData: getModelData
+                }"
+              ></ui-table-view-row-actions>
+              <slot v-else name="row-actions" v-bind="data"></slot>
+            </template>
+          </ui-table>
+        </slot>
 
         <template v-if="table.data.length">
           <ui-pagination
