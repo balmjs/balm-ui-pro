@@ -8,6 +8,7 @@ const components = [
   'form-view',
   'detail-view',
   'table-view',
+  'layout-view',
   'readonly-item',
   'checkbox-group',
   'radio-group',
