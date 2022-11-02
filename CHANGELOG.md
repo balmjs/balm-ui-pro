@@ -2,6 +2,13 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.43.0 / 2022-11-02
+
+### Feature
+
+- `<ui-layout-view>`: new component for layout
+- `<ui-table-view>`: add `content` slot
+
 ## v0.42.3 / 2022-10-20
 
 ### Bug Fixes
