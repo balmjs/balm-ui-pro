@@ -197,7 +197,7 @@ export default {
         {},
         {
           originalData: this.formDataSource,
-          refreshData: this.getModelData
+          refresh: this.getModelData
         },
         slotData
       );
