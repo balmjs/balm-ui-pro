@@ -30,10 +30,7 @@
       >
         <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
         <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-          <slot
-            :name="name"
-            v-bind="Object.assign({ originalData: formDataSource }, slotData)"
-          ></slot>
+          <slot :name="name" v-bind="getSlotData(slotData)"></slot>
         </template>
         <!-- Default error message -->
         <template #after-form-view="slotData">
@@ -43,7 +40,7 @@
           <slot
             v-else
             name="after-form-view"
-            v-bind="Object.assign({ originalData: formDataSource }, slotData)"
+            v-bind="getSlotData(slotData)"
           ></slot>
         </template>
       </ui-form-view>
@@ -194,6 +191,16 @@ export default {
       } catch (err) {
         console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
       }
+    },
+    getSlotData(slotData) {
+      return Object.assign(
+        {},
+        {
+          originalData: this.formDataSource,
+          refreshData: this.getModelData
+        },
+        slotData
+      );
     },
     redirect(to, keepAlive = true) {
       if (to !== 'custom') {
