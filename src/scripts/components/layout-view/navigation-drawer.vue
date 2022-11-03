@@ -1,12 +1,14 @@
 <template>
-  <ui-drawer v-model="open" :type="type" v-bind="attrOrProp" @nav="handleNav">
-    <ui-drawer-header v-if="hasDrawerHeader">
-      <slot name="drawer-title"></slot>
-    </ui-drawer-header>
-    <ui-drawer-content>
-      <slot name="drawer-content"></slot>
-    </ui-drawer-content>
-  </ui-drawer>
+  <div class="mdc-layout-view__drawer">
+    <ui-drawer v-model="open" :type="type" v-bind="attrOrProp" @nav="handleNav">
+      <ui-drawer-header v-if="hasDrawerHeader">
+        <slot name="drawer-title"></slot>
+      </ui-drawer-header>
+      <ui-drawer-content>
+        <slot name="drawer-content"></slot>
+      </ui-drawer-content>
+    </ui-drawer>
+  </div>
 </template>
 
 <script>

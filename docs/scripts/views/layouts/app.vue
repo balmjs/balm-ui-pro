@@ -4,7 +4,7 @@
     <ui-layout-view
       v-else
       ref="layout"
-      drawer-below-top-app-bar
+      :drawer-below-top-app-bar="false"
       :top-app-bar-attr-or-prop="{
         class: 'balmui-head',
         fixed: true

@@ -2,35 +2,18 @@
   <div :class="className">
     <template v-if="drawerAboveTopAppBar">
       <!-- Drawer -->
-      <template v-if="isModalDrawer">
-        <div class="mdc-layout-view__drawer">
-          <mdc-navigation-drawer
-            v-if="useDrawer"
-            v-model="drawerOpen"
-            :type="drawerType"
-            :attr-or-prop="drawerAttrOrProp"
-          >
-            <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
-            <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-              <slot :name="name" v-bind="slotData"></slot>
-            </template>
-          </mdc-navigation-drawer>
-        </div>
-      </template>
-      <template v-else>
-        <mdc-navigation-drawer
-          v-if="useDrawer"
-          v-model="drawerOpen"
-          :type="drawerType"
-          :attr-or-prop="drawerAttrOrProp"
-        >
-          <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
-          <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-            <slot :name="name" v-bind="slotData"></slot>
-          </template>
-        </mdc-navigation-drawer>
-      </template>
-      <!-- Main Content -->
+      <mdc-navigation-drawer
+        v-if="useDrawer"
+        v-model="drawerOpen"
+        :type="drawerType"
+        :attr-or-prop="drawerAttrOrProp"
+      >
+        <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
+        <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
+          <slot :name="name" v-bind="slotData"></slot>
+        </template>
+      </mdc-navigation-drawer>
+      <!-- Content -->
       <div class="mdc-layout-view__content">
         <!-- Top App Bar -->
         <mdc-top-app-bar
@@ -53,7 +36,9 @@
         <slot name="before-layout-view"></slot>
         <!-- App Content -->
         <div :id="contentSelector" class="mdc-layout-view__app-content">
-          <slot></slot>
+          <div class="mdc-layout-view__main-content">
+            <slot></slot>
+          </div>
         </div>
         <!-- After Slot -->
         <slot name="after-layout-view"></slot>
@@ -79,44 +64,25 @@
       </mdc-top-app-bar>
       <!-- Before Slot -->
       <slot name="before-layout-view"></slot>
-      <!-- Main Content -->
+      <!-- Content -->
       <div class="mdc-layout-view__content">
         <!-- Drawer -->
-        <template v-if="isModalDrawer">
-          <div class="mdc-layout-view__drawer">
-            <mdc-navigation-drawer
-              v-if="useDrawer"
-              v-model="drawerOpen"
-              :type="drawerType"
-              :attr-or-prop="drawerAttrOrProp"
-            >
-              <slot
-                v-for="(_, name) in $slots"
-                :slot="name"
-                :name="name"
-              ></slot>
-              <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-                <slot :name="name" v-bind="slotData"></slot>
-              </template>
-            </mdc-navigation-drawer>
-          </div>
-        </template>
-        <template v-else>
-          <mdc-navigation-drawer
-            v-if="useDrawer"
-            v-model="drawerOpen"
-            :type="drawerType"
-            :attr-or-prop="drawerAttrOrProp"
-          >
-            <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
-            <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-              <slot :name="name" v-bind="slotData"></slot>
-            </template>
-          </mdc-navigation-drawer>
-        </template>
+        <mdc-navigation-drawer
+          v-if="useDrawer"
+          v-model="drawerOpen"
+          :type="drawerType"
+          :attr-or-prop="drawerAttrOrProp"
+        >
+          <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
+          <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
+            <slot :name="name" v-bind="slotData"></slot>
+          </template>
+        </mdc-navigation-drawer>
         <!-- App Content -->
         <div :id="contentSelector" class="mdc-layout-view__app-content">
-          <slot></slot>
+          <div class="mdc-layout-view__main-content">
+            <slot></slot>
+          </div>
         </div>
       </div>
       <!-- After Slot -->

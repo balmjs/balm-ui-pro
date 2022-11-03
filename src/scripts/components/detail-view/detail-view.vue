@@ -30,14 +30,21 @@
       >
         <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
         <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-          <slot :name="name" v-bind="slotData"></slot>
+          <slot
+            :name="name"
+            v-bind="Object.assign({ originalData: formDataSource }, slotData)"
+          ></slot>
         </template>
         <!-- Default error message -->
         <template #after-form-view="slotData">
           <template v-if="useValidator">
             <ui-alert v-if="message" state="warning">{{ message }}</ui-alert>
           </template>
-          <slot v-else name="after-form-view" v-bind="slotData"></slot>
+          <slot
+            v-else
+            name="after-form-view"
+            v-bind="Object.assign({ originalData: formDataSource }, slotData)"
+          ></slot>
         </template>
       </ui-form-view>
 
@@ -175,14 +182,14 @@ export default {
     },
     async getModelData() {
       try {
-        const formDataSource = await this.getModelDataFn(this.fullInstanceData);
+        const originalData = await this.getModelDataFn(this.fullInstanceData);
 
         if (
-          getType(formDataSource) === 'object' &&
-          Object.keys(formDataSource).length
+          getType(originalData) === 'object' &&
+          Object.keys(originalData).length
         ) {
-          this.formDataSource = formDataSource;
-          this.formData = Object.assign({}, formDataSource);
+          this.formDataSource = originalData;
+          this.formData = Object.assign({}, originalData);
         }
       } catch (err) {
         console.warn(`[${UiDetailView.name}]: ${err.toString()}`);

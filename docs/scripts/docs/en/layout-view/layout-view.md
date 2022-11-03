@@ -18,6 +18,7 @@
 | Name                 | Props              | Description                                                                 |
 | -------------------- | ------------------ | --------------------------------------------------------------------------- |
 | `title`              |                    | The title slot holds the application title and can contain HTML.            |
+| `nav-icon`           | `navIconClass`     | The nav-icon slot holds the navigation icon and can contain HTML.           |
 | `toolbar`            | `toolbarItemClass` | The toolbar slot holds the top app bar action items and can contain HTML.   |
 |                      |
 | `before-layout-view` |                    | Before layout view                                                          |
