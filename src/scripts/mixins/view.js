@@ -93,7 +93,9 @@ export default {
       return this.title || this.$slots.title;
     },
     refreshData() {
-      return /UiTableView$/.test(this.$vnode.tag) ? this.getModelData : null;
+      return /(UiTableView|UiDetailView)$/.test(this.$vnode.tag)
+        ? this.getModelData
+        : null;
     }
   },
   watch: {
