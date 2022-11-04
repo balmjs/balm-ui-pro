@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.44.0 / 2022-11-04
+
+### Feature
+
+- `<ui-form-view>`: add `actionRendering` prop
+
 ## v0.43.0 / 2022-11-02
 
 ### Feature

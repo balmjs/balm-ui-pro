@@ -193,14 +193,10 @@ export default {
       }
     },
     getSlotData(slotData) {
-      return Object.assign(
-        {},
-        {
-          originalData: this.formDataSource,
-          refresh: this.getModelData
-        },
-        slotData
-      );
+      return Object.assign({}, slotData, {
+        originalData: this.formDataSource,
+        refresh: this.getModelData
+      });
     },
     redirect(to, keepAlive = true) {
       if (to !== 'custom') {

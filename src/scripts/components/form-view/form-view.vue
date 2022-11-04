@@ -52,13 +52,7 @@
               <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
                 <slot
                   :name="name"
-                  v-bind="
-                    Object.assign({}, slotData, {
-                      config: configData,
-                      data: formData,
-                      dataSource: formDataSource
-                    })
-                  "
+                  v-bind="getSlotData(slotData, configData)"
                 ></slot>
               </template>
             </ui-form-item>
@@ -81,13 +75,7 @@
             <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
               <slot
                 :name="name"
-                v-bind="
-                  Object.assign({}, slotData, {
-                    config: configData,
-                    data: formData,
-                    dataSource: formDataSource
-                  })
-                "
+                v-bind="getSlotData(slotData, configData)"
               ></slot>
             </template>
           </ui-form-item>
@@ -117,22 +105,24 @@
             :class="[itemClass, actionClass]"
           >
             <template v-for="(buttonData, buttonIndex) in actionConfig">
-              <ui-button
-                v-if="buttonData.type === NATIVE_BUTTON_TYPES.submit"
-                :key="`form-submit-${buttonIndex}`"
-                v-debounce="handleAction(buttonData)"
-                v-bind="buttonData.attrOrProp || {}"
-              >
-                {{ buttonData.text }}
-              </ui-button>
-              <ui-button
-                v-else
-                :key="`form-button-${buttonIndex}`"
-                v-bind="buttonData.attrOrProp || {}"
-                @click="handleAction(buttonData)"
-              >
-                {{ buttonData.text }}
-              </ui-button>
+              <template v-if="ifAction(buttonData)">
+                <ui-button
+                  v-if="buttonData.type === NATIVE_BUTTON_TYPES.submit"
+                  :key="`form-submit-${buttonIndex}`"
+                  v-debounce="handleAction(buttonData)"
+                  v-bind="buttonData.attrOrProp || {}"
+                >
+                  {{ buttonData.text }}
+                </ui-button>
+                <ui-button
+                  v-else
+                  :key="`form-button-${buttonIndex}`"
+                  v-bind="buttonData.attrOrProp || {}"
+                  @click="handleAction(buttonData)"
+                >
+                  {{ buttonData.text }}
+                </ui-button>
+              </template>
             </template>
           </ui-form-field>
         </slot>
@@ -207,6 +197,10 @@ export default {
     actionConfig: {
       type: Array,
       default: () => []
+    },
+    actionRendering: {
+      type: Function,
+      default: () => true
     },
     setModelOptionsFn: {
       type: [Function, Boolean],
@@ -484,6 +478,25 @@ export default {
         ? customHandler(actionConfig, result)
         : this.$emit(UI_FORM_VIEW.EVENTS.action, actionConfig, result);
     },
+    ifAction(action) {
+      let result = false;
+
+      if (this.formDataKeys.length) {
+        const currentAction = action.if;
+
+        const formViewData = {
+          config: this.formConfig,
+          data: this.formData,
+          dataSource: this.formDataSource
+        };
+
+        result = isFunction(currentAction)
+          ? currentAction(formViewData)
+          : this.actionRendering(action, formViewData);
+      }
+
+      return result;
+    },
     handleAction(action) {
       let debounceConfig = {};
 
@@ -524,6 +537,13 @@ export default {
       return action.type === NATIVE_BUTTON_TYPES.submit
         ? debounceConfig
         : this.exposeAction(action);
+    },
+    getSlotData(slotData, config) {
+      return Object.assign({}, slotData, {
+        config,
+        data: this.formData,
+        dataSource: this.formDataSource
+      });
     }
   }
 };
