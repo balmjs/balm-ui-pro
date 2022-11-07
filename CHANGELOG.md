@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.44.2 / 2022-11-07
+
+### Bug Fixes
+
+- `<ui-form-view>`: fix `modelOptions` init data bug
+
 ## v0.44.0 / 2022-11-04
 
 ### Feature

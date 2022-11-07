@@ -214,7 +214,8 @@ export default {
       formDataKeys: {},
       formDataSource: this.modelValue,
       formData: {},
-      formOptions: {},
+      formOptions: this.modelOptions,
+      privateModelOptions: {},
       formUpdating: false
     };
   },
@@ -278,11 +279,11 @@ export default {
       deep: true
     },
     modelOptions: {
-      async handler(val, oldVal) {
+      async handler(val) {
         if (
           !this.formUpdating &&
           this.isFunctionConfig &&
-          JSON.stringify(val) !== JSON.stringify(oldVal)
+          JSON.stringify(val) !== JSON.stringify(this.formOptions)
         ) {
           this.formUpdating = true;
 
@@ -316,7 +317,7 @@ export default {
       const originalConfig = this.isFunctionConfig
         ? await this.modelConfig(
             Object.assign({}, this.formDataSource),
-            Object.assign({}, this.modelOptions)
+            this.formOptions
           )
         : this.modelConfig;
 
@@ -324,12 +325,12 @@ export default {
         .filter(({ model }) => model)
         .map(({ model }) => model);
 
-      this.formOptions = modelList.length
+      this.privateModelOptions = modelList.length
         ? await this.setModelOptionsFn(modelList)
         : {};
 
-      if (getType(this.formOptions) !== 'object') {
-        this.formOptions = {};
+      if (getType(this.privateModelOptions) !== 'object') {
+        this.privateModelOptions = {};
         console.warn(`[${UI_FORM_VIEW.name}]: Invalid form model options`);
       }
     },
@@ -338,10 +339,16 @@ export default {
         await this.setModelOptions();
       }
 
+      this.formOptions = Object.assign(
+        {},
+        this.privateModelOptions,
+        this.modelOptions
+      );
+
       const originalConfig = this.isFunctionConfig
         ? await modelConfig(
             Object.assign({}, this.formDataSource),
-            Object.assign({}, this.formOptions, this.modelOptions)
+            this.formOptions
           )
         : modelConfig;
 
