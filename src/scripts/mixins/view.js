@@ -83,7 +83,8 @@ export default {
         modelPath,
         modelOptions: validModelOptions,
         modelValueDefaults,
-        keyName
+        keyName,
+        refreshData: this.refreshData
       };
     },
     fullInstanceData() {
