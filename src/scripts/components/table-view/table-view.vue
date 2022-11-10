@@ -304,7 +304,7 @@ export default {
         data: [],
         total: 0,
         page: 1,
-        pageSize: this.pageSize,
+        pageSize: this.paginationAttrOrProp.pageSize || this.pageSize,
         loading: false,
         usePlaceholder: this.useValidator && this.placeholder
       },
