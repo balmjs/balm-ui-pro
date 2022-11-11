@@ -69,7 +69,7 @@
         <slot v-else name="placeholder">{{ placeholder }}</slot>
       </div>
       <template v-else>
-        <slot name="content" v-bind="instanceData">
+        <slot name="table-view-content" v-bind="instanceData">
           <ui-table
             v-model="table.selectedRows"
             v-bind="
