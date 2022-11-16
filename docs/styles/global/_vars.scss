@@ -2,7 +2,7 @@
 @use '@material/top-app-bar/variables' as top-app-bar-variables;
 @use '@material/tab/variables' as tab-variables;
 
-$MIN_WIDTH: 1240 + 1;
+$MIN_WIDTH: 1256 - 1;
 $primary: theme-variables.$primary;
 $secondary: theme-variables.$secondary;
 $mobile-breakpoint: top-app-bar-variables.$mobile-breakpoint;

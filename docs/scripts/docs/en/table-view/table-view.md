@@ -149,16 +149,16 @@ interface ActionData {
 
 | Name                                                 | Props                            | Description                                                                                       |
 | ---------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `title`                                              |                                  | Table view title                                                                                  |
+| `table-view-title`                                   |                                  | Table view title                                                                                  |
 | custom search form item slots (by form model config) | `config`, `data`                 | Custom search form item slots                                                                     |
-| `top-actions`                                        | instanceData                     | Custom table top bar actions (When `topActionConfig = []`)                                        |
+| `table-view-top-actions`                             | instanceData                     | Custom table top bar actions (When `topActionConfig = []`)                                        |
 | `before-table-view`                                  | instanceData                     | Before table view                                                                                 |
-| `placeholder`                                        |                                  | The placeholder before searching model data                                                       |
-| `content`                                            | instanceData                     | Custom table view content                                                                         |
+| `table-view-placeholder`                             |                                  | The placeholder before searching model data                                                       |
+| `table-view-content`                                 | instanceData                     | Custom table view content                                                                         |
 | custom table slots                                   | rowData                          | See BalmUI `<ui-table>` slots [docs](https://v8.material.balmjs.com/#/data-display/table)         |
-| `row-actions`                                        | rowData                          | Custom table cell actions (When `rowActionConfig = []`)                                           |
+| `table-view-row-actions`                             | rowData                          | Custom table cell actions (When `rowActionConfig = []`)                                           |
 | custom pagination slots                              | `currentMinRow`, `currentMaxRow` | See BalmUI `<ui-pagination>` slots [docs](https://v8.material.balmjs.com/#/navigation/pagination) |
-| `empty`                                              |                                  | Custom table no data                                                                              |
+| `table-view-empty`                                   |                                  | Custom table no data                                                                              |
 | `after-table-view`                                   | instanceData                     | After table view                                                                                  |
 
 ### Events

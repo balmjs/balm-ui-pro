@@ -15,13 +15,13 @@
 
 ### Slots
 
-| Name                 | Props              | Description                                                                 |
-| -------------------- | ------------------ | --------------------------------------------------------------------------- |
-| `title`              |                    | The title slot holds the application title and can contain HTML.            |
-| `nav-icon`           | `navIconClass`     | The nav-icon slot holds the navigation icon and can contain HTML.           |
-| `toolbar`            | `toolbarItemClass` | The toolbar slot holds the top app bar action items and can contain HTML.   |
-|                      |
-| `before-layout-view` |                    | Before layout view                                                          |
-| `drawer-title`       |                    | The drawer title slot holds the title and subtitle components of the drawer |
-| `drawer-content`     |                    | Scrollable content area of the drawer                                       |
-| `after-layout-view`  |                    | After layout view                                                           |
+| Name                   | Props              | Description                                                                 |
+| ---------------------- | ------------------ | --------------------------------------------------------------------------- |
+| `top-app-bar-title`    |                    | The title slot holds the application title and can contain HTML.            |
+| `top-app-bar-nav-icon` | `navIconClass`     | The nav-icon slot holds the navigation icon and can contain HTML.           |
+| `top-app-bar-toolbar`  | `toolbarItemClass` | The toolbar slot holds the top app bar action items and can contain HTML.   |
+|                        |
+| `before-layout-view`   |                    | Before layout view                                                          |
+| `drawer-title`         |                    | The drawer title slot holds the title and subtitle components of the drawer |
+| `drawer-content`       |                    | Scrollable content area of the drawer                                       |
+| `after-layout-view`    |                    | After layout view                                                           |

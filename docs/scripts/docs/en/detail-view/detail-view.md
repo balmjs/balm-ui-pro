@@ -63,7 +63,7 @@ const DefaultActionConfig: ActionButton[] = [
 
 | Name                                          | Props            | Description            |
 | --------------------------------------------- | ---------------- | ---------------------- |
-| `title`                                       |                  | Detail view title      |
+| `detail-view-title`                           |                  | Detail view title      |
 | `before-detail-view`                          | instanceData     | Before detail view     |
 | custom form item slots (by form model config) | `config`, `data` | Custom form item slots |
 | `after-detail-view`                           | instanceData     | After detail view      |

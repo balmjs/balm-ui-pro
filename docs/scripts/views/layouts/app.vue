@@ -4,7 +4,7 @@
     <ui-layout-view
       v-else
       ref="layout"
-      :drawer-below-top-app-bar="false"
+      :drawer-below-top-app-bar="true"
       :top-app-bar-attr-or-prop="{
         class: 'balmui-head',
         fixed: true
@@ -12,7 +12,7 @@
       :breakpoint="MIN_WIDTH"
     >
       <!-- Top App Bar -->
-      <template #title>
+      <template #top-app-bar-title>
         <router-link
           to="/"
           :class="['catalog-title', $theme.getThemeClass('on-primary')]"
@@ -20,7 +20,7 @@
           BalmUI Pro
         </router-link>
       </template>
-      <template #toolbar="{ toolbarItemClass }">
+      <template #top-app-bar-toolbar="{ toolbarItemClass }">
         <top-app-toolbar :item-class="toolbarItemClass"></top-app-toolbar>
       </template>
       <!-- Global Message -->

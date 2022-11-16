@@ -1,8 +1,12 @@
 @use '@material/theme' as color;
 
-.mdc-layout-view--mobile {
+.catalog-list .balmui-version {
+  display: none;
+}
+
+.mdc-layout-view--with-drawer-below-top-app-bar {
   .catalog-list .balmui-version {
-    display: none;
+    display: inline;
   }
 }
 
