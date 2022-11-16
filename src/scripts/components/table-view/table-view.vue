@@ -1,7 +1,7 @@
 <template>
   <div class="mdc-table-view">
     <h2 v-if="hasTitle" class="mdc-table-view__title">
-      <slot name="title">{{ title }}</slot>
+      <slot name="table-view-title">{{ title }}</slot>
     </h2>
 
     <section v-if="hasSearchForm" class="mdc-table-view__conditions">
@@ -59,14 +59,14 @@
         resetSelectedRows
       }"
     ></ui-table-view-top-actions>
-    <slot v-else name="top-actions" v-bind="instanceData"></slot>
+    <slot v-else name="table-view-top-actions" v-bind="instanceData"></slot>
 
     <section class="mdc-table-view__content">
       <slot name="before-table-view" v-bind="instanceData"></slot>
 
       <div v-if="table.usePlaceholder" class="mdc-table-view__placeholder">
         <ui-spinner v-if="table.loading" active></ui-spinner>
-        <slot v-else name="placeholder">{{ placeholder }}</slot>
+        <slot v-else name="table-view-placeholder">{{ placeholder }}</slot>
       </div>
       <template v-else>
         <slot name="table-view-content" v-bind="instanceData">
@@ -105,7 +105,7 @@
                   refreshData: getModelData
                 }"
               ></ui-table-view-row-actions>
-              <slot v-else name="row-actions" v-bind="data"></slot>
+              <slot v-else name="table-view-row-actions" v-bind="data"></slot>
             </template>
           </ui-table>
         </slot>
@@ -132,14 +132,14 @@
             <!-- Default pagination info -->
             <template #default="slotData">
               <slot
-                name="pagination"
+                name="table-view-pagination"
                 v-bind="Object.assign({}, slotData, table)"
               ></slot>
             </template>
           </ui-pagination>
         </template>
         <div v-else class="mdc-table-view__empty">
-          <slot name="empty">{{ noData }}</slot>
+          <slot name="table-view-empty">{{ noData }}</slot>
         </div>
       </template>
 

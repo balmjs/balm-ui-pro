@@ -1,7 +1,7 @@
 <template>
   <div class="mdc-detail-view">
     <h2 v-if="hasTitle" class="mdc-detail-view__title">
-      <slot name="title">{{ title }}</slot>
+      <slot name="detail-view-title">{{ title }}</slot>
     </h2>
 
     <section class="mdc-detail-view__content">
