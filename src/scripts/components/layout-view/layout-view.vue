@@ -188,7 +188,7 @@ export default {
     },
     updateLayoutViewport() {
       this.isLargeScreen = window.innerWidth > this.breakpoint;
-      if (this.isLargeScreen && this.drawerOpen) {
+      if (this.drawerOpen) {
         this.drawerOpen = false;
       }
     }

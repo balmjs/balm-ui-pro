@@ -5,13 +5,13 @@
     @nav="handleNav"
   >
     <template #nav-icon="navIconData">
-      <slot name="nav-icon" v-bind="navIconData"></slot>
+      <slot name="top-app-bar-nav-icon" v-bind="navIconData"></slot>
     </template>
 
-    <slot name="title"></slot>
+    <slot name="top-app-bar-title"></slot>
 
     <template #toolbar="toolbarData">
-      <slot name="toolbar" v-bind="toolbarData"></slot>
+      <slot name="top-app-bar-toolbar" v-bind="toolbarData"></slot>
     </template>
   </ui-top-app-bar>
 </template>

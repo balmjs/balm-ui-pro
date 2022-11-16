@@ -1,3 +1,4 @@
+@use '@material/top-app-bar/variables' as top-app-bar-variables;
 @use '@material/drawer/variables' as drawer-variables;
 
 .mdc-layout-view-root {
@@ -9,65 +10,64 @@
 
 .mdc-layout-view {
   display: flex;
-  // height: 100vh;
-}
-
-.mdc-layout-view__drawer .mdc-drawer {
-  position: fixed;
 }
 
 .mdc-layout-view__content {
-  // display: flex;
-  // flex-direction: column;
-  // flex: 1;
   width: 100%;
-  padding-left: drawer-variables.$width;
 }
 
 .mdc-layout-view__app-content {
-  display: flex;
-  flex-direction: column;
   height: 100vh;
-  min-height: calc(100vh - 64px);
-  overflow-y: auto;
 }
 
 .mdc-layout-view__main-content {
   position: relative;
   display: flex;
-  flex-grow: 1;
-  justify-content: center;
-  width: 100%;
+  flex-direction: column;
+  min-height: calc(100vh - #{top-app-bar-variables.$row-height});
+  -webkit-overflow-scrolling: touch;
 }
 
 .mdc-layout-view--with-permanent-drawer {
-  // .mdc-layout-view__app-content {
-  //   height: 100%;
-  //   overflow: auto;
-  // }
-
   &.mdc-layout-view--with-drawer-above-top-app-bar {
-    // .mdc-layout-view__content {
-    //   position: relative;
-    // }
+    .mdc-layout-view__drawer {
+      position: fixed;
+      height: 100%;
+    }
+
+    .mdc-layout-view__content {
+      padding-left: drawer-variables.$width;
+    }
 
     .mdc-top-app-bar {
-      // position: absolute;
       width: calc(100% - #{drawer-variables.$width});
     }
   }
 
   &.mdc-layout-view--with-drawer-below-top-app-bar {
-    .mdc-drawer {
-      z-index: 2; // NOTE: < banner
+    .mdc-layout-view__drawer {
+      min-width: drawer-variables.$width;
+
+      .mdc-drawer {
+        position: fixed;
+        z-index: 2; // NOTE: < banner
+      }
     }
 
     .mdc-layout-view__content {
+      display: flex;
       flex-direction: row;
+      height: 100vh;
     }
 
     .mdc-layout-view__app-content {
-      width: 100%;
+      width: calc(100% - #{drawer-variables.$width});
     }
+  }
+}
+
+.mdc-layout-view--with-modal-drawer {
+  .mdc-layout-view__content {
+    padding-left: 0;
   }
 }
