@@ -3,6 +3,7 @@ import Home from '@/views/home';
 import guideRoutes from './guide';
 import componentRoutes from './components';
 import pluginRoutes from './plugins';
+import demoRoutes from './demo';
 import testRoutes from './test';
 // Pages
 const NotFound = () => import('@/views/not-found');
@@ -16,6 +17,7 @@ const routes = [
   guideRoutes,
   componentRoutes,
   pluginRoutes,
+  ...demoRoutes,
   testRoutes,
   {
     path: '*',

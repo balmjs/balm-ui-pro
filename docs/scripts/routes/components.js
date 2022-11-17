@@ -4,7 +4,7 @@ const LayoutView = () => import('@/views/components/layout-view');
 const FormView = () => import('@/views/components/form-view');
 const FormItems = () => import('@/views/components/form-items');
 const DetailView = () => import('@/views/components/detail-view');
-const TableView = () => import('@/views/components/table-view');
+const ListView = () => import('@/views/components/list-view');
 const ReadonlyItem = () => import('@/views/components/readonly-item');
 const CheckboxGroup = () => import('@/views/components/checkbox-group');
 const RadioGroup = () => import('@/views/components/radio-group');
@@ -40,11 +40,7 @@ export default $routerModel.createRoutes(modelName, {
       `${modelName}.detail-view`,
       DetailView
     ),
-    $routerModel.createRoute(
-      'table-view',
-      `${modelName}.table-view`,
-      TableView
-    ),
+    $routerModel.createRoute('list-view', `${modelName}.list-view`, ListView),
     $routerModel.createRoute(
       'readonly-item',
       `${modelName}.readonly-item`,

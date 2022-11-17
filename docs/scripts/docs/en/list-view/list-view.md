@@ -1,5 +1,5 @@
 ```html
-<ui-table-view></ui-table-view>
+<ui-list-view></ui-list-view>
 ```
 
 ```ts
@@ -8,13 +8,27 @@ interface ActionData {
   modelOptions: object;
   keyName: string | string[];
 }
+
+interface ListViewData {
+  title: string;
+  model: string;
+  modelAction: string;
+  modelPath: string;
+  modelOptions: object;
+  modelValueDefaults: object;
+  keyName: string;
+  refreshData: Function;
+  searchForm: object;
+  dataList: object;
+  dataListSource: object;
+}
 ```
 
 - Search actions
 
   ```js
   interface SearchActionData extends ActionData {
-    ...$data?: TableViewData,
+    ...$data?: ListViewData,
     ...validationResult?: BalmUIValidationResult
   }
 
@@ -52,7 +66,7 @@ interface ActionData {
 
   ```ts
   interface TopActionData extends ActionData {
-    ...$data?: TableViewData
+    ...$data?: ListViewData
   }
 
   interface TopActionButton {
@@ -77,7 +91,7 @@ interface ActionData {
   ) => void;
   ```
 
-- Table row actions
+- List row actions
 
   ```ts
   interface RowActionData extends ActionData {
@@ -149,21 +163,21 @@ interface ActionData {
 
 | Name                                                 | Props                            | Description                                                                                       |
 | ---------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `table-view-title`                                   |                                  | Table view title                                                                                  |
+| `list-view-title`                                    |                                  | List view title                                                                                   |
 | custom search form item slots (by form model config) | `config`, `data`                 | Custom search form item slots                                                                     |
-| `table-view-top-actions`                             | instanceData                     | Custom table top bar actions (When `topActionConfig = []`)                                        |
-| `before-table-view`                                  | instanceData                     | Before table view                                                                                 |
-| `table-view-placeholder`                             |                                  | The placeholder before searching model data                                                       |
-| `table-view-content`                                 | instanceData                     | Custom table view content                                                                         |
+| `list-view-top-actions`                              | instanceData                     | Custom list top bar actions (When `topActionConfig = []`)                                         |
+| `before-list-view`                                   | instanceData                     | Before list view                                                                                  |
+| `list-view-placeholder`                              |                                  | The placeholder before searching model data                                                       |
+| `list-view-content`                                  | instanceData                     | Custom list view content                                                                          |
 | custom table slots                                   | rowData                          | See BalmUI `<ui-table>` slots [docs](https://v8.material.balmjs.com/#/data-display/table)         |
-| `table-view-row-actions`                             | rowData                          | Custom table cell actions (When `rowActionConfig = []`)                                           |
+| `list-view-row-actions`                              | rowData                          | Custom table cell actions (When `rowActionConfig = []`)                                           |
 | custom pagination slots                              | `currentMinRow`, `currentMaxRow` | See BalmUI `<ui-pagination>` slots [docs](https://v8.material.balmjs.com/#/navigation/pagination) |
-| `table-view-empty`                                   |                                  | Custom table no data                                                                              |
-| `after-table-view`                                   | instanceData                     | After table view                                                                                  |
+| `list-view-empty`                                    |                                  | Custom no data for list view                                                                      |
+| `after-list-view`                                    | instanceData                     | After list view                                                                                   |
 
 ### Events
 
-| Name       | Type                                                                                    | Description                                   |
-| ---------- | --------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `change:x` | `function(key: string, value: string, refresh: Function)`                               | Emits when the search form item is changed.   |
-| `action`   | `function(actionConfig: SearchActionButton, data: SearchActionData, refresh: Function)` | Emits when the table view actions is clicked. |
+| Name       | Type                                                                                    | Description                                  |
+| ---------- | --------------------------------------------------------------------------------------- | -------------------------------------------- |
+| `change:x` | `function(key: string, value: string, refresh: Function)`                               | Emits when the search form item is changed.  |
+| `action`   | `function(actionConfig: SearchActionButton, data: SearchActionData, refresh: Function)` | Emits when the list view actions is clicked. |

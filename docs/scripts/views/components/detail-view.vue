@@ -5,7 +5,7 @@
       model="user"
       model-path="model-config/b.js"
       :to="{
-        name: 'components.table-view'
+        name: 'components.list-view'
       }"
       @change:x="onChange"
       @action="onAction"

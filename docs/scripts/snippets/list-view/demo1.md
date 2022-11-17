@@ -20,7 +20,7 @@
   };
   ```
 
-- `pro/views/table-view.js`
+- `pro/views/list-view.js`
 
   ```js
   import { useStore } from 'balm-ui';
@@ -31,11 +31,11 @@
     return await store.getModelConfig(modelPath);
   }
 
-  export async function getModelListDataFn({ model, searchForm, table }) {
+  export async function getModelListDataFn({ model, searchForm, dataList }) {
     const store = useStore();
 
     const { data } = searchForm;
-    const { page } = table;
+    const { page } = dataList;
     const params = Object.assign({}, data, {
       page
     });
@@ -58,14 +58,14 @@ import {
   getModelListDataFn,
   handleRowAction,
   handleTopAction
-} from '@/pro/views/table-view';
+} from '@/pro/views/list-view';
 
 Vue.use(BalmUIPro, {
-  UiTableView: {
+  UiListView: {
     getModelConfigFn,
     getModelDataFn: getModelListDataFn,
     tableDataFormat: {
-      data: 'data',
+      list: 'data',
       total: 'total'
       // page: 'page'
     },
@@ -78,15 +78,15 @@ Vue.use(BalmUIPro, {
 ---
 
 ```html
-<ui-table-view
-  title="Table View"
+<ui-list-view
+  title="List View"
   model="user"
   model-path="model-config/demo.json"
   :thead="thead"
   :tbody="tbody"
   :row-action-config="rowActionConfig"
   :top-action-config="topActionConfig"
-></ui-table-view>
+></ui-list-view>
 ```
 
 ```js

@@ -25,3 +25,7 @@
 | `drawer-title`         |                    | The drawer title slot holds the title and subtitle components of the drawer |
 | `drawer-content`       |                    | Scrollable content area of the drawer                                       |
 | `after-layout-view`    |                    | After layout view                                                           |
+
+### Update layout view for custom menu handler
+
+- `$refs.layout.updateLayoutViewport()`
