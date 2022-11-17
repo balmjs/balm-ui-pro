@@ -94,7 +94,7 @@ export default {
       return this.title || this.$slots.title;
     },
     refreshData() {
-      return /(UiTableView|UiDetailView)$/.test(this.$vnode.tag)
+      return /(UiListView|UiDetailView)$/.test(this.$vnode.tag)
         ? this.getModelData
         : null;
     }
@@ -115,11 +115,8 @@ export default {
       const { handler, ...actionConfig } = action;
       const customHandler = isFunction(handler) ? handler : false;
 
-      const { model, modelOptions, keyName } = this.$props;
       const data = {
-        model,
-        modelOptions,
-        keyName,
+        ...this.viewPropsData,
         ...this.$data,
         ...result
       };

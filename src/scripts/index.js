@@ -4,7 +4,8 @@ import autoInit from './config/auto-init';
 
 import UiFormView from './components/form-view/form-view.vue';
 import UiDetailView from './components/detail-view/detail-view.vue';
-import UiTableView from './components/table-view/table-view.vue';
+import UiListView from './components/list-view/list-view.vue';
+import UiListViewRowActions from './components/list-view/list-view-row-actions.vue';
 import UiLayoutView from './components/layout-view/layout-view.vue';
 import UiReadonlyItem from './components/readonly-item/readonly-item.vue';
 import UiCheckboxGroup from './components/checkbox-group/checkbox-group.vue';
@@ -24,7 +25,8 @@ import $dialog, { useDialog } from './plugins/dialog';
 const Components = {
   UiFormView,
   UiDetailView,
-  UiTableView,
+  UiListView,
+  UiListViewRowActions,
   UiLayoutView,
   UiReadonlyItem,
   UiCheckboxGroup,
@@ -58,7 +60,8 @@ export { version, install };
 export {
   UiFormView,
   UiDetailView,
-  UiTableView,
+  UiListView,
+  UiListViewRowActions,
   UiLayoutView,
   UiReadonlyItem,
   UiCheckboxGroup,

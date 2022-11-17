@@ -1,10 +1,10 @@
 <template>
-  <div class="mdc-table-view">
-    <h2 v-if="hasTitle" class="mdc-table-view__title">
-      <slot name="table-view-title">{{ title }}</slot>
+  <div class="mdc-list-view">
+    <h2 v-if="hasTitle" class="mdc-list-view__title">
+      <slot :name="`${namespace}-title`">{{ title }}</slot>
     </h2>
 
-    <section v-if="hasSearchForm" class="mdc-table-view__conditions">
+    <section v-if="hasSearchForm" class="mdc-list-view__conditions">
       <ui-spinner v-if="searchForm.loading" active></ui-spinner>
       <ui-form-view
         v-show="!searchForm.loading"
@@ -44,7 +44,7 @@
       </ui-form-view>
     </section>
 
-    <ui-table-view-top-actions
+    <ui-list-view-top-actions
       v-if="topActionConfig.length"
       v-bind="{
         data: instanceData,
@@ -58,29 +58,33 @@
         refreshData: getModelData,
         resetSelectedRows
       }"
-    ></ui-table-view-top-actions>
-    <slot v-else name="table-view-top-actions" v-bind="instanceData"></slot>
+    ></ui-list-view-top-actions>
+    <slot
+      v-else
+      :name="`${namespace}-top-actions`"
+      v-bind="instanceData"
+    ></slot>
 
-    <section class="mdc-table-view__content">
-      <slot name="before-table-view" v-bind="instanceData"></slot>
+    <section class="mdc-list-view__content">
+      <slot :name="`before-${namespace}`" v-bind="instanceData"></slot>
 
-      <div v-if="table.usePlaceholder" class="mdc-table-view__placeholder">
-        <ui-spinner v-if="table.loading" active></ui-spinner>
-        <slot v-else name="table-view-placeholder">{{ placeholder }}</slot>
+      <div v-if="dataList.usePlaceholder" class="mdc-list-view__placeholder">
+        <ui-spinner v-if="dataList.loading" active></ui-spinner>
+        <slot v-else :name="`${namespace}-placeholder`">{{ placeholder }}</slot>
       </div>
       <template v-else>
-        <slot name="table-view-content" v-bind="instanceData">
+        <slot :name="`${namespace}-content`" v-bind="instanceData">
           <ui-table
-            v-model="table.selectedRows"
+            v-model="dataList.selectedRows"
             v-bind="
               Object.assign(
                 {},
                 {
-                  data: table.data,
+                  data: dataList.data,
                   thead,
                   tbody,
                   fullwidth: true,
-                  showProgress: table.loading
+                  showProgress: dataList.loading
                 },
                 tableAttrOrProp
               )
@@ -92,7 +96,7 @@
             </template>
             <!-- Default actions -->
             <template #actions="{ data }">
-              <ui-table-view-row-actions
+              <ui-list-view-row-actions
                 v-if="rowActionConfig.length"
                 v-bind="{
                   data,
@@ -104,21 +108,25 @@
                   actionRendering: rowActionRendering,
                   refreshData: getModelData
                 }"
-              ></ui-table-view-row-actions>
-              <slot v-else name="table-view-row-actions" v-bind="data"></slot>
+              ></ui-list-view-row-actions>
+              <slot
+                v-else
+                :name="`${namespace}-row-actions`"
+                v-bind="data"
+              ></slot>
             </template>
           </ui-table>
         </slot>
 
-        <template v-if="table.data.length">
+        <template v-if="dataList.data.length">
           <ui-pagination
             v-if="!withoutPagination"
-            v-model="table.page"
+            v-model="dataList.page"
             v-bind="
               Object.assign(
                 {},
                 {
-                  total: table.total,
+                  total: dataList.total,
                   pageSize
                 },
                 paginationAttrOrProp
@@ -132,31 +140,32 @@
             <!-- Default pagination info -->
             <template #default="slotData">
               <slot
-                name="table-view-pagination"
-                v-bind="Object.assign({}, slotData, table)"
+                :name="`${namespace}-pagination`"
+                v-bind="Object.assign({}, slotData, dataList)"
               ></slot>
             </template>
           </ui-pagination>
         </template>
-        <div v-else class="mdc-table-view__empty">
-          <slot name="table-view-empty">{{ noData }}</slot>
+        <div v-else class="mdc-list-view__empty">
+          <slot :name="`${namespace}-empty`">{{ noData }}</slot>
         </div>
       </template>
 
-      <slot name="after-table-view" v-bind="instanceData"></slot>
+      <slot :name="`after-${namespace}`" v-bind="instanceData"></slot>
     </section>
   </div>
 </template>
 
 <script>
-import UiTableViewTopActions from './table-view-top-actions.vue';
-import UiTableViewRowActions from './table-view-row-actions.vue';
+import UiListViewTopActions from './list-view-top-actions.vue';
+import UiListViewRowActions from './list-view-row-actions.vue';
 import viewMixin from '../../mixins/view';
 import keepAliveMixin from '../../mixins/keep-alive';
 import getType, { isFunction } from '../../utils/typeof';
 
-const UiTableView = {
-  name: 'UiTableView',
+const UiListView = {
+  name: 'UiListView',
+  namespace: 'list-view',
   EVENTS: {
     submit: 'submit',
     reset: 'reset'
@@ -165,14 +174,14 @@ const UiTableView = {
 
 const defaultSearchActionConfig = [
   {
-    type: UiTableView.EVENTS.reset,
+    type: UiListView.EVENTS.reset,
     text: 'Reset',
     attrOrProp: {
       outlined: true
     }
   },
   {
-    type: UiTableView.EVENTS.submit,
+    type: UiListView.EVENTS.submit,
     text: 'Search',
     attrOrProp: {
       raised: true
@@ -181,10 +190,10 @@ const defaultSearchActionConfig = [
 ];
 
 export default {
-  name: UiTableView.name,
+  name: UiListView.name,
   components: {
-    UiTableViewTopActions,
-    UiTableViewRowActions
+    UiListViewTopActions,
+    UiListViewRowActions
   },
   mixins: [viewMixin, keepAliveMixin],
   props: {
@@ -290,6 +299,7 @@ export default {
   },
   data() {
     return {
+      namespace: UiListView.namespace,
       // Search data
       searchForm: {
         config: [],
@@ -298,8 +308,8 @@ export default {
         loading: false
       },
       lastSearchFormData: {}, // cached for last search result
-      // Table data
-      table: {
+      // List data
+      dataList: {
         selectedRows: [],
         data: [],
         total: 0,
@@ -308,7 +318,7 @@ export default {
         loading: false,
         usePlaceholder: this.useValidator && this.placeholder
       },
-      tableDataSource: {}
+      dataListSource: {}
     };
   },
   computed: {
@@ -318,8 +328,8 @@ export default {
     instanceData() {
       return Object.assign({}, this.viewPropsData, {
         searchForm: this.searchForm,
-        table: this.table,
-        tableDataSource: this.tableDataSource
+        dataList: this.dataList,
+        dataListSource: this.dataListSource
       });
     }
   },
@@ -328,7 +338,7 @@ export default {
   },
   methods: {
     init() {
-      this.resetTableData();
+      this.resetListData();
 
       if (this.hasSearchForm) {
         this.setModelConfig();
@@ -350,7 +360,7 @@ export default {
           (await this.getModelConfigFn(this.fullInstanceData));
         modelConfig && this.$set(this.searchForm, 'config', modelConfig);
       } catch (err) {
-        console.warn(`[${UiTableView.name}]: ${err.toString()}`);
+        console.warn(`[${UiListView.name}]: ${err.toString()}`);
       }
     },
     initModelData(formData = {}) {
@@ -361,48 +371,48 @@ export default {
         !this.useValidator && (await this.getModelData());
       });
     },
-    resetTableData() {
-      this.tableDataSource = {};
+    resetListData() {
+      this.dataListSource = {};
 
-      this.$set(this.table, 'selectedRows', []);
-      this.$set(this.table, 'data', []);
-      this.$set(this.table, 'total', 0);
-      this.$set(this.table, 'page', 1);
-      this.$set(this.table, 'loading', false);
+      this.$set(this.dataList, 'selectedRows', []);
+      this.$set(this.dataList, 'data', []);
+      this.$set(this.dataList, 'total', 0);
+      this.$set(this.dataList, 'page', 1);
+      this.$set(this.dataList, 'loading', false);
       this.$set(
-        this.table,
+        this.dataList,
         'usePlaceholder',
         this.useValidator && this.placeholder
       );
     },
     async getModelData() {
       try {
-        this.$set(this.table, 'loading', true);
-        this.tableDataSource = await this.getModelDataFn(this.fullInstanceData);
-        this.$set(this.table, 'loading', false);
-        this.$set(this.table, 'usePlaceholder', false);
+        this.$set(this.dataList, 'loading', true);
+        this.dataListSource = await this.getModelDataFn(this.fullInstanceData);
+        this.$set(this.dataList, 'loading', false);
+        this.$set(this.dataList, 'usePlaceholder', false);
 
-        if (getType(this.tableDataSource) === 'object') {
+        if (getType(this.dataListSource) === 'object') {
           for (const [key, value] of Object.entries(this.tableDataFormat)) {
-            const tableDataValue = isFunction(value)
-              ? value(this.tableDataSource)
-              : this.tableDataSource[value];
+            const dataListValue = isFunction(value)
+              ? value(this.dataListSource)
+              : this.dataListSource[value];
 
-            this.$set(this.table, key, tableDataValue);
+            this.$set(this.dataList, key, dataListValue);
           }
 
           this.lastSearchFormData = Object.assign({}, this.searchForm.data);
         }
       } catch (err) {
-        this.$set(this.table, 'loading', false);
-        console.warn(`[${UiTableView.name}]: ${err.toString()}`);
+        this.$set(this.dataList, 'loading', false);
+        console.warn(`[${UiListView.name}]: ${err.toString()}`);
       }
     },
     async handleAction(action, result) {
       let canSubmit = true;
 
       switch (action.type) {
-        case UiTableView.EVENTS.submit:
+        case UiListView.EVENTS.submit:
           if (this.useValidator) {
             canSubmit = result.valid;
             this.$set(this.searchForm, 'message', result.message);
@@ -412,7 +422,7 @@ export default {
             await this.getModelData();
           }
           break;
-        case UiTableView.EVENTS.reset:
+        case UiListView.EVENTS.reset:
           this.$set(this.searchForm, 'message', '');
           // NOTE: automatic processing in `<ui-form-view>`
           if (this.searchOnReset) {
@@ -425,11 +435,11 @@ export default {
     },
     // NOTE: for multi actions
     resetSelectedRows() {
-      this.$set(this.table, 'selectedRows', []);
+      this.$set(this.dataList, 'selectedRows', []);
     },
     // NOTE: for `<keep-alive>`
     refreshComponent() {
-      this.resetTableData();
+      this.resetListData();
       this.getModelData();
     }
   }

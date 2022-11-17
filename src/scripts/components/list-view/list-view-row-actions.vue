@@ -1,5 +1,5 @@
 <template>
-  <div class="mdc-table-view__row-actions">
+  <div class="mdc-list-view__row-actions">
     <template v-for="(action, index) in actionConfig">
       <template v-if="configAction('if', action)">
         <template v-if="action.component">
@@ -85,7 +85,7 @@ import { cssClasses, TYPES, getRouteLocationRaw } from './constants';
 import { isFunction } from '../../utils/typeof';
 
 export default {
-  name: 'UiTableViewActions',
+  name: 'UiListViewRowActions',
   props: {
     data: {
       type: Object,

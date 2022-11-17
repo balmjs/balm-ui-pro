@@ -1,5 +1,5 @@
 <template>
-  <section class="mdc-table-view__top-actions">
+  <section class="mdc-list-view__top-actions">
     <template v-for="(action, index) in actionConfig">
       <ui-button
         v-if="ifAction(action)"
@@ -27,7 +27,7 @@ import { cssClasses, TYPES, getRouteLocationRaw } from './constants';
 import { isFunction } from '../../utils/typeof';
 
 export default {
-  name: 'UiTableViewTopActions',
+  name: 'UiListViewTopActions',
   props: {
     data: {
       type: Object,
@@ -79,11 +79,11 @@ export default {
     ifAction(action) {
       const currentAction = action.if;
 
-      const { tableDataSource } = this.data;
+      const { dataListSource } = this.data;
 
       return isFunction(currentAction)
-        ? currentAction(tableDataSource)
-        : this.actionRendering(action, tableDataSource);
+        ? currentAction(dataListSource)
+        : this.actionRendering(action, dataListSource);
     },
     actionIcon({ icon, type }) {
       return icon !== false && this.actionIconFormat[type]
@@ -100,7 +100,7 @@ export default {
         resetSelectedRows
       } = this.$props;
 
-      const tableData = {
+      const listViewData = {
         model,
         modelOptions,
         keyName,
@@ -108,15 +108,15 @@ export default {
       };
 
       if (action.type === TYPES.routerLink) {
-        const to = getRouteLocationRaw(action, tableData);
+        const to = getRouteLocationRaw(action, listViewData);
         this.$router.push(to);
       } else {
         if (isFunction(action.handler)) {
-          action.handler(tableData, refreshData, resetSelectedRows);
+          action.handler(listViewData, refreshData, resetSelectedRows);
         } else {
           this.actionHandler(
             Object.assign({}, action),
-            tableData,
+            listViewData,
             refreshData,
             resetSelectedRows
           );
