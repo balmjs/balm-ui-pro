@@ -2,6 +2,24 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.45.0 / 2022-11-17
+
+### Feature
+
+- `<ui-layout-view>`: new component for layout
+
+### Bug Fixes
+
+- `<ui-form-view>`: fix css for from item slider
+
+### Code Refactoring
+
+- `<ui-list-view>`: refactor list view components
+
+### BREAKING CHANGES
+
+- `<ui-table-view>`: deprecated, use `<ui-list-view>` instead
+
 ## v0.44.2 / 2022-11-07
 
 ### Bug Fixes
@@ -18,7 +36,6 @@
 
 ### Feature
 
-- `<ui-layout-view>`: new component for layout
 - `<ui-table-view>`: add `content` slot
 
 ## v0.42.3 / 2022-10-20
