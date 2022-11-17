@@ -1,11 +1,11 @@
 <template>
   <div class="mdc-detail-view">
     <h2 v-if="hasTitle" class="mdc-detail-view__title">
-      <slot name="detail-view-title">{{ title }}</slot>
+      <slot :name="`${namespace}-title`">{{ title }}</slot>
     </h2>
 
     <section class="mdc-detail-view__content">
-      <slot name="before-detail-view" v-bind="instanceData"></slot>
+      <slot :name="`before-${namespace}`" v-bind="instanceData"></slot>
 
       <ui-spinner v-if="loading" active></ui-spinner>
       <ui-form-view
@@ -45,7 +45,7 @@
         </template>
       </ui-form-view>
 
-      <slot name="after-detail-view" v-bind="instanceData"></slot>
+      <slot :name="`after-${namespace}`" v-bind="instanceData"></slot>
     </section>
   </div>
 </template>
@@ -56,6 +56,7 @@ import getType from '../../utils/typeof';
 
 const UiDetailView = {
   name: 'UiDetailView',
+  namespace: 'detail-view',
   EVENTS: {
     submit: 'submit',
     reset: 'reset',
@@ -126,6 +127,7 @@ export default {
   },
   data() {
     return {
+      namespace: UiDetailView.namespace,
       currentModelConfig: [],
       formData: {},
       formDataSource: {},

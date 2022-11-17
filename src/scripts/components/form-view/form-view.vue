@@ -16,7 +16,7 @@
       <div class="mdc-form-view__items">
         <!-- Before from view -->
         <slot
-          name="before-form-view"
+          :name="`before-${namespace}`"
           v-bind="{
             itemClass,
             subitemClass,
@@ -82,7 +82,7 @@
         </template>
         <!-- After from view -->
         <slot
-          name="after-form-view"
+          :name="`after-${namespace}`"
           v-bind="{
             itemClass,
             subitemClass,
@@ -92,7 +92,7 @@
         ></slot>
         <!-- Action view -->
         <slot
-          name="form-view-actions"
+          :name="`${namespace}-actions`"
           v-bind="{
             className: [itemClass, actionClass],
             config: formConfig,
@@ -137,6 +137,7 @@ import getType, { isFunction } from '../../utils/typeof';
 
 const UI_FORM_VIEW = {
   name: 'UiFormView',
+  namespace: 'form-view',
   EVENTS: {
     loaded: 'loaded',
     reload: 'reload',
@@ -209,6 +210,7 @@ export default {
   },
   data() {
     return {
+      namespace: UI_FORM_VIEW.namespace,
       NATIVE_BUTTON_TYPES,
       formConfig: [],
       formDataKeys: {},

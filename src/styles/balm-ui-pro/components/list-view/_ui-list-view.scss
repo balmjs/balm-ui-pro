@@ -1,6 +1,6 @@
 @use '@material/elevation/mixins' as elevation-mixins;
 
-.mdc-table-view {
+.mdc-list-view {
   &__conditions {
     margin-bottom: 12px;
   }
@@ -34,13 +34,13 @@
 }
 
 .mdc-data-table__cell--center {
-  .mdc-table-view__actions {
+  .mdc-list-view__actions {
     justify-content: center;
   }
 }
 
 .mdc-data-table__cell--right {
-  .mdc-table-view__actions {
+  .mdc-list-view__actions {
     justify-content: flex-end;
   }
 }
