@@ -1,7 +1,6 @@
 #!/bin/bash
 
-DistTags=$(npm view balm-ui-pro dist-tags --json)
-LegacyVersion=$(echo "$DistTags" | jq --raw-output '.legacy')
+LegacyVersion=$(npm view balm-ui-pro@legacy version)
 
 npm run docs
 cd dist
