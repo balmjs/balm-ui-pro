@@ -19,8 +19,8 @@ interface ListViewData {
   keyName: string;
   refreshData: Function;
   searchForm: object;
-  dataList: object;
-  dataListSource: object;
+  listData: object;
+  listDataSource: object;
 }
 ```
 

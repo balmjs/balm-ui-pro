@@ -3,11 +3,11 @@ import { isDev } from '@/config';
 
 const $confirm = useConfirm();
 
-export async function getModelListDataFn({ model, searchForm, dataList }) {
+export async function getModelListDataFn({ model, searchForm, listData }) {
   const store = useStore();
 
   const { data } = searchForm;
-  const { page } = dataList;
+  const { page } = listData;
   const params = Object.assign({}, data, {
     page
   });
