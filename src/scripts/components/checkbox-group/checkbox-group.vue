@@ -27,14 +27,14 @@ import formItemMixin from '../../mixins/form-item';
 
 // Define checkbox group constants
 const UI_CHECKBOX_GROUP = {
-  name: 'UiCheckboxGroup',
+  NAME: 'UiCheckboxGroup',
   EVENTS: {
     CHANGE: 'change'
   }
 };
 
 export default {
-  name: UI_CHECKBOX_GROUP.name,
+  name: UI_CHECKBOX_GROUP.NAME,
   mixins: [formItemMixin],
   model: {
     prop: 'modelValue',
@@ -90,7 +90,7 @@ export default {
     }
   },
   beforeMount() {
-    this.checkOptionFormat(UI_CHECKBOX_GROUP.name);
+    this.checkOptionFormat(UI_CHECKBOX_GROUP.NAME);
 
     this.handleSelectAll(this.selectedAll);
   },

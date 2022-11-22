@@ -56,7 +56,7 @@ import UiReadonlyItem from '../readonly-item/readonly-item.vue';
 import getType, { isFunction } from '../../utils/typeof';
 
 const UI_FORM_ITEM = {
-  name: 'UiFormItem',
+  NAME: 'UiFormItem',
   EVENTS: {
     update: 'change'
   },
@@ -64,7 +64,7 @@ const UI_FORM_ITEM = {
 };
 
 export default {
-  name: UI_FORM_ITEM.name,
+  name: UI_FORM_ITEM.NAME,
   components: {
     UiReadonlyItem
   },
@@ -163,7 +163,7 @@ export default {
         slot
       }));
 
-      console.info(`[${UI_FORM_ITEM.name}] slots`);
+      console.info(`[${UI_FORM_ITEM.NAME}] slots`);
       console.table(customSlotsNames, ['slot']);
     }
   },
@@ -181,7 +181,7 @@ export default {
     handleChange({ component, key }, value) {
       this.config.debug &&
         console.info(
-          `[${UI_FORM_ITEM.name}] ${component}@${this.eventName}`,
+          `[${UI_FORM_ITEM.NAME}] ${component}@${this.eventName}`,
           this.hasSubComponents
             ? this.config.components.map(({ key }) => key)
             : key,

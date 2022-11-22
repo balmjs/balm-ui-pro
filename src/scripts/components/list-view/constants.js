@@ -13,6 +13,7 @@ export const TYPES = {
 export function getRouteLocationRaw(action, { model, data, params }) {
   const { to, routeName, routeParams } = action;
   const toRoute = isFunction(to) ? to(data) : to;
+
   return (
     toRoute || {
       name: isFunction(routeName)

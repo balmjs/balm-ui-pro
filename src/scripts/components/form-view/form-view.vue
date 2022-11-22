@@ -136,8 +136,8 @@ import UiFormItem from './form-item.vue';
 import getType, { isFunction } from '../../utils/typeof';
 
 const UI_FORM_VIEW = {
-  name: 'UiFormView',
-  namespace: 'form-view',
+  NAME: 'UiFormView',
+  NAMESPACE: 'form-view',
   EVENTS: {
     loaded: 'loaded',
     reload: 'reload',
@@ -154,7 +154,7 @@ const NATIVE_BUTTON_TYPES = {
 };
 
 export default {
-  name: UI_FORM_VIEW.name,
+  name: UI_FORM_VIEW.NAME,
   components: {
     UiFormItem
   },
@@ -210,7 +210,7 @@ export default {
   },
   data() {
     return {
-      namespace: UI_FORM_VIEW.namespace,
+      namespace: UI_FORM_VIEW.NAMESPACE,
       NATIVE_BUTTON_TYPES,
       formConfig: [],
       formDataKeys: {},
@@ -333,7 +333,7 @@ export default {
 
       if (getType(this.privateModelOptions) !== 'object') {
         this.privateModelOptions = {};
-        console.warn(`[${UI_FORM_VIEW.name}]: Invalid form model options`);
+        console.warn(`[${UI_FORM_VIEW.NAME}]: Invalid form model options`);
       }
     },
     async setFormConfig(modelConfig = this.modelConfig, needInit = false) {
@@ -366,7 +366,7 @@ export default {
           this.changeFormData();
         }
       } else {
-        console.warn(`[${UI_FORM_VIEW.name}]: Invalid form model config`);
+        console.warn(`[${UI_FORM_VIEW.NAME}]: Invalid form model config`);
       }
     },
     loadFormData(reload = false) {
@@ -528,7 +528,7 @@ export default {
                   this.$validations.clear();
                 } else {
                   console.warn(
-                    `[${UI_FORM_VIEW.name}]: BalmUI $validator plugin is missing`
+                    `[${UI_FORM_VIEW.NAME}]: BalmUI $validator plugin is missing`
                   );
                 }
               } else {

@@ -79,11 +79,11 @@ export default {
     ifAction(action) {
       const currentAction = action.if;
 
-      const { dataListSource } = this.data;
+      const { listDataSource } = this.data;
 
       return isFunction(currentAction)
-        ? currentAction(dataListSource)
-        : this.actionRendering(action, dataListSource);
+        ? currentAction(listDataSource)
+        : this.actionRendering(action, listDataSource);
     },
     actionIcon({ icon, type }) {
       return icon !== false && this.actionIconFormat[type]

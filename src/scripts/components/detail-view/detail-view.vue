@@ -14,7 +14,7 @@
         v-bind="
           Object.assign(
             {
-              modelConfig: currentModelConfig,
+              modelConfig: formConfig,
               modelOptions,
               actionConfig,
               formAttrOrProp: {
@@ -55,8 +55,8 @@ import viewMixin from '../../mixins/view';
 import getType from '../../utils/typeof';
 
 const UiDetailView = {
-  name: 'UiDetailView',
-  namespace: 'detail-view',
+  NAME: 'UiDetailView',
+  NAMESPACE: 'detail-view',
   EVENTS: {
     submit: 'submit',
     reset: 'reset',
@@ -82,7 +82,7 @@ const defaultActionConfig = [
 ];
 
 export default {
-  name: UiDetailView.name,
+  name: UiDetailView.NAME,
   mixins: [viewMixin],
   props: {
     actionConfig: {
@@ -127,8 +127,8 @@ export default {
   },
   data() {
     return {
-      namespace: UiDetailView.namespace,
-      currentModelConfig: [],
+      namespace: UiDetailView.NAMESPACE,
+      formConfig: [],
       formData: {},
       formDataSource: {},
       message: '',
@@ -138,8 +138,8 @@ export default {
   computed: {
     instanceData() {
       return Object.assign({}, this.viewPropsData, {
-        formData: this.formData,
-        formDataSource: this.formDataSource
+        detailData: this.formData,
+        detailDataSource: this.formDataSource
       });
     }
   },
@@ -155,14 +155,14 @@ export default {
       }
     },
     async setModelConfig() {
-      this.currentModelConfig = [];
+      this.formConfig = [];
 
       try {
-        this.currentModelConfig =
+        this.formConfig =
           this.modelConfig ||
           (await this.getModelConfigFn(this.fullInstanceData));
       } catch (err) {
-        console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
+        console.warn(`[${UiDetailView.NAME}]: ${err.toString()}`);
       }
     },
     initModelData(formData = {}) {
@@ -191,14 +191,8 @@ export default {
           this.formData = Object.assign({}, originalData);
         }
       } catch (err) {
-        console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
+        console.warn(`[${UiDetailView.NAME}]: ${err.toString()}`);
       }
-    },
-    getSlotData(slotData) {
-      return Object.assign({}, slotData, {
-        originalData: this.formDataSource,
-        refresh: this.getModelData
-      });
     },
     redirect(to, keepAlive = true) {
       if (to !== 'custom') {
@@ -249,6 +243,13 @@ export default {
       }
 
       canSubmit && this.exposeAction(action, result);
+    },
+    getSlotData(slotData) {
+      return Object.assign({}, slotData, {
+        detailData: this.formData,
+        detailDataSource: this.formDataSource,
+        refreshData: this.getModelData
+      });
     }
   }
 };

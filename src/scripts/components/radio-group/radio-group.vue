@@ -18,14 +18,14 @@ import formItemMixin from '../../mixins/form-item';
 
 // Define radio group constants
 const UI_RADIO_GROUP = {
-  name: 'UiRadioGroup',
+  NAME: 'UiRadioGroup',
   EVENTS: {
     CHANGE: 'change'
   }
 };
 
 export default {
-  name: UI_RADIO_GROUP.name,
+  name: UI_RADIO_GROUP.NAME,
   mixins: [formItemMixin],
   model: {
     prop: 'modelValue',
@@ -54,7 +54,7 @@ export default {
     }
   },
   beforeMount() {
-    this.checkOptionFormat(UI_RADIO_GROUP.name);
+    this.checkOptionFormat(UI_RADIO_GROUP.NAME);
   },
   methods: {
     handleChange(selectedValue) {

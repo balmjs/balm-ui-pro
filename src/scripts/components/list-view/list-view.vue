@@ -68,23 +68,23 @@
     <section class="mdc-list-view__content">
       <slot :name="`before-${namespace}`" v-bind="instanceData"></slot>
 
-      <div v-if="dataList.usePlaceholder" class="mdc-list-view__placeholder">
-        <ui-spinner v-if="dataList.loading" active></ui-spinner>
+      <div v-if="listData.usePlaceholder" class="mdc-list-view__placeholder">
+        <ui-spinner v-if="listData.loading" active></ui-spinner>
         <slot v-else :name="`${namespace}-placeholder`">{{ placeholder }}</slot>
       </div>
       <template v-else>
         <slot :name="`${namespace}-content`" v-bind="instanceData">
           <ui-table
-            v-model="dataList.selectedRows"
+            v-model="listData.selectedRows"
             v-bind="
               Object.assign(
                 {},
                 {
-                  data: dataList.data,
+                  data: listData.data,
                   thead,
                   tbody,
                   fullwidth: true,
-                  showProgress: dataList.loading
+                  showProgress: listData.loading
                 },
                 tableAttrOrProp
               )
@@ -118,15 +118,15 @@
           </ui-table>
         </slot>
 
-        <template v-if="dataList.data.length">
+        <template v-if="listData.data.length">
           <ui-pagination
             v-if="!withoutPagination"
-            v-model="dataList.page"
+            v-model="listData.page"
             v-bind="
               Object.assign(
                 {},
                 {
-                  total: dataList.total,
+                  total: listData.total,
                   pageSize
                 },
                 paginationAttrOrProp
@@ -141,7 +141,7 @@
             <template #default="slotData">
               <slot
                 :name="`${namespace}-pagination`"
-                v-bind="Object.assign({}, slotData, dataList)"
+                v-bind="Object.assign({}, slotData, listData)"
               ></slot>
             </template>
           </ui-pagination>
@@ -164,8 +164,8 @@ import keepAliveMixin from '../../mixins/keep-alive';
 import getType, { isFunction } from '../../utils/typeof';
 
 const UiListView = {
-  name: 'UiListView',
-  namespace: 'list-view',
+  NAME: 'UiListView',
+  NAMESPACE: 'list-view',
   EVENTS: {
     submit: 'submit',
     reset: 'reset'
@@ -190,7 +190,7 @@ const defaultSearchActionConfig = [
 ];
 
 export default {
-  name: UiListView.name,
+  name: UiListView.NAME,
   components: {
     UiListViewTopActions,
     UiListViewRowActions
@@ -299,7 +299,7 @@ export default {
   },
   data() {
     return {
-      namespace: UiListView.namespace,
+      namespace: UiListView.NAMESPACE,
       // Search data
       searchForm: {
         config: [],
@@ -309,7 +309,7 @@ export default {
       },
       lastSearchFormData: {}, // cached for last search result
       // List data
-      dataList: {
+      listData: {
         selectedRows: [],
         data: [],
         total: 0,
@@ -318,7 +318,7 @@ export default {
         loading: false,
         usePlaceholder: this.useValidator && this.placeholder
       },
-      dataListSource: {}
+      listDataSource: {}
     };
   },
   computed: {
@@ -328,8 +328,8 @@ export default {
     instanceData() {
       return Object.assign({}, this.viewPropsData, {
         searchForm: this.searchForm,
-        dataList: this.dataList,
-        dataListSource: this.dataListSource
+        listData: this.listData,
+        listDataSource: this.listDataSource
       });
     }
   },
@@ -360,7 +360,7 @@ export default {
           (await this.getModelConfigFn(this.fullInstanceData));
         modelConfig && this.$set(this.searchForm, 'config', modelConfig);
       } catch (err) {
-        console.warn(`[${UiListView.name}]: ${err.toString()}`);
+        console.warn(`[${UiListView.NAME}]: ${err.toString()}`);
       }
     },
     initModelData(formData = {}) {
@@ -372,40 +372,40 @@ export default {
       });
     },
     resetListData() {
-      this.dataListSource = {};
+      this.listDataSource = {};
 
-      this.$set(this.dataList, 'selectedRows', []);
-      this.$set(this.dataList, 'data', []);
-      this.$set(this.dataList, 'total', 0);
-      this.$set(this.dataList, 'page', 1);
-      this.$set(this.dataList, 'loading', false);
+      this.$set(this.listData, 'selectedRows', []);
+      this.$set(this.listData, 'data', []);
+      this.$set(this.listData, 'total', 0);
+      this.$set(this.listData, 'page', 1);
+      this.$set(this.listData, 'loading', false);
       this.$set(
-        this.dataList,
+        this.listData,
         'usePlaceholder',
         this.useValidator && this.placeholder
       );
     },
     async getModelData() {
       try {
-        this.$set(this.dataList, 'loading', true);
-        this.dataListSource = await this.getModelDataFn(this.fullInstanceData);
-        this.$set(this.dataList, 'loading', false);
-        this.$set(this.dataList, 'usePlaceholder', false);
+        this.$set(this.listData, 'loading', true);
+        this.listDataSource = await this.getModelDataFn(this.fullInstanceData);
+        this.$set(this.listData, 'loading', false);
+        this.$set(this.listData, 'usePlaceholder', false);
 
-        if (getType(this.dataListSource) === 'object') {
+        if (getType(this.listDataSource) === 'object') {
           for (const [key, value] of Object.entries(this.tableDataFormat)) {
-            const dataListValue = isFunction(value)
-              ? value(this.dataListSource)
-              : this.dataListSource[value];
+            const listDataValue = isFunction(value)
+              ? value(this.listDataSource)
+              : this.listDataSource[value];
 
-            this.$set(this.dataList, key, dataListValue);
+            this.$set(this.listData, key, listDataValue);
           }
 
           this.lastSearchFormData = Object.assign({}, this.searchForm.data);
         }
       } catch (err) {
-        this.$set(this.dataList, 'loading', false);
-        console.warn(`[${UiListView.name}]: ${err.toString()}`);
+        this.$set(this.listData, 'loading', false);
+        console.warn(`[${UiListView.NAME}]: ${err.toString()}`);
       }
     },
     async handleAction(action, result) {
@@ -435,7 +435,7 @@ export default {
     },
     // NOTE: for multi actions
     resetSelectedRows() {
-      this.$set(this.dataList, 'selectedRows', []);
+      this.$set(this.listData, 'selectedRows', []);
     },
     // NOTE: for `<keep-alive>`
     refreshComponent() {
