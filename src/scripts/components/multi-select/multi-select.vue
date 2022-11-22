@@ -17,14 +17,14 @@
 <script>
 // Define multi select constants
 const UI_MULTI_SELECT = {
-  name: 'UiMultiSelect',
+  NAME: 'UiMultiSelect',
   EVENTS: {
-    CHANGE: 'update:modelValue'
+    change: 'update:modelValue'
   }
 };
 
 export default {
-  name: UI_MULTI_SELECT.name,
+  name: UI_MULTI_SELECT.NAME,
   customOptions: {}
 };
 </script>
@@ -47,7 +47,7 @@ const props = defineProps({
     default: () => []
   }
 });
-const emit = defineEmits([UI_MULTI_SELECT.EVENTS.CHANGE]);
+const emit = defineEmits([UI_MULTI_SELECT.EVENTS.change]);
 
 const state = reactive({
   selectedData: props.modelValue,
@@ -72,7 +72,7 @@ onBeforeMount(() => {
     initSelectedData();
   } else {
     console.warn(
-      `[${UI_MULTI_SELECT.name}]: Form config 'components' are empty`
+      `[${UI_MULTI_SELECT.NAME}]: Form config 'components' are empty`
     );
   }
 });
@@ -165,7 +165,7 @@ async function setSelectedOptions(parentValue, { key, options }) {
         selectedOptions = selectedOptionsMap.get(parentValue);
       }
     } else {
-      console.warn(`[${UI_MULTI_SELECT.name}]: 'options' must return an array`);
+      console.warn(`[${UI_MULTI_SELECT.NAME}]: 'options' must return an array`);
     }
   }
 
@@ -234,6 +234,6 @@ async function handleChange(key, value) {
     await getNextSelected(key, value);
   }
 
-  emit(UI_MULTI_SELECT.EVENTS.CHANGE, state.selectedData);
+  emit(UI_MULTI_SELECT.EVENTS.change, state.selectedData);
 }
 </script>

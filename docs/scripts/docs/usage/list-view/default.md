@@ -9,8 +9,8 @@ import BalmUIPro from 'balm-ui-pro';
 
 Vue.use(BalmUI);
 Vue.use(BalmUIPro {
-  // Optional. Overwrite `<ui-table-view>` props with default value.
-  UiTableView: {
+  // Optional. Overwrite `<ui-list-view>` props with default value.
+  UiListView: {
     // some props
   }
 });

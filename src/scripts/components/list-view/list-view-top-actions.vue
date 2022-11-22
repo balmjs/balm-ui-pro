@@ -1,5 +1,5 @@
 <template>
-  <section class="mdc-table-view__top-actions">
+  <section class="mdc-list-view__top-actions">
     <template
       v-for="(action, index) in actionConfig"
       :key="`top-action-${index}`"
@@ -28,7 +28,7 @@
 import { cssClasses, TYPES } from './constants';
 
 export default {
-  name: 'UiTableViewTopActions',
+  name: 'UiListViewTopActions',
   customOptions: {}
 };
 </script>
@@ -86,11 +86,11 @@ const props = defineProps({
 function ifAction(action) {
   const currentAction = action.if;
 
-  const { tableDataSource } = props.data;
+  const { listDataSource } = props.data;
 
   return isFunction(currentAction)
-    ? currentAction(tableDataSource)
-    : props.actionRendering(action, tableDataSource);
+    ? currentAction(listDataSource)
+    : props.actionRendering(action, listDataSource);
 }
 
 function actionIcon({ icon, type }) {
@@ -103,7 +103,7 @@ function handleClick(action) {
   const { data, model, modelOptions, keyName, refreshData, resetSelectedRows } =
     props;
 
-  const tableData = {
+  const listViewData = {
     model,
     modelOptions,
     keyName,
@@ -111,15 +111,15 @@ function handleClick(action) {
   };
 
   if (action.type === TYPES.routerLink) {
-    const to = getRouteLocationRaw(action, tableData);
+    const to = getRouteLocationRaw(action, listViewData);
     router.push(to);
   } else {
     if (isFunction(action.handler)) {
-      action.handler(tableData, refreshData, resetSelectedRows);
+      action.handler(listViewData, refreshData, resetSelectedRows);
     } else {
       props.actionHandler()(
         Object.assign({}, action),
-        tableData,
+        listViewData,
         refreshData,
         resetSelectedRows
       );

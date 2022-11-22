@@ -25,14 +25,14 @@
 <script>
 // Define checkbox group constants
 const UI_CHECKBOX_GROUP = {
-  name: 'UiCheckboxGroup',
+  NAME: 'UiCheckboxGroup',
   EVENTS: {
-    CHANGE: 'update:modelValue'
+    change: 'update:modelValue'
   }
 };
 
 export default {
-  name: UI_CHECKBOX_GROUP.name,
+  name: UI_CHECKBOX_GROUP.NAME,
   customOptions: {}
 };
 </script>
@@ -66,7 +66,7 @@ const props = defineProps({
     default: false
   }
 });
-const emit = defineEmits([UI_CHECKBOX_GROUP.EVENTS.CHANGE]);
+const emit = defineEmits([UI_CHECKBOX_GROUP.EVENTS.change]);
 
 const state = reactive({
   selectedValue: props.modelValue,
@@ -83,7 +83,7 @@ const indeterminate = computed(() =>
 );
 
 onBeforeMount(() => {
-  checkOptionFormat(UI_CHECKBOX_GROUP.name);
+  checkOptionFormat(UI_CHECKBOX_GROUP.NAME);
 
   handleSelectAll(state.selectedAll);
 });
@@ -99,7 +99,7 @@ watch(
 );
 
 function handleChange(selectedValue) {
-  emit(UI_CHECKBOX_GROUP.EVENTS.CHANGE, selectedValue);
+  emit(UI_CHECKBOX_GROUP.EVENTS.change, selectedValue);
 }
 
 function handleSelectAll(checked) {

@@ -11,7 +11,7 @@
 @use 'balm-ui/components/alert/alert';
 @use 'balm-ui/components/spinner/spinner';
 @use 'balm-ui-pro/components/form-view/form-view';
-@use 'balm-ui-pro/components/table-view/table-view';
+@use 'balm-ui-pro/components/list-view/list-view';
 // NOTE: use awesome form item components css
 ```
 
@@ -23,7 +23,10 @@ import UiTable from 'balm-ui/components/table';
 import UiPagination from 'balm-ui/components/pagination';
 import UiAlert from 'balm-ui/components/alert';
 import UiSpinner from 'balm-ui/components/spinner';
-import UiTableView from 'balm-ui-pro/components/table-view';
+import {
+  UiListView,
+  UiListViewRowActions
+} from 'balm-ui-pro/components/list-view';
 
 Vue.use(UiForm);
 Vue.use(UiFormField);
@@ -32,8 +35,11 @@ Vue.use(UiTable);
 Vue.use(UiPagination);
 Vue.use(UiAlert);
 Vue.use(UiSpinner);
-// Optional. Overwrite `<ui-table-view>` props with default value.
-Vue.use(UiTableView, {
+// Optional. Overwrite `<ui-list-view>` props with default value.
+Vue.use(UiListView, {
+  // some props
+});
+Vue.use(UiListViewRowActions, {
   // some props
 });
 ```

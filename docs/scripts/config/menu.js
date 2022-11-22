@@ -39,7 +39,7 @@ const MATERIAL_COMPONENTS_PRO = [
         name: 'detail-view'
       },
       {
-        name: 'table-view'
+        name: 'list-view'
       }
     ]
   },

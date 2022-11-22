@@ -1,5 +1,5 @@
 <template>
-  <div class="mdc-table-view__row-actions">
+  <div class="mdc-list-view__row-actions">
     <template
       v-for="(action, index) in actionConfig"
       :key="`row-action-${index}`"
@@ -82,7 +82,7 @@
 import { cssClasses, TYPES } from './constants';
 
 export default {
-  name: 'UiTableViewActions',
+  name: 'UiListViewRowActions',
   customOptions: {}
 };
 </script>

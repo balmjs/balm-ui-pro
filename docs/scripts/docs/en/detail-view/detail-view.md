@@ -5,6 +5,19 @@
 ### Props
 
 ```js
+interface DetailViewData {
+  title: string;
+  model: string;
+  modelAction: string;
+  modelPath: string;
+  modelOptions: object;
+  modelValueDefaults: object;
+  keyName: string;
+  refreshData: Function;
+  detailData: object;
+  detailDataSource: object;
+}
+
 interface ActionData {
   model: string;
   modelOptions: object;
@@ -63,7 +76,7 @@ const DefaultActionConfig: ActionButton[] = [
 
 | Name                                          | Props            | Description            |
 | --------------------------------------------- | ---------------- | ---------------------- |
-| `title`                                       |                  | Detail view title      |
+| `detail-view-title`                           |                  | Detail view title      |
 | `before-detail-view`                          | instanceData     | Before detail view     |
 | custom form item slots (by form model config) | `config`, `data` | Custom form item slots |
 | `after-detail-view`                           | instanceData     | After detail view      |

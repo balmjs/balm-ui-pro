@@ -1,11 +1,14 @@
 <template>
   <div class="mdc-detail-view">
     <h2 v-if="hasTitle" class="mdc-detail-view__title">
-      <slot name="title">{{ title }}</slot>
+      <slot :name="`${UI_DETAIL_VIEW.NAMESPACE}-title`">{{ title }}</slot>
     </h2>
 
     <section class="mdc-detail-view__content">
-      <slot name="before-detail-view" v-bind="instanceData"></slot>
+      <slot
+        :name="`before-${UI_DETAIL_VIEW.NAMESPACE}`"
+        v-bind="instanceData"
+      ></slot>
 
       <ui-spinner v-if="loading" active></ui-spinner>
       <ui-form-view
@@ -14,7 +17,7 @@
         v-bind="
           Object.assign(
             {
-              modelConfig: currentModelConfig,
+              modelConfig: formConfig,
               modelOptions,
               actionConfig,
               formAttrOrProp: {
@@ -29,25 +32,33 @@
         @action="handleAction"
       >
         <template v-for="(_, slotName) in $slots" #[slotName]="slotData">
-          <slot :name="slotName" v-bind="slotData"></slot>
+          <slot :name="slotName" v-bind="getSlotData(slotData)"></slot>
         </template>
         <!-- Default error message -->
         <template #after-form-view="slotData">
           <template v-if="useValidator">
             <ui-alert v-if="message" state="warning">{{ message }}</ui-alert>
           </template>
-          <slot v-else name="after-form-view" v-bind="slotData"></slot>
+          <slot
+            v-else
+            name="after-form-view"
+            v-bind="getSlotData(slotData)"
+          ></slot>
         </template>
       </ui-form-view>
 
-      <slot name="after-detail-view" v-bind="instanceData"></slot>
+      <slot
+        :name="`after-${UI_DETAIL_VIEW.NAMESPACE}`"
+        v-bind="instanceData"
+      ></slot>
     </section>
   </div>
 </template>
 
 <script>
-const UiDetailView = {
-  name: 'UiDetailView',
+const UI_DETAIL_VIEW = {
+  NAME: 'UiDetailView',
+  NAMESPACE: 'detail-view',
   EVENTS: {
     updateFormItem: 'change:x',
     action: 'action',
@@ -59,14 +70,14 @@ const UiDetailView = {
 
 const defaultActionConfig = [
   {
-    type: UiDetailView.EVENTS.cancel,
+    type: UI_DETAIL_VIEW.EVENTS.cancel,
     text: 'Cancel',
     attrOrProp: {
       outlined: true
     }
   },
   {
-    type: UiDetailView.EVENTS.submit,
+    type: UI_DETAIL_VIEW.EVENTS.submit,
     text: 'Save',
     attrOrProp: {
       raised: true
@@ -75,7 +86,7 @@ const defaultActionConfig = [
 ];
 
 export default {
-  name: UiDetailView.name,
+  name: UI_DETAIL_VIEW.NAME,
   customOptions: {}
 };
 </script>
@@ -106,6 +117,7 @@ const props = defineProps({
     type: Object,
     default: () => ({})
   },
+  // Redirect
   to: {
     type: [Boolean, Object, String],
     default: false
@@ -114,6 +126,7 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  // Model function
   getModelConfigFn: {
     type: Function,
     default: () => {}
@@ -126,6 +139,7 @@ const props = defineProps({
     type: Function,
     default: () => {}
   },
+  // Others
   useValidator: {
     type: Boolean,
     default: true
@@ -136,19 +150,19 @@ const props = defineProps({
   }
 });
 const emit = defineEmits([
-  UiDetailView.EVENTS.updateFormItem,
-  UiDetailView.EVENTS.action
+  UI_DETAIL_VIEW.EVENTS.updateFormItem,
+  UI_DETAIL_VIEW.EVENTS.action
 ]);
 const slots = useSlots();
 
 const state = reactive({
-  currentModelConfig: [],
+  formConfig: [],
   formData: {},
   formDataSource: {},
   message: '',
   loading: false
 });
-const { currentModelConfig, formData, message, loading } = toRefs(state);
+const { formConfig, formData, message, loading } = toRefs(state);
 
 const {
   globalModelOptions,
@@ -186,14 +200,14 @@ function init() {
 }
 
 async function setModelConfig() {
-  state.currentModelConfig = [];
+  state.formConfig = [];
 
   try {
-    state.currentModelConfig =
+    state.formConfig =
       props.modelConfig ||
       (await props.getModelConfigFn()(fullInstanceData.value));
   } catch (err) {
-    console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
+    console.warn(`[${UI_DETAIL_VIEW.NAME}]: ${err.toString()}`);
   }
 }
 
@@ -225,7 +239,7 @@ async function getModelData() {
       state.formData = Object.assign({}, formDataSource);
     }
   } catch (err) {
-    console.warn(`[${UiDetailView.name}]: ${err.toString()}`);
+    console.warn(`[${UI_DETAIL_VIEW.NAME}]: ${err.toString()}`);
   }
 }
 
@@ -256,7 +270,7 @@ async function handleAction(action, result) {
   let canSubmit = true;
 
   switch (action.type) {
-    case UiDetailView.EVENTS.submit:
+    case UI_DETAIL_VIEW.EVENTS.submit:
       if (props.useValidator) {
         canSubmit = result.valid;
         state.message = result.message;
@@ -267,15 +281,23 @@ async function handleAction(action, result) {
         props.redirectOnSave && redirect(props.to, false);
       }
       break;
-    case UiDetailView.EVENTS.reset:
+    case UI_DETAIL_VIEW.EVENTS.reset:
       state.message = '';
       // NOTE: automatic processing in `<ui-form-view>`
       break;
-    case UiDetailView.EVENTS.cancel:
+    case UI_DETAIL_VIEW.EVENTS.cancel:
       redirect(props.to || 'back');
       break;
   }
 
   canSubmit && exposeAction(action, result);
+}
+
+function getSlotData(slotData) {
+  return Object.assign({}, slotData, {
+    detailData: state.formData,
+    detailDataSource: state.formDataSource,
+    refreshData: getModelData
+  });
 }
 </script>

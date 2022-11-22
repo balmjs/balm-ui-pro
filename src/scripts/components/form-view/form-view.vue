@@ -18,7 +18,7 @@
       <div class="mdc-form-view__items">
         <!-- Before from view -->
         <slot
-          name="before-form-view"
+          :name="`before-${UI_FORM_VIEW.NAMESPACE}`"
           v-bind="{
             itemClass,
             subitemClass,
@@ -38,10 +38,12 @@
           >
             <ui-grid-cell v-bind="gridCellAttrOrProp">
               <ui-form-item
-                :config="configData"
-                :model-value="formData"
-                :form-data-source="formDataSource"
-                :attr-or-prop="formItemAttrOrProp"
+                v-bind="{
+                  config: configData,
+                  modelValue: formData,
+                  formDataSource,
+                  attrOrProp: formItemAttrOrProp
+                }"
                 @update:model-value="handleChange"
               >
                 <template
@@ -50,13 +52,7 @@
                 >
                   <slot
                     :name="slotName"
-                    v-bind="
-                      Object.assign({}, slotData, {
-                        config: configData,
-                        data: formData,
-                        dataSource: formDataSource
-                      })
-                    "
+                    v-bind="getSlotData(slotData, configData)"
                   ></slot>
                 </template>
               </ui-form-item>
@@ -70,22 +66,18 @@
             :key="`form-item-${configData.key || configIndex}`"
           >
             <ui-form-item
-              :config="configData"
-              :model-value="formData"
-              :form-data-source="formDataSource"
-              :attr-or-prop="formItemAttrOrProp"
+              v-bind="{
+                config: configData,
+                modelValue: formData,
+                formDataSource,
+                attrOrProp: formItemAttrOrProp
+              }"
               @update:model-value="handleChange"
             >
               <template v-for="(_, slotName) in $slots" #[slotName]="slotData">
                 <slot
                   :name="slotName"
-                  v-bind="
-                    Object.assign({}, slotData, {
-                      config: configData,
-                      data: formData,
-                      dataSource: formDataSource
-                    })
-                  "
+                  v-bind="getSlotData(slotData, configData)"
                 ></slot>
               </template>
             </ui-form-item>
@@ -93,7 +85,7 @@
         </template>
         <!-- After from view -->
         <slot
-          name="after-form-view"
+          :name="`after-${UI_FORM_VIEW.NAMESPACE}`"
           v-bind="{
             itemClass,
             subitemClass,
@@ -104,7 +96,7 @@
         <!-- Action view -->
 
         <slot
-          name="form-view-actions"
+          :name="`${UI_FORM_VIEW.NAMESPACE}-actions`"
           v-bind="{
             className: [itemClass, actionClass],
             config: formConfig,
@@ -120,20 +112,22 @@
               v-for="(buttonData, buttonIndex) in actionConfig"
               :key="`form-action-${buttonIndex}`"
             >
-              <ui-button
-                v-if="buttonData.type === NATIVE_BUTTON_TYPES.submit"
-                v-debounce="handleAction(buttonData)"
-                v-bind="buttonData.attrOrProp || {}"
-              >
-                {{ buttonData.text }}
-              </ui-button>
-              <ui-button
-                v-else
-                v-bind="buttonData.attrOrProp || {}"
-                @click="handleAction(buttonData)"
-              >
-                {{ buttonData.text }}
-              </ui-button>
+              <template v-if="ifAction(buttonData)">
+                <ui-button
+                  v-if="buttonData.type === NATIVE_BUTTON_TYPES.submit"
+                  v-debounce="handleAction(buttonData)"
+                  v-bind="buttonData.attrOrProp || {}"
+                >
+                  {{ buttonData.text }}
+                </ui-button>
+                <ui-button
+                  v-else
+                  v-bind="buttonData.attrOrProp || {}"
+                  @click="handleAction(buttonData)"
+                >
+                  {{ buttonData.text }}
+                </ui-button>
+              </template>
             </template>
           </ui-form-field>
         </slot>
@@ -144,7 +138,8 @@
 
 <script>
 const UI_FORM_VIEW = {
-  name: 'UiFormView',
+  NAME: 'UiFormView',
+  NAMESPACE: 'form-view',
   EVENTS: {
     loaded: 'loaded',
     reload: 'reload',
@@ -161,7 +156,7 @@ const NATIVE_BUTTON_TYPES = {
 };
 
 export default {
-  name: UI_FORM_VIEW.name,
+  name: UI_FORM_VIEW.NAME,
   customOptions: {
     NATIVE_BUTTON_TYPES
   }
@@ -220,6 +215,10 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  actionRendering: {
+    type: Function,
+    default: () => true
+  },
   setModelOptionsFn: {
     type: [Function, Boolean],
     default: false
@@ -237,7 +236,8 @@ const state = reactive({
   formDataKeys: {},
   formDataSource: props.modelValue,
   formData: {},
-  formOptions: {},
+  formOptions: props.modelOptions,
+  privateModelOptions: {},
   formUpdating: false
 });
 const { formConfig, formData, formDataSource } = toRefs(state);
@@ -321,11 +321,11 @@ watch(
 
 watch(
   () => props.modelOptions,
-  async (val, oldVal) => {
+  async (val) => {
     if (
       !state.formUpdating &&
       isFunctionConfig.value &&
-      JSON.stringify(val) !== JSON.stringify(oldVal)
+      JSON.stringify(val) !== JSON.stringify(state.formOptions)
     ) {
       state.formUpdating = true;
 
@@ -352,7 +352,7 @@ async function setModelOptions() {
   const originalConfig = isFunctionConfig.value
     ? await props.modelConfig(
         Object.assign({}, state.formDataSource),
-        Object.assign({}, props.modelOptions)
+        state.formOptions
       )
     : props.modelConfig;
 
@@ -360,13 +360,13 @@ async function setModelOptions() {
     .filter(({ model }) => model)
     .map(({ model }) => model);
 
-  state.formOptions = modelList.length
+  state.privateModelOptions = modelList.length
     ? await props.setModelOptionsFn(modelList)
     : {};
 
-  if (getType(state.formOptions) !== 'object') {
-    state.formOptions = {};
-    console.warn(`[${UI_FORM_VIEW.name}]: Invalid form model options`);
+  if (getType(state.privateModelOptions) !== 'object') {
+    state.privateModelOptions = {};
+    console.warn(`[${UI_FORM_VIEW.NAME}]: Invalid form model options`);
   }
 }
 
@@ -378,10 +378,16 @@ async function setFormConfig(
     await setModelOptions();
   }
 
+  state.formOptions = Object.assign(
+    {},
+    state.privateModelOptions,
+    props.modelOptions
+  );
+
   const originalConfig = isFunctionConfig.value
     ? await modelConfig(
         Object.assign({}, state.formDataSource),
-        Object.assign({}, state.formOptions, props.modelOptions)
+        state.formOptions
       )
     : modelConfig;
 
@@ -397,7 +403,7 @@ async function setFormConfig(
       changeFormData();
     }
   } else {
-    console.warn(`[${UI_FORM_VIEW.name}]: Invalid form model config`);
+    console.warn(`[${UI_FORM_VIEW.NAME}]: Invalid form model config`);
   }
 }
 
@@ -524,6 +530,26 @@ function exposeAction(action, result = {}) {
     : emit(UI_FORM_VIEW.EVENTS.action, actionConfig, result);
 }
 
+function ifAction(action) {
+  let result = false;
+
+  if (state.formDataKeys.length) {
+    const currentAction = action.if;
+
+    const formViewData = {
+      config: state.formConfig,
+      data: state.formData,
+      dataSource: state.formDataSource
+    };
+
+    result = isFunction(currentAction)
+      ? currentAction(formViewData)
+      : props.actionRendering(action, formViewData);
+  }
+
+  return result;
+}
+
 function handleAction(action) {
   let debounceConfig = {};
 
@@ -546,7 +572,7 @@ function handleAction(action) {
               validator.clear();
             } else {
               console.warn(
-                `[${UI_FORM_VIEW.name}]: BalmUI $validator plugin is missing`
+                `[${UI_FORM_VIEW.NAME}]: BalmUI $validator plugin is missing`
               );
             }
           } else {
@@ -564,5 +590,13 @@ function handleAction(action) {
   return action.type === NATIVE_BUTTON_TYPES.submit
     ? debounceConfig
     : exposeAction(action);
+}
+
+function getSlotData(slotData, config) {
+  return Object.assign({}, slotData, {
+    config,
+    data: state.formData,
+    dataSource: state.formDataSource
+  });
 }
 </script>

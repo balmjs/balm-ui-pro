@@ -11,7 +11,7 @@
     "form-view": "Form View",
     "form-items": "Form Items",
     "detail-view": "Detail View",
-    "table-view": "Table View",
+    "list-view": "List View",
     "readonly-item": "Readonly Item",
     "checkbox-group": "Checkbox Group",
     "radio-group": "Radio Group",

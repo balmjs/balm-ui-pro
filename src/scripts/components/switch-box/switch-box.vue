@@ -15,7 +15,7 @@
 // Define switch box constants
 const UI_SWITCH_BOX = {
   EVENTS: {
-    CHANGE: 'update:modelValue'
+    change: 'update:modelValue'
   }
 };
 
@@ -50,7 +50,7 @@ const props = defineProps({
     default: () => ({})
   }
 });
-const emit = defineEmits([UI_SWITCH_BOX.EVENTS.CHANGE]);
+const emit = defineEmits([UI_SWITCH_BOX.EVENTS.change]);
 
 const state = reactive({
   switchValue: isTrueValue(props.modelValue)
@@ -83,6 +83,6 @@ function isTrueValue(selectedValue) {
 }
 
 function handleSelected(selectedValue) {
-  emit(UI_SWITCH_BOX.EVENTS.CHANGE, selectedValue);
+  emit(UI_SWITCH_BOX.EVENTS.change, selectedValue);
 }
 </script>

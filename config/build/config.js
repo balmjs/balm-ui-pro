@@ -7,7 +7,8 @@ const input = {
 const components = [
   'form-view',
   'detail-view',
-  'table-view',
+  'list-view',
+  'layout-view',
   'readonly-item',
   'checkbox-group',
   'radio-group',

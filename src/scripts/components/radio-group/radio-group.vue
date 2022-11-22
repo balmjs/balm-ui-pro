@@ -16,14 +16,14 @@
 <script>
 // Define radio group constants
 const UI_RADIO_GROUP = {
-  name: 'UiRadioGroup',
+  NAME: 'UiRadioGroup',
   EVENTS: {
-    CHANGE: 'update:modelValue'
+    change: 'update:modelValue'
   }
 };
 
 export default {
-  name: UI_RADIO_GROUP.name,
+  name: UI_RADIO_GROUP.NAME,
   customOptions: {}
 };
 </script>
@@ -45,7 +45,7 @@ const props = defineProps({
     default: () => []
   }
 });
-const emit = defineEmits([UI_RADIO_GROUP.EVENTS.CHANGE]);
+const emit = defineEmits([UI_RADIO_GROUP.EVENTS.change]);
 
 const state = reactive({
   selectedValue: props.modelValue
@@ -54,7 +54,7 @@ const { selectedValue } = toRefs(state);
 
 const { currentOptions, checkOptionFormat } = useFormItem(props);
 onBeforeMount(() => {
-  checkOptionFormat(UI_RADIO_GROUP.name);
+  checkOptionFormat(UI_RADIO_GROUP.NAME);
 });
 
 watch(
@@ -63,6 +63,6 @@ watch(
 );
 
 function handleChange(selectedValue) {
-  emit(UI_RADIO_GROUP.EVENTS.CHANGE, selectedValue);
+  emit(UI_RADIO_GROUP.EVENTS.change, selectedValue);
 }
 </script>

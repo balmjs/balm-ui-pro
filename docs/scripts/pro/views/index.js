@@ -4,13 +4,13 @@ import {
   getModelListDataFn,
   handleRowAction,
   handleTopAction
-} from './table-view';
+} from './list-view';
 
 export default {
   UiFormView: {
     setModelOptionsFn
   },
-  UiTableView: {
+  UiListView: {
     getModelConfigFn,
     getModelDataFn: getModelListDataFn,
     tableDataFormat: {

@@ -19,7 +19,9 @@ export function getRouteLocationRaw(action, { model, data, params }) {
       name: isFunction(routeName)
         ? routeName(data)
         : routeName || `${model}.detail`,
-      params: isFunction(routeParams) ? routeParams(data) : params || {}
+      params: isFunction(routeParams)
+        ? routeParams(data)
+        : routeParams || params || {}
     }
   );
 }

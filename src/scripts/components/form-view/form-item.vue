@@ -53,14 +53,14 @@
 
 <script>
 const UI_FORM_ITEM = {
-  name: 'UiFormItem',
+  NAME: 'UiFormItem',
   EVENTS: {
     update: 'update:modelValue'
   }
 };
 
 export default {
-  name: UI_FORM_ITEM.name,
+  name: UI_FORM_ITEM.NAME,
   customOptions: {}
 };
 </script>
@@ -134,7 +134,7 @@ onBeforeMount(() => {
       slot
     }));
 
-    console.info(`[${UI_FORM_ITEM.name}] slots`);
+    console.info(`[${UI_FORM_ITEM.NAME}] slots`);
     console.table(customSlotsNames, ['slot']);
   }
 });
@@ -159,7 +159,7 @@ function getFormLabel({ label }) {
 function handleChange({ component, key }, value) {
   props.config.debug &&
     console.info[
-      (`[${UI_FORM_ITEM.name}] ${component}@${eventName.value}`,
+      (`[${UI_FORM_ITEM.NAME}] ${component}@${eventName.value}`,
       hasSubComponents.value
         ? props.config.components.map(({ key }) => key)
         : key,

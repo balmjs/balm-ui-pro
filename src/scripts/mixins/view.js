@@ -80,7 +80,8 @@ function useView(props, { route, slots, emit, state, init, refreshData }) {
     modelPath,
     modelOptions: validModelOptions,
     modelValueDefaults,
-    keyName
+    keyName,
+    refreshData
   };
 
   const hasTitle = computed(() => props.title || slots.title);
@@ -107,11 +108,8 @@ function useView(props, { route, slots, emit, state, init, refreshData }) {
     const { handler, ...actionConfig } = action;
     const customHandler = isFunction(handler) ? handler : false;
 
-    const { model, modelOptions, keyName } = props;
     const data = {
-      model,
-      modelOptions,
-      keyName,
+      ...viewPropsData,
       ...toRefs(state),
       ...result
     };
