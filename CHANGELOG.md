@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.46.0 / 2022-11-22
+
+### Chore
+
+- clean code for all components' constants
+
 ## v0.45.0 / 2022-11-17
 
 ### Feature
