@@ -1,7 +1,6 @@
 #!/bin/bash
 
-DistTags=$(npm view balm-ui-pro dist-tags --json)
-LatestVersion=$(echo "$DistTags" | jq --raw-output '.latest')
+LatestVersion=$(npm view balm-ui-pro version)
 
 npm run docs
 cd dist
