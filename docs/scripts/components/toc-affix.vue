@@ -28,7 +28,7 @@
 
 <script>
 import { useI18n } from 'vue-i18n';
-import { $MIN_WIDTH } from '@/config';
+import { MIN_WIDTH } from '@/config';
 
 const DEBUG = false;
 const bodyEl = document.documentElement || document.body;
@@ -67,7 +67,7 @@ export default {
   },
   computed: {
     offset() {
-      return window.innerWidth >= $MIN_WIDTH ? 128 : 104;
+      return window.innerWidth >= MIN_WIDTH ? 128 : 104;
     }
   },
   mounted() {

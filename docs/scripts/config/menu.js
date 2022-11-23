@@ -40,6 +40,9 @@ const MATERIAL_COMPONENTS_PRO = [
       },
       {
         name: 'list-view'
+      },
+      {
+        name: 'layout-view'
       }
     ]
   },
