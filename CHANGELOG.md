@@ -2,6 +2,29 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.20.0 / 2022-10-23
+
+### Chore
+
+- clean code for all components' constants
+
+### Feature
+
+- `<ui-layout-view>`: new component for layout
+- `<ui-form-view>`: add `actionRendering` prop
+
+### Bug Fixes
+
+- `<ui-form-view>`: fix `modelOptions` init data bug, fix css for from item slider
+
+### Code Refactoring
+
+- `<ui-list-view>`: refactor list view components
+
+### BREAKING CHANGES
+
+- `<ui-table-view>`: deprecated, use `<ui-list-view>` instead
+
 ## v0.19.0 / 2022-09-29
 
 ### Feature
