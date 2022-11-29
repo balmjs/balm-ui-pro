@@ -36,7 +36,7 @@
             v-for="(configData, configIndex) in formConfig"
             :key="`form-item-${configData.key || configIndex}`"
           >
-            <ui-grid-cell v-bind="gridCellAttrOrProp">
+            <ui-grid-cell v-bind="configData.attrOrProp.gridCellAttrOrProp ? configData.attrOrProp.gridCellAttrOrProp : gridCellAttrOrProp">
               <ui-form-item
                 v-bind="{
                   config: configData,
