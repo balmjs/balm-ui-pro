@@ -2,6 +2,24 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.47.0 / 2022-12-02
+
+### Feature
+
+- `<ui-list-view>`
+  - add prop `forceRefreshData`
+  - add `column-selection` type for list view top action config
+  - new slot `before-list-view-top-actions`, `after-list-view-top-actions`
+
+```json
+{
+  "type": "column-selection",
+  "icon": "view_column",
+  "text": "Column",
+  "allSelectedLabel": "All"
+}
+```
+
 ## v0.46.0 / 2022-11-22
 
 ### Chore
