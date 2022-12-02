@@ -158,6 +158,7 @@ interface ListViewData {
 | `useValidator`         | boolean       | `false`                            | Enables auto validator (Just for `submit` type)                                                                               |
 | `placeholder`          | string        | `''`                               | The placeholder before searching model data                                                                                   |
 | `searchOnReset`        | boolean       | `false`                            | The page will auto search data after resetting model data                                                                     |
+| `forceRefreshData`     | boolean       | `false`                            | Forced refresh data in keep alive                                                                                             |
 
 ### Slots
 
@@ -165,7 +166,9 @@ interface ListViewData {
 | ---------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------- |
 | `list-view-title`                                    |                                  | List view title                                                                                   |
 | custom search form item slots (by form model config) | `config`, `data`                 | Custom search form item slots                                                                     |
-| `list-view-top-actions`                              | instanceData                     | Custom list top bar actions (When `topActionConfig = []`)                                         |
+| `before-list-view-top-actions`                       |                                  | Custom before list top bar actions                                                                |
+| `list-view-top-actions`                              | instanceData                     | Custom list top bar actions                                                                       |
+| `after-list-view-top-actions`                        |                                  | Custom after list top bar actions                                                                 |
 | `before-list-view`                                   | instanceData                     | Before list view                                                                                  |
 | `list-view-placeholder`                              |                                  | The placeholder before searching model data                                                       |
 | `list-view-content`                                  | instanceData                     | Custom list view content                                                                          |

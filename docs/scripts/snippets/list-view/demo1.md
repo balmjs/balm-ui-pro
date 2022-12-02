@@ -90,7 +90,16 @@ Vue.use(BalmUIPro, {
 ```
 
 ```js
-const thead = ['ID', 'Dessert', 'Calories', 'Fat', 'Actions'];
+const thead = [
+  {
+    value: 'ID',
+    required: true
+  },
+  'Dessert',
+  'Calories',
+  'Fat',
+  'Actions'
+];
 const tbody = [
   'id',
   'dessert',
@@ -137,6 +146,12 @@ const rowActionConfig = [
 ];
 
 const topActionConfig = [
+  {
+    type: 'column-selection',
+    icon: 'view_column',
+    text: 'Column',
+    allSelectedLabel: 'All'
+  },
   {
     type: 'router-link',
     icon: 'add',
