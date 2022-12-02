@@ -1,33 +1,76 @@
 <template>
   <section class="mdc-list-view__top-actions">
-    <template v-for="(action, index) in actionConfig">
-      <ui-button
-        v-if="ifAction(action)"
-        :key="`button-${index}`"
-        :class="[cssClasses.topAction, action.type || '']"
-        v-bind="
-          Object.assign(
-            {
-              raised: true,
-              icon: actionIcon(action)
-            },
-            action.attrOrProp || {}
-          )
-        "
-        @click="handleAction(action)"
-      >
-        {{ action.text }}
-      </ui-button>
-    </template>
+    <slot :name="`before-${namespace}`"></slot>
+    <slot :name="namespace" v-bind="data">
+      <template v-for="(action, actionIndex) in actionConfig">
+        <ui-menu-anchor
+          v-if="action.type === TYPES.columnSelection"
+          :key="`column-selection-${actionIndex}`"
+        >
+          <ui-button
+            :key="`button-${actionIndex}`"
+            :class="[cssClasses.topAction, action.type || '']"
+            v-bind="
+              Object.assign(
+                {
+                  raised: true,
+                  icon: actionIcon(action)
+                },
+                action.attrOrProp || {}
+              )
+            "
+            @click="columnSelection.open = true"
+          >
+            {{ action.text }}
+          </ui-button>
+          <ui-menu v-model="columnSelection.open">
+            <ui-checkbox-group
+              :model-value="columnSelection.selectedValue"
+              :options="columnSelectionOptions"
+              all-selected
+              :all-selected-label="action.allSelectedLabel"
+              selected-all-value
+              @change="handleColumnSelection"
+            ></ui-checkbox-group>
+          </ui-menu>
+        </ui-menu-anchor>
+        <template v-else>
+          <ui-button
+            v-if="ifAction(action)"
+            :key="`button-${actionIndex}`"
+            :class="[cssClasses.topAction, action.type || '']"
+            v-bind="
+              Object.assign(
+                {
+                  raised: true,
+                  icon: actionIcon(action)
+                },
+                action.attrOrProp || {}
+              )
+            "
+            @click="handleAction(action)"
+          >
+            {{ action.text }}
+          </ui-button>
+        </template>
+      </template>
+    </slot>
+    <slot :name="`after-${namespace}`"></slot>
   </section>
 </template>
 
 <script>
+import UiCheckboxGroup from '../checkbox-group/checkbox-group.vue';
 import { cssClasses, TYPES, getRouteLocationRaw } from './constants';
-import { isFunction } from '../../utils/typeof';
+import getType, { isFunction } from '../../utils/typeof';
+
+const namespace = 'list-view-top-actions';
 
 export default {
   name: 'UiListViewTopActions',
+  components: {
+    UiCheckboxGroup
+  },
   props: {
     data: {
       type: Object,
@@ -44,6 +87,10 @@ export default {
     keyName: {
       type: [String, Array],
       default: 'id'
+    },
+    thead: {
+      type: Array,
+      default: () => []
     },
     actionConfig: {
       type: Array,
@@ -72,8 +119,33 @@ export default {
   },
   data() {
     return {
-      cssClasses
+      cssClasses,
+      TYPES,
+      namespace,
+      columnSelection: {
+        open: false,
+        selectedValue: [],
+        fixedItemIndexes: []
+      }
     };
+  },
+  computed: {
+    columnSelectionOptions() {
+      return this.thead.map((item, index) => {
+        const label = getType(item) === 'string' ? item : item.value;
+        const disabled = getType(item) === 'object' ? item.required : false;
+
+        if (disabled) {
+          this.columnSelection.fixedItemIndexes.push(index);
+        }
+
+        return {
+          label,
+          value: index,
+          disabled
+        };
+      });
+    }
   },
   methods: {
     ifAction(action) {
@@ -122,6 +194,18 @@ export default {
           );
         }
       }
+    },
+    handleColumnSelection(value) {
+      let selectedColumns = value;
+
+      this.columnSelection.fixedItemIndexes.forEach((index) => {
+        if (!selectedColumns.includes(index)) {
+          selectedColumns.push(index);
+        }
+      });
+
+      this.$set(this.columnSelection, 'selectedValue', selectedColumns);
+      this.$emit('column-selection', selectedColumns);
     }
   }
 };

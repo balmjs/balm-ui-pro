@@ -7,7 +7,8 @@ export const cssClasses = {
 
 export const TYPES = {
   noSlot: 'no-slot',
-  routerLink: 'router-link'
+  routerLink: 'router-link',
+  columnSelection: 'column-selection'
 };
 
 export function getRouteLocationRaw(action, { model, data, params }) {

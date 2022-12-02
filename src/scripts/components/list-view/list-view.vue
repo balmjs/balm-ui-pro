@@ -45,12 +45,12 @@
     </section>
 
     <ui-list-view-top-actions
-      v-if="topActionConfig.length"
       v-bind="{
         data: instanceData,
         model,
         modelOptions,
         keyName,
+        thead,
         actionConfig: topActionConfig,
         actionHandler: topActionHandler,
         actionRendering: topActionRendering,
@@ -58,12 +58,13 @@
         refreshData: getModelData,
         resetSelectedRows
       }"
-    ></ui-list-view-top-actions>
-    <slot
-      v-else
-      :name="`${namespace}-top-actions`"
-      v-bind="instanceData"
-    ></slot>
+      @column-selection="handleColumnSelection"
+    >
+      <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
+      <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
+        <slot :name="name" v-bind="slotData"></slot>
+      </template>
+    </ui-list-view-top-actions>
 
     <section class="mdc-list-view__content">
       <slot :name="`before-${namespace}`" v-bind="instanceData"></slot>
@@ -81,8 +82,8 @@
                 {},
                 {
                   data: listData.data,
-                  thead,
-                  tbody,
+                  thead: listData.thead,
+                  tbody: listData.tbody,
                   fullwidth: true,
                   showProgress: listData.loading
                 },
@@ -295,6 +296,10 @@ export default {
     searchOnReset: {
       type: Boolean,
       default: false
+    },
+    forceRefreshData: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -316,7 +321,9 @@ export default {
         page: 1,
         pageSize: this.paginationAttrOrProp.pageSize || this.pageSize,
         loading: false,
-        usePlaceholder: this.useValidator && this.placeholder
+        usePlaceholder: this.useValidator && this.placeholder,
+        thead: this.thead,
+        tbody: this.tbody
       },
       listDataSource: {}
     };
@@ -433,14 +440,36 @@ export default {
 
       canSubmit && this.exposeAction(action, result);
     },
+    handleColumnSelection(selectedColumns) {
+      const selectedThead = this.thead.filter((_, index) =>
+        selectedColumns.includes(index)
+      );
+      const selectedTbody = this.tbody.filter((_, index) =>
+        selectedColumns.includes(index)
+      );
+
+      this.$nextTick(() => {
+        this.$set(this.listData, 'thead', selectedThead);
+        this.$set(this.listData, 'tbody', selectedTbody);
+      });
+    },
     // NOTE: for multi actions
     resetSelectedRows() {
       this.$set(this.listData, 'selectedRows', []);
     },
     // NOTE: for `<keep-alive>`
-    refreshComponent() {
-      this.resetListData();
-      this.getModelData();
+    refreshComponent(noKeepAlive) {
+      if (noKeepAlive) {
+        this.resetListData();
+        this.getModelData();
+      } else {
+        if (this.forceRefreshData) {
+          const canRefreshData = Object.values(this.searchForm.data).some(
+            (val) => !!val
+          );
+          canRefreshData && this.getModelData();
+        }
+      }
     }
   }
 };

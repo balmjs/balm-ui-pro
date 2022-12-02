@@ -9,8 +9,6 @@ export default {
     }
   },
   activated() {
-    if (this.noKeepAlive) {
-      this.refreshComponent();
-    }
+    this.refreshComponent(this.noKeepAlive);
   }
 };
