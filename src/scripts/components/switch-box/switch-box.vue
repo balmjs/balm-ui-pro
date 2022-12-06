@@ -55,7 +55,9 @@ export default {
           ? this.isTrueValue(option[this.optionFormat.value])
           : option[this.optionFormat.value] ===
               this.switchAttrOrProp.falseValue ||
-            !option[this.optionFormat.value]
+            (this.switchAttrOrProp.falseValue === true
+              ? option[this.optionFormat.value]
+              : !option[this.optionFormat.value])
       );
       return ~index ? this.options[index] : {};
     }
