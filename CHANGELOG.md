@@ -2,11 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
-## v0.47.1 / 2022-12-06
+## v0.47.2 / 2022-12-06
 
 ### Bug Fixes
 
 - `<ui-list-view>`, `<ui-detail-view>`: fix title slot bug
+- `<ui-switch-box>`: fix switch item label bug
 
 ## v0.47.0 / 2022-12-02
 
