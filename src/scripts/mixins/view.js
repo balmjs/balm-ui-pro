@@ -48,6 +48,9 @@ export default {
     };
   },
   computed: {
+    hasTitle() {
+      return this.title || this.$slots[`${this.namespace}-title`];
+    },
     viewPropsData() {
       const {
         title,
@@ -89,9 +92,6 @@ export default {
     },
     fullInstanceData() {
       return Object.assign({}, this.instanceData, this.globalModelOptions);
-    },
-    hasTitle() {
-      return this.title || this.$slots.title;
     },
     refreshData() {
       return /(UiListView|UiDetailView)$/.test(this.$vnode.tag)
