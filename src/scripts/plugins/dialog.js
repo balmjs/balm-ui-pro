@@ -82,6 +82,7 @@ function createDialog(options) {
       return {
         open: false,
         modelValue: currentModelValue,
+        modelValueSource: currentModelValue,
         ...otherConfig
       };
     },
@@ -116,6 +117,7 @@ function createDialog(options) {
         if (!this.useDialogAction) {
           const actionResult = {
             data: this.modelValue,
+            dataSource: this.modelValueSource,
             ...result
           };
 
@@ -143,7 +145,8 @@ function createDialog(options) {
       handleDialogAction(action) {
         if (this.useDialogAction) {
           const actionResult = {
-            data: this.modelValue
+            data: this.modelValue,
+            dataSource: this.modelValueSource
           };
 
           let debounceConfig = {};
