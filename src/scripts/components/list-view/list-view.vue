@@ -418,22 +418,21 @@ export default {
     async handleAction(action, result) {
       let canSubmit = true;
 
+      if (this.useValidator) {
+        canSubmit = result.valid;
+        this.$set(this.searchForm, 'message', result.message);
+      }
+
       switch (action.type) {
         case UiListView.EVENTS.submit:
-          if (this.useValidator) {
-            canSubmit = result.valid;
-            this.$set(this.searchForm, 'message', result.message);
-          }
-
           if (canSubmit && action.submit !== false) {
             await this.getModelData();
           }
           break;
         case UiListView.EVENTS.reset:
-          this.$set(this.searchForm, 'message', '');
           // NOTE: automatic processing in `<ui-form-view>`
-          if (this.searchOnReset) {
-            this.getModelData();
+          if (canSubmit && this.searchOnReset) {
+            await this.getModelData();
           }
           break;
       }

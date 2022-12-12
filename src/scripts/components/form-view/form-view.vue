@@ -479,7 +479,7 @@ export default {
 
       this.syncFormData();
     },
-    exposeAction(action, result = {}) {
+    exposeAction(action, result) {
       const { handler, ...actionConfig } = action;
       const customHandler = isFunction(handler) ? handler : false;
 
@@ -506,35 +506,39 @@ export default {
 
       return result;
     },
+    validateForm(action) {
+      const validations = this.formConfig.filter(({ validator }) => validator);
+
+      if (validations.length) {
+        if (this.$validate) {
+          this.$validations.set(validations);
+
+          const result = this.$validate(this.formData);
+
+          this.exposeAction(action, result);
+
+          this.$validations.clear();
+        } else {
+          console.warn(
+            `[${UI_FORM_VIEW.NAME}]: BalmUI $validator plugin is missing`
+          );
+        }
+      } else {
+        this.exposeAction(action, {
+          valid: true,
+          message: '',
+          messages: [],
+          validMsg: {}
+        });
+      }
+    },
     handleAction(action) {
       let debounceConfig = {};
 
       switch (action.type) {
         case NATIVE_BUTTON_TYPES.submit:
           debounceConfig = {
-            callback: () => {
-              const validations = this.formConfig.filter(
-                ({ validator }) => validator
-              );
-
-              if (validations.length) {
-                if (this.$validate) {
-                  this.$validations.set(validations);
-
-                  const result = this.$validate(this.formData);
-
-                  this.exposeAction(action, result);
-
-                  this.$validations.clear();
-                } else {
-                  console.warn(
-                    `[${UI_FORM_VIEW.NAME}]: BalmUI $validator plugin is missing`
-                  );
-                }
-              } else {
-                this.exposeAction(action, { valid: true });
-              }
-            },
+            callback: () => this.validateForm(action),
             delay: action.delay || 250
           };
           break;
@@ -545,7 +549,7 @@ export default {
 
       return action.type === NATIVE_BUTTON_TYPES.submit
         ? debounceConfig
-        : this.exposeAction(action);
+        : this.validateForm(action);
     },
     getSlotData(slotData, config) {
       return Object.assign({}, slotData, {
