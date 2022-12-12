@@ -66,10 +66,9 @@ type ModelConfig = FormItemConfig[] | (formData: object, formOptions: object) =>
     text: string;
     type?: 'button' | 'submit' | 'reset' | string;
     attrOrProp?: object;
-    // ⚠️ NOTE: `validationResult` requires `submit` type
     handler?: (
       actionConfig: ActionButton,
-      validationResult?: BalmUIValidationResult
+      validationResult?: BalmUIValidationResult // ⚠️ NOTE: Usually used for the `submit` type
     ) => void;
   }
   ```
