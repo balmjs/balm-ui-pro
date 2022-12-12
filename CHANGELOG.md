@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.47.4 / 2022-12-12
+
+### Chore
+
+- `<ui-form-view>`, `<ui-list-view>`: optimize validationResult for action handler
+
 ## v0.47.2 / 2022-12-06
 
 ### Bug Fixes
