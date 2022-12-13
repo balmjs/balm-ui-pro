@@ -81,7 +81,7 @@ export default {
       type: Object,
       default: () => ({})
     },
-    formDataSource: {
+    modelValueSource: {
       type: Object,
       default: () => ({})
     },
@@ -136,7 +136,7 @@ export default {
         {
           proConfig: this.config,
           proFormData: this.formData,
-          proFormDataSource: this.formDataSource,
+          proFormDataSource: this.modelValueSource,
           proComponentKey: this.componentKey
         },
         this.config.attrOrProp || {}

@@ -33,13 +33,13 @@
           <ui-grid-cell
             v-for="(configData, configIndex) in formConfig"
             :key="`form-item-${configData.key || configIndex}`"
-            v-bind="gridCellAttrOrProp"
+            v-bind="configData.gridCellAttrOrProp || gridCellAttrOrProp"
           >
             <ui-form-item
               v-bind="{
                 config: configData,
                 modelValue: formData,
-                formDataSource,
+                modelValueSource: formDataSource,
                 attrOrProp: formItemAttrOrProp
               }"
               @change="handleChange"
@@ -66,7 +66,7 @@
             v-bind="{
               config: configData,
               modelValue: formData,
-              formDataSource,
+              modelValueSource: formDataSource,
               attrOrProp: formItemAttrOrProp
             }"
             @change="handleChange"
