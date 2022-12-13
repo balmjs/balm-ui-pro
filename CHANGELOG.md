@@ -2,6 +2,28 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.21.0 / 2022-12-13
+
+### Feature
+
+- `<ui-list-view>`
+  - add prop `forceRefreshData`
+  - add `column-selection` type for list view top action config
+  - new slot `before-list-view-top-actions`, `after-list-view-top-actions`
+
+```json
+{
+  "type": "column-selection",
+  "icon": "view_column",
+  "text": "Column",
+  "allSelectedLabel": "All"
+}
+```
+
+### Bug Fixes
+
+- `<ui-switch-box>`: fix switch item label bug
+
 ## v0.20.0 / 2022-10-23
 
 ### Chore
