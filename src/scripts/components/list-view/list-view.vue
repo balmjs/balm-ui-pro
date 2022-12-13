@@ -431,6 +431,8 @@ export default {
           break;
         case UiListView.EVENTS.reset:
           // NOTE: automatic processing in `<ui-form-view>`
+          this.resetListData();
+
           if (canSubmit && this.searchOnReset) {
             await this.getModelData();
           }

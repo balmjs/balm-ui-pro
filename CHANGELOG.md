@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.47.5 / 2022-12-13
+
+### Bug Fixes
+
+`<ui-list-view>`: fix reset action bug
+
 ## v0.47.4 / 2022-12-12
 
 ### Chore
