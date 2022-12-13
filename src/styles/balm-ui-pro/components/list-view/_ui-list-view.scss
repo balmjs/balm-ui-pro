@@ -6,10 +6,17 @@
   }
 
   &__top-actions {
+    display: flex;
+    flex-wrap: wrap;
     margin-bottom: 6px;
 
     .top-action {
       margin: 0 6px 6px 0;
+    }
+
+    .mdc-checkbox-group {
+      display: flex;
+      flex-direction: column;
     }
   }
 

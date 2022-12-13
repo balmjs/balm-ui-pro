@@ -84,8 +84,6 @@ function useView(props, { route, slots, emit, state, init, refreshData }) {
     refreshData
   };
 
-  const hasTitle = computed(() => props.title || slots.title);
-
   watch(
     () => props.modelConfig,
     () => {
@@ -122,7 +120,6 @@ function useView(props, { route, slots, emit, state, init, refreshData }) {
   return {
     globalModelOptions,
     viewPropsData,
-    hasTitle,
     handleChange,
     exposeAction
   };

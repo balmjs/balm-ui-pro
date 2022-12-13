@@ -44,12 +44,12 @@
     </section>
 
     <ui-list-view-top-actions
-      v-if="topActionConfig.length"
       v-bind="{
         data: instanceData,
         model,
         modelOptions,
         keyName,
+        thead,
         actionConfig: topActionConfig,
         actionHandler: topActionHandler,
         actionRendering: topActionRendering,
@@ -57,12 +57,12 @@
         refreshData: getModelData,
         resetSelectedRows
       }"
-    ></ui-list-view-top-actions>
-    <slot
-      v-else
-      :name="`${UI_LIST_VIEW.NAMESPACE}-top-actions`"
-      v-bind="instanceData"
-    ></slot>
+      @column-selection="handleColumnSelection"
+    >
+      <template v-for="(_, slotName) in $slots" #[slotName]="slotData">
+        <slot :name="slotName" v-bind="slotData"></slot>
+      </template>
+    </ui-list-view-top-actions>
 
     <section class="mdc-list-view__content">
       <slot
@@ -85,8 +85,8 @@
                 {},
                 {
                   data: listData.data,
-                  thead,
-                  tbody,
+                  thead: listData.thead,
+                  tbody: listData.tbody,
                   fullwidth: true,
                   showProgress: listData.loading
                 },
@@ -315,6 +315,10 @@ const props = defineProps({
   searchOnReset: {
     type: Boolean,
     default: false
+  },
+  forceRefreshData: {
+    type: Boolean,
+    default: false
   }
 });
 const emit = defineEmits([
@@ -340,26 +344,26 @@ const state = reactive({
     page: 1,
     pageSize: props.paginationAttrOrProp.pageSize || props.pageSize,
     loading: false,
-    usePlaceholder: props.useValidator && props.placeholder
+    usePlaceholder: props.useValidator && props.placeholder,
+    thead: props.thead,
+    tbody: props.tbody
   },
   listDataSource: {}
 });
 const { searchForm, lastSearchFormData, listData } = toRefs(state);
 
-const {
-  globalModelOptions,
-  viewPropsData,
-  hasTitle,
-  handleChange,
-  exposeAction
-} = useView(props, {
-  route,
-  slots,
-  emit,
-  state,
-  init,
-  getModelData
-});
+const { globalModelOptions, viewPropsData, handleChange, exposeAction } =
+  useView(props, {
+    route,
+    slots,
+    emit,
+    state,
+    init,
+    getModelData
+  });
+const hasTitle = computed(
+  () => props.title || slots[`${UI_LIST_VIEW.NAMESPACE}-title`]
+);
 const instanceData = computed(() =>
   Object.assign({}, viewPropsData, {
     searchForm: state.searchForm,
@@ -451,27 +455,42 @@ async function getModelData() {
 async function handleAction(action, result) {
   let canSubmit = true;
 
+  if (props.useValidator) {
+    canSubmit = result.valid;
+    state.searchForm.message = result.message;
+  }
+
   switch (action.type) {
     case UI_LIST_VIEW.EVENTS.submit:
-      if (props.useValidator) {
-        canSubmit = result.valid;
-        state.searchForm.message = result.message;
-      }
-
       if (canSubmit && action.submit !== false) {
         await getModelData();
       }
       break;
     case UI_LIST_VIEW.EVENTS.reset:
-      state.searchForm.message = '';
       // NOTE: automatic processing in `<ui-form-view>`
-      if (props.searchOnReset) {
-        getModelData();
+      resetListData();
+
+      if (canSubmit && props.searchOnReset) {
+        await getModelData();
       }
       break;
   }
 
   canSubmit && exposeAction(action, result);
+}
+
+function handleColumnSelection(selectedColumns) {
+  const selectedThead = props.thead.filter((_, index) =>
+    selectedColumns.includes(index)
+  );
+  const selectedTbody = props.tbody.filter((_, index) =>
+    selectedColumns.includes(index)
+  );
+
+  nextTick(() => {
+    state.listData.thead = selectedThead;
+    state.listData.tbody = selectedTbody;
+  });
 }
 
 // NOTE: for multi actions
@@ -480,9 +499,18 @@ function resetSelectedRows() {
 }
 
 // NOTE: for `<keep-alive>`
-function refreshComponent() {
-  resetListData();
-  getModelData();
+function refreshComponent(noKeepAlive) {
+  if (noKeepAlive) {
+    resetListData();
+    getModelData();
+  } else {
+    if (props.forceRefreshData) {
+      const canRefreshData = Object.values(state.searchForm.data).some(
+        (val) => !!val
+      );
+      canRefreshData && getModelData();
+    }
+  }
 }
 
 useKeepAlive(refreshComponent);

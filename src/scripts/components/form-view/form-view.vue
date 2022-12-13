@@ -521,7 +521,7 @@ function handleChange(key, value) {
   syncFormData();
 }
 
-function exposeAction(action, result = {}) {
+function exposeAction(action, result) {
   const { handler, ...actionConfig } = action;
   const customHandler = isFunction(handler) ? handler : false;
 
@@ -550,35 +550,40 @@ function ifAction(action) {
   return result;
 }
 
+function validateForm(action) {
+  const validations = state.formConfig.filter(({ validator }) => validator);
+
+  if (validations.length) {
+    if (validator.validate) {
+      validator.set(validations);
+
+      const result = validator.validate(state.formData);
+
+      exposeAction(action, result);
+
+      validator.clear();
+    } else {
+      console.warn(
+        `[${UI_FORM_VIEW.NAME}]: BalmUI $validator plugin is missing`
+      );
+    }
+  } else {
+    exposeAction(action, {
+      valid: true,
+      message: '',
+      messages: [],
+      validMsg: {}
+    });
+  }
+}
+
 function handleAction(action) {
   let debounceConfig = {};
 
   switch (action.type) {
     case NATIVE_BUTTON_TYPES.submit:
       debounceConfig = {
-        callback: () => {
-          const validations = state.formConfig.filter(
-            ({ validator }) => validator
-          );
-
-          if (validations.length) {
-            if (validator.validate) {
-              validator.set(validations);
-
-              const result = validator.validate(state.formData);
-
-              exposeAction(action, result);
-
-              validator.clear();
-            } else {
-              console.warn(
-                `[${UI_FORM_VIEW.NAME}]: BalmUI $validator plugin is missing`
-              );
-            }
-          } else {
-            exposeAction(action, { valid: true });
-          }
-        },
+        callback: () => validateForm(action),
         delay: action.delay || 250
       };
       break;
@@ -589,7 +594,7 @@ function handleAction(action) {
 
   return action.type === NATIVE_BUTTON_TYPES.submit
     ? debounceConfig
-    : exposeAction(action);
+    : validateForm(action);
 }
 
 function getSlotData(slotData, config) {

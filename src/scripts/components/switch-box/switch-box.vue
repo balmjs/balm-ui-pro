@@ -62,7 +62,10 @@ const switchItem = computed(() => {
   const index = props.options.findIndex((option) =>
     state.switchValue
       ? isTrueValue(option.value)
-      : option.value === props.switchAttrOrProp.falseValue || !option.value
+      : option.value === props.switchAttrOrProp.falseValue ||
+        (props.switchAttrOrProp.falseValue === true
+          ? option[props.optionFormat.value]
+          : !option[props.optionFormat.value])
   );
   return ~index ? props.options[index] : {};
 });

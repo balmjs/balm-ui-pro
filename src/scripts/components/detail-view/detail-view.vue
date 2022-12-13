@@ -164,19 +164,17 @@ const state = reactive({
 });
 const { formConfig, formData, message, loading } = toRefs(state);
 
-const {
-  globalModelOptions,
-  viewPropsData,
-  hasTitle,
-  handleChange,
-  exposeAction
-} = useView(props, {
-  route,
-  slots,
-  emit,
-  state,
-  init
-});
+const { globalModelOptions, viewPropsData, handleChange, exposeAction } =
+  useView(props, {
+    route,
+    slots,
+    emit,
+    state,
+    init
+  });
+const hasTitle = computed(
+  () => props.title || slots[`${UI_LIST_VIEW.NAMESPACE}-title`]
+);
 const instanceData = computed(() =>
   Object.assign({}, viewPropsData, {
     formData: state.formData,

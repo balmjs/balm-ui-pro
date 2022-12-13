@@ -12,9 +12,5 @@ export function useKeepAlive(refreshComponent) {
     );
   });
 
-  onActivated(() => {
-    if (noKeepAlive.value) {
-      refreshComponent();
-    }
-  });
+  onActivated(() => refreshComponent(noKeepAlive.value));
 }
