@@ -79,7 +79,7 @@ const props = defineProps({
     type: Object,
     default: () => ({})
   },
-  formDataSource: {
+  modelValueSource: {
     type: Object,
     default: () => ({})
   },
@@ -114,7 +114,7 @@ const componentBind = computed(() => {
     {
       proConfig: props.config,
       proFormData: state.formData,
-      proFormDataSource: props.formDataSource,
+      proFormDataSource: props.modelValueSource,
       proComponentKey: componentKey.value
     },
     props.config.attrOrProp || {}

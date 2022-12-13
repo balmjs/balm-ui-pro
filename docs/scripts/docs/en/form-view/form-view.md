@@ -40,6 +40,7 @@ type ModelConfig = FormItemConfig[] | (formData: object, formOptions: object) =>
     component?: string;
     components?: FormItemComponentConfig[];
     attrOrProp?: object;
+    gridCellAttrOrProp?: object;
     event?: string; // Defaults: 'change'
     model?: string; // For the options of the source data
     // Custom slot
