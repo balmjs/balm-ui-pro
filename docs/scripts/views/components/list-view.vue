@@ -24,9 +24,20 @@
 
 
 <script setup>
-const thead = ['ID', 'Dessert', 'Calories', 'Fat', 'Actions'];
+const thead = [
+  {
+    value: 'ID',
+    required: true
+  },
+  'Dessert',
+  'Calories',
+  'Fat',
+  'Actions'
+];
 const tbody = [
-  'id',
+  {
+    field: 'id'
+  },
   'dessert',
   'calories',
   'fat',
@@ -73,6 +84,12 @@ const rowActionConfig = [
 ];
 
 const topActionConfig = [
+  {
+    type: 'column-selection',
+    icon: 'view_column',
+    text: 'Column',
+    allSelectedLabel: 'All'
+  },
   {
     type: 'router-link',
     icon: 'add',

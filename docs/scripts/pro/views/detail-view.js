@@ -24,15 +24,15 @@ export async function getModelDetailDataFn({ model, keyName, route }) {
 export async function setModelDataFn({
   model,
   keyName,
-  formData,
-  formDataSource
+  detailData,
+  detailDataSource
 }) {
   const store = useStore();
 
-  const id = formDataSource[keyName] || formData[keyName];
+  const id = detailDataSource[keyName] || detailData[keyName];
   const fn = id ? 'updateModel' : 'createModel';
 
-  isDev && console.info('setModelDataFn', model, id, formData);
+  isDev && console.info('setModelDataFn', model, id, detailData);
 
-  return await store[fn](model, formData);
+  return await store[fn](model, detailData);
 }

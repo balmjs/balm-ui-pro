@@ -8,7 +8,7 @@ BalmUI Pro is a front-end scaffolding. By default, readers have already understo
 
 - vue 3.x
 - vue-router 4.x
-- balm-ui 10.12.0+
+- balm-ui 10.13.2+
 
 ## Installing
 

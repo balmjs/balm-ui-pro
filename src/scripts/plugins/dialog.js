@@ -107,6 +107,7 @@ function createDialog(options) {
       const state = reactive({
         open: false,
         modelValue: currentModelValue,
+        modelValueSource: currentModelValue,
         ...otherConfig
       });
 
@@ -140,6 +141,7 @@ function createDialog(options) {
         if (!useDialogAction.value) {
           const actionResult = {
             data: state.modelValue,
+            dataSource: state.modelValueSource,
             ...result
           };
 
@@ -168,7 +170,8 @@ function createDialog(options) {
       function handleDialogAction(action) {
         if (useDialogAction.value) {
           const actionResult = {
-            data: state.modelValue
+            data: state.modelValue,
+            dataSource: state.modelValueSource
           };
 
           let debounceConfig = {};
