@@ -3,7 +3,7 @@ module.exports = function (api) {
     ? {
         modules: false,
         useBuiltIns: 'entry',
-        corejs: { version: '3.25', proposals: true }
+        corejs: { version: '3.26', proposals: true }
       }
     : {
         modules: false
@@ -13,6 +13,7 @@ module.exports = function (api) {
   return {
     presets: [['@babel/preset-env', envOptions]],
     plugins: [
+      '@babel/plugin-proposal-optional-chaining',
       ['@babel/plugin-transform-runtime', runtimeOptions],
       [
         'prismjs',
