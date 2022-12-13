@@ -13,7 +13,7 @@
 
 - vue 2.6.0+
 - vue-router 3.x
-- balm-ui 8.56.1+
+- balm-ui 8.56.2+
 
 ### Installing
 
