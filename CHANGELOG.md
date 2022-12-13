@@ -20,6 +20,10 @@
 }
 ```
 
+### Chore
+
+- `<ui-form-view>`: optimize form item config for grid cell
+
 ### Bug Fixes
 
 - `<ui-switch-box>`: fix switch item label bug
