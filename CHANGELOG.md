@@ -2,6 +2,12 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.22.0 / 2022-12-16
+
+### Feature
+
+- `<ui-form-view>`: add prop `components` for local custom form items
+
 ## v0.21.0 / 2022-12-13
 
 ### Feature
