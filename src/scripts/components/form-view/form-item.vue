@@ -24,7 +24,7 @@
         <slot :name="customSlots.componentItem">
           <template v-if="hasSubComponents">
             <component
-              :is="config.component"
+              :is="getComponent(config.component)"
               :components="config.components"
               v-bind="componentBind"
               @[eventName]="handleChange(config, $event)"
@@ -37,7 +37,7 @@
             ></ui-readonly-item>
             <template v-else>
               <component
-                :is="config.component"
+                :is="getComponent(config.component)"
                 v-model="formData[config.key]"
                 v-bind="componentBind"
                 @[eventName]="handleChange(config, $event)"
@@ -66,11 +66,16 @@ export default {
 </script>
 
 <script setup>
-import { reactive, toRefs, computed, watch, onBeforeMount } from 'vue';
+import { markRaw, reactive, toRefs, computed, watch, onBeforeMount } from 'vue';
 import UiReadonlyItem from '../readonly-item/readonly-item.vue';
 import getType, { isFunction } from '../../utils/typeof';
+import { toFirstUpperCase } from '../../utils/helpers';
 
 const props = defineProps({
+  components: {
+    type: Object,
+    default: () => ({})
+  },
   config: {
     type: Object,
     default: () => ({})
@@ -143,6 +148,15 @@ watch(
   () => props.modelValue,
   (val) => (state.formData = val)
 );
+
+function getComponent(component) {
+  const customComponentName = toFirstUpperCase(component);
+  const customComponent = props.components[customComponentName]
+    ? markRaw(props.components[customComponentName])
+    : component;
+
+  return customComponent;
+}
 
 function displayFormItem({ show }) {
   const display = isFunction(show)

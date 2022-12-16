@@ -41,6 +41,7 @@
             >
               <ui-form-item
                 v-bind="{
+                  components,
                   config: configData,
                   modelValue: formData,
                   modelValueSource: formDataSource,
@@ -69,6 +70,7 @@
           >
             <ui-form-item
               v-bind="{
+                components,
                 config: configData,
                 modelValue: formData,
                 modelValueSource: formDataSource,
@@ -181,6 +183,10 @@ import getType, { isFunction } from '../../utils/typeof';
 const validator = inject('validator');
 
 const props = defineProps({
+  components: {
+    type: Object,
+    default: () => ({})
+  },
   modelConfig: {
     type: [Array, Function, Boolean],
     required: true
