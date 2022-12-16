@@ -2,6 +2,7 @@
   <docs-page name="form-view" without-css demo-count="1">
     <ui-form-view
       v-model="formData"
+      :components="components"
       :model-config="modelConfig"
       :model-options="{
         extra
@@ -50,7 +51,12 @@
 import { reactive, toRefs, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'balm-ui';
+import XFormItem from '@/components/x-form-item';
 import defaultModelConfig from '@/views/model-config/a.json';
+
+const components = {
+  XFormItem
+};
 
 const route = useRoute();
 const store = useStore();

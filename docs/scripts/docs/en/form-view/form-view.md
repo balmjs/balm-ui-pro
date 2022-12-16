@@ -10,6 +10,7 @@ type ModelConfig = FormItemConfig[] | (formData: object, formOptions: object) =>
 
 | Name                 | Type              | Default    | Description                                                                                           |
 | -------------------- | ----------------- | ---------- | ----------------------------------------------------------------------------------------------------- |
+| `components`         | object            | `{}`       | Set local custom form item components                                                                 |
 | `modelConfig`        | ModelConfig       | `required` | Form model config                                                                                     |
 | `modelValue`         | object            | `{}`       | Form model data                                                                                       |
 | `modelOptions`       | object            | `{}`       | The extra options of the form model config                                                            |
