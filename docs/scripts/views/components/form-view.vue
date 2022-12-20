@@ -2,6 +2,7 @@
   <docs-page name="form-view" without-css demo-count="1">
     <ui-form-view
       v-model="formData"
+      :components="components"
       :model-config="modelConfig"
       :model-options="{
         extra
@@ -55,6 +56,10 @@ import modelConfig from '@/views/model-config/a.json';
 //   switchOptions
 // } from './options';
 
+const components = {
+  XFormItem
+};
+
 const actionConfig = [
   {
     type: 'reset',
@@ -78,6 +83,7 @@ export default {
   },
   data() {
     return {
+      components,
       formDataSource: {},
       formData: {
         a: 'hello',
