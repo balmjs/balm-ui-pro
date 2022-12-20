@@ -24,7 +24,7 @@
         <slot :name="customSlots.componentItem">
           <template v-if="hasSubComponents">
             <component
-              :is="config.component"
+              :is="getComponent(config.component)"
               :components="config.components"
               v-bind="componentBind"
               @[eventName]="handleChange(config, $event)"
@@ -37,7 +37,7 @@
             ></ui-readonly-item>
             <template v-else>
               <component
-                :is="config.component"
+                :is="getComponent(config.component)"
                 v-model="formData[config.key]"
                 v-bind="componentBind"
                 @[eventName]="handleChange(config, $event)"
@@ -54,6 +54,7 @@
 <script>
 import UiReadonlyItem from '../readonly-item/readonly-item.vue';
 import getType, { isFunction } from '../../utils/typeof';
+import { toFirstUpperCase } from '../../utils/helpers';
 
 const UI_FORM_ITEM = {
   NAME: 'UiFormItem',
@@ -73,6 +74,10 @@ export default {
     event: UI_FORM_ITEM.EVENTS.update
   },
   props: {
+    components: {
+      type: Object,
+      default: () => ({})
+    },
     config: {
       type: Object,
       default: () => ({})
@@ -168,6 +173,12 @@ export default {
     }
   },
   methods: {
+    getComponent(component) {
+      const customComponentName = toFirstUpperCase(component);
+      const customComponent = this.components[customComponentName] || component;
+
+      return customComponent;
+    },
     displayFormItem({ show }) {
       const display = isFunction(show)
         ? show(this.formData)

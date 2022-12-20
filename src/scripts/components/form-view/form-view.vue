@@ -37,6 +37,7 @@
           >
             <ui-form-item
               v-bind="{
+                components,
                 config: configData,
                 modelValue: formData,
                 modelValueSource: formDataSource,
@@ -64,6 +65,7 @@
             v-for="(configData, configIndex) in formConfig"
             :key="`form-item-${configData.key || configIndex}`"
             v-bind="{
+              components,
               config: configData,
               modelValue: formData,
               modelValueSource: formDataSource,
@@ -163,6 +165,10 @@ export default {
     event: UI_FORM_VIEW.EVENTS.update
   },
   props: {
+    components: {
+      type: Object,
+      default: () => ({})
+    },
     modelConfig: {
       type: [Array, Function, Boolean],
       required: true

@@ -4,6 +4,11 @@ export function toCamelCase(str) {
   return str.substr(0, 1).toLowerCase() + str.substr(1);
 }
 
+export function toFirstUpperCase(str) {
+  const camelCaseStr = toCamelCase(str);
+  return camelCaseStr.substr(0, 1).toUpperCase() + camelCaseStr.substr(1);
+}
+
 export function generateRandomString(prefix = '', number = 8) {
   if (number % 2 == 1) {
     throw new Error('Only even sizes are supported');
