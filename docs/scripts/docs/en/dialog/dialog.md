@@ -6,9 +6,10 @@ type ProDialogHandler = (
 ) => void;
 
 interface ProDialogOptions {
-  // Dialog
+  // Basic
   className?: string;
   title?: string;
+  content?: string;
   actionConfig?: ActionButton[];
   maskClosable?: boolean;
   // Custom component
@@ -37,10 +38,11 @@ interface VueInstance {
 | -------------------- | ---------------- | ----------------- | ------------------------------------------------------------------------------------------------------------ |
 | `className`          | string           | `''`              | The custom class name for the pro dialog.                                                                    |
 | `title`              | string           | `''`              | The title of the pro dialog.                                                                                 |
+| `content`            | string           | `''`              | The raw content of the pro dialog.                                                                           |
 | `actionConfig`       | ActionButton[]   | `[]`              | Action button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button) |
 | `maskClosable`       | boolean          | `false`           | Closes the dialog, when the pro dialog scrim is clicked.                                                     |
 | `components`         | object           | `{}`              | A hash of components to be made available to the Vue instance.                                               |
-| `component`          | string           | required          | The custom component for the pro dialog.                                                                     |
+| `component`          | string           | `''`              | The custom component for the pro dialog.                                                                     |
 | `modelValueType`     | string           | `'object'`        | The model value type of the custom component.                                                                |
 | `modelValueDefaults` | any              | `{}`              | The model value of the custom component.                                                                     |
 | `modelValueKeys`     | array            | `[]`              | The model value filter.                                                                                      |
@@ -65,8 +67,12 @@ const $dialog = useDialog();
 
 ### Required Options
 
-1. `component`
-2. `attrOrProp.actionConfig`
+- Custom content
+  1. `content`
+  2. `actionConfig`
+- Custom component
+  1. `component`
+  2. `attrOrProp.actionConfig`
 
 ### Required Events
 

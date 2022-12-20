@@ -3,9 +3,10 @@ import MdcDialog from '../components/dialog/mdc-dialog.vue';
 import getType from '../utils/typeof';
 
 const DEFAULT_OPTIONS = {
-  // Dialog
+  // Basic
   className: '',
   title: '',
+  content: '',
   actionConfig: [],
   maskClosable: false,
   // Custom component
@@ -24,15 +25,24 @@ const DEFAULT_OPTIONS = {
   refresh: location.reload
 };
 
+const PRO_DIALOG_BUTTON_TYPES = {
+  submit: 'submit',
+  cancel: 'cancel',
+  close: 'close'
+};
+
 let globalOptions = DEFAULT_OPTIONS;
 let dialogApp;
 
 const template = `<mdc-dialog :class="className" :open="open" :title="title" :mask-closable="maskClosable" @close="handleClose">
-  <component :is="component" v-model="modelValue" v-bind="attrOrProp" @[event]="handleComponentAction"></component>
+  <template v-if="customComponent">
+    <component :is="customComponent" v-model="modelValue" v-bind="attrOrProp" @[event]="handleComponentAction"></component>
+  </template>
+  <div class="mdc-dialog__custom-content" v-html="content"></div>
   <template #actions>
     <template v-for="(buttonData, buttonIndex) in actionConfig">
       <ui-button
-        v-if="buttonData.type === 'submit'"
+        v-if="buttonData.type === PRO_DIALOG_BUTTON_TYPES.submit"
         v-debounce="handleDialogAction(buttonData)"
         v-bind="buttonData.attrOrProp || {}"
       >
@@ -50,7 +60,7 @@ const template = `<mdc-dialog :class="className" :open="open" :title="title" :ma
 </mdc-dialog>`;
 
 function createDialog(options) {
-  const { components, ...config } = options;
+  const { components, component, ...config } = options;
 
   dialogApp = new Vue({
     el: document.createElement('div'),
@@ -80,7 +90,9 @@ function createDialog(options) {
           : modelValueDefaults;
 
       return {
+        PRO_DIALOG_BUTTON_TYPES,
         open: false,
+        customComponent: component,
         modelValue: currentModelValue,
         modelValueSource: currentModelValue,
         ...otherConfig
@@ -92,12 +104,12 @@ function createDialog(options) {
       }
     },
     mounted() {
-      if (this.component) {
+      if (config.content || component) {
         document.body.appendChild(this.$el);
 
         this.open = true;
       } else {
-        throw new Error('[$dialog]: Missing component');
+        throw new Error('[$dialog]: Missing `content` or `component` option');
       }
     },
     methods: {
@@ -122,7 +134,7 @@ function createDialog(options) {
           };
 
           switch (action.type) {
-            case 'submit':
+            case PRO_DIALOG_BUTTON_TYPES.submit:
               if (this.closeOnSave) {
                 this.handleClose(true);
               }
@@ -131,13 +143,13 @@ function createDialog(options) {
                 this.handleClose(true);
               });
               break;
-            case 'cancel':
-            case 'close':
+            case PRO_DIALOG_BUTTON_TYPES.cancel:
+            case PRO_DIALOG_BUTTON_TYPES.close:
               this.handleClose();
               break;
           }
 
-          if (action.type !== 'submit') {
+          if (action.type !== PRO_DIALOG_BUTTON_TYPES.submit) {
             this.handler(action, actionResult, this.handleClose);
           }
         }
@@ -152,7 +164,7 @@ function createDialog(options) {
           let debounceConfig = {};
 
           switch (action.type) {
-            case 'submit':
+            case PRO_DIALOG_BUTTON_TYPES.submit:
               debounceConfig = {
                 callback: () => {
                   if (this.closeOnSave) {
@@ -166,13 +178,13 @@ function createDialog(options) {
                 delay: action.delay || 250
               };
               break;
-            case 'cancel':
-            case 'close':
+            case PRO_DIALOG_BUTTON_TYPES.cancel:
+            case PRO_DIALOG_BUTTON_TYPES.close:
               this.handleClose();
               break;
           }
 
-          return action.type === 'submit'
+          return action.type === PRO_DIALOG_BUTTON_TYPES.submit
             ? debounceConfig
             : this.handler(action, actionResult, this.handleClose);
         }

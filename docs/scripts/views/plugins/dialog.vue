@@ -15,6 +15,7 @@ export default {
     showDialog() {
       this.$dialog({
         title: 'Custom Dialog',
+        // content: '<code>Hello Pro Dialog</code>',
         component: 'ui-form-view',
         // modelValueType: 'string',
         modelValueDefaults: {
