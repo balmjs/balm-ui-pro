@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.48.0 / 2022-12-20
+
+### Feature
+
+- `<ui-form-view>`: add prop `components` for local custom form items
+
 ## v0.47.5 / 2022-12-13
 
 ### Bug Fixes
