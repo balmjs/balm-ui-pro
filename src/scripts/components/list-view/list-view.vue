@@ -340,6 +340,14 @@ export default {
       });
     }
   },
+  watch: {
+    thead(val) {
+      this.$set(this.listData, 'thead', val);
+    },
+    tbody(val) {
+      this.$set(this.listData, 'tbody', val);
+    }
+  },
   async beforeMount() {
     this.init();
   },

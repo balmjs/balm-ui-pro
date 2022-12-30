@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.49.1 / 2022-12-30
+
+### Bug Fixes
+
+- `<ui-list-view>`: fix `thead` and `tbody` rendering bug
+
 ## v0.49.0 / 2022-12-20
 
 ### Feature
