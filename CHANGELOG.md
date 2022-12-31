@@ -2,6 +2,12 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.22.1 / 2022-12-31
+
+### Bug Fixes
+
+- `<ui-list-view>`: fix `thead` and `tbody` rendering bug
+
 ## v0.22.0 / 2022-12-16
 
 ### Feature

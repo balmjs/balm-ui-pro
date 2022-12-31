@@ -202,6 +202,7 @@ import {
   reactive,
   toRefs,
   computed,
+  watch,
   onBeforeMount,
   useSlots,
   nextTick
@@ -379,6 +380,20 @@ const hasSearchForm = computed(() => !!(props.modelConfig || props.modelPath));
 onBeforeMount(() => {
   init();
 });
+
+watch(
+  () => props.thead,
+  (val) => {
+    state.listData.thead = val;
+  }
+);
+
+watch(
+  () => props.tbody,
+  (val) => {
+    state.listData.tbody = val;
+  }
+);
 
 function init() {
   resetListData();
