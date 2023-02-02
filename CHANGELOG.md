@@ -2,6 +2,12 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.22.2 / 2023-02-02
+
+### Bug Fixes
+
+- `<ui-form-view>`: fix empty component name bug
+
 ## v0.22.1 / 2022-12-31
 
 ### Bug Fixes

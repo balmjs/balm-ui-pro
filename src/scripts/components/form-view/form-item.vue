@@ -25,6 +25,7 @@
           <template v-if="hasSubComponents">
             <component
               :is="getComponent(config.component)"
+              v-if="config.component"
               :components="config.components"
               v-bind="componentBind"
               @[eventName]="handleChange(config, $event)"
@@ -38,6 +39,7 @@
             <template v-else>
               <component
                 :is="getComponent(config.component)"
+                v-if="config.component"
                 v-model="formData[config.key]"
                 v-bind="componentBind"
                 @[eventName]="handleChange(config, $event)"
