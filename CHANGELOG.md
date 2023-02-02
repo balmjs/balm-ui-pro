@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.49.2 / 2023-02-02
+
+### Bug Fixes
+
+- `<ui-form-view>`: fix empty component name bug
+
 ## v0.49.1 / 2022-12-30
 
 ### Bug Fixes
