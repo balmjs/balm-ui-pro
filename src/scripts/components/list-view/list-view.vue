@@ -475,6 +475,8 @@ async function handleAction(action, result) {
     state.searchForm.message = result.message;
   }
 
+  resetListData();
+
   switch (action.type) {
     case UI_LIST_VIEW.EVENTS.submit:
       if (canSubmit && action.submit !== false) {
@@ -483,8 +485,6 @@ async function handleAction(action, result) {
       break;
     case UI_LIST_VIEW.EVENTS.reset:
       // NOTE: automatic processing in `<ui-form-view>`
-      resetListData();
-
       if (canSubmit && props.searchOnReset) {
         await getModelData();
       }
