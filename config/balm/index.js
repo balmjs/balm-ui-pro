@@ -45,6 +45,13 @@ function getConfig(balm) {
             umdNamedDefine: true
           },
       loaders: [
+        // NOTE: https://github.com/webpack/webpack/issues/11467#issuecomment-691873586
+        {
+          test: /\.m?js/,
+          resolve: {
+            fullySpecified: false
+          }
+        },
         {
           test: /\.md$/,
           use: ['html-loader', 'markdown-loader']
