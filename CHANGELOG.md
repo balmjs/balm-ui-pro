@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.49.3 / 2023-03-01
+
+### Bug Fixes
+
+- `<ui-list-view>`: fix search form button handler bug for the page reset
+
 ## v0.49.2 / 2023-02-02
 
 ### Bug Fixes
