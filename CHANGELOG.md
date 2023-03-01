@@ -2,6 +2,12 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.22.3 / 2023-03-01
+
+### Bug Fixes
+
+- `<ui-list-view>`: fix search form button handler bug for the page reset
+
 ## v0.22.2 / 2023-02-02
 
 ### Bug Fixes
