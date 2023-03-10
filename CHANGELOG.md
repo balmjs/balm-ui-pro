@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.49.4 / 2023-03-10
+
+### Chore
+
+- `<ui-form-view>`: update css for vertical form items
+
 ## v0.49.3 / 2023-03-01
 
 ### Bug Fixes
