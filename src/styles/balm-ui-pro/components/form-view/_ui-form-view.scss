@@ -9,15 +9,13 @@
   &.mdc-form--horizontal .mdc-form-item__item {
     flex-grow: 1;
   }
+
+  &.mdc-form--vertical .mdc-form-item__item {
+    width: 100%;
+  }
 }
 
-.mdc-form-item__ui-slider {
-  .mdc-form-item__item {
-    width: 100%;
-
-    .mdc-slider {
-      width: auto;
-      max-width: 100%;
-    }
-  }
+.mdc-form-item__ui-slider .mdc-form-item__item .mdc-slider {
+  width: auto;
+  max-width: 100%;
 }

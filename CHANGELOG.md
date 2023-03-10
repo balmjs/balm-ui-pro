@@ -2,6 +2,12 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.22.4 / 2023-03-10
+
+### Chore
+
+- `<ui-form-view>`: update css for vertical form items
+
 ## v0.22.3 / 2023-03-01
 
 ### Bug Fixes
