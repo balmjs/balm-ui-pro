@@ -279,7 +279,7 @@ watch(
   () => props.modelConfig,
   async (val) => {
     if (val === false) {
-      resetFormView();
+      resetFormView(true);
     } else {
       if (!state.formUpdating) {
         state.formUpdating = true;
@@ -351,9 +351,13 @@ watch(
   }
 );
 
-function resetFormView() {
+function resetFormView(needSync = false) {
   state.formConfig = [];
+  state.formDataKeys = {};
+  state.formDataSource = {};
   state.formData = {};
+
+  needSync && syncFormData();
 }
 
 async function setModelOptions() {

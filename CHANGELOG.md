@@ -2,6 +2,12 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.22.5 / 2023-03-10
+
+### Bug Fixes
+
+- `<ui-form-view>`: fix reset form bug for dynamic form config
+
 ## v0.22.4 / 2023-03-10
 
 ### Chore
