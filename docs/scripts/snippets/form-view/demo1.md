@@ -60,15 +60,17 @@ Vue.use(BalmUIPro, {
 
   const store = useStore();
 
-  export default ({
+  export default (
     data,
-    selectOptions,
-    checkboxOptions,
-    radioOptions,
-    chipsOptions,
-    switchOptions,
-    multiSelectOptions
-  }) => {
+    {
+      selectOptions,
+      checkboxOptions,
+      radioOptions,
+      chipsOptions,
+      switchOptions,
+      multiSelectOptions
+    }
+  ) => {
     const { id } = data;
 
     return [
