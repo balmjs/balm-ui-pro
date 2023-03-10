@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.49.5 / 2023-03-10
+
+### Bug Fixes
+
+- `<ui-form-view>`: fix reset form bug for dynamic form config
+
 ## v0.49.4 / 2023-03-10
 
 ### Chore

@@ -244,7 +244,7 @@ export default {
   watch: {
     async modelConfig(val) {
       if (val === false) {
-        this.resetFormView();
+        this.resetFormView(true);
       } else {
         if (!this.formUpdating) {
           this.formUpdating = true;
@@ -317,9 +317,13 @@ export default {
     this.resetFormView();
   },
   methods: {
-    resetFormView() {
+    resetFormView(needSync = false) {
       this.formConfig = [];
+      this.formDataKeys = {};
+      this.formDataSource = {};
       this.formData = {};
+
+      needSync && this.syncFormData();
     },
     async setModelOptions() {
       const originalConfig = this.isFunctionConfig
