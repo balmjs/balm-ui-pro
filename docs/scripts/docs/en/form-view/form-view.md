@@ -86,6 +86,13 @@ type ModelConfig = FormItemConfig[] | (formData: object, formOptions: object) =>
 | `after-form-view`                             | `itemClass`, `subitemClass`, `data`, `dataSource` | After form items                                               |
 | `form-view-actions`                           | `className`, `config`, `data`, `dataSource`       | Custom form buttons                                            |
 
+- Custom form item slots:
+  - `before-label__[FormItemConfig.component]--[FormItemConfig.key]`
+  - `after-label__[FormItemConfig.component]--[FormItemConfig.key]`
+  - `before-item__[FormItemConfig.component]--[FormItemConfig.key]`
+  - `form-item__[FormItemConfig.component]--[FormItemConfig.key]`
+  - `after-item__[FormItemConfig.component]--[FormItemConfig.key]`
+
 ### Events
 
 | Name                | Type                                                                              | Description                                  |
