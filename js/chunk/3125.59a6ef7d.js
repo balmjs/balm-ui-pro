@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[3125],{3125:function(e,u,o){o.r(u);u.default='<h1 id="router-model">Router Model</h1> <p>Defining front-end routes by model.</p> '}}]);

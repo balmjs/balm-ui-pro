@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[8253],{8253:function(u,h,i){i.r(h);h.default='<h1 id="switch-box">Switch box</h1> '}}]);

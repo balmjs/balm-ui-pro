@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[7121],{7121:function(u,a,i){i.r(a);a.default='<h1 id="pro-dialog">Pro Dialog</h1> '}}]);

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[1877],{4580:function(e,n,a){a.r(n);n.default='<pre><code class="language-ts">type ModelName = string;\n\ninterface GlobalRouterConfig {\n  debug?: true | ModelName;\n  namespace?: boolean;\n}\n</code></pre> '}}]);

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[3520],{3520:function(e,i,u){u.r(i);i.default='<h1 id="detail-view">Detail View</h1> '}}]);

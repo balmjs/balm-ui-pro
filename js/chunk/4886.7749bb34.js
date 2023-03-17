@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[4886],{4886:function(u,e,c){c.r(e);e.default='<h1 id="checkbox-group">Checkbox group</h1> '}}]);

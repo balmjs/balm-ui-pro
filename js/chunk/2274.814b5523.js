@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[2274],{2274:function(u,a,i){i.r(a);a.default='<h1 id="radio-group">Radio group</h1> '}}]);

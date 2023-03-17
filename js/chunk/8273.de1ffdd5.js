@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[8273],{8273:function(n,e,s){s.r(e);e.default='<h1 id="constant">Constant</h1> <p>Defining constants and flexible use.</p> '}}]);

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[4699],{4699:function(e){e.exports=JSON.parse('[{"label":"Switch","component":"ui-switch-box","key":"j","value":"off","attrOrProp":{"options":[{"label":"ON","value":"on"},{"label":"OFF","value":"off"}],"switchAttrOrProp":{"trueValue":"on","falseValue":"off"}}}]')}}]);

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[2476],{2476:function(e){e.exports=JSON.parse('[{"label":"Checkbox","component":"ui-checkbox-group","key":"e","value":[],"attrOrProp":{"options":[{"label":"C","value":3},{"label":"D","value":4}],"allSelected":true,"selectedAllValue":false}}]')}}]);

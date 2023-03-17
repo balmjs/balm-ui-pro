@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[445],{445:function(e){e.exports=JSON.parse('[{"label":"Radio","component":"ui-radio-group","key":"f","value":"","attrOrProp":{"options":[{"label":"E","value":5},{"label":"F","value":6}]}}]')}}]);

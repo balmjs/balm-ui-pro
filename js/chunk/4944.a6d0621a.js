@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[4944],{4944:function(e,u,l){l.r(u);u.default='<h1 id="multi-select">Multi select</h1> '}}]);

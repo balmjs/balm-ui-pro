@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[4088],{4088:function(e,n,o){o.r(n),o.d(n,{default:function(){return c}});var r=o(3114);const t={};var c=(0,o(3744).Z)(t,[["render",function(e,n){const o=(0,r.resolveComponent)("docs-page");return(0,r.openBlock)(),(0,r.createBlock)(o,{name:"form-items","without-css":""})}]])}}]);

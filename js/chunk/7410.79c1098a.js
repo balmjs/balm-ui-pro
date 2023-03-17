@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[7410],{7410:function(u,e,a){a.r(e);e.default='<h1 id="layout-view">Layout View</h1> '}}]);
