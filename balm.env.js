@@ -1,3 +1,15 @@
+process.env.PUBLIC_URL = 'https://legacy.pro.balmjs.com';
+
+process.env.BALM_GIT_FLOW_MAIN = 'legacy';
+process.env.BALM_GIT_FLOW_RELEASE = 'docs-vue2';
+process.env.BALM_GIT_FLOW_RELEASES = ['docs-vue2', 'docs-vue3'];
+process.env.BALM_GIT_FLOW_SCRIPTS = ['docs'];
+process.env.BALM_GIT_FLOW_BUILD_DIR = 'dist';
+process.env.BALM_GIT_FLOW_REPOSITORIES = [
+  'git@github.com:balmjs/legacy.pro.balmjs.com.git'
+];
+process.env.BALM_GIT_FLOW_SITE = 'gh-pages';
+
 function setBalmCore(useSource = false) {
   const BALM_ROOT = '/Users/elf-mouse/www/balmjs/balm';
   const BALM_CORE_SOURCE = `${BALM_ROOT}/packages/balm-core`;
@@ -6,4 +18,4 @@ function setBalmCore(useSource = false) {
   process.env.BALM_CORE = useSource ? BALM_CORE_SOURCE : BALM_CORE;
 }
 
-setBalmCore();
+setBalmCore(true);
