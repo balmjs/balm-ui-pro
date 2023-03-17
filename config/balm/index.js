@@ -134,7 +134,7 @@ function getConfig(balm) {
       options: {
         globIgnores: ['404.html']
       },
-      version: `v${pkg.version.replace(/\./g, '')}`
+      version: `v${pkg.version.replace(/\./g, '')}-0317`
     },
     logs: {
       level: 2
