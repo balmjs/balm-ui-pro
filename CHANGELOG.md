@@ -2,6 +2,12 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.22.6 / 2023-03-31
+
+### Bug Fixes
+
+- `<ui-list-view>`: fix row and top actions rendering bug
+
 ## v0.22.5 / 2023-03-10
 
 ### Bug Fixes
