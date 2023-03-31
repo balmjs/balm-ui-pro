@@ -82,7 +82,7 @@
 
 <script>
 import { cssClasses, TYPES, getRouteLocationRaw } from './constants';
-import { isFunction } from '../../utils/typeof';
+import { isBoolean, isFunction } from '../../utils/typeof';
 
 export default {
   name: 'UiListViewRowActions',
@@ -129,19 +129,22 @@ export default {
   methods: {
     configAction(type, action) {
       let result = '';
-
       const currentAction = action[type];
+      const currentData = Object.assign({}, this.data);
+
       if (isFunction(currentAction)) {
-        result = currentAction(this.data);
+        result = currentAction(currentData);
       } else {
         result = currentAction;
 
         switch (type) {
           case 'if':
-            result = this.actionRendering(action, this.data);
+            result = isBoolean(currentAction)
+              ? currentAction
+              : this.actionRendering(action, currentData);
             break;
           case 'show':
-            result = true;
+            result = isBoolean(currentAction) ? currentAction : true;
             break;
           case TYPES.routerLink:
             const keyName = action.keyName || this.keyName;
@@ -149,14 +152,14 @@ export default {
 
             const params = {};
             paramsKeys.forEach((key) => {
-              if (this.data[key]) {
-                params[key] = this.data[key];
+              if (currentData[key]) {
+                params[key] = currentData[key];
               }
             });
 
             result = getRouteLocationRaw(action, {
               model: this.model,
-              data: this.data,
+              data: currentData,
               params
             });
             break;

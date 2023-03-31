@@ -7,6 +7,8 @@ const getType = (any) => {
     .toLowerCase();
 };
 
+const isBoolean = (bool) => getType(bool) === 'boolean';
+
 const isFunction = (fn) => {
   const type = getType(fn);
   return (
@@ -17,4 +19,4 @@ const isFunction = (fn) => {
 };
 
 export default getType;
-export { isFunction };
+export { isBoolean, isFunction };

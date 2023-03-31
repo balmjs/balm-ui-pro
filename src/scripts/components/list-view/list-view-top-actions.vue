@@ -4,7 +4,7 @@
     <slot :name="namespace" v-bind="data">
       <template v-for="(action, actionIndex) in actionConfig">
         <ui-menu-anchor
-          v-if="action.type === TYPES.columnSelection"
+          v-if="action.type === TYPES.columnSelection && ifAction(action)"
           :key="`column-selection-${actionIndex}`"
         >
           <ui-button
@@ -62,7 +62,7 @@
 <script>
 import UiCheckboxGroup from '../checkbox-group/checkbox-group.vue';
 import { cssClasses, TYPES, getRouteLocationRaw } from './constants';
-import getType, { isFunction } from '../../utils/typeof';
+import getType, { isBoolean, isFunction } from '../../utils/typeof';
 
 const namespace = 'list-view-top-actions';
 
@@ -150,12 +150,14 @@ export default {
   methods: {
     ifAction(action) {
       const currentAction = action.if;
-
       const { listDataSource } = this.data;
+      const currentListData = Object.assign({}, listDataSource);
 
       return isFunction(currentAction)
-        ? currentAction(listDataSource)
-        : this.actionRendering(action, listDataSource);
+        ? currentAction(currentListData)
+        : isBoolean(currentAction)
+        ? currentAction
+        : this.actionRendering(action, currentListData);
     },
     actionIcon({ icon, type }) {
       return icon !== false && this.actionIconFormat[type]
