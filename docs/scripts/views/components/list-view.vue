@@ -9,6 +9,7 @@
       :row-action-config="rowActionConfig"
       :top-action-config="topActionConfig"
       :row-action-rendering="rowActionRendering"
+      :top-action-rendering="topActionRendering"
       @change:x="onChange"
       @action="onAction"
     >
@@ -46,7 +47,7 @@ const tbody = [
 ];
 const rowActionConfig = [
   {
-    if: (data) => true,
+    // if: true,
     component: 'ui-icon',
     text: 'add'
   },
@@ -74,6 +75,7 @@ const rowActionConfig = [
     routeName: 'components.detail-view'
   },
   {
+    // if: false,
     text: 'Link',
     handler: (data, refresh) => {
       console.log('link button', data);
@@ -82,6 +84,7 @@ const rowActionConfig = [
 ];
 const topActionConfig = [
   {
+    // if: true,
     type: 'column-selection',
     icon: 'view_column',
     text: 'Column',
@@ -101,6 +104,7 @@ const topActionConfig = [
     }
   },
   {
+    // if: false,
     type: 'multi-delete',
     text: 'Delete'
   }
@@ -111,6 +115,11 @@ function rowActionRendering(action, data) {
   return true;
 }
 
+function topActionRendering(action, data) {
+  // console.log(action.type, data);
+  return true;
+}
+
 export default {
   data() {
     return {
@@ -118,7 +127,8 @@ export default {
       tbody,
       rowActionConfig,
       topActionConfig,
-      rowActionRendering
+      rowActionRendering,
+      topActionRendering
     };
   },
   methods: {
