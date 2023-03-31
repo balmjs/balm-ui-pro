@@ -89,7 +89,7 @@ export default {
 
 <script setup>
 import { getRouteLocationRaw } from './constants';
-import { isFunction } from '../../utils/typeof';
+import { isBoolean, isFunction } from '../../utils/typeof';
 
 const props = defineProps({
   data: {
@@ -128,19 +128,22 @@ const props = defineProps({
 
 function configAction(type, action) {
   let result = '';
-
   const currentAction = action[type];
+  const currentData = Object.assign({}, props.data);
+
   if (isFunction(currentAction)) {
-    result = currentAction(props.data);
+    result = currentAction(currentData);
   } else {
     result = currentAction;
 
     switch (type) {
       case 'if':
-        result = props.actionRendering(action, props.data);
+        result = isBoolean(currentAction)
+          ? currentAction
+          : props.actionRendering(action, currentData);
         break;
       case 'show':
-        result = true;
+        result = isBoolean(currentAction) ? currentAction : true;
         break;
       case TYPES.routerLink:
         const keyName = action.keyName || props.keyName;
@@ -148,14 +151,14 @@ function configAction(type, action) {
 
         const params = {};
         paramsKeys.forEach((key) => {
-          if (props.data[key]) {
-            params[key] = props.data[key];
+          if (currentData[key]) {
+            params[key] = currentData[key];
           }
         });
 
         result = getRouteLocationRaw(action, {
           model: props.model,
-          data: props.data,
+          data: currentData,
           params
         });
         break;

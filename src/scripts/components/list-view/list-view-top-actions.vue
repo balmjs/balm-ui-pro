@@ -6,7 +6,9 @@
         v-for="(action, actionIndex) in actionConfig"
         :key="`top-action-${actionIndex}`"
       >
-        <ui-menu-anchor v-if="action.type === TYPES.columnSelection">
+        <ui-menu-anchor
+          v-if="action.type === TYPES.columnSelection && ifAction(action)"
+        >
           <ui-button
             :class="[cssClasses.topAction, action.type || '']"
             v-bind="
@@ -78,7 +80,7 @@ import { reactive, toRefs, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { getRouteLocationRaw } from './constants';
 import UiCheckboxGroup from '../checkbox-group/checkbox-group.vue';
-import getType, { isFunction } from '../../utils/typeof';
+import getType, { isBoolean, isFunction } from '../../utils/typeof';
 
 const router = useRouter();
 
@@ -158,12 +160,14 @@ const columnSelectionOptions = computed(() => {
 
 function ifAction(action) {
   const currentAction = action.if;
-
   const { listDataSource } = props.data;
+  const currentListData = Object.assign({}, listDataSource);
 
   return isFunction(currentAction)
-    ? currentAction(listDataSource)
-    : props.actionRendering(action, listDataSource);
+    ? currentAction(currentListData)
+    : isBoolean(currentAction)
+    ? currentAction
+    : props.actionRendering(action, currentListData);
 }
 
 function actionIcon({ icon, type }) {
