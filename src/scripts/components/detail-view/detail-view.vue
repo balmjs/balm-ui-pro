@@ -197,7 +197,9 @@ export default {
     redirect(to, keepAlive = true) {
       if (to !== 'custom') {
         if (to === 'back') {
-          this.$router.back();
+          try {
+            this.$router.back();
+          } catch (e) {}
         } else {
           const toNext = to || {
             name: `${this.model}.list`
