@@ -62,7 +62,7 @@
 <script>
 import UiCheckboxGroup from '../checkbox-group/checkbox-group.vue';
 import { cssClasses, TYPES, getRouteLocationRaw } from './constants';
-import getType, { isBoolean, isFunction } from '../../utils/typeof';
+import { isBoolean, isString, isObject, isFunction } from '../../utils/typeof';
 
 const namespace = 'list-view-top-actions';
 
@@ -132,8 +132,8 @@ export default {
   computed: {
     columnSelectionOptions() {
       return this.thead.map((item, index) => {
-        const label = getType(item) === 'string' ? item : item.value;
-        const disabled = getType(item) === 'object' ? item.required : false;
+        const label = isString(item) ? item : item.value;
+        const disabled = isObject(item) ? item.required : false;
 
         if (disabled) {
           this.columnSelection.fixedItemIndexes.push(index);

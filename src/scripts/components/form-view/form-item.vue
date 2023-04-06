@@ -55,7 +55,7 @@
 
 <script>
 import UiReadonlyItem from '../readonly-item/readonly-item.vue';
-import getType, { isFunction } from '../../utils/typeof';
+import { isUndefined, isObject, isFunction } from '../../utils/typeof';
 import { toFirstUpperCase } from '../../utils/helpers';
 
 const UI_FORM_ITEM = {
@@ -115,7 +115,7 @@ export default {
       return Array.isArray(this.config.components);
     },
     eventName() {
-      return this.config.event ||
+      return this.config.modelEvent ||
         this.formInputComponents.includes(this.config.component)
         ? 'input'
         : UI_FORM_ITEM.EVENTS.update;
@@ -157,6 +157,10 @@ export default {
         componentItem: `form-item__${this.componentKey}`,
         afterItem: `after-item__${this.componentKey}`
       };
+    },
+    customEvents() {
+      // TODO:
+      return [];
     }
   },
   watch: {
@@ -184,7 +188,7 @@ export default {
     displayFormItem({ show }) {
       const display = isFunction(show)
         ? show(this.formData)
-        : getType(show) === 'undefined' || show;
+        : isUndefined(show) || show;
 
       return display;
     },
@@ -198,7 +202,7 @@ export default {
           this.hasSubComponents
             ? this.config.components.map(({ key }) => key)
             : key,
-          getType(value) === 'object'
+          isObject(value)
             ? Object.assign({}, value)
             : Array.isArray(value)
             ? [...value]

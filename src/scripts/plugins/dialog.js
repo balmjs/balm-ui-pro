@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import MdcDialog from '../components/dialog/mdc-dialog.vue';
-import getType from '../utils/typeof';
+import { isObject } from '../utils/typeof';
 
 const DEFAULT_OPTIONS = {
   // Basic
@@ -85,7 +85,7 @@ function createDialog(options) {
                 return formData;
               }, {})
             : Object.assign({}, modelValueDefaults)
-          : getType(modelValueDefaults) === 'object'
+          : isObject(modelValueDefaults)
           ? ''
           : modelValueDefaults;
 

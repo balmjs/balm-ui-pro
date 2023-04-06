@@ -135,7 +135,7 @@
 
 <script>
 import UiFormItem from './form-item.vue';
-import getType, { isFunction } from '../../utils/typeof';
+import { isString, isObject, isFunction } from '../../utils/typeof';
 
 const UI_FORM_VIEW = {
   NAME: 'UiFormView',
@@ -233,8 +233,7 @@ export default {
     },
     formDataConfig() {
       return this.formConfig.filter(
-        ({ key, components }) =>
-          getType(key) === 'string' || Array.isArray(components)
+        ({ key, components }) => isString(key) || Array.isArray(components)
       );
     },
     hasFormDataSource() {
@@ -341,7 +340,7 @@ export default {
         ? await this.setModelOptionsFn(modelList)
         : {};
 
-      if (getType(this.privateModelOptions) !== 'object') {
+      if (!isObject(this.privateModelOptions)) {
         this.privateModelOptions = {};
         console.warn(`[${UI_FORM_VIEW.NAME}]: Invalid form model options`);
       }

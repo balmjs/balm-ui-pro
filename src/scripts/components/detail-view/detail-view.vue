@@ -52,7 +52,7 @@
 
 <script>
 import viewMixin from '../../mixins/view';
-import getType from '../../utils/typeof';
+import { isObject } from '../../utils/typeof';
 
 const UiDetailView = {
   NAME: 'UiDetailView',
@@ -183,10 +183,7 @@ export default {
       try {
         const originalData = await this.getModelDataFn(this.fullInstanceData);
 
-        if (
-          getType(originalData) === 'object' &&
-          Object.keys(originalData).length
-        ) {
+        if (isObject(originalData) && Object.keys(originalData).length) {
           this.formDataSource = originalData;
           this.formData = Object.assign({}, originalData);
         }
@@ -206,7 +203,7 @@ export default {
           };
 
           // NOTE: for `<keep-alive>`
-          if (getType(toNext) === 'object') {
+          if (isObject(toNext)) {
             toNext.params = toNext.params
               ? Object.assign({ keepAlive }, toNext.params)
               : { keepAlive };

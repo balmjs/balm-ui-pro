@@ -7,7 +7,13 @@ const getType = (any) => {
     .toLowerCase();
 };
 
+const isUndefined = (_var) => getType(_var) === 'undefined';
+
 const isBoolean = (bool) => getType(bool) === 'boolean';
+
+const isString = (str) => getType(str) === 'string';
+
+const isObject = (obj) => getType(obj) === 'object';
 
 const isFunction = (fn) => {
   const type = getType(fn);
@@ -19,4 +25,4 @@ const isFunction = (fn) => {
 };
 
 export default getType;
-export { isBoolean, isFunction };
+export { isUndefined, isBoolean, isString, isObject, isFunction };

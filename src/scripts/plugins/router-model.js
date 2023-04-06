@@ -1,4 +1,4 @@
-import getType from '../utils/typeof';
+import { isObject } from '../utils/typeof';
 
 const NAME = '$routerModel';
 
@@ -28,7 +28,7 @@ function parseRoute(data, route, parent = false) {
     data.push({
       path,
       name,
-      redirect: getType(redirect) === 'object' ? redirect.name : redirect,
+      redirect: isObject(redirect) ? redirect.name : redirect,
       'parent name or children count': Array.isArray(children)
         ? children.length
         : parent,
