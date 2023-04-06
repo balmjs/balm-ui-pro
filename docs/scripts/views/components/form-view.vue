@@ -78,9 +78,6 @@ const actionConfig = [
 ];
 
 export default {
-  components: {
-    // XFormItem
-  },
   data() {
     return {
       components,

@@ -7,6 +7,9 @@
       :to="{
         name: 'components.list-view'
       }"
+      :form-view-attr-or-prop="{
+        components
+      }"
       @change:x="onChange"
       @action="onAction"
     >
@@ -17,7 +20,18 @@
 </template>
 
 <script>
+import XFormItem from '@/components/x-form-item';
+
+const components = {
+  XFormItem
+};
+
 export default {
+  data() {
+    return {
+      components
+    };
+  },
   methods: {
     onChange(key, value, _) {
       console.log('onChange', key, value, _);

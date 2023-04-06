@@ -1,7 +1,12 @@
 import { useStore } from 'balm-ui';
 import { isDev } from '@/config';
 
-export async function getModelDetailDataFn({ model, keyName, $route }) {
+export async function getModelDetailDataFn({
+  model,
+  modelAction,
+  keyName,
+  $route
+}) {
   let result = {};
 
   const id = $route?.params[keyName];
