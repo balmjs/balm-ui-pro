@@ -26,8 +26,10 @@
             <component
               :is="getComponent(config.component)"
               v-if="config.component"
+              :ref="componentKey"
               :components="config.components"
               v-bind="componentBind"
+              v-on="config.listeners"
               @[eventName]="handleChange(config, $event)"
             ></component>
           </template>
@@ -40,8 +42,10 @@
               <component
                 :is="getComponent(config.component)"
                 v-if="config.component"
+                :ref="componentKey"
                 v-model="formData[config.key]"
                 v-bind="componentBind"
+                v-on="config.listeners"
                 @[eventName]="handleChange(config, $event)"
               ></component>
             </template>
@@ -127,7 +131,10 @@ export default {
       return this.config.key || 'unknown-key';
     },
     componentKey() {
-      return `${this.component}--${this.key}`;
+      return this.component === 'unknown-component' ||
+        this.key === 'unknown-key'
+        ? null
+        : `${this.component}--${this.key}`;
     },
     className() {
       return [
@@ -157,10 +164,6 @@ export default {
         componentItem: `form-item__${this.componentKey}`,
         afterItem: `after-item__${this.componentKey}`
       };
-    },
-    customEvents() {
-      // TODO:
-      return [];
     }
   },
   watch: {
@@ -209,13 +212,19 @@ export default {
             : value
         );
 
+      const result = this.hasSubComponents ? Object.values(value) : value;
+
+      if (isFunction(this.config.event)) {
+        this.config.event(
+          result,
+          this.componentBind,
+          this.$refs[this.componentKey]
+        );
+      }
+
       this.hasSubComponents
-        ? this.$emit(
-            UI_FORM_ITEM.EVENTS.update,
-            Object.keys(value),
-            Object.values(value)
-          )
-        : this.$emit(UI_FORM_ITEM.EVENTS.update, key, value);
+        ? this.$emit(UI_FORM_ITEM.EVENTS.update, Object.keys(value), result)
+        : this.$emit(UI_FORM_ITEM.EVENTS.update, key, result);
     }
   }
 };
