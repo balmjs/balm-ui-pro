@@ -32,6 +32,9 @@ export default {
   methods: {
     handleEvent(event) {
       this.$emit(eventName, event.target.value);
+    },
+    test() {
+      this.$emit('add', 'gg');
     }
   }
 };

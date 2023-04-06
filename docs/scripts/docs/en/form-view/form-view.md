@@ -42,10 +42,12 @@ type ModelConfig = FormItemConfig[] | (formData: object, formOptions: object) =>
     components?: FormItemComponentConfig[];
     attrOrProp?: object;
     gridCellAttrOrProp?: object;
-    event?: string; // Defaults: 'change'
+    modelEvent?: string; // Defaults: 'change'
     model?: string; // For the options of the source data
-    // Custom slot
+    // Custom component
     slot?: string;
+    event?: (value, props, ref) => void; // New in 0.50.0
+    listeners?: (...args) => void; // New in 0.50.0
     // BalmUI validator
     validator?: string;
     ...BalmUIValidationRule

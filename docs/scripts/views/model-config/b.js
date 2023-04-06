@@ -198,7 +198,18 @@ export default (
       component: 'x-form-item',
       key: 'p',
       value: '',
-      event: 'input'
+      modelEvent: 'input',
+      event: (a, b, c) => {
+        console.log('a', a);
+        console.log('b', b);
+        console.log('c', c);
+        c.test();
+      },
+      listeners: {
+        add: (e) => {
+          console.log('e', e);
+        }
+      }
     },
     {
       label: 'Custom slot',
