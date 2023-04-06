@@ -2,6 +2,16 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.50.0 / 2023-04-06
+
+### Feature
+
+- `<ui-form-view>`: add `event` and `listeners` for form item config
+
+### BREAKING CHANGES
+
+- `<ui-form-view>`: rename the form item config `event` to `modelEvent`
+
 ## v0.49.6 / 2023-03-31
 
 ### Bug Fixes
