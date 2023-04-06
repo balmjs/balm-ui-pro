@@ -100,7 +100,7 @@
               <ui-list-view-row-actions
                 v-if="rowActionConfig.length"
                 v-bind="{
-                  data,
+                  data: Object.assign({ data }, instanceData),
                   model,
                   modelOptions,
                   keyName,
@@ -162,7 +162,7 @@ import UiListViewTopActions from './list-view-top-actions.vue';
 import UiListViewRowActions from './list-view-row-actions.vue';
 import viewMixin from '../../mixins/view';
 import keepAliveMixin from '../../mixins/keep-alive';
-import getType, { isFunction } from '../../utils/typeof';
+import { isObject, isFunction } from '../../utils/typeof';
 
 const UiListView = {
   NAME: 'UiListView',
@@ -407,7 +407,7 @@ export default {
         this.$set(this.listData, 'loading', false);
         this.$set(this.listData, 'usePlaceholder', false);
 
-        if (getType(this.listDataSource) === 'object') {
+        if (isObject(this.listDataSource)) {
           for (const [key, value] of Object.entries(this.tableDataFormat)) {
             const listDataValue = isFunction(value)
               ? value(this.listDataSource)

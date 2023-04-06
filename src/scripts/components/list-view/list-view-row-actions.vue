@@ -130,7 +130,8 @@ export default {
     configAction(type, action) {
       let result = '';
       const currentAction = action[type];
-      const currentData = Object.assign({}, this.data);
+      const { data } = this.data;
+      const currentData = Object.assign({}, data);
 
       if (isFunction(currentAction)) {
         result = currentAction(currentData);
@@ -169,18 +170,23 @@ export default {
       return result;
     },
     handleAction(action) {
-      const { model, modelOptions, keyName, refreshData } = this;
-      const data = {
+      const { data, model, modelOptions, keyName, refreshData } = this.$props;
+
+      const listViewData = {
         model,
         modelOptions,
         keyName,
-        data: Object.assign({}, this.data)
+        ...data
       };
 
       if (isFunction(action.handler)) {
-        action.handler(data, refreshData);
+        action.handler(listViewData, refreshData);
       } else {
-        this.actionHandler(Object.assign({}, action), data, refreshData);
+        this.actionHandler(
+          Object.assign({}, action),
+          listViewData,
+          refreshData
+        );
       }
     }
   }
