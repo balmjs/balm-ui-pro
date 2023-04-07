@@ -47,7 +47,7 @@ type ModelConfig = FormItemConfig[] | (formData: object, formOptions: object) =>
     // Custom component
     slot?: string;
     event?: (value, props, ref) => void; // New in 0.50.0
-    listeners?: (...args) => void; // New in 0.50.0
+    listeners?: { [eventName]: (...args) => void } // New in 0.50.0
     // BalmUI validator
     validator?: string;
     ...BalmUIValidationRule
