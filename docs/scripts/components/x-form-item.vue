@@ -22,7 +22,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits([eventName]);
+const emit = defineEmits([eventName, 'add']);
 
 const state = reactive({
   value: props.modelValue
@@ -39,4 +39,12 @@ watch(
 function handleEvent(event) {
   emit(eventName, event.target.value);
 }
+
+function test() {
+  emit('add', 'gg');
+}
+
+defineExpose({
+  test
+});
 </script>

@@ -240,7 +240,7 @@ Vue.use(BalmUIPro, {
         component: 'x-form-item', // NOTE: need to register first
         key: 'p',
         value: '',
-        event: 'input'
+        modelEvent: 'input'
       },
       {
         label: 'Custom slot',
