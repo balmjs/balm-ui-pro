@@ -1,4 +1,4 @@
-import getType from '../utils/typeof';
+import { isString, isObject } from '../utils/typeof';
 
 const NAME = '$transform';
 
@@ -9,7 +9,7 @@ class Transform {
   }
 
   in(data) {
-    if (getType(data) === 'object') {
+    if (isObject(data)) {
       this.originalDataMap = new Map(Object.entries(data));
     } else {
       throw new Error(`[${NAME}]: Invalid object data`);
@@ -31,7 +31,7 @@ class Transform {
           this.originalDataMap.delete(key);
         }
       });
-    } else if (getType(keys) === 'string') {
+    } else if (isString(keys)) {
       const key = keys;
       if (this.originalDataMap.has(key)) {
         this.originalDataMap.delete(key);

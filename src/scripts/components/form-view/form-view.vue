@@ -178,7 +178,7 @@ import {
   onBeforeUnmount
 } from 'vue';
 import UiFormItem from './form-item.vue';
-import getType, { isFunction } from '../../utils/typeof';
+import { isString, isObject, isFunction } from '../../utils/typeof';
 
 const validator = inject('validator');
 
@@ -253,8 +253,7 @@ const { formConfig, formData, formDataSource } = toRefs(state);
 const isFunctionConfig = computed(() => isFunction(props.modelConfig));
 const formDataConfig = computed(() =>
   state.formConfig.filter(
-    ({ key, components }) =>
-      getType(key) === 'string' || Array.isArray(components)
+    ({ key, components }) => isString(key) || Array.isArray(components)
   )
 );
 const hasFormDataSource = computed(
@@ -376,7 +375,7 @@ async function setModelOptions() {
     ? await props.setModelOptionsFn(modelList)
     : {};
 
-  if (getType(state.privateModelOptions) !== 'object') {
+  if (!isObject(state.privateModelOptions)) {
     state.privateModelOptions = {};
     console.warn(`[${UI_FORM_VIEW.NAME}]: Invalid form model options`);
   }

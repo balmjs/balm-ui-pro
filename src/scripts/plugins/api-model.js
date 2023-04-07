@@ -1,4 +1,4 @@
-import getType from '../utils/typeof';
+import { isUndefined, isString, isObject } from '../utils/typeof';
 import { toCamelCase } from '../utils/helpers';
 
 const NAME = '$apiModel';
@@ -32,7 +32,7 @@ let globalApiConfig = {
 function getCRUD(crud, defaultCRUD = {}) {
   let result = {};
 
-  if (getType(crud) === 'object') {
+  if (isObject(crud)) {
     if (
       Object.keys(crud).every((operation) =>
         REST_API.operations.includes(operation)
@@ -100,13 +100,12 @@ class ApiModel {
 
       for (const [key, value] of Object.entries(currentCRUD)) {
         const operation = key;
-        const operationDefinition =
-          getType(value) === 'object'
-            ? Object.assign({}, value, config[operation])
-            : Object.assign({}, { '': value }, config[operation]);
+        const operationDefinition = isObject(value)
+          ? Object.assign({}, value, config[operation])
+          : Object.assign({}, { '': value }, config[operation]);
 
         if (includeOperations.includes(operation)) {
-          if (getType(operationDefinition) === 'string') {
+          if (isString(operationDefinition)) {
             const operationName = operationDefinition;
             const formatApiAction =
               currentConfig.formatApiAction || globalApiConfig.formatApiAction;
@@ -123,7 +122,7 @@ class ApiModel {
             const defaultApi = { [defaultName]: defaultUrl };
 
             apis = Object.assign(apis, defaultApi);
-          } else if (getType(operationDefinition) === 'object') {
+          } else if (isObject(operationDefinition)) {
             const customApis = createCustomApis(
               operation,
               {
@@ -175,7 +174,7 @@ class ApiModel {
       );
     }
 
-    if (getType(globalApis[name]) === 'undefined') {
+    if (isUndefined(globalApis[name])) {
       throw new Error(
         `[${NAME}]: '${name}' (modelName: '${frontEndApiName}', operation: '${operation}', actionSuffix: '${actionSuffix}') is an invalid API name`
       );
@@ -187,7 +186,7 @@ class ApiModel {
   debug(name = true) {
     const apis = name === true ? this.apis : this.map.get(name);
 
-    if (getType(apis) === 'object') {
+    if (isObject(apis)) {
       const data = Object.keys(apis).map((name) => ({
         name,
         url: apis[name]
@@ -207,7 +206,7 @@ function install(app, options = {}) {
 
   globalApiConfig.crud = Object.assign({}, CRUD, getCRUD(crud));
 
-  if (getType(apiConfig) === 'object') {
+  if (isObject(apiConfig)) {
     globalApiConfig = Object.assign({}, globalApiConfig, apiConfig);
   }
 

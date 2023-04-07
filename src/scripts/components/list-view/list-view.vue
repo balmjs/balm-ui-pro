@@ -102,7 +102,7 @@
               <ui-list-view-row-actions
                 v-if="rowActionConfig.length"
                 v-bind="{
-                  data,
+                  data: Object.assign({ data }, instanceData),
                   model,
                   modelOptions,
                   keyName,
@@ -212,7 +212,7 @@ import UiListViewTopActions from './list-view-top-actions.vue';
 import UiListViewRowActions from './list-view-row-actions.vue';
 import { viewProps, useView } from '../../mixins/view';
 import { useKeepAlive } from '../../mixins/keep-alive';
-import getType, { isFunction } from '../../utils/typeof';
+import { isObject, isFunction } from '../../utils/typeof';
 
 const route = useRoute();
 
@@ -450,7 +450,7 @@ async function getModelData() {
     state.listData.loading = false;
     state.listData.usePlaceholder = false;
 
-    if (getType(state.listDataSource) === 'object') {
+    if (isObject(state.listDataSource)) {
       for (const [key, value] of Object.entries(props.tableDataFormat)) {
         const listDataValue = isFunction(value)
           ? value(state.listDataSource)

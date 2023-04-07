@@ -102,7 +102,7 @@ import {
 } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { viewProps, useView } from '../../mixins/view';
-import getType from '../../utils/typeof';
+import { isObject } from '../../utils/typeof';
 
 const route = useRoute();
 const router = useRouter();
@@ -229,10 +229,7 @@ async function getModelData() {
   try {
     const formDataSource = await props.getModelDataFn()(fullInstanceData.value);
 
-    if (
-      getType(formDataSource) === 'object' &&
-      Object.keys(formDataSource).length
-    ) {
+    if (isObject(formDataSource) && Object.keys(formDataSource).length) {
       state.formDataSource = formDataSource;
       state.formData = Object.assign({}, formDataSource);
     }
@@ -244,14 +241,16 @@ async function getModelData() {
 function redirect(to, keepAlive = true) {
   if (to !== 'custom') {
     if (to === 'back') {
-      router.back();
+      try {
+        router.back();
+      } catch (e) {}
     } else {
       const toNext = to || {
         name: `${props.model}.list`
       };
 
       // NOTE: for `<keep-alive>`
-      if (getType(toNext) === 'object') {
+      if (isObject(toNext)) {
         toNext.params = toNext.params
           ? Object.assign({ keepAlive }, toNext.params)
           : { keepAlive };

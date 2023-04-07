@@ -26,8 +26,10 @@
             <component
               :is="getComponent(config.component)"
               v-if="config.component"
+              :ref="componentKey"
               :components="config.components"
               v-bind="componentBind"
+              v-on="config.listeners || {}"
               @[eventName]="handleChange(config, $event)"
             ></component>
           </template>
@@ -40,8 +42,10 @@
               <component
                 :is="getComponent(config.component)"
                 v-if="config.component"
+                :ref="componentKey"
                 v-model="formData[config.key]"
                 v-bind="componentBind"
+                v-on="config.listeners || {}"
                 @[eventName]="handleChange(config, $event)"
               ></component>
             </template>
@@ -68,9 +72,17 @@ export default {
 </script>
 
 <script setup>
-import { markRaw, reactive, toRefs, computed, watch, onBeforeMount } from 'vue';
+import {
+  markRaw,
+  reactive,
+  toRefs,
+  computed,
+  watch,
+  onBeforeMount,
+  getCurrentInstance
+} from 'vue';
 import UiReadonlyItem from '../readonly-item/readonly-item.vue';
-import getType, { isFunction } from '../../utils/typeof';
+import { isUndefined, isObject, isFunction } from '../../utils/typeof';
 import { toFirstUpperCase } from '../../utils/helpers';
 
 const props = defineProps({
@@ -97,18 +109,23 @@ const props = defineProps({
 });
 const emit = defineEmits([UI_FORM_ITEM.EVENTS.update]);
 
+const instance = getCurrentInstance();
 const state = reactive({
   formData: props.modelValue
 });
 const { formData } = toRefs(state);
 
 const hasSubComponents = computed(() => Array.isArray(props.config.components));
-const eventName = computed(() => {
-  return props.config.event || UI_FORM_ITEM.EVENTS.update;
-});
+const eventName = computed(
+  () => props.config.modelEvent || UI_FORM_ITEM.EVENTS.update
+);
 const component = computed(() => props.config.component || 'unknown-component');
 const key = computed(() => props.config.key || 'unknown-key');
-const componentKey = computed(() => `${component.value}--${key.value}`);
+const componentKey = computed(() =>
+  component.value === 'unknown-component' || key.value === 'unknown-key'
+    ? null
+    : `${component.value}--${key.value}`
+);
 const className = computed(() => [
   'mdc-form__item',
   'mdc-form-item',
@@ -163,7 +180,7 @@ function getComponent(component) {
 function displayFormItem({ show }) {
   const display = isFunction(show)
     ? show(state.formData)
-    : getType(show) === 'undefined' || show;
+    : isUndefined(show) || show;
 
   return display;
 }
@@ -179,15 +196,22 @@ function handleChange({ component, key }, value) {
       hasSubComponents.value
         ? props.config.components.map(({ key }) => key)
         : key,
-      getType(value) === 'object'
+      isObject(value)
         ? Object.assign({}, value)
         : Array.isArray(value)
         ? [...value]
         : value)
     ];
 
+  const result = hasSubComponents.value ? Object.values(value) : value;
+
+  if (componentKey.value && isFunction(props.config.event)) {
+    const formItem = instance.ctx.$refs[componentKey.value];
+    props.config.event(result, componentBind.value, formItem);
+  }
+
   hasSubComponents.value
-    ? emit(UI_FORM_ITEM.EVENTS.update, Object.keys(value), Object.values(value))
-    : emit(UI_FORM_ITEM.EVENTS.update, key, value);
+    ? emit(UI_FORM_ITEM.EVENTS.update, Object.keys(value), result)
+    : emit(UI_FORM_ITEM.EVENTS.update, key, result);
 }
 </script>

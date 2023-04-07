@@ -48,7 +48,7 @@
                 action.attrOrProp || {}
               )
             "
-            @click="handleClick(action)"
+            @click="handleAction(action)"
           >
             {{ action.text }}
           </ui-button>
@@ -80,7 +80,7 @@ import { reactive, toRefs, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { getRouteLocationRaw } from './constants';
 import UiCheckboxGroup from '../checkbox-group/checkbox-group.vue';
-import getType, { isBoolean, isFunction } from '../../utils/typeof';
+import { isBoolean, isString, isObject, isFunction } from '../../utils/typeof';
 
 const router = useRouter();
 
@@ -143,8 +143,8 @@ const emit = defineEmits([UI_LIST_VIEW_TOP_ACTIONS.EVENTS.columnSelection]);
 
 const columnSelectionOptions = computed(() => {
   return props.thead.map((item, index) => {
-    const label = getType(item) === 'string' ? item : item.value;
-    const disabled = getType(item) === 'object' ? item.required : false;
+    const label = isString(item) ? item : item.value;
+    const disabled = isObject(item) ? item.required : false;
 
     if (disabled) {
       state.columnSelection.fixedItemIndexes.push(index);
@@ -176,7 +176,7 @@ function actionIcon({ icon, type }) {
     : icon || '';
 }
 
-function handleClick(action) {
+function handleAction(action) {
   const { data, model, modelOptions, keyName, refreshData, resetSelectedRows } =
     props;
 

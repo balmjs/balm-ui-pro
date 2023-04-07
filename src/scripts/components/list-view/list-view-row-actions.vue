@@ -12,7 +12,7 @@
               v-show="configAction('show', action)"
               :class="[cssClasses.rowAction, 'button-without-slot']"
               v-bind="action.attrOrProp || {}"
-              @click="handleClick(action)"
+              @click="handleAction(action)"
             ></component>
           </template>
           <template v-else>
@@ -21,7 +21,7 @@
               v-show="configAction('show', action)"
               :class="[cssClasses.rowAction, 'button-with-slot']"
               v-bind="action.attrOrProp || {}"
-              @click="handleClick(action)"
+              @click="handleAction(action)"
             >
               {{ configAction('text', action) }}
             </component>
@@ -65,7 +65,7 @@
             v-show="configAction('show', action)"
             :class="[cssClasses.rowAction, 'link']"
             href="javascript:void(0)"
-            @click="handleClick(action)"
+            @click="handleAction(action)"
           >
             <ui-icon v-if="action.icon">
               {{ configAction('icon', action) }}
@@ -129,7 +129,8 @@ const props = defineProps({
 function configAction(type, action) {
   let result = '';
   const currentAction = action[type];
-  const currentData = Object.assign({}, props.data);
+  const { data } = props.data;
+  const currentData = Object.assign({}, data);
 
   if (isFunction(currentAction)) {
     result = currentAction(currentData);
@@ -168,19 +169,20 @@ function configAction(type, action) {
   return result;
 }
 
-function handleClick(action) {
-  const { model, modelOptions, keyName, refreshData } = props;
-  const data = {
+function handleAction(action) {
+  const { data, model, modelOptions, keyName, refreshData } = props;
+
+  const listViewData = {
     model,
     modelOptions,
     keyName,
-    data: Object.assign({}, props.data)
+    ...data
   };
 
   if (isFunction(action.handler)) {
-    action.handler(data, refreshData);
+    action.handler(listViewData, refreshData);
   } else {
-    props.actionHandler()(Object.assign({}, action), data, refreshData);
+    props.actionHandler()(Object.assign({}, action), listViewData, refreshData);
   }
 }
 </script>

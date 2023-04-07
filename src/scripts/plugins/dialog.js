@@ -9,7 +9,7 @@ import {
 } from 'vue';
 import createVueApp from '../config/ssr';
 import MdcDialog from '../components/dialog/mdc-dialog.vue';
-import getType from '../utils/typeof';
+import { isObject } from '../utils/typeof';
 import { createDiv, removeDiv } from '../utils/div';
 
 // Define confirm dialog constants
@@ -100,7 +100,7 @@ function createDialog(options) {
                 return formData;
               }, {})
             : Object.assign({}, modelValueDefaults)
-          : getType(modelValueDefaults) === 'object'
+          : isObject(modelValueDefaults)
           ? ''
           : modelValueDefaults;
 
