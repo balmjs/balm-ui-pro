@@ -2,11 +2,11 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
-## v0.23.0 / 2023-04-07
+## v0.23.1 / 2023-04-07
 
 ### Feature
 
-- `<ui-form-view>`: add `event` and `listeners` for form item config
+- `<ui-form-view>`: add `event` and `listeners` for form item config, and `attrOrProp` include `$attrs`
 
 ### BREAKING CHANGES
 

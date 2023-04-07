@@ -79,7 +79,8 @@ import {
   computed,
   watch,
   onBeforeMount,
-  getCurrentInstance
+  getCurrentInstance,
+  useAttrs
 } from 'vue';
 import UiReadonlyItem from '../readonly-item/readonly-item.vue';
 import { isUndefined, isObject, isFunction } from '../../utils/typeof';
@@ -110,6 +111,7 @@ const props = defineProps({
 const emit = defineEmits([UI_FORM_ITEM.EVENTS.update]);
 
 const instance = getCurrentInstance();
+const attrs = useAttrs();
 const state = reactive({
   formData: props.modelValue
 });
@@ -141,7 +143,8 @@ const componentBind = computed(() => {
       proFormDataSource: props.modelValueSource,
       proComponentKey: componentKey.value
     },
-    props.config.attrOrProp || {}
+    props.config.attrOrProp || {},
+    attrs
   );
 });
 const customSlots = computed(() => ({
