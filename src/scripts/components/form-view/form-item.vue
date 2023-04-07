@@ -153,7 +153,8 @@ export default {
           proFormDataSource: this.modelValueSource,
           proComponentKey: this.componentKey
         },
-        this.config.attrOrProp || {}
+        this.config.attrOrProp || {},
+        this.$attrs
       );
     },
     customSlots() {

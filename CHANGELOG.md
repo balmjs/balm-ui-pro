@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.50.1 / 2023-04-07
+
+### Chore
+
+- `<ui-form-view>`: `attrOrProp` include `$attrs`
+
 ## v0.50.0 / 2023-04-06
 
 ### Feature
