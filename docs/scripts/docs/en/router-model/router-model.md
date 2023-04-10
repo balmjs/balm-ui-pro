@@ -1,4 +1,5 @@
 ```ts
+type VueComponent = object;
 type VueRoute = object;
 type VueRouteOptions = object;
 
@@ -12,16 +13,16 @@ interface RoutesOptions {
   namespace?: string;
   indexLeadingSlash?: boolean;
   indexPath?: string;
-  indexView: object;
+  indexView: VueComponent;
   indexRedirect?: string;
   indexOptions?: VueRouteOptions;
   // list component
   listPath?: string;
-  listView?: object;
+  listView?: VueComponent;
   listOptions?: VueRouteOptions;
   // detail component
   detailPath?: string;
-  detailView?: object | object[];
+  detailView?: VueComponent | VueRoute[];
   detailOptions?: VueRouteOptions;
 }
 
@@ -31,7 +32,7 @@ interface RouterModel {
   createRoute: (
     path: string,
     name: string,
-    component: object,
+    component: VueComponent,
     options?: routeOptions
   ) => VueRoute;
   createRoutes: (name: ModelName, options: RoutesOptions) => VueRoute[];
