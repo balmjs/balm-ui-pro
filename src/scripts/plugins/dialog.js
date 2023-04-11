@@ -32,14 +32,13 @@ const PRO_DIALOG_BUTTON_TYPES = {
 };
 
 let globalOptions = DEFAULT_OPTIONS;
-let dialogApp;
 
 const template = `<mdc-dialog :class="className" :open="open" :title="title" :mask-closable="maskClosable" @close="handleClose">
   <template v-if="customComponent">
     <component :is="customComponent" v-model="modelValue" v-bind="attrOrProp" @[event]="handleComponentAction"></component>
   </template>
-  <div class="mdc-dialog__custom-content" v-html="content"></div>
-  <template #actions>
+  <div v-else class="mdc-dialog__custom-content" v-html="content"></div>
+  <template v-if="actionConfig.length" #actions>
     <template v-for="(buttonData, buttonIndex) in actionConfig">
       <ui-button
         v-if="buttonData.type === PRO_DIALOG_BUTTON_TYPES.submit"
@@ -62,7 +61,7 @@ const template = `<mdc-dialog :class="className" :open="open" :title="title" :ma
 function createDialog(options) {
   const { components, component, ...config } = options;
 
-  dialogApp = new Vue({
+  const dialogApp = new Vue({
     el: document.createElement('div'),
     name: 'ProDialog',
     components: {
