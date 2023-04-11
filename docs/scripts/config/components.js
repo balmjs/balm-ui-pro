@@ -3,9 +3,9 @@ import { isDev } from '@/config';
 import myStore from '@/store';
 import validatorRules from '@/config/validator-rules';
 // BalmUI Pro
-import apiModelConfig from '@/pro/apis';
-import constantSource from '@/pro/constants';
-import proViewsConfig from '@/pro/views';
+import apiModelConfig from '@/apis';
+import constantSource from '@/constants';
+import proViewsConfig from '@/pro';
 // Custom
 import PurePage from '@/views/layouts/pure-page';
 import DocsPage from '@/views/layouts/docs-page';

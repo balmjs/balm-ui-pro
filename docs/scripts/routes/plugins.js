@@ -1,4 +1,4 @@
-import { $routerModel, indexView } from '@/pro/model';
+import { $routerModel, indexView } from '@/config/model';
 
 const ApiModel = () => import('@/views/plugins/api-model');
 const RouterModel = () => import('@/views/plugins/router-model');

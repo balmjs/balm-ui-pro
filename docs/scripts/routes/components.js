@@ -1,4 +1,4 @@
-import { $routerModel, indexView } from '@/pro/model';
+import { $routerModel, indexView } from '@/config/model';
 
 const LayoutView = () => import('@/views/components/layout-view');
 const FormView = () => import('@/views/components/form-view');

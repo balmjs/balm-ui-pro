@@ -1,4 +1,4 @@
-import model from '@/pro/model';
+import model from '@/config/model';
 import page from './page';
 
 export default {

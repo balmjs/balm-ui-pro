@@ -1,4 +1,4 @@
-import { $routerModel, indexView } from '@/pro/model';
+import { $routerModel, indexView } from '@/config/model';
 
 const Intro = () => import('@/views/guide/intro');
 const Quickstart = () => import('@/views/guide/quickstart');
