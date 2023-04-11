@@ -2,6 +2,12 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.24.0 / 2023-04-11
+
+### Feature
+
+- add `$dialog` plugin
+
 ## v0.23.1 / 2023-04-07
 
 ### Feature
