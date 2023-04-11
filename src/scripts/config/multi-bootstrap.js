@@ -7,7 +7,7 @@ const multiBootstrap = (Components) => {
       multiConfigure(Components, options);
 
       // Install the components
-      for (let key in Components) {
+      for (const key in Components) {
         const Component = Components[key];
         app.component(Component.name, Component);
       }
