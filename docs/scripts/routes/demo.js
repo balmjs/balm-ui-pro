@@ -1,4 +1,4 @@
-import { $routerModel } from '@/pro/model';
+import { $routerModel } from '@/config/model';
 
 const DrawerAboveToolbar = () =>
   import('@/views/components/demo/drawer-above-toolbar');

@@ -1,4 +1,4 @@
-import useModelStore from '@/pro/model';
+import useModelStore from '@/config/model';
 import usePageStore from './page';
 import useSnippetStore from './snippet';
 

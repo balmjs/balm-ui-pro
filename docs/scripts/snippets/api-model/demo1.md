@@ -1,4 +1,4 @@
-- `pro/apis.js`
+- `apis/index.js`
 
   ```js
   const apis = [
@@ -54,7 +54,7 @@
   ```
 
 ```js
-import apiModelConfig from '@/pro/apis';
+import apiModelConfig from '@/apis';
 
 Vue.use(BalmUIPro, {
   $model: apiModelConfig
@@ -63,7 +63,7 @@ Vue.use(BalmUIPro, {
 
 ---
 
-- `pro/model.js`
+- `config/model.js`
 
   ```js
   import { useApiModel, useConstantList } from 'balm-ui-pro';
