@@ -13,27 +13,9 @@
         >
           <slot></slot>
         </div>
-        <!-- <footer v-if="hasActions" class="mdc-dialog__actions">
-          <template
-            v-for="(buttonData, buttonIndex) in actionConfig"
-            :key="buttonIndex"
-          >
-            <ui-button
-              v-if="buttonData.type === 'submit'"
-              v-debounce="handleAction(buttonData)"
-              v-bind="buttonData.attrOrProp || {}"
-            >
-              {{ buttonData.text }}
-            </ui-button>
-            <ui-button
-              v-else
-              v-bind="buttonData.attrOrProp || {}"
-              @click="handleAction(buttonData)"
-            >
-              {{ buttonData.text }}
-            </ui-button>
-          </template>
-        </footer> -->
+        <footer v-if="hasActions" class="mdc-dialog__actions">
+          <slot name="actions"></slot>
+        </footer>
       </div>
     </div>
     <div class="mdc-dialog__scrim" @click="handleClose"></div>
@@ -62,10 +44,6 @@ const props = defineProps({
     type: String,
     default: ''
   },
-  actionConfig: {
-    type: Array,
-    default: () => []
-  },
   maskClosable: {
     type: Boolean,
     default: false
@@ -84,7 +62,7 @@ const className = computed(() => ({
   'mdc-dialog--opening': state.opening,
   'mdc-dialog--open': state.opened
 }));
-const hasActions = computed(() => !!props.actionConfig.length);
+const hasActions = computed(() => !!slots.actions);
 
 watch(
   () => props.open,
@@ -104,10 +82,6 @@ watch(
     }
   }
 );
-
-function handleAction(action) {
-  emit('action', action);
-}
 
 function handleClose() {
   props.maskClosable && emit('close');

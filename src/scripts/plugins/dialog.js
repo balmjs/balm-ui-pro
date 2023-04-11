@@ -21,6 +21,7 @@ const DEFAULT_OPTIONS = {
   // Dialog
   className: '',
   title: '',
+  content: '',
   actionConfig: [],
   maskClosable: false,
   // Custom component
@@ -39,15 +40,24 @@ const DEFAULT_OPTIONS = {
   refresh: location.reload
 };
 
+const PRO_DIALOG_BUTTON_TYPES = {
+  submit: 'submit',
+  cancel: 'cancel',
+  close: 'close'
+};
+
+let globalRegistration = [];
 let globalOptions = DEFAULT_OPTIONS;
-let dialogApp;
 
 const template = `<mdc-dialog :class="className" :open="open" :title="title" :mask-closable="maskClosable" @close="handleClose">
-  <component :is="component" v-model="modelValue" v-bind="attrOrProp" @[event]="handleComponentAction"></component>
-  <template #actions>
+  <template v-if="component">
+    <component :is="component" v-model="modelValue" v-bind="attrOrProp" @[event]="handleComponentAction"></component>
+  </template>
+  <div v-else class="mdc-dialog__custom-content" v-html="content"></div>
+  <template v-if="actionConfig.length" #actions>
     <template v-for="(buttonData, buttonIndex) in actionConfig">
       <ui-button
-        v-if="buttonData.type === 'submit'"
+        v-if="buttonData.type === PRO_DIALOG_BUTTON_TYPES.submit"
         v-debounce="handleDialogAction(buttonData)"
         v-bind="buttonData.attrOrProp || {}"
       >
@@ -74,10 +84,9 @@ function removeElement(el) {
 
 function createDialog(options) {
   const el = createElement(UI_PRO_DIALOG.id);
-
   const { components, ...config } = options;
 
-  dialogApp = createVueApp({
+  const dialogApp = createVueApp({
     el,
     name: 'ProDialog',
     components: {
@@ -113,15 +122,17 @@ function createDialog(options) {
 
       const useDialogAction = computed(() => !!state.actionConfig.length);
 
-      onMounted(() =>
+      onMounted(() => {
         nextTick(() => {
-          if (state.component) {
+          if (config.content || config.component) {
             state.open = true;
           } else {
-            throw new Error('[$dialog]: Missing component');
+            throw new Error(
+              '[$dialog]: Missing `content` or `component` option'
+            );
           }
-        })
-      );
+        });
+      });
 
       onBeforeUnmount(() => removeElement(el));
 
@@ -146,7 +157,7 @@ function createDialog(options) {
           };
 
           switch (action.type) {
-            case 'submit':
+            case PRO_DIALOG_BUTTON_TYPES.submit:
               if (state.closeOnSave) {
                 handleClose(true);
               }
@@ -155,13 +166,13 @@ function createDialog(options) {
                 handleClose(true);
               });
               break;
-            case 'cancel':
-            case 'close':
+            case PRO_DIALOG_BUTTON_TYPES.cancel:
+            case PRO_DIALOG_BUTTON_TYPES.close:
               handleClose();
               break;
           }
 
-          if (action.type !== 'submit') {
+          if (action.type !== PRO_DIALOG_BUTTON_TYPES.submit) {
             state.handler(action, actionResult, handleClose);
           }
         }
@@ -177,7 +188,7 @@ function createDialog(options) {
           let debounceConfig = {};
 
           switch (action.type) {
-            case 'submit':
+            case PRO_DIALOG_BUTTON_TYPES.submit:
               debounceConfig = {
                 callback: () => {
                   if (state.closeOnSave) {
@@ -191,19 +202,20 @@ function createDialog(options) {
                 delay: action.delay || 250
               };
               break;
-            case 'cancel':
-            case 'close':
+            case PRO_DIALOG_BUTTON_TYPES.cancel:
+            case PRO_DIALOG_BUTTON_TYPES.close:
               handleClose();
               break;
           }
 
-          return action.type === 'submit'
+          return action.type === PRO_DIALOG_BUTTON_TYPES.submit
             ? debounceConfig
             : state.handler(action, actionResult, handleClose);
         }
       }
 
       return {
+        PRO_DIALOG_BUTTON_TYPES,
         ...toRefs(state),
         handleClose,
         handleComponentAction,
@@ -219,11 +231,22 @@ function createDialog(options) {
 function dialog(customOptions = {}) {
   const options = Object.assign({}, globalOptions, customOptions);
 
-  createDialog(options).mount(`#${UI_PRO_DIALOG.id}`);
+  const dialogApp = createDialog(options);
+
+  if (globalRegistration.length) {
+    globalRegistration.forEach((component) => dialogApp.use(component));
+  }
+
+  dialogApp.mount(`#${UI_PRO_DIALOG.id}`);
 }
 
 function install(app, options = {}) {
-  globalOptions = Object.assign({}, DEFAULT_OPTIONS, options);
+  const { globalComponents, ...otherOptions } = options;
+  globalOptions = Object.assign({}, DEFAULT_OPTIONS, otherOptions);
+
+  if (Array.isArray(globalComponents)) {
+    globalRegistration = globalComponents;
+  }
 
   app.config.globalProperties.$dialog = dialog;
   app.provide('dialog', dialog);
