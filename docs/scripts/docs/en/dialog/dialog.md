@@ -6,9 +6,12 @@ type ProDialogHandler = (
 ) => void;
 
 interface ProDialogOptions {
+  // Global registration
+  globalComponents: VuePlugin[];
   // Dialog
   className?: string;
   title?: string;
+  content?: string;
   actionConfig?: ActionButton[];
   maskClosable?: boolean;
   // Custom component
@@ -35,8 +38,10 @@ interface VueInstance {
 
 | Option               | Type             | Default           | Description                                                                                             |
 | -------------------- | ---------------- | ----------------- | ------------------------------------------------------------------------------------------------------- |
+| `globalComponents`   | VuePlugin[]      | `[]`              | Global components, plugins and directives registration (e.g. `[BalmUI, BalmUIPro]`)                     |
 | `className`          | string           | `''`              | The custom class name for the pro dialog.                                                               |
 | `title`              | string           | `''`              | The title of the pro dialog.                                                                            |
+| `content`            | string           | `''`              | The raw content of the pro dialog.                                                                      |
 | `actionConfig`       | ActionButton[]   | `[]`              | Action button config, see BalmUI `<ui-button>` props [docs](https://material.balmjs.com/general/button) |
 | `maskClosable`       | boolean          | `false`           | Closes the dialog, when the pro dialog scrim is clicked.                                                |
 | `components`         | object           | `{}`              | A hash of components to be made available to the Vue instance.                                          |
@@ -65,8 +70,12 @@ const $dialog = useDialog();
 
 ### Required Options
 
-1. `component`
-2. `attrOrProp.actionConfig`
+- Custom content
+  1. `content`
+  2. `actionConfig`
+- Custom component
+  1. `component`
+  2. `attrOrProp.actionConfig`
 
 ### Required Events
 

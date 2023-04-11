@@ -61,10 +61,10 @@ const MATERIAL_COMPONENTS_PRO = [
       },
       {
         name: 'constant'
+      },
+      {
+        name: 'dialog'
       }
-      // {
-      //   name: 'dialog'
-      // }
     ]
   },
   '-',

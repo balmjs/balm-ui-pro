@@ -2,17 +2,6 @@
   <docs-page name="dialog" without-css demo-count="1">
     <section class="demo-wrapper">
       <div class="demo">
-        <ui-form-view
-          :model-config="[
-            {
-              label: 'Textfield',
-              component: 'ui-textfield',
-              key: 'a',
-              value: '',
-              validator: 'required'
-            }
-          ]"
-        ></ui-form-view>
         <ui-button raised @click="showDialog">Show dialog</ui-button>
       </div>
       <ui-snippet :code="$store.demos[1]"></ui-snippet>
@@ -26,6 +15,7 @@ export default {
     showDialog() {
       this.$dialog({
         title: 'Custom Dialog',
+        // content: '<code>Hello Pro Dialog</code>',
         component: 'ui-form-view',
         // modelValueType: 'string',
         modelValueDefaults: {

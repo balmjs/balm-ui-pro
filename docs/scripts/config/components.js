@@ -1,4 +1,6 @@
 import { isDev } from '@/config';
+import BalmUI from 'balm-ui';
+import BalmUIPro from 'balm-ui-pro';
 // BalmUI
 import myStore from '@/store';
 import validatorRules from '@/config/validator-rules';
@@ -26,6 +28,9 @@ export const BalmUIProConfig = {
     debug: isDev
   },
   $constant: constantSource,
+  $dialog: {
+    globalComponents: [BalmUI, BalmUIPro]
+  },
   ...proViewsConfig
 };
 

@@ -1,3 +1,7 @@
+// @use '@material/theme/theme-color' with (
+//   $primary: red
+// );
+
 @use '@material/layout-grid' with (
   $breakpoints: (
     desktop: 840px,
