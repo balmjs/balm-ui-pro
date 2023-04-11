@@ -1,4 +1,4 @@
-- `pro/constants/index.js`
+- `constants/index.js`
 
   ```js
   const DEMO_DATA = [
@@ -20,7 +20,7 @@
   ```
 
 ```js
-import constantSource from '@/pro/constants';
+import constantSource from '@/constants';
 
 Vue.use(BalmUIPro, {
   $constant: constantSource
