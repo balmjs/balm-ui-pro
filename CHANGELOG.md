@@ -2,6 +2,16 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.51.0 / 2023-04-13
+
+### Code Refactoring
+
+- `<ui-list-view>`: update Row and top actions handler
+
+### BREAKING CHANGES
+
+- `<ui-list-view>`: Row and top actions' handler params
+
 ## v0.50.1 / 2023-04-07
 
 ### Chore
