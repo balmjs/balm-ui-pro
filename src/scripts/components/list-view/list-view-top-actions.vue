@@ -1,7 +1,7 @@
 <template>
   <section class="mdc-list-view__top-actions">
     <slot :name="`before-${namespace}`"></slot>
-    <slot :name="namespace" v-bind="data">
+    <slot :name="namespace" v-bind="listViewData">
       <template v-for="(action, actionIndex) in actionConfig">
         <ui-menu-anchor
           v-if="action.type === TYPES.columnSelection && ifAction(action)"
@@ -72,21 +72,9 @@ export default {
     UiCheckboxGroup
   },
   props: {
-    data: {
+    listViewData: {
       type: Object,
       default: () => ({})
-    },
-    model: {
-      type: String,
-      default: ''
-    },
-    modelOptions: {
-      type: Object,
-      default: () => ({})
-    },
-    keyName: {
-      type: [String, Array],
-      default: 'id'
     },
     thead: {
       type: Array,
@@ -107,10 +95,6 @@ export default {
     actionIconFormat: {
       type: Object,
       default: () => ({})
-    },
-    refreshData: {
-      type: Function,
-      default: () => {}
     },
     resetSelectedRows: {
       type: Function,
@@ -150,14 +134,12 @@ export default {
   methods: {
     ifAction(action) {
       const currentAction = action.if;
-      const { listDataSource } = this.data;
-      const currentListData = Object.assign({}, listDataSource);
 
       return isFunction(currentAction)
-        ? currentAction(currentListData)
+        ? currentAction(this.listViewData)
         : isBoolean(currentAction)
         ? currentAction
-        : this.actionRendering(action, currentListData);
+        : this.actionRendering(Object.assign({}, action), this.listViewData);
     },
     actionIcon({ icon, type }) {
       return icon !== false && this.actionIconFormat[type]
@@ -165,35 +147,19 @@ export default {
         : icon || '';
     },
     handleAction(action) {
-      const {
-        data,
-        model,
-        modelOptions,
-        keyName,
-        refreshData,
-        resetSelectedRows
-      } = this.$props;
-
-      const listViewData = {
-        model,
-        modelOptions,
-        keyName,
-        ...data
-      };
-
       if (action.type === TYPES.routerLink) {
-        const to = getRouteLocationRaw(action, listViewData);
+        const to = getRouteLocationRaw(action, this.listViewData);
         this.$router.push(to);
       } else {
+        const listViewData = {
+          ...this.listViewData,
+          resetSelectedRows: this.resetSelectedRows
+        };
+
         if (isFunction(action.handler)) {
-          action.handler(listViewData, refreshData, resetSelectedRows);
+          action.handler(listViewData);
         } else {
-          this.actionHandler(
-            Object.assign({}, action),
-            listViewData,
-            refreshData,
-            resetSelectedRows
-          );
+          this.actionHandler(Object.assign({}, action), listViewData);
         }
       }
     },

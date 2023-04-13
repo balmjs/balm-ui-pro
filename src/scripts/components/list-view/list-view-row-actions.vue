@@ -91,17 +91,9 @@ export default {
       type: Object,
       default: () => ({})
     },
-    model: {
-      type: String,
-      default: ''
-    },
-    modelOptions: {
+    listViewData: {
       type: Object,
       default: () => ({})
-    },
-    keyName: {
-      type: [String, Array],
-      default: 'id'
     },
     actionConfig: {
       type: Array,
@@ -114,10 +106,6 @@ export default {
     actionRendering: {
       type: Function,
       default: () => true
-    },
-    refreshData: {
-      type: Function,
-      default: () => {}
     }
   },
   data() {
@@ -130,11 +118,10 @@ export default {
     configAction(type, action) {
       let result = '';
       const currentAction = action[type];
-      const { data } = this.data;
-      const currentData = Object.assign({}, data);
+      const currentData = Object.assign({}, this.data);
 
       if (isFunction(currentAction)) {
-        result = currentAction(currentData);
+        result = currentAction(currentData, this.listViewData);
       } else {
         result = currentAction;
 
@@ -142,7 +129,11 @@ export default {
           case 'if':
             result = isBoolean(currentAction)
               ? currentAction
-              : this.actionRendering(action, currentData);
+              : this.actionRendering(
+                  Object.assign({}, action),
+                  currentData,
+                  this.listViewData
+                );
             break;
           case 'show':
             result = isBoolean(currentAction) ? currentAction : true;
@@ -158,11 +149,13 @@ export default {
               }
             });
 
-            result = getRouteLocationRaw(action, {
-              model: this.model,
-              data: currentData,
-              params
-            });
+            result = getRouteLocationRaw(
+              action,
+              Object.assign({}, this.listViewData, {
+                data: currentData,
+                params
+              })
+            );
             break;
         }
       }
@@ -170,22 +163,15 @@ export default {
       return result;
     },
     handleAction(action) {
-      const { data, model, modelOptions, keyName, refreshData } = this.$props;
-
-      const listViewData = {
-        model,
-        modelOptions,
-        keyName,
-        ...data
-      };
+      const currentData = Object.assign({}, this.data);
 
       if (isFunction(action.handler)) {
-        action.handler(listViewData, refreshData);
+        action.handler(currentData, this.listViewData);
       } else {
         this.actionHandler(
           Object.assign({}, action),
-          listViewData,
-          refreshData
+          currentData,
+          this.listViewData
         );
       }
     }

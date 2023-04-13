@@ -56,7 +56,6 @@ export default {
         title,
         model,
         modelAction,
-        modelConfig,
         modelPath,
         modelOptions,
         modelValueDefaults,
@@ -82,7 +81,6 @@ export default {
         title,
         model,
         modelAction,
-        modelConfig,
         modelPath,
         modelOptions: validModelOptions,
         modelValueDefaults,
@@ -115,20 +113,15 @@ export default {
       const { handler, ...actionConfig } = action;
       const customHandler = isFunction(handler) ? handler : false;
 
-      const data = {
+      const listViewData = {
         ...this.viewPropsData,
         ...this.$data,
         ...result
       };
 
       customHandler
-        ? customHandler(actionConfig, data, this.refreshData)
-        : this.$emit(
-            FORM_VIEW_EVENTS.action,
-            actionConfig,
-            data,
-            this.refreshData
-          );
+        ? customHandler(actionConfig, listViewData)
+        : this.$emit(FORM_VIEW_EVENTS.action, actionConfig, listViewData);
     }
   }
 };

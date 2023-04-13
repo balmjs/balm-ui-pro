@@ -46,16 +46,12 @@
 
     <ui-list-view-top-actions
       v-bind="{
-        data: instanceData,
-        model,
-        modelOptions,
-        keyName,
+        listViewData: instanceData,
         thead,
         actionConfig: topActionConfig,
         actionHandler: topActionHandler,
         actionRendering: topActionRendering,
         actionIconFormat: topActionIconFormat,
-        refreshData: getModelData,
         resetSelectedRows
       }"
       @column-selection="handleColumnSelection"
@@ -100,14 +96,11 @@
               <ui-list-view-row-actions
                 v-if="rowActionConfig.length"
                 v-bind="{
-                  data: Object.assign({ data }, instanceData),
-                  model,
-                  modelOptions,
-                  keyName,
+                  data,
+                  listViewData: instanceData,
                   actionConfig: rowActionConfig,
                   actionHandler: rowActionHandler,
-                  actionRendering: rowActionRendering,
-                  refreshData: getModelData
+                  actionRendering: rowActionRendering
                 }"
               ></ui-list-view-row-actions>
               <slot
