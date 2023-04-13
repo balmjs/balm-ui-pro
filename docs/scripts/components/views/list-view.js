@@ -17,10 +17,10 @@ export async function getModelListDataFn({ model, searchForm, listData }) {
   return await store.getModelList(model, params);
 }
 
-export async function handleRowAction(action, data, refresh) {
-  isDev && console.log('handleRowAction', action, data);
+export async function handleRowAction(action, data, listViewData) {
+  isDev && console.log('handleRowAction', action, data, listViewData);
 }
 
-export async function handleTopAction(action, data, refresh) {
-  isDev && console.log('handleTopAction', action, data);
+export async function handleTopAction(action, listViewData) {
+  isDev && console.log('handleTopAction', action, listViewData);
 }

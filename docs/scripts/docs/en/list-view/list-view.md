@@ -3,12 +3,6 @@
 ```
 
 ```ts
-interface ActionData {
-  model: string;
-  modelOptions: object;
-  keyName: string | string[];
-}
-
 interface ListViewData {
   title: string;
   model: string;
@@ -16,7 +10,7 @@ interface ListViewData {
   modelPath: string;
   modelOptions: object;
   modelValueDefaults: object;
-  keyName: string;
+  keyName: string | string[];
   refreshData: Function;
   searchForm: object;
   listData: object;
@@ -27,9 +21,8 @@ interface ListViewData {
 - Search actions
 
   ```js
-  interface SearchActionData extends ActionData {
-    ...$data?: ListViewData,
-    ...validationResult?: BalmUIValidationResult
+  interface SearchActionData extends ListViewData {
+    ...BalmUIValidationResult
   }
 
   interface SearchActionButton {
@@ -38,8 +31,7 @@ interface ListViewData {
     attrOrProp?: object;
     handler?: (
       actionConfig: SearchActionButton,
-      data: SearchActionData,
-      refresh: Function
+      listViewData: SearchActionData
     ) => void;
     submit?: false; // Just for custom `submit` type
   }
@@ -65,39 +57,27 @@ interface ListViewData {
 - Top bar actions
 
   ```ts
-  interface TopActionData extends ActionData {
-    ...$data?: ListViewData
+  interface TopActionData extends ListViewData {
+    resetSelectedRows?: Function;
   }
 
   interface TopActionButton {
-    if?: boolean | (dataSource: object) => boolean;
+    if?: boolean | (listViewData: TopActionData) => boolean;
     type: 'router-link' | string;
     icon?: string;
     text: string;
     routeName?: string | (data: object) => string;
     attrOrProp?: object;
-    handler?: (
-      data: TopActionData,
-      refresh: Function,
-      resetSelectedRows: Function
-    ) => void;
+    handler?: (listViewData: TopActionData) => void;
   }
 
   type GlobalTopActionHandler = (
     actionConfig: TopActionButton,
-    data: TopActionData,
-    refresh: Function,
-    resetSelectedRows: Function
+    listViewData: TopActionData
   ) => void;
   ```
 
 - List row actions
-
-  ```ts
-  interface RowActionData extends ActionData {
-    data: object;
-  }
-  ```
 
   ```ts
   interface RowActionButton {
@@ -112,15 +92,15 @@ interface ListViewData {
     href?: string;
     attrOrProp?: object;
     handler?: (
-      data: RowActionData,
-      refresh: Function
+      data: object,
+      listViewData: ListViewData
     ) => void;
   }
 
   type GlobalRowActionHandler = (
     actionConfig: RowActionButton,
-    data: RowActionData,
-    refresh: Function
+    data: object,
+    listViewData: ListViewData
   ) => void;
   ```
 

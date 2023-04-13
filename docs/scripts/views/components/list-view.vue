@@ -77,8 +77,8 @@ const rowActionConfig = [
   {
     // if: false,
     text: 'Link',
-    handler: (data, refresh) => {
-      console.log('link button', data);
+    handler: (data, listViewData) => {
+      console.log('link button', data, listViewData);
     }
   }
 ];
@@ -99,8 +99,8 @@ const topActionConfig = [
   {
     type: 'multi-update',
     text: 'Update',
-    handler: (data, refresh) => {
-      console.log('update', data);
+    handler: (listViewData) => {
+      console.log('update', listViewData);
     }
   },
   {
@@ -110,13 +110,13 @@ const topActionConfig = [
   }
 ];
 
-function rowActionRendering(action, data) {
-  // console.log(action, data);
+function rowActionRendering(action, data, listViewData) {
+  // console.log(action, data, listViewData);
   return true;
 }
 
-function topActionRendering(action, data) {
-  // console.log(action.type, data);
+function topActionRendering(action, listViewData) {
+  // console.log(action.type, listViewData);
   return true;
 }
 
@@ -136,8 +136,8 @@ export default {
       console.log('onChange', key, value);
       // refresh();
     },
-    onAction(action, data) {
-      console.log('onAction', action, data);
+    onAction(action, listViewData) {
+      console.log('onAction', action, listViewData);
     }
   }
 };
