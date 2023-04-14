@@ -79,7 +79,7 @@ const DefaultActionConfig: ActionButton[] = [
 
 ### Events
 
-| Name       | Type                                                                        | Description                                    |
-| ---------- | --------------------------------------------------------------------------- | ---------------------------------------------- |
-| `change:x` | `function(key: string, value: string)`                                      | Emits when the detail form item is changed.    |
-| `action`   | `function(actionConfig: ActionButton, data: ActionData, refresh: Function)` | Emits when the detail view actions is clicked. |
+| Name       | Type                                                               | Description                                    |
+| ---------- | ------------------------------------------------------------------ | ---------------------------------------------- |
+| `change:x` | `function(key: string, value: string, refreshData: Function)`      | Emits when the detail form item is changed.    |
+| `action`   | `function(actionConfig: ActionButton, detailViewData: ActionData)` | Emits when the detail view actions is clicked. |

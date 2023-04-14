@@ -161,7 +161,7 @@ interface ListViewData {
 
 ### Events
 
-| Name       | Type                                                                                    | Description                                  |
-| ---------- | --------------------------------------------------------------------------------------- | -------------------------------------------- |
-| `change:x` | `function(key: string, value: string, refresh: Function)`                               | Emits when the search form item is changed.  |
-| `action`   | `function(actionConfig: SearchActionButton, data: SearchActionData, refresh: Function)` | Emits when the list view actions is clicked. |
+| Name       | Type                                                                         | Description                                  |
+| ---------- | ---------------------------------------------------------------------------- | -------------------------------------------- |
+| `change:x` | `function(key: string, value: string, refreshData: Function)`                | Emits when the search form item is changed.  |
+| `action`   | `function(actionConfig: SearchActionButton, listViewData: SearchActionData)` | Emits when the list view actions is clicked. |
