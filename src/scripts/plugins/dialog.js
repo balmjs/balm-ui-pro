@@ -61,7 +61,7 @@ const template = `<mdc-dialog :class="className" :open="open" :title="title" :ma
 function createDialog(options) {
   const { components, component, ...config } = options;
 
-  const dialogApp = new Vue({
+  let dialogApp = new Vue({
     el: document.createElement('div'),
     name: 'ProDialog',
     components: {
