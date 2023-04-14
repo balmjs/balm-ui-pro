@@ -111,17 +111,17 @@ export default {
   data() {
     return {
       cssClasses,
-      TYPES
+      TYPES,
+      rowData: Object.assign({}, this.data)
     };
   },
   methods: {
     configAction(type, action) {
       let result = '';
       const currentAction = action[type];
-      const currentData = Object.assign({}, this.data);
 
       if (isFunction(currentAction)) {
-        result = currentAction(currentData, this.listViewData);
+        result = currentAction(this.rowData, this.listViewData);
       } else {
         result = currentAction;
 
@@ -131,7 +131,7 @@ export default {
               ? currentAction
               : this.actionRendering(
                   Object.assign({}, action),
-                  currentData,
+                  this.rowData,
                   this.listViewData
                 );
             break;
@@ -139,20 +139,20 @@ export default {
             result = isBoolean(currentAction) ? currentAction : true;
             break;
           case TYPES.routerLink:
-            const keyName = action.keyName || this.keyName;
+            const keyName = action.keyName || this.listViewData.keyName;
             const paramsKeys = Array.isArray(keyName) ? keyName : [keyName];
 
             const params = {};
             paramsKeys.forEach((key) => {
-              if (currentData[key]) {
-                params[key] = currentData[key];
+              if (this.rowData[key]) {
+                params[key] = this.rowData[key];
               }
             });
 
             result = getRouteLocationRaw(
               action,
               Object.assign({}, this.listViewData, {
-                data: currentData,
+                data: this.rowData,
                 params
               })
             );
@@ -163,14 +163,12 @@ export default {
       return result;
     },
     handleAction(action) {
-      const currentData = Object.assign({}, this.data);
-
       if (isFunction(action.handler)) {
-        action.handler(currentData, this.listViewData);
+        action.handler(this.rowData, this.listViewData);
       } else {
         this.actionHandler(
           Object.assign({}, action),
-          currentData,
+          this.rowData,
           this.listViewData
         );
       }

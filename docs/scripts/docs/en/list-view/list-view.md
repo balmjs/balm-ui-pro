@@ -64,9 +64,10 @@ interface ListViewData {
   interface TopActionButton {
     if?: boolean | (listViewData: TopActionData) => boolean;
     type: 'router-link' | string;
-    icon?: string;
     text: string;
+    icon?: string;
     routeName?: string | (data: object) => string;
+    routeParams?: (data: object) => {};
     attrOrProp?: object;
     handler?: (listViewData: TopActionData) => void;
   }
@@ -81,25 +82,25 @@ interface ListViewData {
 
   ```ts
   interface RowActionButton {
-    if?: boolean | (data: object) => boolean;
-    show?: boolean | (data: object) => boolean;
+    if?: boolean | (rowData: object, listViewData: ListViewData) => boolean;
+    show?: boolean | (rowData: object, listViewData: ListViewData) => boolean;
     type: 'router-link' | 'no-slot' | string;
-    component?: string;
-    icon?: string;
+    component?: string; // Just for custom row action component
     text: string;
+    icon?: string;
     routeName?: string | (data: object) => string;
     routeParams?: (data: object) => {};
-    href?: string;
     attrOrProp?: object;
+    href?: string;
     handler?: (
-      data: object,
+      rowData: object,
       listViewData: ListViewData
     ) => void;
   }
 
   type GlobalRowActionHandler = (
     actionConfig: RowActionButton,
-    data: object,
+    rowData: object,
     listViewData: ListViewData
   ) => void;
   ```

@@ -26,7 +26,7 @@ interface ActionButton {
   text: string;
   type?: 'button' | 'submit' | 'reset' | string;
   attrOrProp?: object;
-  handler?: (actionConfig: ActionButton, data: ActionData) => void;
+  handler?: (actionConfig: ActionButton, detailViewData: ActionData) => void;
   submit?: false // Just for custom `submit` type
 }
 
