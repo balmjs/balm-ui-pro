@@ -86,7 +86,7 @@ function createDialog(options) {
   const el = createElement(UI_PRO_DIALOG.id);
   const { components, ...config } = options;
 
-  const dialogApp = createVueApp({
+  let dialogApp = createVueApp({
     el,
     name: 'ProDialog',
     components: {
