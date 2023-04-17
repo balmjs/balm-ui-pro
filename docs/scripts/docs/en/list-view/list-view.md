@@ -31,7 +31,7 @@ interface ListViewData {
     attrOrProp?: object;
     handler?: (
       actionConfig: SearchActionButton,
-      listViewData: SearchActionData
+      data: SearchActionData
     ) => void;
     submit?: false; // Just for custom `submit` type
   }
@@ -66,8 +66,8 @@ interface ListViewData {
     type: 'router-link' | string;
     text: string;
     icon?: string;
-    routeName?: string | (data: object) => string;
-    routeParams?: (data: object) => {};
+    routeName?: string | (listViewData: TopActionData) => string;
+    routeParams?: (listViewData: TopActionData) => {};
     attrOrProp?: object;
     handler?: (listViewData: TopActionData) => void;
   }
@@ -88,8 +88,8 @@ interface ListViewData {
     component?: string; // Just for custom row action component
     text: string;
     icon?: string;
-    routeName?: string | (data: object) => string;
-    routeParams?: (data: object) => {};
+    routeName?: string | (rowData: object, listViewData: ListViewData) => string;
+    routeParams?: (rowData: object, listViewData: ListViewData) => {};
     attrOrProp?: object;
     href?: string;
     handler?: (
@@ -148,20 +148,20 @@ interface ListViewData {
 | `list-view-title`                                    |                                  | List view title                                                                                   |
 | custom search form item slots (by form model config) | `config`, `data`                 | Custom search form item slots                                                                     |
 | `before-list-view-top-actions`                       |                                  | Custom before list top bar actions                                                                |
-| `list-view-top-actions`                              | instanceData                     | Custom list top bar actions                                                                       |
+| `list-view-top-actions`                              | ListViewData                     | Custom list top bar actions                                                                       |
 | `after-list-view-top-actions`                        |                                  | Custom after list top bar actions                                                                 |
-| `before-list-view`                                   | instanceData                     | Before list view                                                                                  |
+| `before-list-view`                                   | ListViewData                     | Before list view                                                                                  |
 | `list-view-placeholder`                              |                                  | The placeholder before searching model data                                                       |
-| `list-view-content`                                  | instanceData                     | Custom list view content                                                                          |
+| `list-view-content`                                  | ListViewData                     | Custom list view content                                                                          |
 | custom table slots                                   | rowData                          | See BalmUI `<ui-table>` slots [docs](https://v8.material.balmjs.com/#/data-display/table)         |
 | `list-view-row-actions`                              | rowData                          | Custom table cell actions (When `rowActionConfig = []`)                                           |
 | custom pagination slots                              | `currentMinRow`, `currentMaxRow` | See BalmUI `<ui-pagination>` slots [docs](https://v8.material.balmjs.com/#/navigation/pagination) |
 | `list-view-empty`                                    |                                  | Custom no data for list view                                                                      |
-| `after-list-view`                                    | instanceData                     | After list view                                                                                   |
+| `after-list-view`                                    | ListViewData                     | After list view                                                                                   |
 
 ### Events
 
-| Name       | Type                                                                         | Description                                  |
-| ---------- | ---------------------------------------------------------------------------- | -------------------------------------------- |
-| `change:x` | `function(key: string, value: string, refreshData: Function)`                | Emits when the search form item is changed.  |
-| `action`   | `function(actionConfig: SearchActionButton, listViewData: SearchActionData)` | Emits when the list view actions is clicked. |
+| Name       | Type                                                                 | Description                                  |
+| ---------- | -------------------------------------------------------------------- | -------------------------------------------- |
+| `change:x` | `function(key: string, value: string, data: ListViewData)`           | Emits when the search form item is changed.  |
+| `action`   | `function(actionConfig: SearchActionButton, data: SearchActionData)` | Emits when the list view actions is clicked. |

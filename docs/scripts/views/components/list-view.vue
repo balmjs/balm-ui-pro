@@ -132,9 +132,9 @@ export default {
     };
   },
   methods: {
-    onChange(key, value, refresh) {
+    onChange(key, value, { refreshData }) {
       console.log('onChange', key, value);
-      // refresh();
+      // refreshData();
     },
     onAction(action, listViewData) {
       console.log('onAction', action, listViewData);
