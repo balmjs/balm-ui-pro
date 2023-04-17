@@ -152,9 +152,9 @@ export default {
             result = getRouteLocationRaw(
               action,
               Object.assign({}, this.listViewData, {
-                data: this.rowData,
                 params
-              })
+              }),
+              this.rowData
             );
             break;
         }

@@ -107,21 +107,26 @@ export default {
   },
   methods: {
     handleChange(key, value) {
-      this.$emit(FORM_VIEW_EVENTS.updateFormItem, key, value, this.refreshData);
+      const viewData = {
+        ...this.viewPropsData,
+        ...this.$data
+      };
+
+      this.$emit(FORM_VIEW_EVENTS.updateFormItem, key, value, viewData);
     },
     exposeAction(action, result = {}) {
       const { handler, ...actionConfig } = action;
       const customHandler = isFunction(handler) ? handler : false;
 
-      const listViewData = {
+      const viewData = {
         ...this.viewPropsData,
         ...this.$data,
         ...result
       };
 
       customHandler
-        ? customHandler(actionConfig, listViewData)
-        : this.$emit(FORM_VIEW_EVENTS.action, actionConfig, listViewData);
+        ? customHandler(actionConfig, viewData)
+        : this.$emit(FORM_VIEW_EVENTS.action, actionConfig, viewData);
     }
   }
 };
