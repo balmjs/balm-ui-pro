@@ -2,6 +2,16 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.25.0 / 2023-04-18
+
+### Code Refactoring
+
+- `<ui-list-view>`: update row and top actions handler
+
+### BREAKING CHANGES
+
+- `<ui-list-view>`: Row and top actions' handler params
+
 ## v0.24.0 / 2023-04-11
 
 ### Feature
