@@ -42,7 +42,7 @@
   ```
 
 ```js
-import { setModelOptionsFn } from '@/pro/form-view';
+import { setModelOptionsFn } from '@/components/views/form-view';
 
 Vue.use(BalmUIPro, {
   UiFormView: {

@@ -58,7 +58,7 @@ import {
   getModelListDataFn,
   handleRowAction,
   handleTopAction
-} from '@/pro/list-view';
+} from '@/components/views/list-view';
 
 Vue.use(BalmUIPro, {
   UiListView: {

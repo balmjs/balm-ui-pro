@@ -69,7 +69,7 @@ import {
   getModelConfigFn,
   getModelDetailDataFn,
   setModelDataFn
-} from '@/pro/detail-view';
+} from '@/components/views/detail-view';
 
 Vue.use(BalmUIPro, {
   UiDetailView: {
