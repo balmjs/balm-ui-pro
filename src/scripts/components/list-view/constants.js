@@ -11,17 +11,26 @@ export const TYPES = {
   columnSelection: 'column-selection'
 };
 
-export function getRouteLocationRaw(action, { model, data, params }) {
+export function getRouteLocationRaw(action, listViewData, rowData = '') {
   const { to, routeName, routeParams } = action;
-  const toRoute = isFunction(to) ? to(data) : to;
+  const { model, params } = listViewData;
+  const toRoute = isFunction(to)
+    ? rowData
+      ? to(rowData, listViewData)
+      : to(listViewData)
+    : to;
 
   return (
     toRoute || {
       name: isFunction(routeName)
-        ? routeName(data)
+        ? rowData
+          ? routeName(rowData, listViewData)
+          : routeName(listViewData)
         : routeName || `${model}.detail`,
       params: isFunction(routeParams)
-        ? routeParams(data)
+        ? rowData
+          ? routeParams(rowData, listViewData)
+          : routeParams(listViewData)
         : routeParams || params || {}
     }
   );

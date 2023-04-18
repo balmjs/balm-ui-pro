@@ -96,17 +96,9 @@ const props = defineProps({
     type: Object,
     default: () => ({})
   },
-  model: {
-    type: String,
-    default: ''
-  },
-  modelOptions: {
+  listViewData: {
     type: Object,
     default: () => ({})
-  },
-  keyName: {
-    type: [String, Array],
-    default: 'id'
   },
   actionConfig: {
     type: Array,
@@ -119,21 +111,16 @@ const props = defineProps({
   actionRendering: {
     type: Function,
     default: () => true
-  },
-  refreshData: {
-    type: Function,
-    default: () => {}
   }
 });
 
 function configAction(type, action) {
   let result = '';
   const currentAction = action[type];
-  const { data } = props.data;
-  const currentData = Object.assign({}, data);
+  const rowData = Object.assign({}, props.data);
 
   if (isFunction(currentAction)) {
-    result = currentAction(currentData);
+    result = currentAction(rowData, props.listViewData);
   } else {
     result = currentAction;
 
@@ -141,27 +128,33 @@ function configAction(type, action) {
       case 'if':
         result = isBoolean(currentAction)
           ? currentAction
-          : props.actionRendering(action, currentData);
+          : props.actionRendering(
+              Object.assign({}, action),
+              rowData,
+              props.listViewData
+            );
         break;
       case 'show':
         result = isBoolean(currentAction) ? currentAction : true;
         break;
       case TYPES.routerLink:
-        const keyName = action.keyName || props.keyName;
+        const keyName = action.keyName || props.listViewData.keyName;
         const paramsKeys = Array.isArray(keyName) ? keyName : [keyName];
 
         const params = {};
         paramsKeys.forEach((key) => {
-          if (currentData[key]) {
-            params[key] = currentData[key];
+          if (rowData[key]) {
+            params[key] = rowData[key];
           }
         });
 
-        result = getRouteLocationRaw(action, {
-          model: props.model,
-          data: currentData,
-          params
-        });
+        result = getRouteLocationRaw(
+          action,
+          Object.assign({}, props.listViewData, {
+            params
+          }),
+          rowData
+        );
         break;
     }
   }
@@ -170,19 +163,16 @@ function configAction(type, action) {
 }
 
 function handleAction(action) {
-  const { data, model, modelOptions, keyName, refreshData } = props;
-
-  const listViewData = {
-    model,
-    modelOptions,
-    keyName,
-    ...data
-  };
+  const rowData = Object.assign({}, props.data);
 
   if (isFunction(action.handler)) {
-    action.handler(listViewData, refreshData);
+    action.handler(rowData, props.listViewData);
   } else {
-    props.actionHandler()(Object.assign({}, action), listViewData, refreshData);
+    props.actionHandler()(
+      Object.assign({}, action),
+      rowData,
+      props.listViewData
+    );
   }
 }
 </script>

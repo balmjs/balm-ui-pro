@@ -1,13 +1,16 @@
 import { computed, onActivated } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 export function useKeepAlive(refreshComponent) {
   const route = useRoute();
+  const router = useRouter();
 
   const noKeepAlive = computed(() => {
-    const { params, matched } = route;
+    const { matched } = route;
+    const { state } = router.options.history;
+
     return (
-      params?.keepAlive === false ||
+      state?.keepAlive === false ||
       matched.some((route) => route.meta?.keepAlive === false)
     );
   });

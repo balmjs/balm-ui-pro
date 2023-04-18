@@ -234,6 +234,7 @@ const props = defineProps({
 });
 const emit = defineEmits([
   UI_FORM_VIEW.EVENTS.loaded,
+  UI_FORM_VIEW.EVENTS.reload,
   UI_FORM_VIEW.EVENTS.update,
   UI_FORM_VIEW.EVENTS.updateFormItem,
   UI_FORM_VIEW.EVENTS.action

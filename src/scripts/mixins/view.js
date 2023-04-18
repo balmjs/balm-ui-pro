@@ -46,7 +46,6 @@ function useView(props, { route, slots, emit, state, init, refreshData }) {
     title,
     model,
     modelAction,
-    modelConfig,
     modelPath,
     modelOptions,
     modelValueDefaults,
@@ -76,7 +75,6 @@ function useView(props, { route, slots, emit, state, init, refreshData }) {
     title,
     model,
     modelAction,
-    modelConfig,
     modelPath,
     modelOptions: validModelOptions,
     modelValueDefaults,
@@ -99,22 +97,27 @@ function useView(props, { route, slots, emit, state, init, refreshData }) {
   );
 
   function handleChange(key, value) {
-    emit(FORM_VIEW_EVENTS.updateFormItem, key, value, refreshData);
+    const viewData = {
+      ...viewPropsData,
+      ...toRefs(state)
+    };
+
+    emit(FORM_VIEW_EVENTS.updateFormItem, key, value, viewData);
   }
 
   function exposeAction(action, result = {}) {
     const { handler, ...actionConfig } = action;
     const customHandler = isFunction(handler) ? handler : false;
 
-    const data = {
+    const viewData = {
       ...viewPropsData,
       ...toRefs(state),
       ...result
     };
 
     customHandler
-      ? customHandler(actionConfig, data, refreshData)
-      : emit(FORM_VIEW_EVENTS.action, actionConfig, data, refreshData);
+      ? customHandler(actionConfig, viewData)
+      : emit(FORM_VIEW_EVENTS.action, actionConfig, viewData);
   }
 
   return {

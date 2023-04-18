@@ -170,15 +170,16 @@ const { globalModelOptions, viewPropsData, handleChange, exposeAction } =
     slots,
     emit,
     state,
-    init
+    init,
+    refreshData: getModelData
   });
 const hasTitle = computed(
   () => props.title || slots[`${UI_LIST_VIEW.NAMESPACE}-title`]
 );
 const instanceData = computed(() =>
   Object.assign({}, viewPropsData, {
-    formData: state.formData,
-    formDataSource: state.formDataSource
+    detailData: state.formData,
+    detailDataSource: state.formDataSource
   })
 );
 const fullInstanceData = computed(() =>
@@ -251,8 +252,8 @@ function redirect(to, keepAlive = true) {
 
       // NOTE: for `<keep-alive>`
       if (isObject(toNext)) {
-        toNext.params = toNext.params
-          ? Object.assign({ keepAlive }, toNext.params)
+        toNext.state = toNext.state
+          ? Object.assign({ keepAlive }, toNext.state)
           : { keepAlive };
       }
 

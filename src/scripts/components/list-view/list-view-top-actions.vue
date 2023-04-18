@@ -1,7 +1,7 @@
 <template>
   <section class="mdc-list-view__top-actions">
     <slot :name="`before-${UI_LIST_VIEW_TOP_ACTIONS.namespace}`"></slot>
-    <slot :name="UI_LIST_VIEW_TOP_ACTIONS.namespace" v-bind="data">
+    <slot :name="UI_LIST_VIEW_TOP_ACTIONS.namespace" v-bind="listViewData">
       <template
         v-for="(action, actionIndex) in actionConfig"
         :key="`top-action-${actionIndex}`"
@@ -85,21 +85,9 @@ import { isBoolean, isString, isObject, isFunction } from '../../utils/typeof';
 const router = useRouter();
 
 const props = defineProps({
-  data: {
+  listViewData: {
     type: Object,
     default: () => ({})
-  },
-  model: {
-    type: String,
-    default: ''
-  },
-  modelOptions: {
-    type: Object,
-    default: () => ({})
-  },
-  keyName: {
-    type: [String, Array],
-    default: 'id'
   },
   thead: {
     type: Array,
@@ -120,10 +108,6 @@ const props = defineProps({
   actionIconFormat: {
     type: Object,
     default: () => ({})
-  },
-  refreshData: {
-    type: Function,
-    default: () => {}
   },
   resetSelectedRows: {
     type: Function,
@@ -160,14 +144,12 @@ const columnSelectionOptions = computed(() => {
 
 function ifAction(action) {
   const currentAction = action.if;
-  const { listDataSource } = props.data;
-  const currentListData = Object.assign({}, listDataSource);
 
   return isFunction(currentAction)
-    ? currentAction(currentListData)
+    ? currentAction(props.listViewData)
     : isBoolean(currentAction)
     ? currentAction
-    : props.actionRendering(action, currentListData);
+    : props.actionRendering(Object.assign({}, action), props.listViewData);
 }
 
 function actionIcon({ icon, type }) {
@@ -177,29 +159,19 @@ function actionIcon({ icon, type }) {
 }
 
 function handleAction(action) {
-  const { data, model, modelOptions, keyName, refreshData, resetSelectedRows } =
-    props;
-
-  const listViewData = {
-    model,
-    modelOptions,
-    keyName,
-    ...data
-  };
-
   if (action.type === TYPES.routerLink) {
-    const to = getRouteLocationRaw(action, listViewData);
+    const to = getRouteLocationRaw(action, props.listViewData);
     router.push(to);
   } else {
+    const listViewData = {
+      ...props.listViewData,
+      resetSelectedRows: props.resetSelectedRows
+    };
+
     if (isFunction(action.handler)) {
-      action.handler(listViewData, refreshData, resetSelectedRows);
+      action.handler(listViewData);
     } else {
-      props.actionHandler()(
-        Object.assign({}, action),
-        listViewData,
-        refreshData,
-        resetSelectedRows
-      );
+      props.actionHandler()(Object.assign({}, action), listViewData);
     }
   }
 }
