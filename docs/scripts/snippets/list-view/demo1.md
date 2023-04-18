@@ -20,7 +20,7 @@
   };
   ```
 
-- `pro/list-view.js`
+- `components/views/list-view.js`
 
   ```js
   import { useStore } from 'balm-ui';

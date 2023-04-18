@@ -29,7 +29,7 @@
   };
   ```
 
-- `pro/form-view.js`
+- `components/views/form-view.js`
 
   ```js
   import { useStore } from 'balm-ui';

@@ -22,7 +22,7 @@
   };
   ```
 
-- `pro/detail-view.js`
+- `components/views/detail-view.js`
 
   ```js
   import { useStore } from 'balm-ui';
