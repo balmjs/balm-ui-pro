@@ -80,7 +80,7 @@
                   submenu: item.isSubmenu,
                   'no-icon': !item.icon
                 }"
-                @click="handleMenu($event, navigate)"
+                @click.stop="handleMenu($event, navigate)"
               >
                 <template #before="{ iconClass }">
                   <ui-icon
@@ -200,9 +200,10 @@ onMounted(() => {
   });
 });
 
-function handleMenu(event, navigate) {
-  root.value.updateLayoutViewport();
+const layout = ref(null);
 
+function handleMenu(event, navigate) {
+  layout.value.updateLayoutViewport();
   navigate(event);
 }
 </script>

@@ -7,7 +7,7 @@ import validatorRules from '@/config/validator-rules';
 // BalmUI Pro
 import apiModelConfig from '@/apis';
 import constantSource from '@/constants';
-import proViewsConfig from '@/pro';
+import proViewsConfig from '@/components/views';
 // Custom
 import PurePage from '@/views/layouts/pure-page';
 import DocsPage from '@/views/layouts/docs-page';

@@ -20,7 +20,7 @@
   };
   ```
 
-- `pro/list-view.js`
+- `components/views/list-view.js`
 
   ```js
   import { useStore } from 'balm-ui';
@@ -58,7 +58,7 @@ import {
   getModelListDataFn,
   handleRowAction,
   handleTopAction
-} from '@/pro/list-view';
+} from '@/components/views/list-view';
 
 Vue.use(BalmUIPro, {
   UiListView: {

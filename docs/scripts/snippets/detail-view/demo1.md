@@ -22,7 +22,7 @@
   };
   ```
 
-- `pro/detail-view.js`
+- `components/views/detail-view.js`
 
   ```js
   import { useStore } from 'balm-ui';
@@ -69,7 +69,7 @@ import {
   getModelConfigFn,
   getModelDetailDataFn,
   setModelDataFn
-} from '@/pro/views/detail-view';
+} from '@/components/views/detail-view';
 
 Vue.use(BalmUIPro, {
   UiDetailView: {

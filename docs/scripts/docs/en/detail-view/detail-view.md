@@ -18,19 +18,15 @@ interface DetailViewData {
   detailDataSource: object;
 }
 
-interface ActionData {
-  model: string;
-  modelOptions: object;
-  keyName: string | string[];
-  ...$data?: DetailViewData,
-  ...validationResult?: BalmUIValidationResult
+interface ActionData extends DetailViewData {
+  ...BalmUIValidationResult
 }
 
 interface ActionButton {
   text: string;
   type?: 'button' | 'submit' | 'reset' | string;
   attrOrProp?: object;
-  handler?: (actionConfig: ActionButton, data: ActionData, refresh: Function) => void;
+  handler?: (actionConfig: ActionButton, data: ActionData) => void;
   submit?: false // Just for custom `submit` type
 }
 
@@ -77,13 +73,13 @@ const DefaultActionConfig: ActionButton[] = [
 | Name                                          | Props            | Description            |
 | --------------------------------------------- | ---------------- | ---------------------- |
 | `detail-view-title`                           |                  | Detail view title      |
-| `before-detail-view`                          | instanceData     | Before detail view     |
+| `before-detail-view`                          | DetailViewData   | Before detail view     |
 | custom form item slots (by form model config) | `config`, `data` | Custom form item slots |
-| `after-detail-view`                           | instanceData     | After detail view      |
+| `after-detail-view`                           | DetailViewData   | After detail view      |
 
 ### Events
 
-| Name       | Type                                                                        | Description                                    |
-| ---------- | --------------------------------------------------------------------------- | ---------------------------------------------- |
-| `update:x` | `function(key: string, value: string)`                                      | Emits when the detail form item is changed.    |
-| `action`   | `function(actionConfig: ActionButton, data: ActionData, refresh: Function)` | Emits when the detail view actions is clicked. |
+| Name       | Type                                                         | Description                                    |
+| ---------- | ------------------------------------------------------------ | ---------------------------------------------- |
+| `update:x` | `function(key: string, value: string, data: DetailViewData)` | Emits when the detail form item is changed.    |
+| `action`   | `function(actionConfig: ActionButton, data: ActionData)`     | Emits when the detail view actions is clicked. |
