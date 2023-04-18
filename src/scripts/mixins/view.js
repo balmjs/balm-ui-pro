@@ -56,7 +56,6 @@ export default {
         title,
         model,
         modelAction,
-        modelPath,
         modelOptions,
         modelValueDefaults,
         keyName
@@ -81,7 +80,6 @@ export default {
         title,
         model,
         modelAction,
-        modelPath,
         modelOptions: validModelOptions,
         modelValueDefaults,
         keyName,

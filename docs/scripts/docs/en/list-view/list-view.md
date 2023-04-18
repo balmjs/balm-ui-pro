@@ -7,7 +7,6 @@ interface ListViewData {
   title: string;
   model: string;
   modelAction: string;
-  modelPath: string;
   modelOptions: object;
   modelValueDefaults: object;
   keyName: string | string[];
