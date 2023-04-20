@@ -3,6 +3,7 @@ import autoInstall from './config/auto-install';
 import autoInit from './config/auto-init';
 
 import UiFormView from './components/form-view/form-view.vue';
+import UiFormItem from './components/form-view/form-item.vue';
 import UiDetailView from './components/detail-view/detail-view.vue';
 import UiListView from './components/list-view/list-view.vue';
 import UiListViewRowActions from './components/list-view/list-view-row-actions.vue';
@@ -24,6 +25,7 @@ import $dialog, { useDialog } from './plugins/dialog';
 
 const Components = {
   UiFormView,
+  UiFormItem,
   UiDetailView,
   UiListView,
   UiListViewRowActions,
@@ -59,6 +61,7 @@ export default BalmUIPro;
 export { version, install };
 export {
   UiFormView,
+  UiFormItem,
   UiDetailView,
   UiListView,
   UiListViewRowActions,

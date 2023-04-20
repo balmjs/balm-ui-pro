@@ -4,6 +4,7 @@
     :class="[className, attrOrProp.class || '']"
     v-bind="attrOrProp"
   >
+    <slot :name="customSlots.before"></slot>
     <label
       v-if="config.label"
       :class="{
@@ -18,7 +19,8 @@
     <div class="mdc-form-item__item">
       <slot :name="customSlots.beforeItem"></slot>
       <template v-if="config.slot">
-        <slot :name="config.slot"></slot>
+        <slot v-if="isBoolean(config.slot)" :name="customSlots.item"></slot>
+        <slot v-else :name="config.slot"></slot>
       </template>
       <template v-else>
         <slot :name="customSlots.componentItem">
@@ -54,12 +56,18 @@
       </template>
       <slot :name="customSlots.afterItem"></slot>
     </div>
+    <slot :name="customSlots.after"></slot>
   </ui-form-field>
 </template>
 
 <script>
 import UiReadonlyItem from '../readonly-item/readonly-item.vue';
-import { isUndefined, isObject, isFunction } from '../../utils/typeof';
+import {
+  isUndefined,
+  isBoolean,
+  isObject,
+  isFunction
+} from '../../utils/typeof';
 import { toFirstUpperCase } from '../../utils/helpers';
 
 const UI_FORM_ITEM = {
@@ -159,11 +167,14 @@ export default {
     },
     customSlots() {
       return {
+        before: 'before-form-item',
         beforeLabel: `before-label__${this.componentKey}`,
         afterLabel: `after-label__${this.componentKey}`,
         beforeItem: `before-item__${this.componentKey}`,
+        item: 'form-item',
         componentItem: `form-item__${this.componentKey}`,
-        afterItem: `after-item__${this.componentKey}`
+        afterItem: `after-item__${this.componentKey}`,
+        after: 'after-form-item'
       };
     }
   },
@@ -183,6 +194,7 @@ export default {
     }
   },
   methods: {
+    isBoolean,
     getComponent(component) {
       const customComponentName = toFirstUpperCase(component);
       const customComponent = this.components[customComponentName] || component;
