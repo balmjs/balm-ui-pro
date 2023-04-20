@@ -2,6 +2,13 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.53.0 / 2023-04-20
+
+### Feature
+
+- `<ui-form-item>`: docs released
+- `<ui-form-view>`: new slot `before-form-item`, `form-item` and `after-form-item`
+
 ## v0.52.0 / 2023-04-17
 
 ### Code Refactoring
