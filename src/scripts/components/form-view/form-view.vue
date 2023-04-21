@@ -30,7 +30,13 @@
           class="mdc-form-view__grid"
           v-bind="gridAttrOrProp"
         >
-          <slot>
+          <slot
+            v-bind="{
+              formConfig,
+              data: formData,
+              dataSource: formDataSource
+            }"
+          >
             <ui-grid-cell
               v-for="(configData, configIndex) in formConfig"
               :key="`form-item-${configData.key || configIndex}`"
@@ -63,7 +69,13 @@
         </ui-grid>
         <!-- Detail view -->
         <template v-else>
-          <slot>
+          <slot
+            v-bind="{
+              formConfig,
+              data: formData,
+              dataSource: formDataSource
+            }"
+          >
             <ui-form-item
               v-for="(configData, configIndex) in formConfig"
               :key="`form-item-${configData.key || configIndex}`"

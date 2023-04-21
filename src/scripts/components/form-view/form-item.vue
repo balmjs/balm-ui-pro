@@ -75,7 +75,8 @@ const UI_FORM_ITEM = {
   EVENTS: {
     update: 'change'
   },
-  DEFAULT_INPUT_COMPONENTS: ['ui-textfield', 'ui-autocomplete']
+  DEFAULT_INPUT_COMPONENTS: ['ui-textfield', 'ui-autocomplete'],
+  UNKNOWN: 'unknown'
 };
 
 export default {
@@ -133,15 +134,15 @@ export default {
         : UI_FORM_ITEM.EVENTS.update;
     },
     component() {
-      return this.config.component || 'unknown-component';
+      return this.config.component || `${UI_FORM_ITEM.UNKNOWN}-component`;
     },
     key() {
-      return this.config.key || 'unknown-key';
+      return this.config.key || `${UI_FORM_ITEM.UNKNOWN}-key`;
     },
     componentKey() {
-      return this.component === 'unknown-component' ||
-        this.key === 'unknown-key'
-        ? null
+      return this.component === `${UI_FORM_ITEM.UNKNOWN}-component` ||
+        this.key === `${UI_FORM_ITEM.UNKNOWN}-key`
+        ? this.config.slot || null
         : `${this.component}--${this.key}`;
     },
     className() {
@@ -159,21 +160,22 @@ export default {
           proConfig: this.config,
           proFormData: this.formData,
           proFormDataSource: this.modelValueSource,
-          proComponentKey: this.componentKey
+          proComponentKey: this.componentKey || UI_FORM_ITEM.UNKNOWN
         },
         this.config.attrOrProp || {},
         this.$attrs
       );
     },
     customSlots() {
+      const componentKey = this.componentKey || UI_FORM_ITEM.UNKNOWN;
       return {
         before: 'before-form-item',
-        beforeLabel: `before-label__${this.componentKey}`,
-        afterLabel: `after-label__${this.componentKey}`,
-        beforeItem: `before-item__${this.componentKey}`,
+        beforeLabel: `before-label__${componentKey}`,
+        afterLabel: `after-label__${componentKey}`,
+        beforeItem: `before-item__${componentKey}`,
         item: 'form-item',
-        componentItem: `form-item__${this.componentKey}`,
-        afterItem: `after-item__${this.componentKey}`,
+        componentItem: `form-item__${componentKey}`,
+        afterItem: `after-item__${componentKey}`,
         after: 'after-form-item'
       };
     }
@@ -227,7 +229,7 @@ export default {
 
       const result = this.hasSubComponents ? Object.values(value) : value;
 
-      if (isFunction(this.config.event)) {
+      if (this.componentKey && isFunction(this.config.event)) {
         this.config.event(
           result,
           this.componentBind,
