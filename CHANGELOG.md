@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.54.0 / 2023-04-21
+
+### Feature
+
+- `<ui-form-view>`: optimize default slot params for custom form view
+
 ## v0.53.0 / 2023-04-20
 
 ### Feature
