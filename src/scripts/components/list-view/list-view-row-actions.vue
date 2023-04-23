@@ -111,17 +111,17 @@ export default {
   data() {
     return {
       cssClasses,
-      TYPES,
-      rowData: Object.assign({}, this.data)
+      TYPES
     };
   },
   methods: {
     configAction(type, action) {
       let result = '';
       const currentAction = action[type];
+      const rowData = Object.assign({}, this.data);
 
       if (isFunction(currentAction)) {
-        result = currentAction(this.rowData, this.listViewData);
+        result = currentAction(rowData, this.listViewData);
       } else {
         result = currentAction;
 
@@ -131,7 +131,7 @@ export default {
               ? currentAction
               : this.actionRendering(
                   Object.assign({}, action),
-                  this.rowData,
+                  rowData,
                   this.listViewData
                 );
             break;
@@ -144,8 +144,8 @@ export default {
 
             const params = {};
             paramsKeys.forEach((key) => {
-              if (this.rowData[key]) {
-                params[key] = this.rowData[key];
+              if (rowData[key]) {
+                params[key] = rowData[key];
               }
             });
 
@@ -154,7 +154,7 @@ export default {
               Object.assign({}, this.listViewData, {
                 params
               }),
-              this.rowData
+              rowData
             );
             break;
         }
@@ -163,12 +163,13 @@ export default {
       return result;
     },
     handleAction(action) {
+      const rowData = Object.assign({}, this.data);
       if (isFunction(action.handler)) {
-        action.handler(this.rowData, this.listViewData);
+        action.handler(rowData, this.listViewData);
       } else {
         this.actionHandler(
           Object.assign({}, action),
-          this.rowData,
+          rowData,
           this.listViewData
         );
       }

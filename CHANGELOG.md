@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.54.1 / 2023-04-23
+
+### Bug Fixes
+
+- `<ui-list-view>`: fix rowData bug for row handler
+
 ## v0.54.0 / 2023-04-21
 
 ### Feature
