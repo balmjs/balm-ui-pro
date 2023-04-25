@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.55.0 / 2023-04-25
+
+### Feature
+
+- `<ui-list-view>`: add prop `tableListeners` for custom table event
+
 ## v0.54.2 / 2023-04-24
 
 ### Bug Fixes
