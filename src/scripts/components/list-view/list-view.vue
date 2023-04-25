@@ -86,6 +86,7 @@
                 tableAttrOrProp
               )
             "
+            v-on="tableListeners"
           >
             <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
             <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
@@ -251,6 +252,10 @@ export default {
         data: 'data',
         total: 'total'
       })
+    },
+    tableListeners: {
+      type: Object,
+      default: () => ({})
     },
     // Pagination
     pageSize: {
