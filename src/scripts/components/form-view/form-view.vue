@@ -32,12 +32,56 @@
           class="mdc-form-view__grid"
           v-bind="gridAttrOrProp"
         >
-          <template
-            v-for="(configData, configIndex) in formConfig"
-            :key="`form-item-${configData.key || configIndex}`"
+          <slot
+            v-bind="{
+              formConfig,
+              data: formData,
+              dataSource: formDataSource
+            }"
           >
-            <ui-grid-cell
-              v-bind="configData.gridCellAttrOrProp || gridCellAttrOrProp"
+            <template
+              v-for="(configData, configIndex) in formConfig"
+              :key="`form-item-${configData.key || configIndex}`"
+            >
+              <ui-grid-cell
+                v-bind="configData.gridCellAttrOrProp || gridCellAttrOrProp"
+              >
+                <ui-form-item
+                  v-bind="{
+                    components,
+                    config: configData,
+                    modelValue: formData,
+                    modelValueSource: formDataSource,
+                    attrOrProp: formItemAttrOrProp
+                  }"
+                  @update:model-value="handleChange"
+                >
+                  <template
+                    v-for="(_, slotName) in $slots"
+                    #[slotName]="slotData"
+                  >
+                    <slot
+                      :name="slotName"
+                      v-bind="getSlotData(slotData, configData)"
+                    ></slot>
+                  </template>
+                </ui-form-item>
+              </ui-grid-cell>
+            </template>
+          </slot>
+        </ui-grid>
+        <!-- Detail view -->
+        <template v-else>
+          <slot
+            v-bind="{
+              formConfig,
+              data: formData,
+              dataSource: formDataSource
+            }"
+          >
+            <template
+              v-for="(configData, configIndex) in formConfig"
+              :key="`form-item-${configData.key || configIndex}`"
             >
               <ui-form-item
                 v-bind="{
@@ -59,33 +103,8 @@
                   ></slot>
                 </template>
               </ui-form-item>
-            </ui-grid-cell>
-          </template>
-        </ui-grid>
-        <!-- Detail view -->
-        <template v-else>
-          <template
-            v-for="(configData, configIndex) in formConfig"
-            :key="`form-item-${configData.key || configIndex}`"
-          >
-            <ui-form-item
-              v-bind="{
-                components,
-                config: configData,
-                modelValue: formData,
-                modelValueSource: formDataSource,
-                attrOrProp: formItemAttrOrProp
-              }"
-              @update:model-value="handleChange"
-            >
-              <template v-for="(_, slotName) in $slots" #[slotName]="slotData">
-                <slot
-                  :name="slotName"
-                  v-bind="getSlotData(slotData, configData)"
-                ></slot>
-              </template>
-            </ui-form-item>
-          </template>
+            </template>
+          </slot>
         </template>
         <!-- After from view -->
         <slot
@@ -177,7 +196,6 @@ import {
   onBeforeMount,
   onBeforeUnmount
 } from 'vue';
-import UiFormItem from './form-item.vue';
 import { isString, isObject, isFunction } from '../../utils/typeof';
 
 const validator = inject('validator');

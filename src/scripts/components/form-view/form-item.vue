@@ -4,6 +4,7 @@
     :class="[className, attrOrProp.class || '']"
     v-bind="attrOrProp"
   >
+    <slot :name="customSlots.before"></slot>
     <label
       v-if="config.label"
       :class="{
@@ -18,7 +19,8 @@
     <div class="mdc-form-item__item">
       <slot :name="customSlots.beforeItem"></slot>
       <template v-if="config.slot">
-        <slot :name="config.slot"></slot>
+        <slot v-if="isBoolean(config.slot)" :name="customSlots.item"></slot>
+        <slot v-else :name="config.slot"></slot>
       </template>
       <template v-else>
         <slot :name="customSlots.componentItem">
@@ -54,6 +56,7 @@
       </template>
       <slot :name="customSlots.afterItem"></slot>
     </div>
+    <slot :name="customSlots.after"></slot>
   </ui-form-field>
 </template>
 
@@ -62,7 +65,8 @@ const UI_FORM_ITEM = {
   NAME: 'UiFormItem',
   EVENTS: {
     update: 'update:modelValue'
-  }
+  },
+  UNKNOWN: 'unknown'
 };
 
 export default {
@@ -83,7 +87,12 @@ import {
   useAttrs
 } from 'vue';
 import UiReadonlyItem from '../readonly-item/readonly-item.vue';
-import { isUndefined, isObject, isFunction } from '../../utils/typeof';
+import {
+  isUndefined,
+  isBoolean,
+  isObject,
+  isFunction
+} from '../../utils/typeof';
 import { toFirstUpperCase } from '../../utils/helpers';
 
 const props = defineProps({
@@ -121,11 +130,14 @@ const hasSubComponents = computed(() => Array.isArray(props.config.components));
 const eventName = computed(
   () => props.config.modelEvent || UI_FORM_ITEM.EVENTS.update
 );
-const component = computed(() => props.config.component || 'unknown-component');
-const key = computed(() => props.config.key || 'unknown-key');
+const component = computed(
+  () => props.config.component || `${UI_FORM_ITEM.UNKNOWN}-component`
+);
+const key = computed(() => props.config.key || `${UI_FORM_ITEM.UNKNOWN}-key`);
 const componentKey = computed(() =>
-  component.value === 'unknown-component' || key.value === 'unknown-key'
-    ? null
+  component.value === `${UI_FORM_ITEM.UNKNOWN}-component` ||
+  key.value === `${UI_FORM_ITEM.UNKNOWN}-key`
+    ? props.config.slot || null
     : `${component.value}--${key.value}`
 );
 const className = computed(() => [
@@ -141,19 +153,25 @@ const componentBind = computed(() => {
       proConfig: props.config,
       proFormData: state.formData,
       proFormDataSource: props.modelValueSource,
-      proComponentKey: componentKey.value
+      proComponentKey: componentKey.value || UI_FORM_ITEM.UNKNOWN
     },
     props.config.attrOrProp || {},
     attrs
   );
 });
-const customSlots = computed(() => ({
-  beforeLabel: `before-label__${componentKey.value}`,
-  afterLabel: `after-label__${componentKey.value}`,
-  beforeItem: `before-item__${componentKey.value}`,
-  componentItem: `form-item__${componentKey.value}`,
-  afterItem: `after-item__${componentKey.value}`
-}));
+const customSlots = computed(() => {
+  const componentKey = componentKey.value || UI_FORM_ITEM.UNKNOWN;
+  return {
+    before: 'before-form-item',
+    beforeLabel: `before-label__${componentKey}`,
+    afterLabel: `after-label__${componentKey}`,
+    beforeItem: `before-item__${componentKey}`,
+    item: 'form-item',
+    componentItem: `form-item__${componentKey}`,
+    afterItem: `after-item__${componentKey}`,
+    after: 'after-form-item'
+  };
+});
 
 onBeforeMount(() => {
   if (props.config.debug) {

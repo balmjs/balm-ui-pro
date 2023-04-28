@@ -180,11 +180,6 @@ function createDialog(options) {
 
       function handleDialogAction(action) {
         if (useDialogAction.value) {
-          const actionResult = {
-            data: state.modelValue,
-            dataSource: state.modelValueSource
-          };
-
           let debounceConfig = {};
 
           switch (action.type) {
@@ -195,9 +190,17 @@ function createDialog(options) {
                     handleClose(true);
                   }
 
-                  state.handler(action, actionResult, () => {
-                    handleClose(true);
-                  });
+                  state.handler(
+                    action,
+                    // NOTE: direct assignment in here
+                    {
+                      data: state.modelValue,
+                      dataSource: state.modelValueSource
+                    },
+                    () => {
+                      handleClose(true);
+                    }
+                  );
                 },
                 delay: action.delay || 250
               };
@@ -210,7 +213,14 @@ function createDialog(options) {
 
           return action.type === PRO_DIALOG_BUTTON_TYPES.submit
             ? debounceConfig
-            : state.handler(action, actionResult, handleClose);
+            : state.handler(
+                action,
+                {
+                  data: state.modelValue,
+                  dataSource: state.modelValueSource
+                },
+                handleClose
+              );
         }
       }
 

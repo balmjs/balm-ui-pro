@@ -89,6 +89,7 @@
                 tableAttrOrProp
               )
             "
+            v-on="tableListeners"
           >
             <template v-for="(_, slotName) in $slots" #[slotName]="slotData">
               <slot :name="slotName" v-bind="slotData"></slot>
@@ -271,6 +272,10 @@ const props = defineProps({
       data: 'data',
       total: 'total'
     })
+  },
+  tableListeners: {
+    type: Object,
+    default: () => ({})
   },
   // Pagination
   pageSize: {
