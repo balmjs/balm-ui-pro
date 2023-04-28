@@ -1,5 +1,10 @@
 <template>
-  <docs-page name="form-view" without-css demo-count="1">
+  <docs-page
+    name="form-view"
+    :apis="['form-view', 'form-item']"
+    without-css
+    demo-count="1"
+  >
     <ui-form-view
       v-model="formData"
       :components="components"
@@ -17,15 +22,18 @@
         <div>outer formData: {{ formDataSource }}</div>
         <hr />
       </template>
+
       <template #form-item__ui-textfield--l>
         <input v-model="formData.l" />
       </template>
       <template #custom-slot>gg</template>
+
       <!-- <template #actions="{ className, data }">
         <ui-form-field :class="className">
           <ui-button raised @click="onSubmit(data)">Custom Submit</ui-button>
         </ui-form-field>
       </template> -->
+
       <template #after-form-view="{ data }">
         <ui-form-field>
           <label for="extra-option">

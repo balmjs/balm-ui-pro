@@ -44,7 +44,7 @@
 ```js
 import { setModelOptionsFn } from '@/components/views/form-view';
 
-Vue.use(BalmUIPro, {
+app.use(BalmUIPro, {
   UiFormView: {
     setModelOptionsFn
   }

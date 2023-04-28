@@ -9,7 +9,7 @@ import UiForm from 'balm-ui/components/form';
 import UiFormField from 'balm-ui/components/form-field';
 import UiReadonlyItem from 'balm-ui-pro/components/readonly-item';
 
-Vue.use(UiForm);
-Vue.use(UiFormField);
-Vue.use(UiReadonlyItem);
+app.use(UiForm);
+app.use(UiFormField);
+app.use(UiReadonlyItem);
 ```

@@ -12,10 +12,10 @@ import UiButton from 'balm-ui/components/button';
 import $dialog from 'balm-ui-pro/plugins/dialog';
 // NOTE: import awesome components
 
-Vue.use(UiDialogComponents);
-Vue.use(UiButton);
+app.use(UiDialogComponents);
+app.use(UiButton);
 // Optional. Overwrite `$dialog` options.
-Vue.use($dialog, {
+app.use($dialog, {
   // some options
 });
 ```

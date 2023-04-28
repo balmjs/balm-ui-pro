@@ -71,7 +71,7 @@ import {
   setModelDataFn
 } from '@/components/views/detail-view';
 
-Vue.use(BalmUIPro, {
+app.use(BalmUIPro, {
   UiDetailView: {
     getModelConfigFn,
     getModelDataFn: getModelDetailDataFn,

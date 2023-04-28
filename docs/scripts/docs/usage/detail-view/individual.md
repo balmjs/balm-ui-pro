@@ -18,13 +18,13 @@ import UiAlert from 'balm-ui/components/alert';
 import UiSpinner from 'balm-ui/components/spinner';
 import UiDetailView from 'balm-ui-pro/components/detail-view';
 
-Vue.use(UiForm);
-Vue.use(UiFormField);
-Vue.use(UiButton);
-Vue.use(UiAlert);
-Vue.use(UiSpinner);
+app.use(UiForm);
+app.use(UiFormField);
+app.use(UiButton);
+app.use(UiAlert);
+app.use(UiSpinner);
 // Optional. Overwrite `<ui-detail-view>` props with default value.
-Vue.use(UiDetailView, {
+app.use(UiDetailView, {
   // some props
 });
 ```

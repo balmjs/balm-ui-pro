@@ -7,8 +7,8 @@
 import BalmUI from 'balm-ui';
 import BalmUIPro from 'balm-ui-pro';
 
-Vue.use(BalmUI);
-Vue.use(BalmUIPro {
+app.use(BalmUI);
+app.use(BalmUIPro {
   // Optional. Overwrite `$dialog` options.
   $dialog: {
     // some options

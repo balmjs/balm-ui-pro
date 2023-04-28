@@ -60,7 +60,7 @@ import {
   handleTopAction
 } from '@/components/views/list-view';
 
-Vue.use(BalmUIPro, {
+app.use(BalmUIPro, {
   UiListView: {
     getModelConfigFn,
     getModelDataFn: getModelListDataFn,

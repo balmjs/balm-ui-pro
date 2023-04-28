@@ -11,8 +11,8 @@ import UiFormField from 'balm-ui/components/form-field';
 import UiCheckbox from 'balm-ui/components/checkbox';
 import UiCheckboxGroup from 'balm-ui-pro/components/checkbox-group';
 
-Vue.use(UiForm);
-Vue.use(UiFormField);
-Vue.use(UiCheckbox);
-Vue.use(UiCheckboxGroup);
+app.use(UiForm);
+app.use(UiFormField);
+app.use(UiCheckbox);
+app.use(UiCheckboxGroup);
 ```

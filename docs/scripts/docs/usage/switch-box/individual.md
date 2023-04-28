@@ -11,8 +11,8 @@ import UiFormField from 'balm-ui/components/form-field';
 import UiSwitch from 'balm-ui/components/switch';
 import UiSwitchBox from 'balm-ui-pro/components/switch-box';
 
-Vue.use(UiForm);
-Vue.use(UiFormField);
-Vue.use(UiSwitch);
-Vue.use(UiSwitchBox);
+app.use(UiForm);
+app.use(UiFormField);
+app.use(UiSwitch);
+app.use(UiSwitchBox);
 ```

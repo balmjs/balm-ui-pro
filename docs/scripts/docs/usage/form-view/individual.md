@@ -12,13 +12,14 @@
 import UiForm from 'balm-ui/components/form';
 import UiFormField from 'balm-ui/components/form-field';
 import UiButton from 'balm-ui/components/button';
-import UiFormView from 'balm-ui-pro/components/form-view';
+import { UiFormView, UiFormItem } from 'balm-ui-pro/components/form-view';
 
-Vue.use(UiForm);
-Vue.use(UiFormField);
-Vue.use(UiButton);
+app.use(UiForm);
+app.use(UiFormField);
+app.use(UiButton);
 // Optional. Overwrite `<ui-form-view>` props with default value.
-Vue.use(UiFormView, {
+app.use(UiFormView, {
   // some props
 });
+app.use(UiFormItem);
 ```

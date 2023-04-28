@@ -28,18 +28,18 @@ import {
   UiListViewRowActions
 } from 'balm-ui-pro/components/list-view';
 
-Vue.use(UiForm);
-Vue.use(UiFormField);
-Vue.use(UiButton);
-Vue.use(UiTable);
-Vue.use(UiPagination);
-Vue.use(UiAlert);
-Vue.use(UiSpinner);
+app.use(UiForm);
+app.use(UiFormField);
+app.use(UiButton);
+app.use(UiTable);
+app.use(UiPagination);
+app.use(UiAlert);
+app.use(UiSpinner);
 // Optional. Overwrite `<ui-list-view>` props with default value.
-Vue.use(UiListView, {
+app.use(UiListView, {
   // some props
 });
-Vue.use(UiListViewRowActions, {
+app.use(UiListViewRowActions, {
   // some props
 });
 ```

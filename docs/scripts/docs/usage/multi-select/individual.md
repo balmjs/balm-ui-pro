@@ -11,8 +11,8 @@ import UiFormField from 'balm-ui/components/form-field';
 import UiSelect from 'balm-ui/components/select';
 import UiMultiSelect from 'balm-ui-pro/components/multi-select';
 
-Vue.use(UiForm);
-Vue.use(UiFormField);
-Vue.use(UiSelect);
-Vue.use(UiMultiSelect);
+app.use(UiForm);
+app.use(UiFormField);
+app.use(UiSelect);
+app.use(UiMultiSelect);
 ```

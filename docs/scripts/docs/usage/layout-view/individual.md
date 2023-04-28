@@ -16,7 +16,7 @@ import UiListComponents from 'balm-ui/components/list';
 import UiLayoutView from 'balm-ui-pro/components/layout-view';
 
 // Optional. Overwrite `<ui-layout-view>` props with default value.
-Vue.use(UiLayoutView, {
+app.use(UiLayoutView, {
   // some props
 });
 ```

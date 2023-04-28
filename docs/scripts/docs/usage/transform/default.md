@@ -1,5 +1,5 @@
 ```js
 import BalmUIPro from 'balm-ui-pro';
 
-Vue.use(BalmUIPro);
+app.use(BalmUIPro);
 ```

@@ -56,7 +56,7 @@
 ```js
 import apiModelConfig from '@/apis';
 
-Vue.use(BalmUIPro, {
+app.use(BalmUIPro, {
   $model: apiModelConfig
 });
 ```

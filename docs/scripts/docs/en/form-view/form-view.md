@@ -45,7 +45,7 @@ type ModelConfig = FormItemConfig[] | (formData: object, formOptions: object) =>
     modelEvent?: string; // Defaults: 'change'
     model?: string; // For the options of the source data
     // Custom component
-    slot?: string;
+    slot?: boolean | string;
     event?: (value, props, ref) => void; // New in 0.23.0
     listeners?: { [eventName]: (...args) => void } // New in 0.23.0
     // BalmUI validator
@@ -89,11 +89,15 @@ type ModelConfig = FormItemConfig[] | (formData: object, formOptions: object) =>
 | `form-view-actions`                           | `className`, `config`, `data`, `dataSource`       | Custom form buttons                                            |
 
 - Custom form item slots:
+  - `before-form-item`,
   - `before-label__[FormItemConfig.component]--[FormItemConfig.key]`
   - `after-label__[FormItemConfig.component]--[FormItemConfig.key]`
   - `before-item__[FormItemConfig.component]--[FormItemConfig.key]`
-  - `form-item__[FormItemConfig.component]--[FormItemConfig.key]`
+  - `form-item__[FormItemConfig.component]--[FormItemConfig.key]` or `form-item`
   - `after-item__[FormItemConfig.component]--[FormItemConfig.key]`
+  - `after-form-item`
+
+> NOTE: `before-form-item`, `form-item` and `after-form-item` for new in 0.26.0, `form-item` need to set `FormItemConfig.slot = true`
 
 ### Events
 

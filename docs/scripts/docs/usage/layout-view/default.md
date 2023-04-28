@@ -7,8 +7,8 @@
 import BalmUI from 'balm-ui';
 import BalmUIPro from 'balm-ui-pro';
 
-Vue.use(BalmUI);
-Vue.use(BalmUIPro {
+app.use(BalmUI);
+app.use(BalmUIPro {
   // Optional. Overwrite `<ui-layout-view>` props with default value.
   UiLayoutView: {
     // some props

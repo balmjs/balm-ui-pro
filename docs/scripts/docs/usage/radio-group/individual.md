@@ -11,8 +11,8 @@ import UiFormField from 'balm-ui/components/form-field';
 import UiRadio from 'balm-ui/components/radio';
 import UiRadioGroup from 'balm-ui-pro/components/radio-group';
 
-Vue.use(UiForm);
-Vue.use(UiFormField);
-Vue.use(UiRadio);
-Vue.use(UiRadioGroup);
+app.use(UiForm);
+app.use(UiFormField);
+app.use(UiRadio);
+app.use(UiRadioGroup);
 ```

@@ -1,5 +1,5 @@
 ```js
 import BalmUIPro from 'balm-ui-pro';
 
-Vue.use(BalmUIPro, GlobalRouterConfig);
+app.use(BalmUIPro, GlobalRouterConfig);
 ```

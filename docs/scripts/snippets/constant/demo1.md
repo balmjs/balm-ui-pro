@@ -22,7 +22,7 @@
 ```js
 import constantSource from '@/constants';
 
-Vue.use(BalmUIPro, {
+app.use(BalmUIPro, {
   $constant: constantSource
 });
 ```
