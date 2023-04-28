@@ -160,15 +160,15 @@ const componentBind = computed(() => {
   );
 });
 const customSlots = computed(() => {
-  const componentKey = componentKey.value || UI_FORM_ITEM.UNKNOWN;
+  const formItemComponentKey = componentKey.value || UI_FORM_ITEM.UNKNOWN;
   return {
     before: 'before-form-item',
-    beforeLabel: `before-label__${componentKey}`,
-    afterLabel: `after-label__${componentKey}`,
-    beforeItem: `before-item__${componentKey}`,
+    beforeLabel: `before-label__${formItemComponentKey}`,
+    afterLabel: `after-label__${formItemComponentKey}`,
+    beforeItem: `before-item__${formItemComponentKey}`,
     item: 'form-item',
-    componentItem: `form-item__${componentKey}`,
-    afterItem: `after-item__${componentKey}`,
+    componentItem: `form-item__${formItemComponentKey}`,
+    afterItem: `after-item__${formItemComponentKey}`,
     after: 'after-form-item'
   };
 });

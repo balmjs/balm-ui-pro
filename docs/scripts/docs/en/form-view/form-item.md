@@ -15,12 +15,12 @@
 
   ```html
   <ui-form-view v-model="modelValue" :model-config="modelConfig">
-    <template #default="{ formConfig, data }">
+    <template #default="{ formConfig }">
       <ui-form-item
         v-for="(config, index) in formConfig"
         :key="index"
         :config="config"
-        :model-value="data"
+        :model-value="modelValue"
       ></ui-form-item>
     </template>
   </ui-form-view>

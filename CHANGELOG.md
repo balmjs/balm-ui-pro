@@ -2,6 +2,13 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.26.0 / 2023-04-28
+
+### Feature
+
+- `<ui-form-view>`: new slot `before-form-item`, `form-item` and `after-form-item`
+- `<ui-list-view>`: add prop `tableListeners` for custom table event
+
 ## v0.25.0 / 2023-04-18
 
 ### Code Refactoring
