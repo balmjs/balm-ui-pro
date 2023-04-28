@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[4131],{4131:function(a,n,e){e.r(n);n.default='<pre><code class="language-js">import BalmUIPro from &#39;balm-ui-pro&#39;;\n\napp.use(BalmUIPro, {\n  $constant: ConstantSource\n});\n</code></pre> '}}]);

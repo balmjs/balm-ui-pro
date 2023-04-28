@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[6253],{6253:function(e,l,p){p.r(l);l.default='<pre><code class="language-js">import $apiModel from &#39;balm-ui-pro/plugins/api-model&#39;;\n\nVue.use($apiModel, GlobalApiConfig);\n</code></pre> '}}]);

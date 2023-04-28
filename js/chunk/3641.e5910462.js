@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[3641],{3641:function(e,o,r){r.r(o);o.default='<pre><code class="language-js">import $routerModel from &#39;balm-ui-pro/plugins/router-model&#39;;\n\napp.use($routerModel, GlobalRouterConfig);\n</code></pre> '}}]);
