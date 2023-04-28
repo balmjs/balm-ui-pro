@@ -56,7 +56,7 @@
 
 ### Code Refactoring
 
-- `<ui-list-view>`: update Row and top actions handler
+- `<ui-list-view>`: update row and top actions handler
 
 ### BREAKING CHANGES
 
