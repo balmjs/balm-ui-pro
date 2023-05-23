@@ -89,15 +89,20 @@ type ModelConfig = FormItemConfig[] | (formData: object, formOptions: object) =>
 | `form-view-actions`                           | `className`, `config`, `data`, `dataSource`       | Custom form buttons                                            |
 
 - Custom form item slots:
+
   - `before-form-item`,
   - `before-label__[FormItemConfig.component]--[FormItemConfig.key]`
   - `after-label__[FormItemConfig.component]--[FormItemConfig.key]`
+  - `after-label`
   - `before-item__[FormItemConfig.component]--[FormItemConfig.key]`
   - `form-item__[FormItemConfig.component]--[FormItemConfig.key]` or `form-item`
   - `after-item__[FormItemConfig.component]--[FormItemConfig.key]`
   - `after-form-item`
 
-> NOTE: `before-form-item`, `form-item` and `after-form-item` for new in 0.53.0, `form-item` need to set `FormItemConfig.slot = true`
+> NOTE:
+>
+> - `before-form-item`, `form-item` and `after-form-item` for new in 0.53.0, `form-item` need to set `FormItemConfig.slot = true`
+> - `after-label` for new in 0.56.0
 
 ### Events
 

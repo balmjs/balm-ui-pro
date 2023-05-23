@@ -15,6 +15,7 @@
       <slot :name="customSlots.beforeLabel"></slot>
       <span>{{ getFormLabel(config) }}</span>
       <slot :name="customSlots.afterLabel"></slot>
+      <slot name="after-label"></slot>
     </label>
     <div class="mdc-form-item__item">
       <slot :name="customSlots.beforeItem"></slot>

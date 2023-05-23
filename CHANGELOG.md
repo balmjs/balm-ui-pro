@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.56.0 / 2023-05-23
+
+### Feature
+
+- `<ui-form-view>`: new slot `after-label` for global form items
+
 ## v0.55.1 / 2023-04-28
 
 ### Bug Fixes
