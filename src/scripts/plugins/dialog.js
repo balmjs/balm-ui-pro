@@ -19,6 +19,7 @@ const DEFAULT_OPTIONS = {
   event: 'action',
   // Action handler
   handler: () => {},
+  listeners: {},
   // Others
   closeOnSave: true,
   refreshOnSave: false,
@@ -35,7 +36,7 @@ let globalOptions = DEFAULT_OPTIONS;
 
 const template = `<mdc-dialog :class="className" :open="open" :title="title" :mask-closable="maskClosable" @close="handleClose">
   <template v-if="customComponent">
-    <component :is="customComponent" v-model="modelValue" v-bind="attrOrProp" @[event]="handleComponentAction"></component>
+    <component :is="customComponent" v-model="modelValue" v-bind="attrOrProp" v-on="listeners" @[event]="handleComponentAction"></component>
   </template>
   <div v-else class="mdc-dialog__custom-content" v-html="content"></div>
   <template v-if="actionConfig.length" #actions>
