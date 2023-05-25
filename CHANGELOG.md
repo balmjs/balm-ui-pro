@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.57.0 / 2023-05-25
+
+### Feature
+
+- `<ui-list-view>`: add `action` event to the `tableListeners` prop for external event handling
+
 ## v0.56.0 / 2023-05-23
 
 ### Feature

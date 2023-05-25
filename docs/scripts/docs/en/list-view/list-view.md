@@ -142,6 +142,8 @@ interface ListViewData {
 | `searchOnReset`        | boolean       | `false`                            | The page will auto search data after resetting model data                                                                     |         |
 | `forceRefreshData`     | boolean       | `false`                            | Forced refresh data in keep alive                                                                                             |         |
 
+> NOTE: New in 0.57.0, add `action(listViewData: TopActionData)` event to the `tableListeners` prop for external event handling
+
 ### Slots
 
 | Name                                                 | Props                            | Description                                                                                       |

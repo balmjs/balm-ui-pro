@@ -416,6 +416,13 @@ export default {
 
           this.lastSearchFormData = Object.assign({}, this.searchForm.data);
         }
+
+        const { action } = this.tableListeners;
+        isFunction(action) &&
+          action({
+            ...this.viewPropsData,
+            ...this.$data
+          });
       } catch (err) {
         this.$set(this.listData, 'loading', false);
         console.warn(`[${UiListView.NAME}]: ${err.toString()}`);
