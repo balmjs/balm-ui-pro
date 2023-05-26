@@ -4,6 +4,7 @@ import { isObject } from '../utils/typeof';
 
 const DEFAULT_OPTIONS = {
   // Basic
+  id: null, // NOTE: control whether the dialog is destroyed
   className: '',
   title: '',
   content: '',
@@ -34,7 +35,7 @@ const PRO_DIALOG_BUTTON_TYPES = {
 
 let globalOptions = DEFAULT_OPTIONS;
 
-const template = `<mdc-dialog :class="className" :open="open" :title="title" :mask-closable="maskClosable" @close="handleClose">
+const template = `<mdc-dialog :id="id" :class="className" :open="open" :title="title" :mask-closable="maskClosable" @close="handleClose">
   <template v-if="customComponent">
     <component :is="customComponent" v-model="modelValue" v-bind="attrOrProp" v-on="listeners" @[event]="handleComponentAction"></component>
   </template>
@@ -60,10 +61,10 @@ const template = `<mdc-dialog :class="className" :open="open" :title="title" :ma
 </mdc-dialog>`;
 
 function createDialog(options) {
-  const { components, component, ...config } = options;
+  const { id, components, component, ...config } = options;
 
   let dialogApp = new Vue({
-    el: document.createElement('div'),
+    el: document.getElementById(id) || document.createElement('div'),
     name: 'ProDialog',
     components: {
       MdcDialog,
@@ -91,6 +92,7 @@ function createDialog(options) {
 
       return {
         PRO_DIALOG_BUTTON_TYPES,
+        id,
         open: false,
         customComponent: component,
         modelValue: currentModelValue,
@@ -117,8 +119,10 @@ function createDialog(options) {
         if (dialogApp) {
           this.open = false;
 
-          document.body.removeChild(this.$el);
-          dialogApp = null;
+          if (!id) {
+            document.body.removeChild(this.$el);
+            dialogApp = null;
+          }
 
           if (onSave && this.refreshOnSave) {
             this.refresh();

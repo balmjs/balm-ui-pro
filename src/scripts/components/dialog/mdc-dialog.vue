@@ -71,6 +71,8 @@ export default {
             this.opening = false;
           }, 150);
         }, 150);
+      } else {
+        this.opened = false;
       }
     }
   },

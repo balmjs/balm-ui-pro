@@ -36,6 +36,7 @@ interface VueInstance {
 
 | Option               | Type             | Default           | Description                                                                                                  | Version |
 | -------------------- | ---------------- | ----------------- | ------------------------------------------------------------------------------------------------------------ | ------- |
+| `id`                 | string           | `null`            | Controls whether the dialog is destroyed.                                                                    | 0.58.0  |
 | `className`          | string           | `''`              | The custom class name for the pro dialog.                                                                    |         |
 | `title`              | string           | `''`              | The title of the pro dialog.                                                                                 |         |
 | `content`            | string           | `''`              | The raw content of the pro dialog.                                                                           |         |
@@ -49,10 +50,10 @@ interface VueInstance {
 | `attrOrProp`         | object           | `{}`              | The attrs or props of the custom component.                                                                  |         |
 | `event`              | string           | `'action'`        | The event name of the custom component.                                                                      |         |
 | `handler`            | ProDialogHandler | `() => {}`        | The custom handler of the custom component or pro dialog.                                                    |         |
-| `listeners`          | object           | `{}`              | Custom component events                                                                                      | 0.57.0  |
-| `closeOnSave`        | boolean          | `true`            | The pro dialog will auto close after saving model data                                                       |         |
-| `refreshOnSave`      | boolean          | `false`           | The page will auto refresh after saving model data                                                           |         |
-| `refresh`            | function         | `location.reload` | Refreshing current page data                                                                                 |         |
+| `listeners`          | object           | `{}`              | Custom component events.                                                                                     | 0.57.0  |
+| `closeOnSave`        | boolean          | `true`            | The pro dialog will auto close after saving model data.                                                      |         |
+| `refreshOnSave`      | boolean          | `false`           | The page will auto refresh after saving model data.                                                          |         |
+| `refresh`            | function         | `location.reload` | Refreshing current page data.                                                                                |         |
 
 ### Use `$dialog` without `.vue` component
 

@@ -2,6 +2,13 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.58.0 / 2023-05-26
+
+### Feature
+
+- `$dialog`: add `id` option to control whether the dialog is destroyed
+- `<ui-list-view>`: update `resetSelectedRows` method for external call
+
 ## v0.57.1 / 2023-05-25
 
 ### Feature

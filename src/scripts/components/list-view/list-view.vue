@@ -468,8 +468,8 @@ export default {
       });
     },
     // NOTE: for multi actions
-    resetSelectedRows() {
-      this.$set(this.listData, 'selectedRows', []);
+    resetSelectedRows(selectedRows = []) {
+      this.$set(this.listData, 'selectedRows', selectedRows);
     },
     // NOTE: for `<keep-alive>`
     refreshComponent(noKeepAlive) {
