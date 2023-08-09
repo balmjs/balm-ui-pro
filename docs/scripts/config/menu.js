@@ -36,6 +36,9 @@ const MATERIAL_COMPONENTS_PRO = [
         name: 'multi-select'
       },
       {
+        name: 'component-plus'
+      },
+      {
         name: 'detail-view'
       },
       {

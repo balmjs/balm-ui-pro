@@ -10,6 +10,7 @@ const CheckboxGroup = () => import('@/views/components/checkbox-group');
 const RadioGroup = () => import('@/views/components/radio-group');
 const SwitchBox = () => import('@/views/components/switch-box');
 const MultiSelect = () => import('@/views/components/multi-select');
+const ComponentPlus = () => import('@/views/components/component-plus');
 
 const modelName = 'components';
 
@@ -65,6 +66,11 @@ export default $routerModel.createRoutes(modelName, {
       'multi-select',
       `${modelName}.multi-select`,
       MultiSelect
+    ),
+    $routerModel.createRoute(
+      'component-plus',
+      `${modelName}.component-plus`,
+      ComponentPlus
     )
   ]
 });

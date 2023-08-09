@@ -1,0 +1,12 @@
+[
+  {
+    "label": "Component Plus",
+    "component": "ui-component-plus",
+    "key": "x",
+    "value": [],
+    "attrOrProp": {
+      "componentName": "ui-textfield",
+      "componentModelEvent": "input"
+    }
+  }
+]
