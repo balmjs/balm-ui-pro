@@ -6,7 +6,11 @@
     "value": [],
     "attrOrProp": {
       "componentName": "ui-textfield",
-      "componentModelEvent": "input"
+      "componentModelEvent": "input",
+      "componentAttrOrProp": {
+        "fullwidth": true
+      },
+      "fullwidth": true
     }
   }
 ]

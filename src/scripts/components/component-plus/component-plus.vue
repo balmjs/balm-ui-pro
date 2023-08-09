@@ -1,25 +1,28 @@
 <template>
-  <div class="mdc-component-plus">
+  <div :class="className">
     <div
       v-for="(_, componentIndex) in componentData"
       :key="componentIndex"
       class="mdc-component-plus__item"
     >
-      <component
-        :is="componentName"
-        v-model="componentData[componentIndex]"
-        @[componentModelEvent]="handleChange"
-      ></component>
+      <div class="mdc-component-plus__content">
+        <component
+          :is="componentName"
+          v-model="componentData[componentIndex]"
+          v-bind="componentAttrOrProp"
+          @[componentModelEvent]="handleChange"
+        ></component>
+      </div>
       <div class="mdc-component-plus__actions">
-        <ui-icon-button
-          v-if="canRemove(componentIndex)"
-          icon="remove"
-          @click="onRemove(componentIndex)"
-        ></ui-icon-button>
         <ui-icon-button
           v-if="canAdd(componentIndex)"
           icon="add"
           @click="onAdd"
+        ></ui-icon-button>
+        <ui-icon-button
+          v-if="canRemove(componentIndex)"
+          icon="remove"
+          @click="onRemove(componentIndex)"
         ></ui-icon-button>
       </div>
     </div>
@@ -45,6 +48,12 @@ export default {
     event: UI_COMPONENT_PLUS.EVENTS.CHANGE
   },
   props: {
+    // States
+    modelValue: {
+      type: Array,
+      default: () => []
+    },
+    // UI attributes
     componentName: {
       type: String,
       required: true
@@ -57,16 +66,27 @@ export default {
       type: String,
       default: UI_COMPONENT_PLUS.EVENTS.CHANGE
     },
-    // States
-    modelValue: {
-      type: Array,
-      default: () => []
+    componentAttrOrProp: {
+      type: Object,
+      default: () => ({})
+    },
+    fullwidth: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
       componentData: this.modelValue
     };
+  },
+  computed: {
+    className() {
+      return {
+        'mdc-component-plus': true,
+        'mdc-component-plus--fullwidth': this.fullwidth
+      };
+    }
   },
   beforeMount() {
     this.onInit();

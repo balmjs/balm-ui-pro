@@ -4,12 +4,14 @@
 
 ### Props
 
-| Name                  | Type   | Default    | Description                           |
-| --------------------- | ------ | ---------- | ------------------------------------- |
-| `componentName`       | string | `required` | The name of the component used        |
-| `componentModelValue` | any    | `''`       | The model value of the component used |
-| `componentModelEvent` | string | `'change'` | The model event of the component used |
-| `modelValue`          | array  | `[]`       | The model value of the component plus |
+| Name                  | Type    | Default    | Description                                              |
+| --------------------- | ------- | ---------- | -------------------------------------------------------- |
+| `modelValue`          | array   | `[]`       | The model value of the component plus                    |
+| `componentName`       | string  | `required` | The name of the component used                           |
+| `componentModelValue` | any     | `''`       | The model value of the component used                    |
+| `componentModelEvent` | string  | `'change'` | The model event of the component used                    |
+| `componentAttrOrProp` | object  | `{}`       | The props of the component used                          |
+| `fullwidth`           | boolean | `false`    | Styles the component plus as a full width component item |
 
 ### Events
 

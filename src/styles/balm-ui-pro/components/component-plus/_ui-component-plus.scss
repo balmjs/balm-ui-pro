@@ -1,6 +1,12 @@
 .mdc-component-plus {
   display: flex;
   flex-direction: column;
+
+  &.mdc-component-plus--fullwidth {
+    .mdc-component-plus__content {
+      flex: 1;
+    }
+  }
 }
 
 .mdc-component-plus__item {
