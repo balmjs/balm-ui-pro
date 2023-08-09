@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.59.0 / 2023-08-09
+
+### Feature
+
+- `<ui-component-plus>`: new component for more sub components
+
 ## v0.58.0 / 2023-05-26
 
 ### Feature
@@ -199,7 +205,7 @@
 
 ### Feature
 
-- `<ui-layout-view>`: new component for layout
+- `<ui-layout-view>`: for more sub components for layout
 
 ### Bug Fixes
 

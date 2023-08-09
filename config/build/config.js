@@ -13,7 +13,8 @@ const components = [
   'checkbox-group',
   'radio-group',
   'switch-box',
-  'multi-select'
+  'multi-select',
+  'component-plus'
 ];
 
 const plugins = [
