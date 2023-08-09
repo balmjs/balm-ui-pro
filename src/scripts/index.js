@@ -13,6 +13,7 @@ import UiCheckboxGroup from './components/checkbox-group/checkbox-group.vue';
 import UiRadioGroup from './components/radio-group/radio-group.vue';
 import UiSwitchBox from './components/switch-box/switch-box.vue';
 import UiMultiSelect from './components/multi-select/multi-select.vue';
+import UiComponentPlus from './components/component-plus/component-plus.vue';
 import $apiModel, { useApiModel } from './plugins/api-model';
 import $routerModel, { useRouterModel } from './plugins/router-model';
 import $transform, { useTransform } from './plugins/transform';
@@ -34,7 +35,8 @@ const Components = {
   UiCheckboxGroup,
   UiRadioGroup,
   UiSwitchBox,
-  UiMultiSelect
+  UiMultiSelect,
+  UiComponentPlus
 };
 
 const Plugins = {
@@ -70,7 +72,8 @@ export {
   UiCheckboxGroup,
   UiRadioGroup,
   UiSwitchBox,
-  UiMultiSelect
+  UiMultiSelect,
+  UiComponentPlus
 };
 export {
   $apiModel,
