@@ -89,8 +89,8 @@ export default {
     }
   },
   watch: {
-    modelValue(val, oldVal) {
-      const canUpdate = !(!val.length && oldVal.length);
+    modelValue(val) {
+      const canUpdate = !!val.length;
       canUpdate && (this.componentData = val);
     }
   },
