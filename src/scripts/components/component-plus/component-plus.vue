@@ -89,8 +89,9 @@ export default {
     }
   },
   watch: {
-    modelValue(val) {
-      this.componentData = val;
+    modelValue(val, oldVal) {
+      const canUpdate = !(!val.length && oldVal.length);
+      canUpdate && (this.componentData = val);
     }
   },
   beforeMount() {
