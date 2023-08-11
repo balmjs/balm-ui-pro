@@ -88,6 +88,11 @@ export default {
       };
     }
   },
+  watch: {
+    modelValue(val) {
+      this.componentData = val;
+    }
+  },
   beforeMount() {
     this.onInit();
   },
@@ -102,7 +107,11 @@ export default {
       return !(!index && this.componentData.length === 1);
     },
     onInit() {
-      this.componentData = [this.componentModelValue];
+      const initialValue = this.proFormDataSource[this.proConfig.key];
+      this.componentData =
+        Array.isArray(initialValue) && initialValue.length
+          ? initialValue
+          : [this.componentModelValue];
       this.handleChange();
     },
     onAdd() {
