@@ -1,7 +1,9 @@
 <template>
   <div class="mdc-detail-view">
     <h2 v-if="hasTitle" class="mdc-detail-view__title">
-      <slot :name="`${namespace}-title`">{{ title }}</slot>
+      <slot :name="`${namespace}-title`" v-bind="instanceData">{{
+        title
+      }}</slot>
     </h2>
 
     <section class="mdc-detail-view__content">

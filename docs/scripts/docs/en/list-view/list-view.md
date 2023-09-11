@@ -148,7 +148,7 @@ interface ListViewData {
 
 | Name                                                 | Props                            | Description                                                                                       |
 | ---------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `list-view-title`                                    |                                  | List view title                                                                                   |
+| `list-view-title`                                    | ListViewData                     | List view title                                                                                   |
 | custom search form item slots (by form model config) | `config`, `data`                 | Custom search form item slots                                                                     |
 | `before-list-view-top-actions`                       |                                  | Custom before list top bar actions                                                                |
 | `list-view-top-actions`                              | ListViewData                     | Custom list top bar actions                                                                       |
