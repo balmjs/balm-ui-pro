@@ -2,6 +2,13 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.60.0 / 2023-09-11
+
+### Feature
+
+- `<ui-list-view>`: update `list-view-title` slot props
+- `<ui-detail-view>`: update `detail-view-title` slot props
+
 ## v0.59.4 / 2023-08-11
 
 ### Bug Fixes
