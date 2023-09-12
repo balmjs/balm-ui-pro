@@ -1,7 +1,9 @@
 <template>
   <div class="mdc-list-view">
     <h2 v-if="hasTitle" class="mdc-list-view__title">
-      <slot :name="`${UI_LIST_VIEW.NAMESPACE}-title`">{{ title }}</slot>
+      <slot :name="`${UI_LIST_VIEW.NAMESPACE}-title`" v-bind="instanceData">{{
+        title
+      }}</slot>
     </h2>
 
     <section v-if="hasSearchForm" class="mdc-list-view__conditions">

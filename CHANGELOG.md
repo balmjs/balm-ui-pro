@@ -2,6 +2,13 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.27.0 / 2023-09-12
+
+### Feature
+
+- `<ui-list-view>`: update `list-view-title` slot props
+- `<ui-detail-view>`: update `detail-view-title` slot props
+
 ## v0.26.0 / 2023-04-28
 
 ### Feature
