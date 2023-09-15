@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.60.1 / 2023-09-15
+
+### Chore
+
+- `<ui-list-view>`, `<ui-detail-view>`: add `model` watcher
+
 ## v0.60.0 / 2023-09-11
 
 ### Feature

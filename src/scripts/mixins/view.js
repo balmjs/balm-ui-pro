@@ -98,6 +98,9 @@ export default {
     }
   },
   watch: {
+    model() {
+      this.init();
+    },
     modelConfig() {
       this.init();
     },
