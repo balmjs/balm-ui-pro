@@ -25,13 +25,13 @@ const currentFormData = computed(() =>
 const currentValue = computed(() => {
   const value = currentFormData.value[props.proConfig.key];
   const type = getType(value);
-  const data = Object.assign({}, props, {
+  const propsData = Object.assign({}, props, {
     type,
-    value
+    value: isFunction(value) ? undefined : value
   });
 
   return isFunction(props.proConfig.value)
-    ? props.proConfig.value(data)
+    ? props.proConfig.value(currentFormData.value, propsData)
     : value;
 });
 </script>
