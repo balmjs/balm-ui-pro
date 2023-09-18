@@ -221,7 +221,7 @@ export default (
             label: 'Readonly Item',
             component: 'ui-readonly-item',
             key: 'x',
-            value: (data) => data.value,
+            value: ({ x }) => x,
             attrOrProp: {
               text: 'ox'
             }

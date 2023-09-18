@@ -4,22 +4,22 @@
 
 ### Props
 
-| Name             | Type   | Default | Description            |
-| ---------------- | ------ | ------- | ---------------------- |
-| `config`         | object | `{}`    | Form item config       |
-| `formData`       | object | `{}`    | Form model data        |
-| `formDataSource` | object | `{}`    | Form model data source |
+| Name                | Type   | Default | Description            |
+| ------------------- | ------ | ------- | ---------------------- |
+| `proConfig`         | object | `{}`    | Form item config       |
+| `proFormData`       | object | `{}`    | Form model data        |
+| `proFormDataSource` | object | `{}`    | Form model data source |
 
 ```ts
-type ReadonlyItemData = {
-  formData: object,
-  formDataSource: object,
-  config: object,
-  type: string,
-  value: unknown,
+type ReadonlyItemPropsData = {
+  proConfig: object;
+  proFormData: object;
+  proFormDataSource: object;
+  type: string;
+  value: unknown;
 }
 
 interface ReadonlyItemConfig extends FormItemConfig {
-  value: unknown | (data: ReadonlyItemData) => any
+  value: unknown | (currentFormData: object, propsData: ReadonlyItemPropsData) => any;
 }
 ```
