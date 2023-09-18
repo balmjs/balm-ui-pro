@@ -18,13 +18,13 @@ export default {
     currentValue() {
       const value = this.currentFormData[this.proConfig.key];
       const type = getType(value);
-      const data = Object.assign({}, this.$props, {
+      const propsData = Object.assign({}, this.$props, {
         type,
-        value
+        value: isFunction(value) ? undefined : value
       });
 
       return isFunction(this.proConfig.value)
-        ? this.proConfig.value(data)
+        ? this.proConfig.value(this.currentFormData, propsData)
         : value;
     }
   }
