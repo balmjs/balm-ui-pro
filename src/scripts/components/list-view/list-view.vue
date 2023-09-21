@@ -460,6 +460,12 @@ async function getModelData() {
       }
 
       state.lastSearchFormData = Object.assign({}, state.searchForm.data);
+    } else {
+      if (props.withoutPagination && Array.isArray(state.listDataSource)) {
+        state.listData.data = state.listDataSource;
+      } else {
+        console.warn(`[${UI_LIST_VIEW.NAME}]: Invalid response data`);
+      }
     }
   } catch (err) {
     state.listData.loading = false;

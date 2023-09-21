@@ -2,6 +2,12 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.28.1 / 2023-09-21
+
+### Chore
+
+- `<ui-list-view>`: update getModelData for invalid response data
+
 ## v0.28.0 / 2023-09-18
 
 ### Code Refactoring
