@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.61.1 / 2023-09-21
+
+### Chore
+
+- `<ui-list-view>`: update getModelData for invalid response data
+
 ## v0.61.0 / 2023-09-18
 
 ### Code Refactoring

@@ -417,6 +417,12 @@ export default {
           }
 
           this.lastSearchFormData = Object.assign({}, this.searchForm.data);
+        } else {
+          if (this.withoutPagination && Array.isArray(this.listDataSource)) {
+            this.$set(this.listData, 'data', this.listDataSource);
+          } else {
+            console.warn(`[${UiListView.NAME}]: Invalid response data`);
+          }
         }
 
         const { action } = this.tableListeners;
