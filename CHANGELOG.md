@@ -2,6 +2,12 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.28.2 / 2023-10-26
+
+### Bug Fixes
+
+- `<ui-layout-view>`: fix without drawer bug
+
 ## v0.28.1 / 2023-09-21
 
 ### Chore
