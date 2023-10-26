@@ -149,12 +149,14 @@ const isPermanentDrawer = computed(() => drawerType.value === 'permanent');
 const drawerAboveTopAppBar = computed(() => !props.drawerBelowTopAppBar);
 const className = computed(() => ({
   'mdc-layout-view': true,
-  'mdc-layout-view--with-modal-drawer': isModalDrawer.value,
-  'mdc-layout-view--with-permanent-drawer': isPermanentDrawer.value,
+  'mdc-layout-view--with-modal-drawer': props.useDrawer && isModalDrawer.value,
+  'mdc-layout-view--with-permanent-drawer':
+    props.useDrawer && isPermanentDrawer.value,
   'mdc-layout-view--with-drawer-above-top-app-bar':
-    isPermanentDrawer.value && drawerAboveTopAppBar.value,
+    props.useDrawer && isPermanentDrawer.value && drawerAboveTopAppBar.value,
   'mdc-layout-view--with-drawer-below-top-app-bar':
-    isPermanentDrawer.value && props.drawerBelowTopAppBar,
+    props.useDrawer && isPermanentDrawer.value && props.drawerBelowTopAppBar,
+  'mdc-layout-view--without-drawer': !props.useDrawer,
   'mdc-layout-view--mobile': !state.isLargeScreen,
   'mdc-layout-view--desktop': state.isLargeScreen
 }));
