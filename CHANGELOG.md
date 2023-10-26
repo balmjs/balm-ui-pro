@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.61.2 / 2023-10-26
+
+### Bug Fixes
+
+- `<ui-layout-view>`: fix without drawer bug
+
 ## v0.61.1 / 2023-09-21
 
 ### Chore
