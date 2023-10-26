@@ -151,12 +151,15 @@ export default {
     className() {
       return {
         'mdc-layout-view': true,
-        'mdc-layout-view--with-modal-drawer': this.isModalDrawer,
-        'mdc-layout-view--with-permanent-drawer': this.isPermanentDrawer,
+        'mdc-layout-view--with-modal-drawer':
+          this.useDrawer && this.isModalDrawer,
+        'mdc-layout-view--with-permanent-drawer':
+          this.useDrawer && this.isPermanentDrawer,
         'mdc-layout-view--with-drawer-above-top-app-bar':
-          this.isPermanentDrawer && this.drawerAboveTopAppBar,
+          this.useDrawer && this.isPermanentDrawer && this.drawerAboveTopAppBar,
         'mdc-layout-view--with-drawer-below-top-app-bar':
-          this.isPermanentDrawer && this.drawerBelowTopAppBar,
+          this.useDrawer && this.isPermanentDrawer && this.drawerBelowTopAppBar,
+        'mdc-layout-view--without-drawer': !this.useDrawer,
         'mdc-layout-view--mobile': !this.isLargeScreen,
         'mdc-layout-view--desktop': this.isLargeScreen
       };
