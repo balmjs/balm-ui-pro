@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.61.3 / 2023-11-17
+
+### Chore
+
+- `<ui-list-view>`: optimize row and top actions' config for `attrOrProp.class`
+
 ## v0.61.2 / 2023-10-26
 
 ### Bug Fixes

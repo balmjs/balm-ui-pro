@@ -9,7 +9,7 @@
         >
           <ui-button
             :key="`button-${actionIndex}`"
-            :class="[cssClasses.topAction, action.type || '']"
+            :class="actionClass(action)"
             v-bind="
               Object.assign(
                 {
@@ -38,7 +38,7 @@
           <ui-button
             v-if="ifAction(action)"
             :key="`button-${actionIndex}`"
-            :class="[cssClasses.topAction, action.type || '']"
+            :class="actionClass(action)"
             v-bind="
               Object.assign(
                 {
@@ -103,7 +103,6 @@ export default {
   },
   data() {
     return {
-      cssClasses,
       TYPES,
       namespace,
       columnSelection: {
@@ -140,6 +139,13 @@ export default {
         : isBoolean(currentAction)
         ? currentAction
         : this.actionRendering(Object.assign({}, action), this.listViewData);
+    },
+    actionClass({ type, attrOrProp }) {
+      return [
+        cssClasses.topAction,
+        type || '',
+        attrOrProp ? attrOrProp.class : ''
+      ];
     },
     actionIcon({ icon, type }) {
       return icon !== false && this.actionIconFormat[type]

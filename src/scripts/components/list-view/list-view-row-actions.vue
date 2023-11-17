@@ -8,7 +8,7 @@
               :is="action.component"
               v-show="configAction('show', action)"
               :key="`button-without-slot-${index}`"
-              :class="[cssClasses.rowAction, 'button-without-slot']"
+              :class="actionClass('button-without-slot', action)"
               v-bind="action.attrOrProp || {}"
               @click.native="handleAction(action)"
             ></component>
@@ -18,7 +18,7 @@
               :is="action.component"
               v-show="configAction('show', action)"
               :key="`button-with-slot-${index}`"
-              :class="[cssClasses.rowAction, 'button-with-slot']"
+              :class="actionClass('button-with-slot', action)"
               v-bind="action.attrOrProp || {}"
               @click.native="handleAction(action)"
             >
@@ -31,7 +31,7 @@
             v-if="action.type === TYPES.routerLink"
             v-show="configAction('show', action)"
             :key="`internal-link-${index}`"
-            :class="[cssClasses.rowAction, 'internal-link']"
+            :class="actionClass('internal-link', action)"
             :to="configAction(TYPES.routerLink, action)"
             v-bind="action.attrOrProp || {}"
           >
@@ -44,7 +44,7 @@
             v-else-if="action.href"
             v-show="configAction('show', action)"
             :key="`external-link-${index}`"
-            :class="[cssClasses.rowAction, 'external-link']"
+            :class="actionClass('external-link', action)"
             :href="configAction('href', action)"
             v-bind="
               Object.assign(
@@ -65,7 +65,7 @@
             v-else
             v-show="configAction('show', action)"
             :key="`link-${index}`"
-            :class="[cssClasses.rowAction, 'link']"
+            :class="actionClass('link', action)"
             href="javascript:void(0)"
             @click="handleAction(action)"
           >
@@ -110,11 +110,18 @@ export default {
   },
   data() {
     return {
-      cssClasses,
       TYPES
     };
   },
   methods: {
+    actionClass(currentClassName, { type, attrOrProp }) {
+      return [
+        cssClasses.rowAction,
+        currentClassName,
+        type || '',
+        attrOrProp ? attrOrProp.class : ''
+      ];
+    },
     configAction(type, action) {
       let result = '';
       const currentAction = action[type];
