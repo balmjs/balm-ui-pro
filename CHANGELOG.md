@@ -2,6 +2,12 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.28.3 / 2023-11-17
+
+### Chore
+
+- `<ui-list-view>`: optimize row and top actions' config for `attrOrProp.class`
+
 ## v0.28.2 / 2023-10-26
 
 ### Bug Fixes

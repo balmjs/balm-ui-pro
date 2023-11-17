@@ -10,7 +10,7 @@
           v-if="action.type === TYPES.columnSelection && ifAction(action)"
         >
           <ui-button
-            :class="[cssClasses.topAction, action.type || '']"
+            :class="actionClass(action)"
             v-bind="
               Object.assign(
                 {
@@ -38,7 +38,7 @@
         <template v-else>
           <ui-button
             v-if="ifAction(action)"
-            :class="[cssClasses.topAction, action.type || '']"
+            :class="actionClass(action)"
             v-bind="
               Object.assign(
                 {
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { cssClasses, TYPES } from './constants';
+import { TYPES } from './constants';
 
 const UI_LIST_VIEW_TOP_ACTIONS = {
   namespace: 'list-view-top-actions',
@@ -78,7 +78,7 @@ export default {
 <script setup>
 import { reactive, toRefs, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { getRouteLocationRaw } from './constants';
+import { cssClasses, getRouteLocationRaw } from './constants';
 import UiCheckboxGroup from '../checkbox-group/checkbox-group.vue';
 import { isBoolean, isString, isObject, isFunction } from '../../utils/typeof';
 
@@ -150,6 +150,10 @@ function ifAction(action) {
     : isBoolean(currentAction)
     ? currentAction
     : props.actionRendering(Object.assign({}, action), props.listViewData);
+}
+
+function actionClass({ type, attrOrProp }) {
+  return [cssClasses.topAction, type || '', attrOrProp ? attrOrProp.class : ''];
 }
 
 function actionIcon({ icon, type }) {

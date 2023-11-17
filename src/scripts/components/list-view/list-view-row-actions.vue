@@ -10,7 +10,7 @@
             <component
               :is="action.component"
               v-show="configAction('show', action)"
-              :class="[cssClasses.rowAction, 'button-without-slot']"
+              :class="actionClass('button-without-slot', action)"
               v-bind="action.attrOrProp || {}"
               @click="handleAction(action)"
             ></component>
@@ -19,7 +19,7 @@
             <component
               :is="action.component"
               v-show="configAction('show', action)"
-              :class="[cssClasses.rowAction, 'button-with-slot']"
+              :class="actionClass('button-with-slot', action)"
               v-bind="action.attrOrProp || {}"
               @click="handleAction(action)"
             >
@@ -31,7 +31,7 @@
           <router-link
             v-if="action.type === TYPES.routerLink"
             v-show="configAction('show', action)"
-            :class="[cssClasses.rowAction, 'internal-link']"
+            :class="actionClass('internal-link', action)"
             :to="configAction(TYPES.routerLink, action)"
             v-bind="action.attrOrProp || {}"
           >
@@ -43,7 +43,7 @@
           <a
             v-else-if="action.href"
             v-show="configAction('show', action)"
-            :class="[cssClasses.rowAction, 'external-link']"
+            :class="actionClass('external-link', action)"
             :href="configAction('href', action)"
             v-bind="
               Object.assign(
@@ -63,7 +63,7 @@
           <a
             v-else
             v-show="configAction('show', action)"
-            :class="[cssClasses.rowAction, 'link']"
+            :class="actionClass('link', action)"
             href="javascript:void(0)"
             @click="handleAction(action)"
           >
@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { cssClasses, TYPES } from './constants';
+import { TYPES } from './constants';
 
 export default {
   name: 'UiListViewRowActions',
@@ -88,7 +88,7 @@ export default {
 </script>
 
 <script setup>
-import { getRouteLocationRaw } from './constants';
+import { cssClasses, getRouteLocationRaw } from './constants';
 import { isBoolean, isFunction } from '../../utils/typeof';
 
 const props = defineProps({
@@ -113,6 +113,15 @@ const props = defineProps({
     default: () => true
   }
 });
+
+function actionClass(currentClassName, { type, attrOrProp }) {
+  return [
+    cssClasses.rowAction,
+    currentClassName,
+    type || '',
+    attrOrProp ? attrOrProp.class : ''
+  ];
+}
 
 function configAction(type, action) {
   let result = '';
