@@ -69,7 +69,9 @@ export default {
       this.selectedData = val;
     },
     components() {
-      this.initRootSelectedOptions();
+      this.hasSelectedOptions
+        ? this.initSelectedOptions()
+        : this.setSelectedOptions(0, this.components[0]);
     },
     proFormData: {
       handler(val) {
@@ -117,11 +119,6 @@ export default {
         if (key === this.rootSelectedKey || parentValue) {
           await this.setSelectedOptions(parentValue, this.components[index]);
         }
-      }
-    },
-    initRootSelectedOptions() {
-      if (!this.hasSelectedOptions) {
-        this.setSelectedOptions(0, this.components[0]);
       }
     },
     async setSelectedOptions(parentValue, { key, options }) {
