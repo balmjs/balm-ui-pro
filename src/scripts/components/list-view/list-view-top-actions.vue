@@ -1,14 +1,14 @@
 <template>
-  <section class="mdc-list-view__top-actions">
+  <section v-if="hasTopActions" class="mdc-list-view__top-actions">
     <slot :name="`before-${namespace}`"></slot>
     <slot :name="namespace" v-bind="listViewData">
-      <template v-for="(action, actionIndex) in actionConfig">
+      <template v-for="(action, index) in actionConfig">
         <ui-menu-anchor
           v-if="action.type === TYPES.columnSelection && ifAction(action)"
-          :key="`column-selection-${actionIndex}`"
+          :key="`column-selection-${index}`"
         >
           <ui-button
-            :key="`button-${actionIndex}`"
+            :key="`button-${index}`"
             :class="actionClass(action)"
             v-bind="
               Object.assign(
@@ -37,7 +37,7 @@
         <template v-else>
           <ui-button
             v-if="ifAction(action)"
-            :key="`button-${actionIndex}`"
+            :key="`button-${index}`"
             :class="actionClass(action)"
             v-bind="
               Object.assign(
@@ -113,6 +113,14 @@ export default {
     };
   },
   computed: {
+    hasTopActions() {
+      const hasCustomSlot =
+        this.$slots[`before-${namespace}`] ||
+        this.$slots[namespace] ||
+        this.$slots[`after-${namespace}`];
+
+      return !!(this.actionConfig.length || hasCustomSlot);
+    },
     columnSelectionOptions() {
       return this.thead.map((item, index) => {
         const label = isString(item) ? item : item.value;

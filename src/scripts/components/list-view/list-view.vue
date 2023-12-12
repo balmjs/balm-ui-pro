@@ -475,10 +475,6 @@ export default {
         this.$set(this.listData, 'tbody', selectedTbody);
       });
     },
-    // NOTE: for multi actions
-    resetSelectedRows(selectedRows = []) {
-      this.$set(this.listData, 'selectedRows', selectedRows);
-    },
     // NOTE: for `<keep-alive>`
     refreshComponent(noKeepAlive) {
       if (noKeepAlive) {
@@ -492,6 +488,10 @@ export default {
           canRefreshData && this.getModelData();
         }
       }
+    },
+    // expose
+    resetSelectedRows(selectedRows = []) {
+      this.$set(this.listData, 'selectedRows', selectedRows);
     }
   }
 };
