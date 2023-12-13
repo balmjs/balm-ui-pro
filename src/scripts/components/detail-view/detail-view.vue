@@ -187,7 +187,9 @@ export default {
 
         if (isObject(originalData) && Object.keys(originalData).length) {
           this.formDataSource = originalData;
-          this.formData = Object.assign({}, originalData);
+          Object.keys(this.formData).forEach((key) =>
+            this.$set(this.formData, key, originalData[key])
+          );
         }
       } catch (err) {
         console.warn(`[${UiDetailView.NAME}]: ${err.toString()}`);

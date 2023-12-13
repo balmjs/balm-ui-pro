@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.61.6 / 2023-12-13
+
+### Bug Fixes
+
+- `<ui-detail-view>`: fix init formData bug
+
 ## v0.61.4 / 2023-11-23
 
 ### Bug Fixes
