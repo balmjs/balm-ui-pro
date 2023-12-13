@@ -1,10 +1,10 @@
 <template>
-  <section class="mdc-list-view__top-actions">
+  <section v-if="hasTopActions" class="mdc-list-view__top-actions">
     <slot :name="`before-${UI_LIST_VIEW_TOP_ACTIONS.namespace}`"></slot>
     <slot :name="UI_LIST_VIEW_TOP_ACTIONS.namespace" v-bind="listViewData">
       <template
-        v-for="(action, actionIndex) in actionConfig"
-        :key="`top-action-${actionIndex}`"
+        v-for="(action, index) in actionConfig"
+        :key="`top-action-${index}`"
       >
         <ui-menu-anchor
           v-if="action.type === TYPES.columnSelection && ifAction(action)"
@@ -76,7 +76,7 @@ export default {
 </script>
 
 <script setup>
-import { reactive, toRefs, computed } from 'vue';
+import { reactive, toRefs, computed, useSlots } from 'vue';
 import { useRouter } from 'vue-router';
 import { cssClasses, getRouteLocationRaw } from './constants';
 import UiCheckboxGroup from '../checkbox-group/checkbox-group.vue';
@@ -114,6 +114,7 @@ const props = defineProps({
     default: () => {}
   }
 });
+const slots = useSlots();
 
 const state = reactive({
   columnSelection: {
@@ -124,6 +125,15 @@ const state = reactive({
 });
 const { columnSelection } = toRefs(state);
 const emit = defineEmits([UI_LIST_VIEW_TOP_ACTIONS.EVENTS.columnSelection]);
+
+const hasTopActions = computed(() => {
+  const hasCustomSlot =
+    slots[`before-${UI_LIST_VIEW_TOP_ACTIONS.NAMESPACE}`] ||
+    slots[UI_LIST_VIEW_TOP_ACTIONS.NAMESPACE] ||
+    slots[`after-${UI_LIST_VIEW_TOP_ACTIONS.NAMESPACE}`];
+
+  return !!(props.actionConfig.length || hasCustomSlot);
+});
 
 const columnSelectionOptions = computed(() => {
   return props.thead.map((item, index) => {

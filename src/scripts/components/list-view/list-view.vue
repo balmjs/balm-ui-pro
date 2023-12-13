@@ -514,11 +514,6 @@ function handleColumnSelection(selectedColumns) {
   });
 }
 
-// NOTE: for multi actions
-function resetSelectedRows() {
-  state.listData.selectedRows = [];
-}
-
 // NOTE: for `<keep-alive>`
 function refreshComponent(noKeepAlive) {
   if (noKeepAlive) {
@@ -535,4 +530,13 @@ function refreshComponent(noKeepAlive) {
 }
 
 useKeepAlive(refreshComponent);
+
+// expose
+function resetSelectedRows() {
+  state.listData.selectedRows = [];
+}
+
+defineExpose({
+  resetSelectedRows
+});
 </script>

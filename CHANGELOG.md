@@ -2,6 +2,13 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.28.4 / 2023-12-13
+
+### Bug Fixes
+
+- `<ui-multi-select>`: fix sub options watcher bug
+- `<ui-detail-view>`: fix init formData bug
+
 ## v0.28.3 / 2023-11-17
 
 ### Chore

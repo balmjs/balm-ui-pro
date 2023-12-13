@@ -87,7 +87,9 @@ watch(
 watch(
   () => props.components,
   () => {
-    initRootSelectedOptions();
+    hasSelectedOptions.value
+      ? initSelectedOptions()
+      : setSelectedOptions(0, props.components[0]);
   }
 );
 
@@ -131,12 +133,6 @@ async function initSelectedOptions() {
     if (key === rootSelectedKey.value || parentValue) {
       await setSelectedOptions(parentValue, props.components[index]);
     }
-  }
-}
-
-function initRootSelectedOptions() {
-  if (!hasSelectedOptions.value) {
-    setSelectedOptions(0, props.components[0]);
   }
 }
 

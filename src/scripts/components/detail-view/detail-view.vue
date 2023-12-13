@@ -234,7 +234,9 @@ async function getModelData() {
 
     if (isObject(formDataSource) && Object.keys(formDataSource).length) {
       state.formDataSource = formDataSource;
-      state.formData = Object.assign({}, formDataSource);
+      Object.keys(state.formData).forEach((key) =>
+        this.$set(state.formData, key, formDataSource[key])
+      );
     }
   } catch (err) {
     console.warn(`[${UI_DETAIL_VIEW.NAME}]: ${err.toString()}`);
