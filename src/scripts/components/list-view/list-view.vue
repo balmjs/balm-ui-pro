@@ -26,7 +26,7 @@
           )
         "
         @loaded="initModelData"
-        @reload="initModelData"
+        @reload="reloadModelData"
         @change:x="handleChange"
         @action="handleAction"
       >
@@ -385,6 +385,9 @@ export default {
         this.searchForm.data = Object.assign(formData, this.modelValueDefaults);
         !this.useValidator && (await this.getModelData());
       });
+    },
+    reloadModelData(formData) {
+      this.searchForm.data = formData;
     },
     resetListData() {
       this.listDataSource = {};
