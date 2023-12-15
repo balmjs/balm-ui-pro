@@ -26,7 +26,6 @@
           )
         "
         @loaded="initModelData"
-        @reload="reloadModelData"
         @update:x="handleChange"
         @action="handleAction"
       >
@@ -430,10 +429,6 @@ function initModelData(formData = {}) {
     state.searchForm.data = Object.assign(formData, props.modelValueDefaults);
     !props.useValidator && (await getModelData());
   });
-}
-
-function reloadModelData(formData) {
-  state.searchForm.data = formData;
 }
 
 function resetListData() {

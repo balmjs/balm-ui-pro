@@ -31,7 +31,6 @@
           )
         "
         @loaded="initModelData"
-        @reload="reloadModelData"
         @update:x="handleChange"
         @action="handleAction"
       >
@@ -223,10 +222,6 @@ function initModelData(formData = {}) {
     state.detailData = Object.assign(formData, props.modelValueDefaults);
     await getModelData();
   });
-}
-
-function reloadModelData(formData) {
-  state.detailData = formData;
 }
 
 function resetDetailData() {
