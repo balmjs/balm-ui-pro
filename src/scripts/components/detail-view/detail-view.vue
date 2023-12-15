@@ -28,7 +28,6 @@
           )
         "
         @loaded="initModelData"
-        @reload="reloadModelData"
         @change:x="handleChange"
         @action="handleAction"
       >
@@ -176,9 +175,6 @@ export default {
         this.detailData = Object.assign(formData, this.modelValueDefaults);
         await this.getModelData();
       });
-    },
-    reloadModelData(formData) {
-      this.detailData = formData;
     },
     resetDetailData() {
       this.detailDataSource = {};
