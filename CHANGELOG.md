@@ -2,6 +2,12 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.29.0 / 2023-12-15
+
+### Code Refactoring
+
+- `<ui-detail-view>`: optimize form data and source binding for form view
+
 ## v0.28.4 / 2023-12-13
 
 ### Bug Fixes

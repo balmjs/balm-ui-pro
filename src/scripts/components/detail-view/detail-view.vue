@@ -15,7 +15,8 @@
       <ui-spinner v-if="loading" active></ui-spinner>
       <ui-form-view
         v-show="!loading"
-        v-model="formData"
+        ref="formView"
+        v-model="detailData"
         v-bind="
           Object.assign(
             {
@@ -30,6 +31,7 @@
           )
         "
         @loaded="initModelData"
+        @reload="reloadModelData"
         @update:x="handleChange"
         @action="handleAction"
       >
@@ -100,7 +102,8 @@ import {
   computed,
   onBeforeMount,
   useSlots,
-  nextTick
+  nextTick,
+  getCurrentInstance
 } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { viewProps, useView } from '../../mixins/view';
@@ -157,14 +160,15 @@ const emit = defineEmits([
 ]);
 const slots = useSlots();
 
+const instance = getCurrentInstance();
 const state = reactive({
   formConfig: [],
-  formData: {},
-  formDataSource: {},
+  detailDataSource: {},
+  detailData: {},
   message: '',
   loading: false
 });
-const { formConfig, formData, message, loading } = toRefs(state);
+const { formConfig, detailData, message, loading } = toRefs(state);
 
 const { globalModelOptions, viewPropsData, handleChange, exposeAction } =
   useView(props, {
@@ -180,8 +184,8 @@ const hasTitle = computed(
 );
 const instanceData = computed(() =>
   Object.assign({}, viewPropsData, {
-    detailData: state.formData,
-    detailDataSource: state.formDataSource
+    detailData: state.detailData,
+    detailDataSource: state.detailDataSource
   })
 );
 const fullInstanceData = computed(() =>
@@ -216,14 +220,18 @@ function initModelData(formData = {}) {
   state.loading = false;
 
   nextTick(async () => {
-    state.formData = Object.assign(formData, props.modelValueDefaults);
+    state.detailData = Object.assign(formData, props.modelValueDefaults);
     await getModelData();
   });
 }
 
+function reloadModelData(formData) {
+  state.detailData = formData;
+}
+
 function resetDetailData() {
-  state.formData = {};
-  state.formDataSource = {};
+  state.detailDataSource = {};
+  state.detailData = {};
   state.message = '';
   state.loading = true;
 }
@@ -233,9 +241,10 @@ async function getModelData() {
     const formDataSource = await props.getModelDataFn()(fullInstanceData.value);
 
     if (isObject(formDataSource) && Object.keys(formDataSource).length) {
-      state.formDataSource = formDataSource;
-      Object.keys(state.formData).forEach((key) =>
-        this.$set(state.formData, key, formDataSource[key])
+      instance.ctx.$refs.formView.formDataSource = formDataSource;
+      state.detailDataSource = formDataSource;
+      Object.keys(state.detailData).forEach(
+        (key) => (state.detailData[key] = formDataSource[key])
       );
     }
   } catch (err) {
@@ -297,8 +306,8 @@ async function handleAction(action, result) {
 
 function getSlotData(slotData) {
   return Object.assign({}, slotData, {
-    detailData: state.formData,
-    detailDataSource: state.formDataSource,
+    detailData: state.detailData,
+    detailDataSource: state.detailDataSource,
     refreshData: getModelData
   });
 }
