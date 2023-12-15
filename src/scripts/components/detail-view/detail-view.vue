@@ -12,7 +12,8 @@
       <ui-spinner v-if="loading" active></ui-spinner>
       <ui-form-view
         v-show="!loading"
-        v-model="formData"
+        ref="formView"
+        v-model="detailData"
         v-bind="
           Object.assign(
             {
@@ -27,6 +28,7 @@
           )
         "
         @loaded="initModelData"
+        @reload="reloadModelData"
         @change:x="handleChange"
         @action="handleAction"
       >
@@ -131,8 +133,8 @@ export default {
     return {
       namespace: UiDetailView.NAMESPACE,
       formConfig: [],
-      formData: {},
-      formDataSource: {},
+      detailDataSource: {},
+      detailData: {},
       message: '',
       loading: false
     };
@@ -140,8 +142,8 @@ export default {
   computed: {
     instanceData() {
       return Object.assign({}, this.viewPropsData, {
-        detailData: this.formData,
-        detailDataSource: this.formDataSource
+        detailData: this.detailData,
+        detailDataSource: this.detailDataSource
       });
     }
   },
@@ -171,13 +173,16 @@ export default {
       this.loading = false;
 
       this.$nextTick(async () => {
-        this.formData = Object.assign(formData, this.modelValueDefaults);
+        this.detailData = Object.assign(formData, this.modelValueDefaults);
         await this.getModelData();
       });
     },
+    reloadModelData(formData) {
+      this.detailData = formData;
+    },
     resetDetailData() {
-      this.formData = {};
-      this.formDataSource = {};
+      this.detailDataSource = {};
+      this.detailData = {};
       this.message = '';
       this.loading = true;
     },
@@ -186,9 +191,10 @@ export default {
         const originalData = await this.getModelDataFn(this.fullInstanceData);
 
         if (isObject(originalData) && Object.keys(originalData).length) {
-          this.formDataSource = originalData;
-          Object.keys(this.formData).forEach((key) =>
-            this.$set(this.formData, key, originalData[key])
+          this.$refs.formView.formDataSource = originalData;
+          this.detailDataSource = originalData;
+          Object.keys(this.detailData).forEach((key) =>
+            this.$set(this.detailData, key, originalData[key])
           );
         }
       } catch (err) {
@@ -249,8 +255,8 @@ export default {
     },
     getSlotData(slotData) {
       return Object.assign({}, slotData, {
-        detailData: this.formData,
-        detailDataSource: this.formDataSource,
+        detailData: this.detailData,
+        detailDataSource: this.detailDataSource,
         refreshData: this.getModelData
       });
     }

@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.62.0 / 2023-12-15
+
+### Code Refactoring
+
+- `<ui-detail-view>`: optimize form data and source binding for form view
+
 ## v0.61.6 / 2023-12-13
 
 ### Bug Fixes
