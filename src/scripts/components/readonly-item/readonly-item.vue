@@ -1,6 +1,9 @@
 <template>
   <div :class="['mdc-readonly-item', cssClasses.subitemClass]">
-    <slot>{{ currentValue }}</slot>
+    <slot>
+      <div v-if="isRawHtml" v-html="currentValue"></div>
+      <div v-else v-text="currentValue"></div>
+    </slot>
   </div>
 </template>
 
@@ -16,7 +19,11 @@ import { cssClasses, formItemProps } from '../../mixins/form-item';
 import getType, { isFunction } from '../../utils/typeof';
 
 const props = defineProps({
-  ...formItemProps
+  ...formItemProps,
+  raw: {
+    type: [Boolean, Function],
+    default: false
+  }
 });
 
 const currentFormData = computed(() =>
@@ -33,5 +40,9 @@ const currentValue = computed(() => {
   return isFunction(props.proConfig.value)
     ? props.proConfig.value(currentFormData.value, propsData)
     : value;
+});
+
+const isRawHtml = computed(() => {
+  return isFunction(props.raw) ? props.raw(currentFormData.value) : props.raw;
 });
 </script>

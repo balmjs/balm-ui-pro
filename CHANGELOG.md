@@ -2,6 +2,12 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.30.0 / 2023-12-28
+
+### Feature
+
+- `<ui-readonly-item>`: add `raw` prop for raw HTML
+
 ## v0.29.0 / 2023-12-15
 
 ### Code Refactoring
