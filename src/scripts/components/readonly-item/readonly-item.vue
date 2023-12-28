@@ -1,6 +1,9 @@
 <template>
   <div :class="['mdc-readonly-item', cssClasses.subitemClass]">
-    <slot>{{ currentValue }}</slot>
+    <slot>
+      <div v-if="isRawHtml" v-html="currentValue"></div>
+      <div v-else v-text="currentValue"></div>
+    </slot>
   </div>
 </template>
 
@@ -11,6 +14,12 @@ import getType, { isFunction } from '../../utils/typeof';
 export default {
   name: 'UiReadonlyItem',
   mixins: [formItemMixin],
+  props: {
+    raw: {
+      type: [Boolean, Function],
+      default: false
+    }
+  },
   computed: {
     currentFormData() {
       return Object.assign({}, this.proFormDataSource, this.proFormData);
@@ -26,6 +35,9 @@ export default {
       return isFunction(this.proConfig.value)
         ? this.proConfig.value(this.currentFormData, propsData)
         : value;
+    },
+    isRawHtml() {
+      return isFunction(this.raw) ? this.raw(this.currentFormData) : this.raw;
     }
   }
 };

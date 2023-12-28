@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.63.0 / 2023-12-28
+
+### Feature
+
+- `<ui-readonly-item>`: add `raw` prop for raw HTML
+
 ## v0.62.0 / 2023-12-15
 
 ### Code Refactoring
