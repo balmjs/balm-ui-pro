@@ -21,6 +21,7 @@ export default {
         modelValueDefaults: {
           a: 'Hello BalmUI Pro'
         },
+        closable: true,
         attrOrProp: {
           modelConfig: [
             {

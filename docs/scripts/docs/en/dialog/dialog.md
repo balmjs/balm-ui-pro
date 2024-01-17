@@ -11,6 +11,7 @@ interface ProDialogOptions {
   title?: string;
   content?: string;
   actionConfig?: ActionButton[];
+  closable?: boolean;
   maskClosable?: boolean;
   // Custom component
   components?: object;
@@ -41,6 +42,7 @@ interface VueInstance {
 | `title`              | string           | `''`              | The title of the pro dialog.                                                                                 |         |
 | `content`            | string           | `''`              | The raw content of the pro dialog.                                                                           |         |
 | `actionConfig`       | ActionButton[]   | `[]`              | Action button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button) |         |
+| `closable`           | boolean          | `false`           | Displays close icon button of the dialog title.                                                              | 0.64.0  |
 | `maskClosable`       | boolean          | `false`           | Closes the dialog, when the pro dialog scrim is clicked.                                                     |         |
 | `components`         | object           | `{}`              | A hash of components to be made available to the Vue instance.                                               |         |
 | `component`          | string           | `''`              | The custom component for the pro dialog.                                                                     |         |

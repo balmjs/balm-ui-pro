@@ -2,8 +2,24 @@
   <div :class="className">
     <div class="mdc-dialog__container">
       <div class="mdc-dialog__surface">
-        <h2 v-if="title" class="mdc-dialog__title">
+        <h2
+          v-if="title"
+          :class="[
+            'mdc-dialog__title',
+            { 'mdc-dialog__title--closable': closable }
+          ]"
+        >
           {{ title }}
+          <button
+            v-if="closable"
+            type="button"
+            class="mdc-icon-button material-icons"
+            tabindex="-1"
+            @click="handleClose"
+          >
+            <div class="mdc-icon-button__ripple"></div>
+            close
+          </button>
         </h2>
         <div
           :class="{
@@ -18,7 +34,7 @@
         </footer>
       </div>
     </div>
-    <div class="mdc-dialog__scrim" @click="handleClose"></div>
+    <div class="mdc-dialog__scrim" @click="handleMaskClose"></div>
   </div>
 </template>
 
@@ -36,6 +52,10 @@ export default {
     title: {
       type: String,
       default: ''
+    },
+    closable: {
+      type: Boolean,
+      default: false
     },
     maskClosable: {
       type: Boolean,
@@ -78,7 +98,10 @@ export default {
   },
   methods: {
     handleClose() {
-      this.maskClosable && this.$emit('close');
+      this.$emit('close');
+    },
+    handleMaskClose() {
+      this.maskClosable && this.handleClose();
     }
   }
 };

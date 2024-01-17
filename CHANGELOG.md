@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.64.0 / 2024-01-17
+
+### Feature
+
+- `$dialog`: add `closable` prop
+
 ## v0.63.0 / 2023-12-28
 
 ### Feature

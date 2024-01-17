@@ -9,6 +9,7 @@ const DEFAULT_OPTIONS = {
   title: '',
   content: '',
   actionConfig: [],
+  closable: false,
   maskClosable: false,
   // Custom component
   components: {},
@@ -35,7 +36,7 @@ const PRO_DIALOG_BUTTON_TYPES = {
 
 let globalOptions = DEFAULT_OPTIONS;
 
-const template = `<mdc-dialog :id="id" :class="className" :open="open" :title="title" :mask-closable="maskClosable" @close="handleClose">
+const template = `<mdc-dialog :id="id" :class="className" :open="open" :title="title" :closable="closable" :mask-closable="maskClosable" @close="handleClose">
   <template v-if="customComponent">
     <component :is="customComponent" v-model="modelValue" v-bind="attrOrProp" v-on="listeners" @[event]="handleComponentAction"></component>
   </template>
