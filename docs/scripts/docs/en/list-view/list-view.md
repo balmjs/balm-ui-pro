@@ -109,7 +109,7 @@ interface ListViewData {
 
 | Name                   | Type          | Default                            | Description                                                                                                              | Version |
 | ---------------------- | ------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------- |
-| `title`                | string        | `''`                               | Detail view title                                                                                                        |         |
+| `title`                | string        | `''`                               | List view title                                                                                                          |         |
 | `model`                | string        | _required_                         | Model name                                                                                                               |         |
 | `modelAction`          | string        | `''`                               | Api model action suffix                                                                                                  |         |
 | `modelConfig`          | ModelConfig   | `false`                            | Form model config, see `<ui-form-view>` props [docs](/components/form-view)                                              |         |

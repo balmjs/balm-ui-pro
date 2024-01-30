@@ -1,0 +1,145 @@
+{
+  "ui-form-view": {
+    "attributes": [
+      "components",
+      "model-config",
+      "model-value",
+      "model-options",
+      "use-grid",
+      "form-attr-or-prop",
+      "form-item-attr-or-prop",
+      "grid-attr-or-prop",
+      "grid-cell-attr-or-prop",
+      "action-config",
+      "set-model-options-fn"
+    ],
+    "description": "Configurable form view for vue components"
+  },
+  "ui-readonly-item": {
+    "attributes": [
+      "pro-config",
+      "pro-form-data",
+      "pro-form-data-source",
+      "raw"
+    ],
+    "description": "The readonly area of the form item"
+  },
+  "ui-checkbox-group": {
+    "attributes": [
+      "config",
+      "form-data",
+      "form-data-source",
+      "option-format",
+      "model-value",
+      "options",
+      "all-selected",
+      "all-selected-label",
+      "selected-all-value"
+    ],
+    "description": "The checkboxes of the form item"
+  },
+  "ui-radio-group": {
+    "attributes": [
+      "config",
+      "form-data",
+      "form-data-source",
+      "option-format",
+      "model-value",
+      "options"
+    ],
+    "description": "The radio boxes of the form item"
+  },
+  "ui-switch-box": {
+    "attributes": [
+      "config",
+      "form-data",
+      "form-data-source",
+      "option-format",
+      "model-value",
+      "options",
+      "switch-attr-or-prop"
+    ],
+    "description": "The switch box of the form item"
+  },
+  "ui-multi-select": {
+    "attributes": [
+      "config",
+      "form-data",
+      "form-data-source",
+      "option-format",
+      "model-value",
+      "components"
+    ],
+    "description": "The multi select of the form item"
+  },
+  "ui-detail-view": {
+    "attributes": [
+      "title",
+      "model",
+      "model-action",
+      "model-config",
+      "model-path",
+      "model-options",
+      "model-value-defaults",
+      "key-name",
+      "action-config",
+      "form-view-attr-or-prop",
+      "to",
+      "replace",
+      "get-model-config-fn",
+      "get-model-data-fn",
+      "set-model-data-fn",
+      "use-validator",
+      "redirect-on-save"
+    ],
+    "description": "Configurable detail view for vue components"
+  },
+  "ui-list-view": {
+    "attributes": [
+      "title",
+      "model",
+      "model-action",
+      "model-config",
+      "model-path",
+      "model-options",
+      "model-value-defaults",
+      "key-name",
+      "search-action-config",
+      "form-view-attr-or-prop",
+      "no-data",
+      "thead",
+      "tbody",
+      "row-action-config",
+      "row-action-handler",
+      "row-action-rendering",
+      "top-action-config",
+      "top-action-handler",
+      "top-action-rendering",
+      "top-action-icon-format",
+      "table-attr-or-prop",
+      "table-data-format",
+      "table-listeners",
+      "page-size",
+      "pagination-attr-or-prop",
+      "without-pagination",
+      "get-model-config-fn",
+      "get-model-data-fn",
+      "use-validator",
+      "placeholder",
+      "search-on-reset",
+      "force-refresh-data"
+    ],
+    "description": "Configurable list view for vue components"
+  },
+  "ui-layout-view": {
+    "attributes": [
+      "use-top-app-bar",
+      "top-app-bar-attr-or-prop",
+      "use-drawer",
+      "drawer-attr-or-prop",
+      "drawer-below-top-app-bar",
+      "breakpoint"
+    ],
+    "description": "Configurable layout view for <ui-top-app-bar> and <ui-drawer>"
+  }
+}

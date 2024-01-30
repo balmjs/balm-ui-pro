@@ -1,0 +1,130 @@
+{
+  "title": {
+    "type": "string",
+    "description": "List view title"
+  },
+  "model": {
+    "type": "string",
+    "description": "Model name"
+  },
+  "model-action": {
+    "type": "string",
+    "description": "Api model action suffix"
+  },
+  "model-config": {
+    "type": "array",
+    "description": "Form model config, see <ui-form-view> props [docs](https://pro.balmjs.com/components/form-view)"
+  },
+  "model-path": {
+    "type": "string",
+    "description": "The file path of model config"
+  },
+  "model-options": {
+    "type": "object",
+    "description": "The options of model config"
+  },
+  "model-value-defaults": {
+    "type": "object",
+    "description": "Sets default value of model data"
+  },
+  "key-name": {
+    "type": "string | array",
+    "description": "The primary key of model data"
+  },
+  "search-action-config": {
+    "type": "array",
+    "description": "Search form button config, see BalmUI <ui-button> props [docs](https://material.balmjs.com/general/button)"
+  },
+  "form-view-attr-or-prop": {
+    "type": "object",
+    "description": "See <ui-form-view> props [docs](https://pro.balmjs.com/components/form-view)"
+  },
+  "no-data": {
+    "type": "string",
+    "description": "No data message"
+  },
+  "thead": {
+    "type": "array",
+    "description": "Table header renderer, see BalmUI <ui-table> props [docs](https://material.balmjs.com/data-display/table)"
+  },
+  "tbody": {
+    "type": "array",
+    "description": "Table content renderer, see BalmUI <ui-table> props [docs](https://material.balmjs.com/data-display/table)"
+  },
+  "row-action-config": {
+    "type": "array",
+    "description": "Table cell button config, see BalmUI <ui-button> props [docs](https://material.balmjs.com/general/button)"
+  },
+  "row-action-handler": {
+    "type": "function",
+    "description": "Table cell button handler"
+  },
+  "row-action-rendering": {
+    "type": "function",
+    "description": "Table cell button rendering handler by server-side"
+  },
+  "top-action-config": {
+    "type": "array",
+    "description": "Table top bar button config, see BalmUI <ui-button> props [docs](https://material.balmjs.com/general/button)"
+  },
+  "top-action-handler": {
+    "type": "function",
+    "description": "Table top bar button handler"
+  },
+  "top-action-rendering": {
+    "type": "function",
+    "description": "Table top bar button rendering handler by server-side"
+  },
+  "top-action-icon-format": {
+    "type": "object",
+    "description": "Defines the table top bar button format for the button icons, see BalmUI icons [docs](https://material.balmjs.com/icons)"
+  },
+  "table-attr-or-prop": {
+    "type": "object",
+    "description": "See BalmUI <ui-table> props [docs](https://material.balmjs.com/data-display/table)"
+  },
+  "table-data-format": {
+    "type": "object",
+    "description": "Defines the table data format for API"
+  },
+  "table-listeners": {
+    "type": "object",
+    "description": "Custom <ui-table> events"
+  },
+  "page-size": {
+    "type": "number",
+    "description": "Default page size"
+  },
+  "pagination-attr-or-prop": {
+    "type": "object",
+    "description": "See BalmUI <ui-pagination> props [docs](https://material.balmjs.com/navigation/pagination)"
+  },
+  "without-pagination": {
+    "type": "boolean",
+    "description": "No pagination"
+  },
+  "get-model-config-fn": {
+    "type": "function",
+    "description": "Loading model config"
+  },
+  "get-model-data-fn": {
+    "type": "function",
+    "description": "Loading model data"
+  },
+  "use-validator": {
+    "type": "boolean",
+    "description": "Enables auto validator (Just for `submit` type)"
+  },
+  "placeholder": {
+    "type": "string",
+    "description": "The placeholder before searching model data"
+  },
+  "search-on-reset": {
+    "type": "boolean",
+    "description": "The page will auto search data after resetting model data"
+  },
+  "force-refresh-data": {
+    "type": "boolean",
+    "description": "Forced refresh data in keep alive"
+  }
+}

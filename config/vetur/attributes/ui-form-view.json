@@ -1,0 +1,46 @@
+{
+  "components": {
+    "type": "object",
+    "description": "Set local custom form item components"
+  },
+  "model-config": {
+    "type": "array | function",
+    "description": "Form model config"
+  },
+  "model-value": {
+    "type": "object",
+    "description": "Form model data"
+  },
+  "model-options": {
+    "type": "object",
+    "description": "The extra options of the form model config"
+  },
+  "use-grid": {
+    "type": "boolean",
+    "description": "Enables layout grid for form items"
+  },
+  "form-attr-or-prop": {
+    "type": "object",
+    "description": "See BalmUI <ui-form> props [docs](https://material.balmjs.com/layout/form)"
+  },
+  "form-item-attr-or-prop": {
+    "type": "object",
+    "description": "Form items' common attrs (e.g. `class`)"
+  },
+  "grid-attr-or-prop": {
+    "type": "object",
+    "description": "See BalmUI <ui-grid> props [docs](https://material.balmjs.com/layout/grid)"
+  },
+  "grid-cell-attr-or-prop": {
+    "type": "object",
+    "description": "See BalmUI <ui-grid-cell> props [docs](https://material.balmjs.com/layout/grid)"
+  },
+  "action-config": {
+    "type": "array",
+    "description": "Form button config, see BalmUI <ui-button> props [docs](https://material.balmjs.com/general/button)"
+  },
+  "set-model-options-fn": {
+    "type": "function",
+    "description": "Form model options handler by the model list of form model config"
+  }
+}

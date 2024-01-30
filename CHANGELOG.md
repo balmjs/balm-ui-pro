@@ -2,6 +2,16 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.31.0 / 2024-01-30
+
+### Features
+
+- add vetur support
+
+### Chore
+
+- `<ui-list-view>`: optimize pagination
+
 ## v0.30.0 / 2023-12-28
 
 ### Feature

@@ -1,6 +1,6 @@
 {
   "name": "balm-ui-pro",
-  "version": "0.30.0",
+  "version": "0.31.0",
   "description": "More configuration definition, less code implementation for Vue.js",
   "keywords": [
     "balm",
@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23",
-    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.21",
     "@babel/runtime-corejs3": "^7.23",
     "@csstools/normalize.css": "^12.0.0",
     "@rollup/plugin-alias": "^5.0.0",
@@ -57,7 +57,7 @@
     "@vue/compiler-sfc": "^3.2.30",
     "axios": "^1.6.0",
     "babel-plugin-prismjs": "^2.1.0",
-    "balm": "^4.25.0",
+    "balm": "^4.26.0",
     "balm-ui": "^10.25.1",
     "core-js": "^3.30.0",
     "eslint": "^8.0.0",

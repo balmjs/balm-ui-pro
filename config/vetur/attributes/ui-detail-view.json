@@ -1,0 +1,70 @@
+{
+  "title": {
+    "type": "string",
+    "description": "Detail view title"
+  },
+  "model": {
+    "type": "string",
+    "description": "Model name"
+  },
+  "model-action": {
+    "type": "string",
+    "description": "Api model action suffix"
+  },
+  "model-config": {
+    "type": "array",
+    "description": "Form model config, see <ui-form-view> props [docs](https://pro.balmjs.com/components/form-view)"
+  },
+  "model-path": {
+    "type": "string",
+    "description": "The file path of model config"
+  },
+  "model-options": {
+    "type": "object",
+    "description": "The options of model config"
+  },
+  "model-value-defaults": {
+    "type": "object",
+    "description": "Sets default value of model data"
+  },
+  "key-name": {
+    "type": "string | array",
+    "description": "The primary key of model data"
+  },
+  "action-config": {
+    "type": "array",
+    "description": "Form button config, see BalmUI <ui-button> props [docs](https://material.balmjs.com/general/button)"
+  },
+  "form-view-attr-or-prop": {
+    "type": "object",
+    "description": "See <ui-form-view> props [docs](https://pro.balmjs.com/components/form-view)"
+  },
+  "to": {
+    "type": "object | string | 'back' | 'custom'",
+    "description": "The custom router link after saving model data"
+  },
+  "replace": {
+    "type": "boolean",
+    "description": "The navigation will not leave a history record"
+  },
+  "get-model-config-fn": {
+    "type": "function",
+    "description": "Loading model config"
+  },
+  "get-model-data-fn": {
+    "type": "function",
+    "description": "Loading model data"
+  },
+  "set-model-data-fn": {
+    "type": "function",
+    "description": "Saving model data"
+  },
+  "use-validator": {
+    "type": "boolean",
+    "description": "Enables auto validator (Just for `submit` type)"
+  },
+  "redirect-on-save": {
+    "type": "boolean",
+    "description": "The page will auto redirect after saving model data"
+  }
+}

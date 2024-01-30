@@ -27,7 +27,8 @@ const plugins = [
 const output = {
   dist: './dist',
   components: './components',
-  plugins: './plugins'
+  plugins: './plugins',
+  vetur: './vetur'
 };
 
 module.exports = {

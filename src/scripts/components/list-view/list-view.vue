@@ -116,9 +116,9 @@
           </ui-table>
         </slot>
 
-        <template v-if="listData.data.length">
+        <template v-if="listData.total || listData.data.length">
           <ui-pagination
-            v-if="!withoutPagination"
+            v-if="usePagination"
             v-model="listData.page"
             v-bind="
               Object.assign(
@@ -375,6 +375,10 @@ const fullInstanceData = computed(() =>
   Object.assign({}, globalModelOptions, instanceData.value)
 );
 const hasSearchForm = computed(() => !!(props.modelConfig || props.modelPath));
+const usePagination = computed(() => {
+  const pageCount = Math.ceil(state.listData.total / state.listData.pageSize);
+  return !props.withoutPagination && pageCount > 1;
+});
 
 onBeforeMount(() => {
   init();

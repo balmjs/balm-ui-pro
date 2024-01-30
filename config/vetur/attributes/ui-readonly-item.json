@@ -1,0 +1,18 @@
+{
+  "pro-config": {
+    "type": "object",
+    "description": "Form item config"
+  },
+  "pro-form-data": {
+    "type": "object",
+    "description": "Form model data"
+  },
+  "pro-form-data-source": {
+    "type": "object",
+    "description": "Form model data source"
+  },
+  "raw": {
+    "type": "object",
+    "description": "Use Raw HTML"
+  }
+}
