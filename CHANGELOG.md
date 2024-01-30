@@ -2,7 +2,11 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
-## v0.64.1 / 2024-01-30
+## v0.65.0 / 2024-01-30
+
+### Features
+
+- add vetur support
 
 ### Chore
 

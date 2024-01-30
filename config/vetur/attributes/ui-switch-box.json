@@ -1,0 +1,30 @@
+{
+  "config": {
+    "type": "object",
+    "description": "Form item config"
+  },
+  "form-data": {
+    "type": "object",
+    "description": "Form model data"
+  },
+  "form-data-source": {
+    "type": "object",
+    "description": "Form model data source"
+  },
+  "option-format": {
+    "type": "object",
+    "description": "Defines the option data format"
+  },
+  "model-value": {
+    "type": "boolean | string | number",
+    "description": "The model value of the switch box"
+  },
+  "options": {
+    "type": "array",
+    "description": "The model options of the switch box"
+  },
+  "switch-attr-or-prop": {
+    "type": "object",
+    "description": "The attrs or props of the switch component, see BalmUI <ui-switch> props [docs](https://v8.material.balmjs.com/#/data-input/switch)"
+  }
+}

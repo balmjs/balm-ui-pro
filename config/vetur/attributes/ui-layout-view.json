@@ -1,0 +1,26 @@
+{
+  "use-top-app-bar": {
+    "type": "boolean",
+    "description": "Shows top app bar"
+  },
+  "top-app-bar-attr-or-prop": {
+    "type": "object",
+    "description": "See BalmUI <ui-top-app-bar> props [docs](https://v8.material.balmjs.com/#/layout/top-app-bar)"
+  },
+  "use-drawer": {
+    "type": "boolean",
+    "description": "Shows navigation drawer"
+  },
+  "drawer-attr-or-prop": {
+    "type": "object",
+    "description": "See BalmUI <ui-drawer> props [docs](https://v8.material.balmjs.com/#/navigation/drawer)"
+  },
+  "drawer-below-top-app-bar": {
+    "type": "boolean",
+    "description": "Sets drawer below top app bar"
+  },
+  "breakpoint": {
+    "type": "number",
+    "description": "Sets viewport breakpoint for the modal drawer"
+  }
+}

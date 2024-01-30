@@ -1,0 +1,26 @@
+{
+  "config": {
+    "type": "object",
+    "description": "Form item config"
+  },
+  "form-data": {
+    "type": "object",
+    "description": "Form model data"
+  },
+  "form-data-source": {
+    "type": "object",
+    "description": "Form model data source"
+  },
+  "option-format": {
+    "type": "object",
+    "description": "Defines the option data format"
+  },
+  "model-value": {
+    "type": "string | number",
+    "description": "The model value of the radio group"
+  },
+  "options": {
+    "type": "array",
+    "description": "The model options of the radio group"
+  }
+}

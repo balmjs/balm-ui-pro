@@ -1,0 +1,38 @@
+{
+  "config": {
+    "type": "object",
+    "description": "Form item config"
+  },
+  "form-data": {
+    "type": "object",
+    "description": "Form model data"
+  },
+  "form-data-source": {
+    "type": "object",
+    "description": "Form model data source"
+  },
+  "option-format": {
+    "type": "object",
+    "description": "Defines the option data format"
+  },
+  "model-value": {
+    "type": "array",
+    "description": "The model value of the checkbox group"
+  },
+  "options": {
+    "type": "array",
+    "description": "The model options of the checkbox group"
+  },
+  "all-selected": {
+    "type": "boolean",
+    "description": "Displays one checkbox for all selected"
+  },
+  "all-selected-label": {
+    "type": "string",
+    "description": "The label of the all selected checkbox"
+  },
+  "selected-all-value": {
+    "type": "boolean",
+    "description": "All checked for default value"
+  }
+}

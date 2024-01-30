@@ -1,0 +1,26 @@
+{
+  "config": {
+    "type": "object",
+    "description": "Form item config"
+  },
+  "form-data": {
+    "type": "object",
+    "description": "Form model data"
+  },
+  "form-data-source": {
+    "type": "object",
+    "description": "Form model data source"
+  },
+  "option-format": {
+    "type": "object",
+    "description": "Defines the option data format"
+  },
+  "model-value": {
+    "type": "object",
+    "description": "The model value of the multi select"
+  },
+  "components": {
+    "type": "array",
+    "description": "The select model config of the multi select, see <ui-form-view> model config [docs](https://legacy.pro.balmjs.com/#/components/form-view)"
+  }
+}
