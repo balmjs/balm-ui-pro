@@ -114,9 +114,9 @@
           </ui-table>
         </slot>
 
-        <template v-if="listData.data.length">
+        <template v-if="listData.total || listData.data.length">
           <ui-pagination
-            v-if="!withoutPagination"
+            v-if="usePagination"
             v-model="listData.page"
             v-bind="
               Object.assign(
@@ -337,6 +337,10 @@ export default {
         listData: this.listData,
         listDataSource: this.listDataSource
       });
+    },
+    usePagination() {
+      const pageCount = Math.ceil(this.listData.total / this.listData.pageSize);
+      return !this.withoutPagination && pageCount > 1;
     }
   },
   watch: {

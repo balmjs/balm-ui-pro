@@ -1,6 +1,6 @@
 {
   "name": "balm-ui-pro",
-  "version": "0.64.0-legacy",
+  "version": "0.64.1-legacy",
   "description": "More configuration definition, less code implementation for Vue.js",
   "keywords": [
     "balm",
@@ -43,11 +43,11 @@
     "url": "https://github.com/balmjs/balm-ui-pro/issues"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "7.22",
-    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
-    "@babel/runtime-corejs3": "7.22",
+    "@babel/eslint-parser": "7.23",
+    "@babel/plugin-proposal-optional-chaining": "^7.21",
+    "@babel/runtime-corejs3": "7.23",
     "@csstools/normalize.css": "^12.0.0",
-    "axios": "^1.4.0",
+    "axios": "^1.6.0",
     "babel-plugin-prismjs": "^2.1.0",
     "balm": "3",
     "balm-ui": "8",
@@ -58,16 +58,16 @@
     "eslint-plugin-vue": "^9.0.0",
     "html-loader": "1",
     "markdown-loader": "7",
-    "miragejs": "^0.1.47",
+    "miragejs": "^0.1.48",
     "miragejs-axios-adapter": "^0.1.1",
     "prettier": "2",
     "prismjs": "^1.29.0",
     "sanitize.css": "^13.0.0",
-    "vue": "2",
+    "vue": "2.7",
     "vue-i18n": "8",
     "vue-loader": "15",
     "vue-router": "3",
-    "vue-template-compiler": "2",
+    "vue-template-compiler": "2.7",
     "webpack": "4"
   },
   "peerDependencies": {

@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.64.1 / 2024-01-30
+
+### Chore
+
+- `<ui-list-view>`: optimize pagination
+
 ## v0.64.0 / 2024-01-17
 
 ### Feature
