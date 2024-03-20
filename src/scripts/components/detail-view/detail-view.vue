@@ -189,8 +189,10 @@ export default {
         if (isObject(originalData) && Object.keys(originalData).length) {
           this.$refs.formView.formDataSource = originalData;
           this.detailDataSource = originalData;
-          Object.keys(this.detailData).forEach((key) =>
-            this.$set(this.detailData, key, originalData[key])
+          Object.keys(this.detailData).forEach(
+            (key) =>
+              originalData.hasOwnProperty(key) &&
+              this.$set(this.detailData, key, originalData[key])
           );
         }
       } catch (err) {
