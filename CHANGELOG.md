@@ -2,6 +2,12 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.31.1 / 2024-03-20
+
+### Bug Fixes
+
+- `<ui-detail-view>`: fix init formData bug
+
 ## v0.31.0 / 2024-01-30
 
 ### Features

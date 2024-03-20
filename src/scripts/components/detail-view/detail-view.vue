@@ -239,7 +239,9 @@ async function getModelData() {
       instance.ctx.$refs.formView.formDataSource = formDataSource;
       state.detailDataSource = formDataSource;
       Object.keys(state.detailData).forEach(
-        (key) => (state.detailData[key] = formDataSource[key])
+        (key) =>
+          formDataSource.hasOwnProperty(key) &&
+          (state.detailData[key] = formDataSource[key])
       );
     }
   } catch (err) {
