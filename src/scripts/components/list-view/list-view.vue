@@ -386,7 +386,7 @@ export default {
 
       this.$nextTick(async () => {
         this.searchForm.data = Object.assign(formData, this.modelValueDefaults);
-        !this.useValidator && (await this.getModelData());
+        !this.listData.usePlaceholder && (await this.getModelData());
       });
     },
     resetListData() {
