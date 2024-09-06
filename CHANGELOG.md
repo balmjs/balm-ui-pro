@@ -2,6 +2,10 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.31.2 / 2024-09-06
+
+- `<ui-list-view>`: fix usePlaceholder bug for init
+
 ## v0.31.1 / 2024-03-20
 
 ### Bug Fixes

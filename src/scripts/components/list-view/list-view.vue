@@ -431,7 +431,7 @@ function initModelData(formData = {}) {
 
   nextTick(async () => {
     state.searchForm.data = Object.assign(formData, props.modelValueDefaults);
-    !props.useValidator && (await getModelData());
+    !state.listData.usePlaceholder && (await getModelData());
   });
 }
 
