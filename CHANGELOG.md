@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.66.0 / 2024-09-30
+
+### Features
+
+- `<ui-list-view>`: add `change` event
+
 ## v0.65.2 / 2024-09-06
 
 - `<ui-list-view>`: fix usePlaceholder bug for init

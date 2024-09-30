@@ -163,21 +163,22 @@ const UiListView = {
   NAME: 'UiListView',
   NAMESPACE: 'list-view',
   EVENTS: {
-    submit: 'submit',
-    reset: 'reset'
+    CHANGE: 'change',
+    SUBMIT: 'submit',
+    RESET: 'reset'
   }
 };
 
 const defaultSearchActionConfig = [
   {
-    type: UiListView.EVENTS.reset,
+    type: UiListView.EVENTS.RESET,
     text: 'Reset',
     attrOrProp: {
       outlined: true
     }
   },
   {
-    type: UiListView.EVENTS.submit,
+    type: UiListView.EVENTS.SUBMIT,
     text: 'Search',
     attrOrProp: {
       raised: true
@@ -428,12 +429,14 @@ export default {
           }
         }
 
+        const listViewData = {
+          ...this.viewPropsData,
+          ...this.$data
+        };
+        this.$emit(UiListView.EVENTS.CHANGE, listViewData);
+
         const { action } = this.tableListeners;
-        isFunction(action) &&
-          action({
-            ...this.viewPropsData,
-            ...this.$data
-          });
+        isFunction(action) && action(listViewData);
       } catch (err) {
         this.$set(this.listData, 'loading', false);
         console.warn(`[${UiListView.NAME}]: ${err.toString()}`);
@@ -450,12 +453,12 @@ export default {
       this.resetListData();
 
       switch (action.type) {
-        case UiListView.EVENTS.submit:
+        case UiListView.EVENTS.SUBMIT:
           if (canSubmit && action.submit !== false) {
             await this.getModelData();
           }
           break;
-        case UiListView.EVENTS.reset:
+        case UiListView.EVENTS.RESET:
           // NOTE: automatic processing in `<ui-form-view>`
           if (canSubmit && this.searchOnReset) {
             await this.getModelData();
