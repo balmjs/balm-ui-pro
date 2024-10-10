@@ -162,6 +162,7 @@ const UI_LIST_VIEW = {
   NAME: 'UiListView',
   NAMESPACE: 'list-view',
   EVENTS: {
+    updateData: 'change',
     updateFormItem: 'change:x',
     action: 'action',
     reset: 'reset',
@@ -322,6 +323,7 @@ const props = defineProps({
   }
 });
 const emit = defineEmits([
+  UI_LIST_VIEW.EVENTS.updateData,
   UI_LIST_VIEW.EVENTS.updateFormItem,
   UI_LIST_VIEW.EVENTS.action
 ]);
@@ -470,6 +472,15 @@ async function getModelData() {
         console.warn(`[${UI_LIST_VIEW.NAME}]: Invalid response data`);
       }
     }
+
+    const listViewData = {
+      ...viewPropsData,
+      ...toRefs(state)
+    };
+    emit(UI_LIST_VIEW.EVENTS.updateData, listViewData);
+
+    const { action } = props.tableListeners;
+    isFunction(action) && action(listViewData);
   } catch (err) {
     state.listData.loading = false;
     console.warn(`[${UI_LIST_VIEW.NAME}]: ${err.toString()}`);

@@ -2,6 +2,12 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.32.0 / 2024-10-10
+
+### Features
+
+- `<ui-list-view>`: add `change` event
+
 ## v0.31.2 / 2024-09-06
 
 - `<ui-list-view>`: fix usePlaceholder bug for init
