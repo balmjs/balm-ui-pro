@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.66.1 / 2024-11-01
+
+### Bug Fixes
+
+- `<ui-list-view>`: fix resetListData bug for handleAction
+
 ## v0.66.0 / 2024-09-30
 
 ### Features

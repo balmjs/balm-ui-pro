@@ -450,15 +450,15 @@ export default {
         this.$set(this.searchForm, 'message', result.message);
       }
 
-      this.resetListData();
-
       switch (action.type) {
         case UiListView.EVENTS.SUBMIT:
+          this.resetListData();
           if (canSubmit && action.submit !== false) {
             await this.getModelData();
           }
           break;
         case UiListView.EVENTS.RESET:
+          this.resetListData();
           // NOTE: automatic processing in `<ui-form-view>`
           if (canSubmit && this.searchOnReset) {
             await this.getModelData();
