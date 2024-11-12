@@ -1,3 +1,10 @@
+@use './vars';
+
+@use '@material/theme/theme-color' with (
+  $primary: vars.$primary,
+  $secondary: vars.$secondary
+);
+
 @use '@material/layout-grid' with (
   $breakpoints: (
     desktop: 840px,
@@ -19,3 +26,11 @@
 @use 'balm-ui/components/form' with (
   $form-item-margin-bottom: 10px
 );
+
+@use '@material/top-app-bar/variables' as top-app-bar-variables;
+@use '@material/tab/variables' as tab-variables;
+
+$mobile-breakpoint: top-app-bar-variables.$mobile-breakpoint;
+$topAppBar-row-height: top-app-bar-variables.$row-height;
+$topAppBar-mobile-row-height: top-app-bar-variables.$mobile-row-height;
+$tab-height: tab-variables.$height;

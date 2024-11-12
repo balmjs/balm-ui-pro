@@ -43,13 +43,13 @@
     "url": "https://github.com/balmjs/balm-ui-pro/issues"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "7.24",
-    "@babel/plugin-proposal-optional-chaining": "^7.21",
-    "@babel/runtime-corejs3": "7.24",
+    "@babel/eslint-parser": "7.25",
+    "@babel/plugin-transform-optional-chaining": "^7.25",
+    "@babel/runtime-corejs3": "7.25",
     "@csstools/normalize.css": "^12.0.0",
     "axios": "^1.7.0",
     "babel-plugin-prismjs": "^2.1.0",
-    "balm": "^3.35.1",
+    "balm": "^3.36.0",
     "balm-ui": "^8.70.0",
     "core-js": "^3.30.0",
     "eslint": "^8.0.0",
