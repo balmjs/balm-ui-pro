@@ -1,5 +1,4 @@
 @use './vars';
-@use '@material/top-app-bar/variables' as top-app-bar-variables;
 
 @use '@material/theme/theme-color' with (
   $primary: vars.$primary,
@@ -27,6 +26,8 @@
 @use 'balm-ui/components/form' with (
   $form-item-margin-bottom: 10px
 );
+
+@use '@material/top-app-bar/variables' as top-app-bar-variables;
 
 $mobile-breakpoint: top-app-bar-variables.$mobile-breakpoint;
 $topAppBar-row-height: top-app-bar-variables.$row-height;
