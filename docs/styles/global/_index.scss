@@ -1,5 +1,5 @@
 @use './reset';
-@use './ui';
-@use './vendors';
 @forward './vars';
+@forward './ui';
+@use './vendors';
 @use './base';
