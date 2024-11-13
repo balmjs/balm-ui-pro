@@ -1,3 +1,5 @@
+export const BALM_API_REGEX = /\/browser-sync\/socket\.io\//;
+
 export const NAMESPACE = '/mock/api';
 export const MOCK_API_REGEX = /^\/mock\/api/;
 

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import router from '@/routes';
 import i18n from '@/locales';
 import $http from '@/plugins/http';
+import $mock from '@/plugins/mock';
 import $prism from '@/plugins/prism';
 import App from '@/views/layouts/app';
 import { setGlobalProps } from '@/config';
@@ -17,10 +18,9 @@ import {
 // PWA
 import './my-sw';
 
-function createBalmUIProApp(mock = false) {
-  Vue.prototype.$mock = mock;
-
+function createBalmUIProApp() {
   Vue.use($http);
+  Vue.use($mock);
   Vue.use($prism);
   Vue.use(BalmUI, BalmUIConfig);
   Vue.use(BalmUIPlus);
