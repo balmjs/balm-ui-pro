@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.66.2 / 2024-11-14
+
+### Chore
+
+- `<ui-multi-select>`: optimize v-show for options
+
 ## v0.66.1 / 2024-11-01
 
 ### Bug Fixes
@@ -15,6 +21,8 @@
 - `<ui-list-view>`: add `change` event
 
 ## v0.65.2 / 2024-09-06
+
+### Bug Fixes
 
 - `<ui-list-view>`: fix usePlaceholder bug for init
 

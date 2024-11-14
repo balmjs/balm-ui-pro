@@ -1,13 +1,17 @@
 <template>
   <div :class="['mdc-multi-select', cssClasses.subitemClass]">
-    <ui-select
-      v-for="(component, index) in components"
-      :key="`${component.key}-${index}`"
-      v-model="selectedData[component.key]"
-      :options="selectedOptions[component.key]"
-      v-bind="component.attrOrProp || {}"
-      @change="handleChange(component.key, $event)"
-    ></ui-select>
+    <template v-for="(component, index) in components">
+      <ui-select
+        v-show="
+          selectedKeys[index - 1] ? selectedOptions[component.key].length : true
+        "
+        :key="`${component.key}-${index}`"
+        v-model="selectedData[component.key]"
+        :options="selectedOptions[component.key]"
+        v-bind="component.attrOrProp || {}"
+        @change="handleChange(component.key, $event)"
+      ></ui-select>
+    </template>
   </div>
 </template>
 
