@@ -236,7 +236,9 @@ export default {
           }
 
           if (canSubmit && action.submit !== false) {
-            await this.setModelDataFn(this.fullInstanceData);
+            await this.setModelDataFn(
+              Object.assign({ action }, this.fullInstanceData)
+            );
             this.redirectOnSave && this.redirect(this.to, false);
           }
           break;

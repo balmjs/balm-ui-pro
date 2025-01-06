@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.66.3 / 2025-01-06
+
+### Chore
+
+- `<ui-detail-view>`: add `action` params for `setModelDataFn`
+
 ## v0.66.2 / 2024-11-14
 
 ### Chore
