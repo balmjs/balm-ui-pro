@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.66.4 / 2025-01-07
+
+### Chore
+
+- `<ui-detail-view>`: update `modelValueDefaults` handler for `getModelData`
+
 ## v0.66.3 / 2025-01-06
 
 ### Chore

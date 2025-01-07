@@ -171,9 +171,8 @@ export default {
     initModelData(formData = {}) {
       this.loading = false;
 
-      this.$nextTick(async () => {
-        this.detailData = Object.assign(formData, this.modelValueDefaults);
-        await this.getModelData();
+      this.$nextTick(() => {
+        this.getModelData(formData);
       });
     },
     resetDetailData() {
@@ -182,18 +181,25 @@ export default {
       this.message = '';
       this.loading = true;
     },
-    async getModelData() {
+    updateDetailData(originalData) {
+      this.$refs.formView.formDataSource = originalData;
+      this.detailDataSource = originalData;
+      Object.keys(this.detailData).forEach(
+        (key) =>
+          originalData.hasOwnProperty(key) &&
+          this.$set(this.detailData, key, originalData[key])
+      );
+    },
+    async getModelData(formData) {
       try {
         const originalData = await this.getModelDataFn(this.fullInstanceData);
 
         if (isObject(originalData) && Object.keys(originalData).length) {
-          this.$refs.formView.formDataSource = originalData;
-          this.detailDataSource = originalData;
-          Object.keys(this.detailData).forEach(
-            (key) =>
-              originalData.hasOwnProperty(key) &&
-              this.$set(this.detailData, key, originalData[key])
-          );
+          this.updateDetailData(originalData);
+        } else {
+          originalData = Object.assign(formData, this.modelValueDefaults);
+          Object.keys(originalData).length &&
+            this.updateDetailData(originalData);
         }
       } catch (err) {
         console.warn(`[${UiDetailView.NAME}]: ${err.toString()}`);
