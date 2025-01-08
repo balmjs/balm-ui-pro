@@ -5,7 +5,7 @@
         v-model="selectedAll"
         :input-id="uuid"
         :indeterminate="indeterminate"
-        @change="handleSelectAll"
+        @change="handleSelectAllAndChange"
       ></ui-checkbox>
       <label :for="uuid">{{ allSelectedLabel }}</label>
     </ui-form-field>
@@ -102,6 +102,9 @@ export default {
       this.selectedValue = checked
         ? this.currentOptions.map((option) => option[this.optionFormat.value])
         : [];
+    },
+    handleSelectAllAndChange(checked) {
+      this.handleSelectAll(checked);
       this.handleChange(this.selectedValue);
     }
   }

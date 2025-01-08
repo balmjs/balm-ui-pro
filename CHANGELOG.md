@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.66.6 / 2025-01-08
+
+### Bug Fixes
+
+- `<ui-checkbox-group>`: fix handleSelectAll bug for init
+
 ## v0.66.5 / 2025-01-08
 
 ### Chore
