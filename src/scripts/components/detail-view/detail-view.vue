@@ -190,9 +190,9 @@ export default {
           this.$set(this.detailData, key, originalData[key])
       );
     },
-    async getModelData(formData) {
+    async getModelData(formData = {}) {
       try {
-        const originalData = await this.getModelDataFn(this.fullInstanceData);
+        let originalData = await this.getModelDataFn(this.fullInstanceData);
 
         if (isObject(originalData) && Object.keys(originalData).length) {
           this.updateDetailData(originalData);
