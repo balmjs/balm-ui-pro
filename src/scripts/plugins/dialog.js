@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import MdcDialog from '../components/dialog/mdc-dialog.vue';
-import { isObject } from '../utils/typeof';
+import { isObject, isFunction } from '../utils/typeof';
 
 const DEFAULT_OPTIONS = {
   // Basic
@@ -43,20 +43,22 @@ const template = `<mdc-dialog :id="id" :class="className" :open="open" :title="t
   <div v-else class="mdc-dialog__custom-content" v-html="content"></div>
   <template v-if="actionConfig.length" #actions>
     <template v-for="(buttonData, buttonIndex) in actionConfig">
-      <ui-button
-        v-if="buttonData.type === PRO_DIALOG_BUTTON_TYPES.submit"
-        v-debounce="handleDialogAction(buttonData)"
-        v-bind="buttonData.attrOrProp || {}"
-      >
-        {{ buttonData.text }}
-      </ui-button>
-      <ui-button
-        v-else
-        v-bind="buttonData.attrOrProp || {}"
-        @click="handleDialogAction(buttonData)"
-      >
-        {{ buttonData.text }}
-      </ui-button>
+      <template v-if="ifAction(buttonData)">
+        <ui-button
+          v-if="buttonData.type === PRO_DIALOG_BUTTON_TYPES.submit"
+          v-debounce="handleDialogAction(buttonData)"
+          v-bind="buttonData.attrOrProp || {}"
+        >
+          {{ buttonData.text }}
+        </ui-button>
+        <ui-button
+          v-else
+          v-bind="buttonData.attrOrProp || {}"
+          @click="handleDialogAction(buttonData)"
+        >
+          {{ buttonData.text }}
+        </ui-button>
+      </template>
     </template>
   </template>
 </mdc-dialog>`;
@@ -116,6 +118,19 @@ function createDialog(options) {
       }
     },
     methods: {
+      ifAction(action) {
+        let result = false;
+
+        const currentAction = action.if;
+        const formViewData = {
+          data: this.modelValue,
+          dataSource: this.modelValueSource
+        };
+
+        result = isFunction(currentAction) ? currentAction(formViewData) : true;
+
+        return result;
+      },
       handleClose(onSave = false) {
         if (dialogApp) {
           this.open = false;

@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.66.7 / 2025-01-09
+
+### Chore
+
+- `$dialog`: update `actionConfig` for supporting `if` attribute
+
 ## v0.66.6 / 2025-01-08
 
 ### Bug Fixes

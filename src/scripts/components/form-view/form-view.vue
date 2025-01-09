@@ -517,7 +517,6 @@ export default {
 
       if (this.formDataKeys.length) {
         const currentAction = action.if;
-
         const formViewData = {
           config: this.formConfig,
           data: this.formData,
