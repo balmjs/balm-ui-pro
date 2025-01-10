@@ -172,7 +172,8 @@ export default {
       this.loading = false;
 
       this.$nextTick(() => {
-        this.getModelData(formData);
+        this.detailData = formData;
+        this.getModelData();
       });
     },
     resetDetailData() {
@@ -190,14 +191,18 @@ export default {
           this.$set(this.detailData, key, originalData[key])
       );
     },
-    async getModelData(formData = {}) {
+    async getModelData() {
       try {
         let originalData = await this.getModelDataFn(this.fullInstanceData);
 
         if (isObject(originalData) && Object.keys(originalData).length) {
           this.updateDetailData(originalData);
         } else {
-          originalData = Object.assign(formData, this.modelValueDefaults);
+          originalData = Object.assign(
+            {},
+            this.detailData,
+            this.modelValueDefaults
+          );
           Object.keys(originalData).length &&
             this.updateDetailData(originalData);
         }
