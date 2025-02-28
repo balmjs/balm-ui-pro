@@ -12,6 +12,9 @@
 | `componentModelEvent` | string  | `'change'` | The model event of the component used                    |
 | `componentAttrOrProp` | object  | `{}`       | The props of the component used                          |
 | `fullwidth`           | boolean | `false`    | Styles the component plus as a full width component item |
+| `limit`               | number  | `0`        | Maximum number of components that can be added           |
+
+> `componentName`: The custom form item component will additionally have a `componentIndex` prop
 
 ### Events
 

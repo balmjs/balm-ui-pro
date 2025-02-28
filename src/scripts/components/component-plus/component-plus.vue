@@ -9,7 +9,7 @@
         <component
           :is="componentName"
           v-model="componentData[componentIndex]"
-          v-bind="componentAttrOrProp"
+          v-bind="Object.assign({}, { componentIndex }, componentAttrOrProp)"
           @[componentModelEvent]="handleChange"
         ></component>
       </div>
@@ -36,7 +36,9 @@ import formItemMixin from '../../mixins/form-item';
 const UI_COMPONENT_PLUS = {
   NAME: 'UiComponentPlus',
   EVENTS: {
-    CHANGE: 'change'
+    CHANGE: 'change',
+    ADD: 'add',
+    REMOVE: 'remove'
   }
 };
 
@@ -73,6 +75,10 @@ export default {
     fullwidth: {
       type: Boolean,
       default: false
+    },
+    limit: {
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -102,7 +108,10 @@ export default {
       this.$emit(UI_COMPONENT_PLUS.EVENTS.CHANGE, this.componentData);
     },
     canAdd(index) {
-      return index === this.componentData.length - 1;
+      const isInfinite = index === this.componentData.length - 1;
+      return this.limit
+        ? isInfinite && this.componentData.length < this.limit
+        : isInfinite;
     },
     canRemove(index) {
       return !(!index && this.componentData.length === 1);

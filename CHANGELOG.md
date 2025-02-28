@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.67.0 / 2025-02-28
+
+### Features
+
+- `<ui-component-plus>`: add `limit` prop
+
 ## v0.66.8 / 2025-01-10
 
 ### Bug Fixes
