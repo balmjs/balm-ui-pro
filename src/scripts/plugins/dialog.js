@@ -9,7 +9,7 @@ import {
 } from 'vue';
 import createVueApp from '../config/ssr';
 import MdcDialog from '../components/dialog/mdc-dialog.vue';
-import { isObject } from '../utils/typeof';
+import { isObject, isFunction } from '../utils/typeof';
 import { createDiv, removeDiv } from '../utils/div';
 
 // Define confirm dialog constants
@@ -56,20 +56,22 @@ const template = `<mdc-dialog :class="className" :open="open" :title="title" :ma
   <div v-else class="mdc-dialog__custom-content" v-html="content"></div>
   <template v-if="actionConfig.length" #actions>
     <template v-for="(buttonData, buttonIndex) in actionConfig">
-      <ui-button
-        v-if="buttonData.type === PRO_DIALOG_BUTTON_TYPES.submit"
-        v-debounce="handleDialogAction(buttonData)"
-        v-bind="buttonData.attrOrProp || {}"
-      >
-        {{ buttonData.text }}
-      </ui-button>
-      <ui-button
-        v-else
-        v-bind="buttonData.attrOrProp || {}"
-        @click="handleDialogAction(buttonData)"
-      >
-        {{ buttonData.text }}
-      </ui-button>
+      <template v-if="ifAction(buttonData)">
+        <ui-button
+          v-if="buttonData.type === PRO_DIALOG_BUTTON_TYPES.submit"
+          v-debounce="handleDialogAction(buttonData)"
+          v-bind="buttonData.attrOrProp || {}"
+        >
+          {{ buttonData.text }}
+        </ui-button>
+        <ui-button
+          v-else
+          v-bind="buttonData.attrOrProp || {}"
+          @click="handleDialogAction(buttonData)"
+        >
+          {{ buttonData.text }}
+        </ui-button>
+      </template>
     </template>
   </template>
 </mdc-dialog>`;
@@ -135,6 +137,20 @@ function createDialog(options) {
       });
 
       onBeforeUnmount(() => removeElement(el));
+
+      function ifAction(action) {
+        let result = false;
+
+        const currentAction = action.if;
+        const formViewData = {
+          data: state.modelValue,
+          dataSource: state.modelValueSource
+        };
+
+        result = isFunction(currentAction) ? currentAction(formViewData) : true;
+
+        return result;
+      }
 
       function handleClose(onSave = false) {
         if (dialogApp) {
@@ -227,6 +243,7 @@ function createDialog(options) {
       return {
         PRO_DIALOG_BUTTON_TYPES,
         ...toRefs(state),
+        ifAction,
         handleClose,
         handleComponentAction,
         handleDialogAction

@@ -1,13 +1,13 @@
 {
-  "config": {
+  "pro-config": {
     "type": "object",
     "description": "Form item config"
   },
-  "form-data": {
+  "pro-form-data": {
     "type": "object",
     "description": "Form model data"
   },
-  "form-data-source": {
+  "pro-form-data-source": {
     "type": "object",
     "description": "Form model data source"
   },

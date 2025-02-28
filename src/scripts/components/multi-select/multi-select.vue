@@ -5,6 +5,9 @@
       :key="`${component.key}-${index}`"
     >
       <ui-select
+        v-show="
+          selectedKeys[index - 1] ? selectedOptions[component.key].length : true
+        "
         v-model="selectedData[component.key]"
         :options="selectedOptions[component.key]"
         v-bind="component.attrOrProp || {}"

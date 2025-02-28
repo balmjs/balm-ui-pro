@@ -2,6 +2,22 @@
 
 - [`balm-ui-pro@legacy`](https://github.com/balmjs/balm-ui-pro/tree/legacy) for Vue 2
 
+## v0.33.0 / 2025-02-28
+
+### Chore
+
+- `<ui-multi-select>`: optimize v-show for options
+- `<ui-detail-view>`:
+  - add `action` params for `setModelDataFn`
+  - update `modelValueDefaults` handler for `getModelData`
+- `$dialog`: update `actionConfig` for supporting `if` attribute
+- update vetur
+
+### Bug Fixes
+
+- `<ui-list-view>`: fix resetListData bug for handleAction
+- `<ui-checkbox-group>`: fix handleSelectAll bug for init
+
 ## v0.32.0 / 2024-10-10
 
 ### Features
@@ -9,6 +25,8 @@
 - `<ui-list-view>`: add `change` event
 
 ## v0.31.2 / 2024-09-06
+
+### Bug Fixes
 
 - `<ui-list-view>`: fix usePlaceholder bug for init
 

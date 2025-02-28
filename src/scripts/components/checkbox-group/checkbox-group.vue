@@ -5,7 +5,7 @@
         v-model="selectedAll"
         :input-id="uuid"
         :indeterminate="indeterminate"
-        @update:model-value="handleSelectAll"
+        @update:model-value="handleSelectAllAndChange"
       ></ui-checkbox>
       <label :for="uuid">{{ allSelectedLabel }}</label>
     </ui-form-field>
@@ -106,7 +106,10 @@ function handleSelectAll(checked) {
   state.selectedValue = checked
     ? currentOptions.value.map((option) => option[props.optionFormat.value])
     : [];
+}
 
+function handleSelectAllAndChange(checked) {
+  handleSelectAll(checked);
   handleChange(state.selectedValue);
 }
 </script>

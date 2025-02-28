@@ -495,15 +495,15 @@ async function handleAction(action, result) {
     state.searchForm.message = result.message;
   }
 
-  resetListData();
-
   switch (action.type) {
     case UI_LIST_VIEW.EVENTS.submit:
+      resetListData();
       if (canSubmit && action.submit !== false) {
         await getModelData();
       }
       break;
     case UI_LIST_VIEW.EVENTS.reset:
+      resetListData();
       // NOTE: automatic processing in `<ui-form-view>`
       if (canSubmit && props.searchOnReset) {
         await getModelData();

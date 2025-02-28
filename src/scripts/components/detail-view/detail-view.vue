@@ -218,9 +218,9 @@ async function setModelConfig() {
 function initModelData(formData = {}) {
   state.loading = false;
 
-  nextTick(async () => {
-    state.detailData = Object.assign(formData, props.modelValueDefaults);
-    await getModelData();
+  nextTick(() => {
+    state.detailData = formData;
+    getModelData();
   });
 }
 
@@ -231,18 +231,29 @@ function resetDetailData() {
   state.loading = true;
 }
 
+function updateDetailData(originalData) {
+  instance.ctx.$refs.formView.formDataSource = originalData;
+  state.detailDataSource = originalData;
+  Object.keys(state.detailData).forEach(
+    (key) =>
+      originalData.hasOwnProperty(key) &&
+      (state.detailData[key] = originalData[key])
+  );
+}
+
 async function getModelData() {
   try {
-    const formDataSource = await props.getModelDataFn()(fullInstanceData.value);
+    let originalData = await props.getModelDataFn()(fullInstanceData.value);
 
-    if (isObject(formDataSource) && Object.keys(formDataSource).length) {
-      instance.ctx.$refs.formView.formDataSource = formDataSource;
-      state.detailDataSource = formDataSource;
-      Object.keys(state.detailData).forEach(
-        (key) =>
-          formDataSource.hasOwnProperty(key) &&
-          (state.detailData[key] = formDataSource[key])
+    if (isObject(originalData) && Object.keys(originalData).length) {
+      updateDetailData(originalData);
+    } else {
+      originalData = Object.assign(
+        {},
+        state.detailData,
+        props.modelValueDefaults
       );
+      Object.keys(originalData).length && updateDetailData(originalData);
     }
   } catch (err) {
     console.warn(`[${UI_DETAIL_VIEW.NAME}]: ${err.toString()}`);
@@ -285,7 +296,9 @@ async function handleAction(action, result) {
       }
 
       if (canSubmit && action.submit !== false) {
-        await props.setModelDataFn()(fullInstanceData.value);
+        await props.setModelDataFn()(
+          Object.assign({ action }, fullInstanceData.value)
+        );
         props.redirectOnSave && redirect(props.to, false);
       }
       break;
