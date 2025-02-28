@@ -26,9 +26,9 @@
   },
   "ui-checkbox-group": {
     "attributes": [
-      "config",
-      "form-data",
-      "form-data-source",
+      "pro-config",
+      "pro-form-data",
+      "pro-form-data-source",
       "option-format",
       "model-value",
       "options",
@@ -40,9 +40,9 @@
   },
   "ui-radio-group": {
     "attributes": [
-      "config",
-      "form-data",
-      "form-data-source",
+      "pro-config",
+      "pro-form-data",
+      "pro-form-data-source",
       "option-format",
       "model-value",
       "options"
@@ -51,9 +51,9 @@
   },
   "ui-switch-box": {
     "attributes": [
-      "config",
-      "form-data",
-      "form-data-source",
+      "pro-config",
+      "pro-form-data",
+      "pro-form-data-source",
       "option-format",
       "model-value",
       "options",
@@ -63,14 +63,29 @@
   },
   "ui-multi-select": {
     "attributes": [
-      "config",
-      "form-data",
-      "form-data-source",
+      "pro-config",
+      "pro-form-data",
+      "pro-form-data-source",
       "option-format",
       "model-value",
       "components"
     ],
     "description": "The multi select of the form item"
+  },
+  "ui-component-plus": {
+    "attributes": [
+      "pro-config",
+      "pro-form-data",
+      "pro-form-data-source",
+      "model-value",
+      "component-name",
+      "component-model-value",
+      "component-model-event",
+      "component-attr-or-prop",
+      "fullwidth",
+      "limit"
+    ],
+    "description": "The component plus of the form item"
   },
   "ui-detail-view": {
     "attributes": [

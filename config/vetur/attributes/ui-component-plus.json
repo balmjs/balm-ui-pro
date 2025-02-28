@@ -1,0 +1,42 @@
+{
+  "pro-config": {
+    "type": "object",
+    "description": "Form item config"
+  },
+  "pro-form-data": {
+    "type": "object",
+    "description": "Form model data"
+  },
+  "pro-form-data-source": {
+    "type": "object",
+    "description": "Form model data source"
+  },
+  "model-value": {
+    "type": "array",
+    "description": "The model value of the component plus"
+  },
+  "component-name": {
+    "type": "string",
+    "description": "The name of the component used"
+  },
+  "component-model-value": {
+    "type": "any",
+    "description": "The model value of the component used"
+  },
+  "component-model-event": {
+    "type": "string",
+    "description": "The model event of the component used"
+  },
+  "component-attr-or-prop": {
+    "type": "object",
+    "description": "The props of the component used"
+  },
+  "fullwidth": {
+    "type": "boolean",
+    "description": "Styles the component plus as a full width component item"
+  },
+  "limit": {
+    "type": "number",
+    "description": "Maximum number of components that can be added"
+  }
+}

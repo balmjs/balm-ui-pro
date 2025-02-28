@@ -7,6 +7,7 @@
 ### Features
 
 - `<ui-component-plus>`: add `limit` prop
+- update vetur
 
 ## v0.66.8 / 2025-01-10
 
