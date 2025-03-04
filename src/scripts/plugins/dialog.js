@@ -99,7 +99,7 @@ function createDialog(options) {
         open: false,
         customComponent: component,
         modelValue: currentModelValue,
-        modelValueSource: currentModelValue,
+        modelValueSource: Object.assign({}, currentModelValue),
         ...otherConfig
       };
     },

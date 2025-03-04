@@ -122,7 +122,6 @@ export default {
         Array.isArray(initialValue) && initialValue.length
           ? initialValue
           : [this.componentModelValue];
-      this.handleChange();
     },
     onAdd() {
       this.componentData.push(this.componentModelValue);
