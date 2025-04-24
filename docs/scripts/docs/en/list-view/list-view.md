@@ -120,6 +120,7 @@ interface ListViewData {
 | `searchActionConfig`   | array         | `DefaultSearchActionConfig`        | Search form button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button)             |         |
 | `formViewAttrOrProp`   | object        | `{}`                               | See `<ui-form-view>` props [docs](/#/components/form-view)                                                                    |         |
 | `noData`               | string        | `No Data`                          | No data message                                                                                                               |         |
+| `hideTableWhenEmpty`   | boolean       | `false`                            | Custom no data for empty table                                                                                                | 0.68.0  |
 | `thead`                | array         | `[]`                               | Table header renderer, see BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table)              |         |
 | `tbody`                | array         | `[]`                               | Table content renderer, see BalmUI `<ui-table>` props [docs](https://v8.material.balmjs.com/#/data-display/table)             |         |
 | `rowActionConfig`      | array         | `RowActionButton[]`                | Table cell button config, see BalmUI `<ui-button>` props [docs](https://v8.material.balmjs.com/#/general/button)              |         |
@@ -150,16 +151,16 @@ interface ListViewData {
 | ---------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------- |
 | `list-view-title`                                    | ListViewData                     | List view title                                                                                   |
 | custom search form item slots (by form model config) | `config`, `data`                 | Custom search form item slots                                                                     |
-| `before-list-view-top-actions`                       |                                  | Custom before list top bar actions                                                                |
+| `before-list-view-top-actions`                       | ListViewData                     | Custom before list top bar actions                                                                |
 | `list-view-top-actions`                              | ListViewData                     | Custom list top bar actions                                                                       |
-| `after-list-view-top-actions`                        |                                  | Custom after list top bar actions                                                                 |
+| `after-list-view-top-actions`                        | ListViewData                     | Custom after list top bar actions                                                                 |
 | `before-list-view`                                   | ListViewData                     | Before list view                                                                                  |
-| `list-view-placeholder`                              |                                  | The placeholder before searching model data                                                       |
+| `list-view-placeholder`                              | ListViewData                     | The placeholder before searching model data                                                       |
 | `list-view-content`                                  | ListViewData                     | Custom list view content                                                                          |
 | custom table slots                                   | rowData                          | See BalmUI `<ui-table>` slots [docs](https://v8.material.balmjs.com/#/data-display/table)         |
 | `list-view-row-actions`                              | rowData                          | Custom table cell actions (When `rowActionConfig = []`)                                           |
 | custom pagination slots                              | `currentMinRow`, `currentMaxRow` | See BalmUI `<ui-pagination>` slots [docs](https://v8.material.balmjs.com/#/navigation/pagination) |
-| `list-view-empty`                                    |                                  | Custom no data for list view                                                                      |
+| `list-view-empty`                                    | ListViewData                     | Custom no data for list view                                                                      |
 | `after-list-view`                                    | ListViewData                     | After list view                                                                                   |
 
 ### Events

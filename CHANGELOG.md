@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.68.0 / 2025-04-24
+
+### Features
+
+- `<ui-table>`: add `hideTableWhenEmpty` prop
+
 ## v0.67.1 / 2025-03-04
 
 ### Bug Fixes

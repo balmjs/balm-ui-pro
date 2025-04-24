@@ -1,6 +1,6 @@
 <template>
   <section v-if="hasTopActions" class="mdc-list-view__top-actions">
-    <slot :name="`before-${namespace}`"></slot>
+    <slot :name="`before-${namespace}`" v-bind="listViewData"></slot>
     <slot :name="namespace" v-bind="listViewData">
       <template v-for="(action, index) in actionConfig">
         <ui-menu-anchor
@@ -55,7 +55,7 @@
         </template>
       </template>
     </slot>
-    <slot :name="`after-${namespace}`"></slot>
+    <slot :name="`after-${namespace}`" v-bind="listViewData"></slot>
   </section>
 </template>
 

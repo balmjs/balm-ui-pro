@@ -9,7 +9,7 @@
     <section v-if="hasSearchForm" class="mdc-list-view__conditions">
       <ui-spinner v-if="searchForm.loading" active></ui-spinner>
       <ui-form-view
-        v-show="!searchForm.loading"
+        v-show="hasListData && !searchForm.loading"
         v-model="searchForm.data"
         v-bind="
           Object.assign(
@@ -68,11 +68,14 @@
 
       <div v-if="listData.usePlaceholder" class="mdc-list-view__placeholder">
         <ui-spinner v-if="listData.loading" active></ui-spinner>
-        <slot v-else :name="`${namespace}-placeholder`">{{ placeholder }}</slot>
+        <slot v-else :name="`${namespace}-placeholder`" v-bind="instanceData">{{
+          placeholder
+        }}</slot>
       </div>
       <template v-else>
         <slot :name="`${namespace}-content`" v-bind="instanceData">
           <ui-table
+            v-if="hasListData || !hideTableWhenEmpty"
             v-model="listData.selectedRows"
             v-bind="
               Object.assign(
@@ -114,7 +117,7 @@
           </ui-table>
         </slot>
 
-        <template v-if="listData.total || listData.data.length">
+        <template v-if="hasListData">
           <ui-pagination
             v-if="usePagination"
             v-model="listData.page"
@@ -142,9 +145,20 @@
             </template>
           </ui-pagination>
         </template>
-        <div v-else class="mdc-list-view__empty">
-          <slot :name="`${namespace}-empty`">{{ noData }}</slot>
-        </div>
+        <template v-else>
+          <slot
+            v-if="hideTableWhenEmpty"
+            :name="`${namespace}-empty`"
+            v-bind="instanceData"
+          >
+            {{ noData }}
+          </slot>
+          <div v-else class="mdc-list-view__empty">
+            <slot :name="`${namespace}-empty`" v-bind="instanceData">{{
+              noData
+            }}</slot>
+          </div>
+        </template>
       </template>
 
       <slot :name="`after-${namespace}`" v-bind="instanceData"></slot>
@@ -207,6 +221,10 @@ export default {
     noData: {
       type: String,
       default: 'No Data'
+    },
+    hideTableWhenEmpty: {
+      type: Boolean,
+      default: false
     },
     thead: {
       type: Array,
@@ -329,6 +347,9 @@ export default {
     };
   },
   computed: {
+    hasListData() {
+      return this.listData.total || this.listData.data.length;
+    },
     hasSearchForm() {
       return !!(this.modelConfig || this.modelPath);
     },
