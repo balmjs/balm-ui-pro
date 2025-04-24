@@ -43,6 +43,10 @@
     "type": "string",
     "description": "No data message"
   },
+  "hide-table-when-empty": {
+    "type": "boolean",
+    "description": "Custom no data for empty table"
+  },
   "thead": {
     "type": "array",
     "description": "Table header renderer, see BalmUI <ui-table> props [docs](https://v8.material.balmjs.com/#/data-display/table)"
