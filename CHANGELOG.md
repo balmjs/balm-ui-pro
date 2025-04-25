@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.68.1 / 2025-04-25
+
+### Bug Fixes
+
+- `<ui-table>`: fix conditions render bug
+
 ## v0.68.0 / 2025-04-24
 
 ### Features
