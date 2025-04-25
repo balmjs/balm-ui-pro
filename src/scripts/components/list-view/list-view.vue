@@ -9,7 +9,7 @@
     <section v-if="hasSearchForm" class="mdc-list-view__conditions">
       <ui-spinner v-if="searchForm.loading" active></ui-spinner>
       <ui-form-view
-        v-show="hasListData && !searchForm.loading"
+        v-show="!searchForm.loading"
         v-model="searchForm.data"
         v-bind="
           Object.assign(
