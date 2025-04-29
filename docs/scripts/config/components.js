@@ -14,6 +14,7 @@ import UiSnippet from '@/components/snippet';
 import UiFooterNav from '@/components/footer-nav';
 import UiTocAffix from '@/components/toc-affix';
 // import XFormItem from '@/components/x-form-item';
+import DemoComponentPlus from '@/components/demo-component-plus';
 
 export const BalmUIConfig = {
   $store: myStore,
@@ -35,6 +36,7 @@ export const customComponents = [
   UiMarkdown,
   UiSnippet,
   UiFooterNav,
-  UiTocAffix
+  UiTocAffix,
   // XFormItem
+  DemoComponentPlus
 ];

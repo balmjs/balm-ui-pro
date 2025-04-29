@@ -13,7 +13,7 @@
           @[componentModelEvent]="handleChange"
         ></component>
       </div>
-      <div class="mdc-component-plus__actions">
+      <div v-if="!fixed" class="mdc-component-plus__actions">
         <ui-icon-button
           v-if="canAdd(componentIndex)"
           icon="add"
@@ -79,6 +79,10 @@ export default {
     limit: {
       type: Number,
       default: 0
+    },
+    fixed: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

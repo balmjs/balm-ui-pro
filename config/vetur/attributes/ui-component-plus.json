@@ -38,5 +38,9 @@
   "limit": {
     "type": "number",
     "description": "Maximum number of components that can be added"
+  },
+  "fixed": {
+    "type": "boolean",
+    "description": "Enables fixed mode for component items"
   }
 }

@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.69.0 / 2025-04-29
+
+### Features
+
+- `<ui-component-plus>`: add `fixed` prop
+
 ## v0.68.1 / 2025-04-25
 
 ### Bug Fixes
