@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbalm_ui_pro=self.webpackChunkbalm_ui_pro||[]).push([[5381],{5381:function(e,a,l){l.r(a),a.default=e=>[{label:"Label A",component:"ui-readonly-item",key:"a",value:e.a},{label:"Label B",component:"ui-readonly-item",key:"b",value:({b:e})=>e+"!"}]}}]);
