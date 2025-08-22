@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import router from '@/routes';
+import $analytics from '@/plugins/analytics';
 import i18n from '@/locales';
 import $http from '@/plugins/http';
 import $mock from '@/plugins/mock';
@@ -19,6 +20,7 @@ import {
 import './my-sw';
 
 function createBalmUIProApp() {
+  Vue.use($analytics, 6);
   Vue.use($http);
   Vue.use($mock);
   Vue.use($prism);

@@ -27,7 +27,10 @@ export function mockServer() {
   });
 
   server.passthrough(
-    ({ url }) => BALM_API_REGEX.test(url) || PROXY_API_REGEX.test(url)
+    ({ url }) =>
+      /\/api\/track/.test(url) ||
+      BALM_API_REGEX.test(url) ||
+      PROXY_API_REGEX.test(url)
   );
 
   return server;
