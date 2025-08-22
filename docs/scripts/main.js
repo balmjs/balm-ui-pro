@@ -4,6 +4,7 @@ import i18n from '@/locales';
 import $http from '@/plugins/http';
 import $mock from '@/plugins/mock';
 import $prism from '@/plugins/prism';
+import $analytics from '@/plugins/analytics';
 import App from '@/views/layouts/app';
 import setGlobalProperties from '@/config/properties';
 // BalmUI
@@ -26,6 +27,7 @@ function createBalmUIProApp() {
   app.use($http);
   app.use($mock);
   app.use($prism);
+  app.use($analytics, 5);
   app.use(BalmUI, BalmUIConfig);
   app.use(BalmUIPlus);
   app.use(BalmUIPro, BalmUIProConfig);
