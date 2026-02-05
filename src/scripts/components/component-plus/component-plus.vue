@@ -120,15 +120,19 @@ export default {
     canRemove(index) {
       return !(!index && this.componentData.length === 1);
     },
+    getDefaultValue() {
+      // Deep clone to prevent reference pollution
+      return JSON.parse(JSON.stringify(this.componentModelValue));
+    },
     onInit() {
       const initialValue = this.proFormDataSource[this.proConfig.key];
       this.componentData =
         Array.isArray(initialValue) && initialValue.length
           ? initialValue
-          : [this.componentModelValue];
+          : [this.getDefaultValue()];
     },
     onAdd() {
-      this.componentData.push(this.componentModelValue);
+      this.componentData.push(this.getDefaultValue());
     },
     onRemove(index) {
       this.componentData.splice(index, 1);

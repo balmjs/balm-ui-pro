@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.69.1 / 2026-02-05
+
+### Bug Fixes
+
+- `<ui-component-plus>`: fix initial value for custom component
+
 ## v0.69.0 / 2025-04-29
 
 ### Features
