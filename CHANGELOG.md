@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.69.2 / 2026-03-31
+
+### Bug Fixes
+
+- `<ui-multi-select>`: fix modelValue bug when `subOptions = []`
+
 ## v0.69.1 / 2026-02-05
 
 ### Bug Fixes

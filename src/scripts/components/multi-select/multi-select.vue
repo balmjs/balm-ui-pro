@@ -157,6 +157,14 @@ export default {
       }
 
       this.$set(this.selectedOptions, key, selectedOptions);
+
+      if (!selectedOptions.length) {
+        const selectedIndex = this.selectedKeys.findIndex(
+          (selectedKey) => selectedKey === key
+        );
+        this.$set(this.selectedData, key, '');
+        this.clearSelectedData(selectedIndex);
+      }
     },
     async updateSelected() {
       let updateSelectedKeys = [];
