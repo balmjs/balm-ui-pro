@@ -167,24 +167,26 @@ export default {
       }
     },
     async updateSelected() {
-      let updateSelectedKeys = [];
+      // Collect changed values but DON'T set them yet.
+      // Setting child values before their options are loaded causes ui-select
+      // to detect an invalid value and emit change(''), resetting the value.
+      const pendingUpdates = {};
       this.selectedKeys.forEach((key) => {
         const newValue = this.proFormData[key];
         if (this.selectedData[key] !== newValue) {
-          this.$set(this.selectedData, key, newValue);
-
-          if (newValue) {
-            updateSelectedKeys.push({
-              key,
-              newValue
-            });
-          }
+          pendingUpdates[key] = newValue;
         }
       });
 
-      if (updateSelectedKeys.length) {
-        for await (const { key, newValue } of updateSelectedKeys) {
-          if (key !== this.lastSelectedKey) {
+      // Process keys sequentially: set value, then load child options.
+      // This ensures each key's options are already loaded (by its parent's
+      // getNextSelected call) before the value is set.
+      for (const key of this.selectedKeys) {
+        if (key in pendingUpdates) {
+          const newValue = pendingUpdates[key];
+          this.$set(this.selectedData, key, newValue);
+
+          if (newValue && key !== this.lastSelectedKey) {
             await this.getNextSelected(key, newValue);
           }
         }
