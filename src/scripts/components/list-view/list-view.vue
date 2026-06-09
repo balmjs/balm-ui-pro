@@ -8,30 +8,22 @@
 
     <section v-if="hasSearchForm" class="mdc-list-view__conditions">
       <ui-spinner v-if="searchForm.loading" active></ui-spinner>
-      <ui-form-view
-        v-show="!searchForm.loading"
-        v-model="searchForm.data"
-        v-bind="
-          Object.assign(
-            {
-              useGrid: true,
-              modelConfig: searchForm.config,
-              modelOptions,
-              actionConfig: searchActionConfig,
-              formAttrOrProp: {
-                actionAlign: 'center'
-              }
-            },
-            formViewAttrOrProp
-          )
-        "
-        @loaded="initModelData"
-        @change:x="handleChange"
-        @action="handleAction"
-      >
+      <ui-form-view v-show="!searchForm.loading" v-model="searchForm.data" v-bind="Object.assign(
+        {
+          useGrid: true,
+          modelConfig: searchForm.config,
+          modelOptions,
+          actionConfig: searchActionConfig,
+          formAttrOrProp: {
+            actionAlign: 'center'
+          }
+        },
+        formViewAttrOrProp
+      )
+        " @loaded="initModelData" @change:x="handleChange" @action="handleAction">
         <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
         <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-          <slot :name="name" v-bind="slotData"></slot>
+          <slot :name="name" v-bind="getSlotData(slotData)"></slot>
         </template>
         <!-- Default error message -->
         <template #after-form-view="slotData">
@@ -40,26 +32,23 @@
               searchForm.message
             }}</ui-alert>
           </template>
-          <slot v-else name="after-form-view" v-bind="slotData"></slot>
+          <slot v-else name="after-form-view" v-bind="getSlotData(slotData)"></slot>
         </template>
       </ui-form-view>
     </section>
 
-    <ui-list-view-top-actions
-      v-bind="{
-        listViewData: instanceData,
-        thead,
-        actionConfig: topActionConfig,
-        actionHandler: topActionHandler,
-        actionRendering: topActionRendering,
-        actionIconFormat: topActionIconFormat,
-        resetSelectedRows
-      }"
-      @column-selection="handleColumnSelection"
-    >
+    <ui-list-view-top-actions v-bind="{
+      listViewData: instanceData,
+      thead,
+      actionConfig: topActionConfig,
+      actionHandler: topActionHandler,
+      actionRendering: topActionRendering,
+      actionIconFormat: topActionIconFormat,
+      resetSelectedRows
+    }" @column-selection="handleColumnSelection">
       <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
       <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-        <slot :name="name" v-bind="slotData"></slot>
+        <slot :name="name" v-bind="getSlotData(slotData)"></slot>
       </template>
     </ui-list-view-top-actions>
 
@@ -74,83 +63,57 @@
       </div>
       <template v-else>
         <slot :name="`${namespace}-content`" v-bind="instanceData">
-          <ui-table
-            v-if="hasListData || !hideTableWhenEmpty"
-            v-model="listData.selectedRows"
-            v-bind="
-              Object.assign(
-                {},
-                {
-                  data: listData.data,
-                  thead: listData.thead,
-                  tbody: listData.tbody,
-                  fullwidth: true,
-                  showProgress: listData.loading
-                },
-                tableAttrOrProp
-              )
-            "
-            v-on="tableListeners"
-          >
+          <ui-table v-if="hasListData || !hideTableWhenEmpty" v-model="listData.selectedRows" v-bind="Object.assign(
+            {},
+            {
+              data: listData.data,
+              thead: listData.thead,
+              tbody: listData.tbody,
+              fullwidth: true,
+              showProgress: listData.loading
+            },
+            tableAttrOrProp
+          )
+            " v-on="tableListeners">
             <slot v-for="(_, name) in $slots" :slot="name" :name="name"></slot>
             <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-              <slot :name="name" v-bind="slotData"></slot>
+              <slot :name="name" v-bind="getSlotData(slotData)"></slot>
             </template>
             <!-- Default actions -->
             <template #actions="{ data }">
-              <ui-list-view-row-actions
-                v-if="rowActionConfig.length"
-                v-bind="{
-                  data,
-                  listViewData: instanceData,
-                  actionConfig: rowActionConfig,
-                  actionHandler: rowActionHandler,
-                  actionRendering: rowActionRendering
-                }"
-              ></ui-list-view-row-actions>
-              <slot
-                v-else
-                :name="`${namespace}-row-actions`"
-                v-bind="data"
-              ></slot>
+              <ui-list-view-row-actions v-if="rowActionConfig.length" v-bind="{
+                data,
+                listViewData: instanceData,
+                actionConfig: rowActionConfig,
+                actionHandler: rowActionHandler,
+                actionRendering: rowActionRendering
+              }"></ui-list-view-row-actions>
+              <slot v-else :name="`${namespace}-row-actions`" v-bind="data"></slot>
             </template>
           </ui-table>
         </slot>
 
         <template v-if="hasListData">
-          <ui-pagination
-            v-if="usePagination"
-            v-model="listData.page"
-            v-bind="
-              Object.assign(
-                {},
-                {
-                  total: listData.total,
-                  pageSize
-                },
-                paginationAttrOrProp
-              )
-            "
-            @change="getModelData"
-          >
+          <ui-pagination v-if="usePagination" v-model="listData.page" v-bind="Object.assign(
+            {},
+            {
+              total: listData.total,
+              pageSize
+            },
+            paginationAttrOrProp
+          )
+            " @change="getModelData">
             <template v-for="(_, name) in $scopedSlots" #[name]="slotData">
-              <slot :name="name" v-bind="slotData"></slot>
+              <slot :name="name" v-bind="getSlotData(slotData)"></slot>
             </template>
             <!-- Default pagination info -->
             <template #default="slotData">
-              <slot
-                :name="`${namespace}-pagination`"
-                v-bind="Object.assign({}, slotData, listData)"
-              ></slot>
+              <slot :name="`${namespace}-pagination`" v-bind="Object.assign({}, slotData, listData)"></slot>
             </template>
           </ui-pagination>
         </template>
         <template v-else>
-          <slot
-            v-if="hideTableWhenEmpty"
-            :name="`${namespace}-empty`"
-            v-bind="instanceData"
-          >
+          <slot v-if="hideTableWhenEmpty" :name="`${namespace}-empty`" v-bind="instanceData">
             {{ noData }}
           </slot>
           <div v-else class="mdc-list-view__empty">
@@ -240,7 +203,7 @@ export default {
     },
     rowActionHandler: {
       type: Function,
-      default: () => {}
+      default: () => { }
     },
     rowActionRendering: {
       type: Function,
@@ -252,7 +215,7 @@ export default {
     },
     topActionHandler: {
       type: Function,
-      default: () => {}
+      default: () => { }
     },
     topActionRendering: {
       type: Function,
@@ -296,11 +259,11 @@ export default {
     // Model function
     getModelConfigFn: {
       type: Function,
-      default: () => {}
+      default: () => { }
     },
     getModelDataFn: {
       type: Function,
-      default: () => {}
+      default: () => { }
     },
     // Others
     useValidator: {
@@ -519,6 +482,9 @@ export default {
     // expose
     resetSelectedRows(selectedRows = []) {
       this.$set(this.listData, 'selectedRows', selectedRows);
+    },
+    getSlotData(slotData) {
+      return Object.assign({}, slotData, this.instanceData);
     }
   }
 };

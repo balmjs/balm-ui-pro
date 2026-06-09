@@ -2,6 +2,12 @@
 
 > ⚠️ The current version only supports Vue 2. [Click here](https://github.com/balmjs/balm-ui-pro) for Vue 3.
 
+## v0.69.4 / 2026-06-09
+
+### Chore
+
+- `<ui-list-view>`: update slotData for all slots
+
 ## v0.69.3 / 2026-03-31
 
 ### Bug Fixes
